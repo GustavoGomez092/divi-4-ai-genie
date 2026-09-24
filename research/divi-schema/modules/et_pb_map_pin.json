@@ -1,0 +1,128 @@
+{
+    "module": {
+        "slug": "et_pb_map_pin",
+        "name": "Pin",
+        "plural": "Pins",
+        "type": "child",
+        "child_slug": null,
+        "child_item_text": null,
+        "fullwidth": false,
+        "is_structure": false,
+        "main_css_element": "%%order_class%%",
+        "vb_support": "on",
+        "advanced_fields": null,
+        "custom_css_fields": [],
+        "settings_modal_toggles": {
+            "general": {
+                "toggles": {
+                    "main_content": "Text",
+                    "map": "Map"
+                }
+            },
+            "custom_css": {
+                "toggles": {
+                    "visibility": {
+                        "title": "Visibility",
+                        "priority": 99
+                    },
+                    "conditions": {
+                        "title": "Conditions",
+                        "priority": 98
+                    },
+                    "scroll_effects": {
+                        "title": "Scroll Effects",
+                        "priority": 200
+                    }
+                }
+            }
+        },
+        "field_count": 16
+    },
+    "fields": {
+        "title": {
+            "label": "Title",
+            "type": "text",
+            "option_category": "basic_option",
+            "description": "The title will be used within the tab button for this tab.",
+            "toggle_slug": "main_content",
+            "dynamic_content": "text",
+            "mobile_options": true,
+            "hover": "tabs"
+        },
+        "pin_address": {
+            "label": "Map Pin Address",
+            "type": "text",
+            "option_category": "basic_option",
+            "description": "Enter an address for this map pin, and the address will be geocoded and displayed on the map below.",
+            "toggle_slug": "map"
+        },
+        "zoom_level": {
+            "type": "hidden",
+            "default": "18",
+            "default_on_front": "",
+            "option_category": "basic_option"
+        },
+        "pin_address_lat": {
+            "type": "hidden",
+            "option_category": "basic_option"
+        },
+        "pin_address_lng": {
+            "type": "hidden",
+            "option_category": "basic_option"
+        },
+        "map_center_map": {
+            "type": "center_map",
+            "option_category": "basic_option",
+            "toggle_slug": "map"
+        },
+        "content": {
+            "label": "Body",
+            "type": "tiny_mce",
+            "option_category": "basic_option",
+            "description": "Here you can define the content that will be placed within the infobox for the pin.",
+            "toggle_slug": "main_content",
+            "dynamic_content": "text",
+            "mobile_options": true,
+            "hover": "tabs"
+        },
+        "title_tablet": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "title_phone": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "title_last_edited": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "content_tablet": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "content_phone": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "content_last_edited": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "_builder_version": {
+            "type": "skip"
+        },
+        "_dynamic_attributes": {
+            "type": "skip"
+        },
+        "_module_preset": {
+            "type": "skip"
+        }
+    }
+}

@@ -1,0 +1,1675 @@
+{
+    "module": {
+        "slug": "et_pb_video_slider_item",
+        "name": "Video",
+        "plural": "Videos",
+        "type": "child",
+        "child_slug": null,
+        "child_item_text": null,
+        "fullwidth": false,
+        "is_structure": false,
+        "main_css_element": "%%order_class%%",
+        "vb_support": "on",
+        "advanced_fields": {
+            "text": {
+                "use_text_orientation": false,
+                "use_background_layout": true,
+                "options": {
+                    "background_layout": {
+                        "label": "Slider Arrows Color",
+                        "option_category": "color_option",
+                        "toggle_slug": "arrows_color",
+                        "description": "This setting will make your slider arrows either light or dark in color.",
+                        "default": "dark",
+                        "default_on_child": true,
+                        "hover": "tabs",
+                        "priority": 1
+                    }
+                }
+            },
+            "box_shadow": {
+                "default": false
+            },
+            "borders": {
+                "default": false
+            },
+            "text_shadow": {
+                "default": false
+            },
+            "background": false,
+            "fonts": false,
+            "max_width": false,
+            "height": false,
+            "margin_padding": false,
+            "button": false,
+            "link_options": false,
+            "scroll_effects": false,
+            "transform": [],
+            "position_fields": [],
+            "z_index": [],
+            "filters": [],
+            "animation": []
+        },
+        "custom_css_fields": [],
+        "settings_modal_toggles": {
+            "general": {
+                "toggles": {
+                    "main_content": "Video",
+                    "overlay": "Overlay",
+                    "admin_label": "Admin Label"
+                }
+            },
+            "advanced": {
+                "toggles": {
+                    "arrows_color": "Controls",
+                    "transform": {
+                        "title": "Transform",
+                        "priority": 109
+                    },
+                    "text": {
+                        "title": "Text",
+                        "priority": 49
+                    },
+                    "filters": {
+                        "title": "Filters",
+                        "priority": 105
+                    }
+                }
+            },
+            "custom_css": {
+                "toggles": {
+                    "position_fields": {
+                        "title": "Position",
+                        "priority": 190
+                    },
+                    "hover_transitions": {
+                        "title": "Transitions",
+                        "priority": 120
+                    },
+                    "visibility": {
+                        "title": "Visibility",
+                        "priority": 99
+                    },
+                    "conditions": {
+                        "title": "Conditions",
+                        "priority": 98
+                    },
+                    "scroll_effects": {
+                        "title": "Scroll Effects",
+                        "priority": 200
+                    }
+                }
+            }
+        },
+        "field_count": 154
+    },
+    "fields": {
+        "admin_title": {
+            "label": "Admin Label",
+            "type": "text",
+            "description": "This will change the label of the video in the builder for easy identification.",
+            "toggle_slug": "admin_label"
+        },
+        "src": {
+            "label": "Video MP4/URL",
+            "type": "upload",
+            "option_category": "basic_option",
+            "data_type": "video",
+            "upload_button_text": "Upload a video",
+            "choose_text": "Choose a Video MP4 File",
+            "update_text": "Set As Video",
+            "description": "Upload your desired video in .MP4 format, or type in the URL to the video you would like to display",
+            "toggle_slug": "main_content",
+            "computed_affects": [
+                "__get_oembed",
+                "__oembed_thumbnail",
+                "__is_oembed"
+            ],
+            "mobile_options": true,
+            "hover": "tabs"
+        },
+        "src_webm": {
+            "label": "Video Webm",
+            "type": "upload",
+            "option_category": "basic_option",
+            "data_type": "video",
+            "upload_button_text": "Upload a video",
+            "choose_text": "Choose a Video WEBM File",
+            "update_text": "Set As Video",
+            "description": "Upload the .WEBM version of your video here. All uploaded videos should be in both .MP4 .WEBM formats to ensure maximum compatibility in all browsers.",
+            "toggle_slug": "main_content",
+            "mobile_options": true,
+            "hover": "tabs"
+        },
+        "image_src": {
+            "label": "Image Overlay URL",
+            "type": "upload",
+            "option_category": "basic_option",
+            "upload_button_text": "Upload an image",
+            "choose_text": "Choose an Image",
+            "update_text": "Set As Image",
+            "description": "Upload your desired image, or type in the URL to the image you would like to display over your video. You can also generate a still image from your video.",
+            "toggle_slug": "overlay",
+            "dynamic_content": "image",
+            "mobile_options": true,
+            "hover": "tabs"
+        },
+        "__oembed_thumbnail": {
+            "type": "computed"
+        },
+        "__is_oembed": {
+            "type": "computed"
+        },
+        "__get_oembed": {
+            "type": "computed"
+        },
+        "play_icon_color": {
+            "label": "Play Icon Color",
+            "description": "Here you can define a custom color for the play icon.",
+            "type": "color-alpha",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "use_icon_font_size": {
+            "label": "Use Play Icon Font Size",
+            "description": "If you would like to control the size of the icon, you must first enable this option.",
+            "type": "yes_no_button",
+            "options": {
+                "off": "No",
+                "on": "Yes"
+            },
+            "default_on_front": "off",
+            "affects": [
+                "icon_font_size"
+            ],
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color",
+            "option_category": "font_option"
+        },
+        "icon_font_size": {
+            "label": "Play Icon Font Size",
+            "description": "Control the size of the icon by increasing or decreasing the font size.",
+            "type": "range",
+            "option_category": "font_option",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color",
+            "allowed_units": [
+                "%",
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default": "96px",
+            "default_unit": "px",
+            "default_on_front": "",
+            "range_settings": {
+                "min": "1",
+                "max": "120",
+                "step": "1"
+            },
+            "mobile_options": true,
+            "depends_show_if": "on",
+            "responsive": true,
+            "sticky": true,
+            "hover": "tabs"
+        },
+        "font_icon": {
+            "label": "Icon",
+            "toggle_slug": "arrows_color",
+            "type": "select_icon",
+            "description": "Choose an icon to display with your blurb.",
+            "mobile_options": true,
+            "hover": "tabs",
+            "sticky": true,
+            "tab_slug": "advanced"
+        },
+        "src_tablet": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "src_phone": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "src_last_edited": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "src_webm_tablet": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "src_webm_phone": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "src_webm_last_edited": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "main_content"
+        },
+        "image_src_tablet": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "overlay"
+        },
+        "image_src_phone": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "overlay"
+        },
+        "image_src_last_edited": {
+            "type": "skip",
+            "tab_slug": "",
+            "toggle_slug": "overlay"
+        },
+        "play_icon_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "play_icon_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "play_icon_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "icon_font_size_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "icon_font_size_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "icon_font_size_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "font_icon_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "font_icon_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "font_icon_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "_builder_version": {
+            "type": "skip"
+        },
+        "_dynamic_attributes": {
+            "type": "skip"
+        },
+        "_module_preset": {
+            "type": "skip"
+        },
+        "transform_styles": {
+            "label": "Transform",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "type": "composite",
+            "attr_suffix": "",
+            "composite_type": "transforms",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "responsive": true,
+            "description": "Using the transform controls, you can performance visual adjustments to any element using a combination of Scale, Translation, Rotation and Skew settings. This allows you to create advanced design effects without the need of a separate graphic design program.",
+            "composite_structure": {
+                "scale": {
+                    "icon": "resize",
+                    "controls": {
+                        "transform_scale": {
+                            "type": "transform",
+                            "label": "Transform Scale",
+                            "default": "100%|100%",
+                            "default_unit": "%",
+                            "range_settings": {
+                                "min": -100,
+                                "max": 300,
+                                "step": 1
+                            },
+                            "context": "transform_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "transform_scale_tablet": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_scale_phone": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_scale_last_edited": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_scale_linked": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_scale_linked_tablet": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_scale_linked_phone": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_scale_linked__hover": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_scale_linked__sticky": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        }
+                    }
+                },
+                "translate": {
+                    "icon": "move",
+                    "controls": {
+                        "transform_translate": {
+                            "type": "transform",
+                            "label": "Transform Translate",
+                            "default": "0px|0px",
+                            "default_unit": "px",
+                            "range_settings": {
+                                "min": -300,
+                                "max": 300,
+                                "step": 1
+                            },
+                            "context": "transform_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "transform_translate_tablet": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_translate_phone": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_translate_last_edited": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_translate_linked": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_translate_linked_tablet": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_translate_linked_phone": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_translate_linked__hover": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_translate_linked__sticky": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        }
+                    }
+                },
+                "rotate": {
+                    "icon": "rotate",
+                    "controls": {
+                        "transform_rotate": {
+                            "type": "transform",
+                            "label": "Transform Rotate",
+                            "default": "0deg|0deg|0deg",
+                            "default_unit": "deg",
+                            "range_settings": {
+                                "min": 0,
+                                "max": 360,
+                                "step": 1
+                            },
+                            "context": "transform_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "transform_rotate_tablet": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_rotate_phone": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_rotate_last_edited": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        }
+                    }
+                },
+                "skew": {
+                    "icon": "skew",
+                    "controls": {
+                        "transform_skew": {
+                            "type": "transform",
+                            "label": "Transform Skew",
+                            "default": "0deg|0deg",
+                            "default_unit": "deg",
+                            "range_settings": {
+                                "min": -180,
+                                "max": 180,
+                                "min_limit": -180,
+                                "max_limit": 180,
+                                "step": 1
+                            },
+                            "context": "transform_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "transform_skew_tablet": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_skew_phone": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_skew_last_edited": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_skew_linked": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_skew_linked_tablet": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_skew_linked_phone": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_skew_linked__hover": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        },
+                        "transform_skew_linked__sticky": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform",
+                            "default": "on"
+                        }
+                    }
+                },
+                "origin": {
+                    "icon": "transform-origin",
+                    "controls": {
+                        "transform_origin": {
+                            "type": "transform",
+                            "label": "Transform Origin",
+                            "default": "50%|50%",
+                            "default_unit": "%",
+                            "range_settings": {
+                                "min": -50,
+                                "max": 150,
+                                "step": 1
+                            },
+                            "context": "transform_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "transform_origin_tablet": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_origin_phone": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        },
+                        "transform_origin_last_edited": {
+                            "type": "skip",
+                            "tab_slug": "advanced",
+                            "toggle_slug": "transform"
+                        }
+                    }
+                }
+            }
+        },
+        "transform_styles_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "positioning": {
+            "label": "Position",
+            "description": "Here you can choose the element&#039;s position type. Absolutlely positioned elements will float inside their parent elements. Fixed positioned elements will float within the browser viewport. Relatively positioned elements sit statically in their parent container, but can still be offset without disrupting surrounding elements.",
+            "type": "select",
+            "options": {
+                "none": "Default",
+                "relative": "Relative",
+                "absolute": "Absolute",
+                "fixed": "Fixed"
+            },
+            "option_category": "layout",
+            "default": "none",
+            "default_on_child": true,
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields",
+            "mobile_options": true,
+            "sticky": true,
+            "hover": "tabs"
+        },
+        "position_origin_a": {
+            "label": "Location",
+            "description": "Here you can adjust the element&#039;s starting location within its parent container. You can further adjust the element&#039;s position using the offset controls.",
+            "type": "position",
+            "options": {
+                "top_left": "Top Left",
+                "top_right": "Top Right",
+                "bottom_left": "Bottom Left",
+                "bottom_right": "Bottom Right",
+                "center_left": "Center Left",
+                "center_center": "Center Center",
+                "center_right": "Center Right",
+                "top_center": "Top Center",
+                "bottom_center": "Bottom Center"
+            },
+            "option_category": "layout",
+            "default": "top_left",
+            "default_on_child": true,
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields",
+            "mobile_options": true,
+            "sticky": true,
+            "hover": "tabs"
+        },
+        "position_origin_f": {
+            "label": "Location",
+            "description": "Here you can adjust the element&#039;s starting location within its parent container. You can further adjust the element&#039;s position using the offset controls.",
+            "type": "position",
+            "options": {
+                "top_left": "Top Left",
+                "top_right": "Top Right",
+                "bottom_left": "Bottom Left",
+                "bottom_right": "Bottom Right",
+                "center_left": "Center Left",
+                "center_center": "Center Center",
+                "center_right": "Center Right",
+                "top_center": "Top Center",
+                "bottom_center": "Bottom Center"
+            },
+            "option_category": "layout",
+            "default": "top_left",
+            "default_on_child": true,
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields",
+            "mobile_options": true,
+            "sticky": true,
+            "hover": "tabs"
+        },
+        "position_origin_r": {
+            "label": "Offset Origin ",
+            "description": "Here you can choose from which corner this element is offset from. The vertical and horizontal offset adjustments will be affected based on the element&#039;s offset origin.",
+            "type": "position",
+            "options": {
+                "top_left": "Top Left",
+                "top_right": "Top Right",
+                "bottom_left": "Bottom Left",
+                "bottom_right": "Bottom Right"
+            },
+            "option_category": "layout",
+            "default": "top_left",
+            "default_on_child": true,
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields",
+            "mobile_options": true,
+            "sticky": true,
+            "hover": "tabs"
+        },
+        "vertical_offset": {
+            "type": "range",
+            "range_settings": {
+                "min": -1000,
+                "max": 1000,
+                "step": 1
+            },
+            "option_category": "layout",
+            "default_unit": "px",
+            "default_on_child": true,
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields",
+            "responsive": true,
+            "mobile_options": true,
+            "sticky": true,
+            "hover": "tabs",
+            "default": "",
+            "label": "Vertical Offset",
+            "description": "Here you can adjust the element&#039;s position upwards or downwards from its starting location, which may differ based on its offset origin."
+        },
+        "horizontal_offset": {
+            "type": "range",
+            "range_settings": {
+                "min": -1000,
+                "max": 1000,
+                "step": 1
+            },
+            "option_category": "layout",
+            "default_unit": "px",
+            "default_on_child": true,
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields",
+            "responsive": true,
+            "mobile_options": true,
+            "sticky": true,
+            "hover": "tabs",
+            "default": "",
+            "label": "Horizontal Offset",
+            "description": "Here you can adjust the element&#039;s position left or right from its starting location, which may differ based on its offset origin."
+        },
+        "z_index": {
+            "label": "Z Index",
+            "description": "Here you can control element position on the z axis. Elements with higher z-index values will sit atop elements with lower z-index values.",
+            "type": "range",
+            "range_settings": {
+                "min": -500,
+                "max": 500,
+                "step": 1
+            },
+            "option_category": "layout",
+            "default": "",
+            "default_on_child": true,
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields",
+            "unitless": true,
+            "hover": "tabs",
+            "sticky": true,
+            "responsive": true,
+            "mobile_options": true
+        },
+        "vertical_offset_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "vertical_offset_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "vertical_offset_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "horizontal_offset_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "horizontal_offset_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "horizontal_offset_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "position_origin_a_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "position_origin_a_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "position_origin_a_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "position_origin_f_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "position_origin_f_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "position_origin_f_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "position_origin_r_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "position_origin_r_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "position_origin_r_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "background_layout": {
+            "label": "Slider Arrows Color",
+            "type": "select",
+            "option_category": "color_option",
+            "options": {
+                "dark": "Light",
+                "light": "Dark"
+            },
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color",
+            "hover": "tabs",
+            "description": "This setting will make your slider arrows either light or dark in color.",
+            "mobile_options": true,
+            "sticky": true,
+            "default": "dark",
+            "default_on_child": true
+        },
+        "overflow-x": {
+            "label": "Horizontal Overflow",
+            "type": "select",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "default": "",
+            "tab_slug": "custom_css",
+            "toggle_slug": "visibility",
+            "options": {
+                "": "Default",
+                "visible": "Visible",
+                "scroll": "Scroll",
+                "hidden": "Hidden",
+                "auto": "Auto"
+            },
+            "description": "Here you can control element overflow on the X axis. If set to scroll, content that overflows static widths or heights will trigger a browser scrollbar. If set to hidden, content overflow will be clipped."
+        },
+        "overflow-y": {
+            "label": "Vertical Overflow",
+            "type": "select",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "default": "",
+            "tab_slug": "custom_css",
+            "toggle_slug": "visibility",
+            "options": {
+                "": "Default",
+                "visible": "Visible",
+                "scroll": "Scroll",
+                "hidden": "Hidden",
+                "auto": "Auto"
+            },
+            "description": "Here you can control element overflow on the Y axis. If set to scroll, content that overflows static widths or heights will trigger a browser scrollbar. If set to hidden, content overflow will be clipped."
+        },
+        "display_conditions": {
+            "label": "Display Conditions",
+            "type": "display_conditions",
+            "mobile_options": false,
+            "default": "",
+            "tab_slug": "custom_css",
+            "toggle_slug": "conditions",
+            "description": "Choose when to display this element based on a set of conditions. Multiple conditions can be added. Date &amp; Time condition is based on your timezone settings in your <a href=\"http://divi-test.local/wp-admin/options-general.php\" target=\"_blank\" title=\"WordPress General Settings\">WordPress General Settings</a>"
+        },
+        "filter_hue_rotate": {
+            "label": "Hue",
+            "description": "Shift all colors by this amount.",
+            "type": "range",
+            "option_category": "layout",
+            "range_settings": {
+                "min": 0,
+                "max": 359,
+                "step": 1
+            },
+            "default": "0deg",
+            "default_on_child": true,
+            "validate_unit": true,
+            "fixed_unit": "deg",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "filter_saturate": {
+            "label": "Saturation",
+            "description": "Define how intense the color saturation should be.",
+            "type": "range",
+            "option_category": "layout",
+            "range_settings": {
+                "min": 0,
+                "max": 200,
+                "step": 1
+            },
+            "default": "100%",
+            "default_on_child": true,
+            "validate_unit": true,
+            "fixed_unit": "%",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "filter_brightness": {
+            "label": "Brightness",
+            "description": "Define how bright the colors should be.",
+            "type": "range",
+            "option_category": "layout",
+            "range_settings": {
+                "min": 0,
+                "max": 200,
+                "step": 1
+            },
+            "default": "100%",
+            "default_on_child": true,
+            "validate_unit": true,
+            "fixed_unit": "%",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "filter_contrast": {
+            "label": "Contrast",
+            "description": "Define how distinct bright and dark areas should be.",
+            "type": "range",
+            "option_category": "layout",
+            "range_settings": {
+                "min": 0,
+                "max": 200,
+                "step": 1
+            },
+            "default": "100%",
+            "default_on_child": true,
+            "validate_unit": true,
+            "fixed_unit": "%",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "filter_invert": {
+            "label": "Invert",
+            "description": "Invert the hue, saturation, and brightness by this amount.",
+            "type": "range",
+            "option_category": "layout",
+            "range_settings": {
+                "min": 0,
+                "max": 100,
+                "step": 1
+            },
+            "default": "0%",
+            "default_on_child": true,
+            "validate_unit": true,
+            "fixed_unit": "%",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "filter_sepia": {
+            "label": "Sepia",
+            "description": "Travel back in time by this amount.",
+            "type": "range",
+            "option_category": "layout",
+            "range_settings": {
+                "min": 0,
+                "max": 100,
+                "step": 1
+            },
+            "default": "0%",
+            "default_on_child": true,
+            "validate_unit": true,
+            "fixed_unit": "%",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "filter_opacity": {
+            "label": "Opacity",
+            "description": "Define how transparent or opaque this should be.",
+            "type": "range",
+            "option_category": "layout",
+            "range_settings": {
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "min_limit": 0,
+                "max_limit": 100
+            },
+            "default": "100%",
+            "default_on_child": true,
+            "validate_unit": true,
+            "fixed_unit": "%",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "filter_blur": {
+            "label": "Blur",
+            "description": "Blur by this amount.",
+            "type": "range",
+            "option_category": "layout",
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1
+            },
+            "default": "0px",
+            "default_unit": "px",
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "tab_slug": "advanced",
+            "toggle_slug": "filters",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "mix_blend_mode": {
+            "label": "Blend Mode",
+            "description": "Modify how this element blends with any layers beneath it. To reset, choose the &quot;Normal&quot; option.",
+            "type": "select",
+            "option_category": "layout",
+            "default": "normal",
+            "default_on_child": true,
+            "options": {
+                "normal": "Normal",
+                "multiply": "Multiply",
+                "screen": "Screen",
+                "overlay": "Overlay",
+                "darken": "Darken",
+                "lighten": "Lighten",
+                "color-dodge": "Color Dodge",
+                "color-burn": "Color Burn",
+                "hard-light": "Hard Light",
+                "soft-light": "Soft Light",
+                "difference": "Difference",
+                "exclusion": "Exclusion",
+                "hue": "Hue",
+                "saturation": "Saturation",
+                "color": "Color",
+                "luminosity": "Luminosity"
+            },
+            "tab_slug": "advanced",
+            "toggle_slug": "filters",
+            "mobile_options": true
+        },
+        "hover_transition_duration": {
+            "label": "Transition Duration",
+            "description": "This controls the transition duration of the hover animation.",
+            "type": "range",
+            "option_category": "layout",
+            "range_settings": {
+                "min": 0,
+                "max": 2000,
+                "step": 50
+            },
+            "default": "300ms",
+            "default_on_child": true,
+            "validate_unit": true,
+            "fixed_unit": "ms",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions",
+            "mobile_options": true
+        },
+        "hover_transition_delay": {
+            "label": "Transition Delay",
+            "description": "This controls the transition delay of the hover animation.",
+            "type": "range",
+            "option_category": "layout",
+            "range_settings": {
+                "min": 0,
+                "max": 300,
+                "step": 50
+            },
+            "default": "0ms",
+            "default_on_child": true,
+            "validate_unit": true,
+            "fixed_unit": "ms",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions",
+            "mobile_options": true
+        },
+        "hover_transition_speed_curve": {
+            "label": "Transition Speed Curve",
+            "description": "This controls the transition speed curve of the hover animation.",
+            "type": "select",
+            "option_category": "layout",
+            "default": "ease",
+            "default_on_child": true,
+            "options": {
+                "ease-in-out": "Ease-In-Out",
+                "ease": "Ease",
+                "ease-in": "Ease-In",
+                "ease-out": "Ease-Out",
+                "linear": "Linear"
+            },
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions",
+            "mobile_options": true
+        },
+        "sticky_position": {
+            "label": "Sticky Position",
+            "description": "Choose to have this element remain a fixed distance from the top or bottom edge of the browser window as the user scrolls",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "type": "select",
+            "options": {
+                "none": "Do Not Stick",
+                "top": "Stick to Top",
+                "bottom": "Stick to Bottom",
+                "top_bottom": "Stick to Top and Bottom"
+            },
+            "default": "",
+            "option_category": "layout",
+            "responsive": true,
+            "mobile_options": true
+        },
+        "sticky_offset_top": {
+            "label": "Sticky Top Offset",
+            "description": "Define the vertical offset distance from the top edge of the browser window",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "type": "range",
+            "range_settings": {
+                "min": 0,
+                "max": 400,
+                "step": 1
+            },
+            "default": "",
+            "show_if_not": {
+                "sticky_position": [
+                    "none",
+                    "bottom"
+                ]
+            },
+            "responsive": true,
+            "mobile_options": true
+        },
+        "sticky_offset_bottom": {
+            "label": "Sticky Bottom Offset",
+            "description": "Define the vertical offset distance from the bottom edge of the browser window",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "type": "range",
+            "range_settings": {
+                "min": 0,
+                "max": 400,
+                "step": 1
+            },
+            "default": "",
+            "show_if_not": {
+                "sticky_position": [
+                    "none",
+                    "top"
+                ]
+            },
+            "responsive": true,
+            "mobile_options": true
+        },
+        "sticky_limit_top": {
+            "label": "Top Sticky Limit",
+            "description": "If defined, this element will stick to the top of this container, overriding its stickiness edge of the browser",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "type": "select",
+            "options": {
+                "none": "None",
+                "body": "Body Area",
+                "section": "Section",
+                "row": "Row",
+                "column": "Column"
+            },
+            "default": "",
+            "depends_show_if_not": [
+                "top",
+                "none"
+            ],
+            "depends_on": [
+                "sticky_position"
+            ],
+            "responsive": true,
+            "mobile_options": true
+        },
+        "sticky_limit_bottom": {
+            "label": "Bottom Sticky Limit",
+            "description": "If defined, this element will stick to the bottom of this container, overriding its stickiness to the edge of the browser",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "type": "select",
+            "options": {
+                "none": "None",
+                "body": "Body Area",
+                "section": "Section",
+                "row": "Row",
+                "column": "Column"
+            },
+            "default": "",
+            "depends_show_if_not": [
+                "bottom",
+                "none"
+            ],
+            "depends_on": [
+                "sticky_position"
+            ],
+            "responsive": true,
+            "mobile_options": true
+        },
+        "sticky_offset_surrounding": {
+            "label": "Offset From Surrounding Sticky Elements",
+            "description": "Apply “Sticky Offset” to the nearest Sticky Element above or below this element",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "type": "yes_no_button",
+            "options": {
+                "on": "Yes",
+                "off": "No"
+            },
+            "default": "",
+            "show_if_not": {
+                "sticky_position": "none"
+            },
+            "responsive": true,
+            "mobile_options": true
+        },
+        "sticky_transition": {
+            "label": "Transition Default and Sticky Styles",
+            "description": "Enabled animated transitions between default and sticky styles when the element becomes “stuck”",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "type": "yes_no_button",
+            "options": {
+                "on": "Yes",
+                "off": "No"
+            },
+            "default": "",
+            "show_if_not": {
+                "sticky_position": "none"
+            },
+            "responsive": true,
+            "mobile_options": true
+        },
+        "hover_enabled": {
+            "type": "skip",
+            "default": 0
+        },
+        "transform_styles_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_styles_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "positioning_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "positioning_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "positioning_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "z_index_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "z_index_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "z_index_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "position_fields"
+        },
+        "background_layout_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "background_layout_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "background_layout_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "arrows_color"
+        },
+        "overflow-x_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "visibility"
+        },
+        "overflow-x_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "visibility"
+        },
+        "overflow-x_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "visibility"
+        },
+        "overflow-y_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "visibility"
+        },
+        "overflow-y_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "visibility"
+        },
+        "overflow-y_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "visibility"
+        },
+        "filter_hue_rotate_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_hue_rotate_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_hue_rotate_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_saturate_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_saturate_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_saturate_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_brightness_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_brightness_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_brightness_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_contrast_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_contrast_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_contrast_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_invert_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_invert_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_invert_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_sepia_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_sepia_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_sepia_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_opacity_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_opacity_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_opacity_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_blur_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_blur_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "filter_blur_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "mix_blend_mode_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "mix_blend_mode_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "mix_blend_mode_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "filters"
+        },
+        "hover_transition_duration_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions"
+        },
+        "hover_transition_duration_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions"
+        },
+        "hover_transition_duration_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions"
+        },
+        "hover_transition_delay_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions"
+        },
+        "hover_transition_delay_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions"
+        },
+        "hover_transition_delay_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions"
+        },
+        "hover_transition_speed_curve_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions"
+        },
+        "hover_transition_speed_curve_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions"
+        },
+        "hover_transition_speed_curve_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "hover_transitions"
+        },
+        "sticky_position_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_position_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_position_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_offset_top_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_offset_top_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_offset_top_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_offset_bottom_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_offset_bottom_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_offset_bottom_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_limit_top_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_limit_top_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_limit_top_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_limit_bottom_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_limit_bottom_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_limit_bottom_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_offset_surrounding_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_offset_surrounding_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_offset_surrounding_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_transition_tablet": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_transition_phone": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        },
+        "sticky_transition_last_edited": {
+            "type": "skip",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects"
+        }
+    }
+}
