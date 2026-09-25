@@ -2407,6 +2407,11 @@
     "use_width": false,
     "use_module_alignment": false
    },
+   "height": {
+    "use_height": false,
+    "use_max_height": false,
+    "use_min_height": false
+   },
    "button": false
   }
  }

@@ -24,10 +24,14 @@ import fetch_divi
 PREVIEW = SCRIPTS / "preview.py"
 VERSION = fetch_divi.newest_cached()
 LANDING = FIXTURES / "valid" / "handwritten-landing.txt"
-# et_pb_sidebar needs WordPress widgets: it always renders as the fallback in the Python preview.
+# et_pb_sidebar needs WordPress widgets: it always renders as the fallback in the Python preview, and
+# neither preview has the site's widgets. et_pb_search isn't ported to Python but --exact renders it.
 UNSUPPORTED_PAGE = ('[et_pb_section][et_pb_row][et_pb_column type="4_4"]'
                     '[et_pb_sidebar area="sidebar-1"][/et_pb_sidebar]'
                     '[/et_pb_column][/et_pb_row][/et_pb_section]')
+EXACT_ONLY_PAGE = ('[et_pb_section][et_pb_row][et_pb_column type="4_4"]'
+                   '[et_pb_search][/et_pb_search]'
+                   '[/et_pb_column][/et_pb_row][/et_pb_section]')
 
 
 def run(*args, env=None, cwd=None, timeout=120):
@@ -196,14 +200,27 @@ class RenderTest(unittest.TestCase):
             self.assertEqual(r.returncode, 0, r.stderr)
             self.assertTrue((Path(d) / "handwritten-landing.html").exists())
 
-    def test_coverage_summary_lists_unsupported_modules(self):
+    def render_summary(self, source: str) -> str:
         with tempfile.TemporaryDirectory() as d:
             page = Path(d) / "t.txt"
-            page.write_text(UNSUPPORTED_PAGE)
+            page.write_text(source)
             r = run("render", page, "--divi", VERSION, "--no-js", cwd=d)
         self.assertEqual(r.returncode, 0, r.stderr)
-        self.assertIn("et_pb_sidebar", r.stdout)
-        self.assertIn("--exact", r.stdout)
+        return r.stdout
+
+    def test_coverage_summary_sends_site_data_modules_to_the_draft_preview(self):
+        out = self.render_summary(UNSUPPORTED_PAGE)
+        line = next(l for l in out.splitlines() if "et_pb_sidebar" in l)
+        self.assertIn("needs the live site's data", line)
+        self.assertIn("WordPress draft preview", line)
+        self.assertNotIn("--exact", out)
+
+    def test_coverage_summary_lists_unsupported_modules_for_exact(self):
+        out = self.render_summary(EXACT_ONLY_PAGE)
+        line = next(l for l in out.splitlines() if "et_pb_search" in l)
+        self.assertIn("unsupported modules", line)
+        self.assertIn("--exact", line)
+        self.assertNotIn("draft preview", out)
 
 
 @unittest.skipUnless(VERSION, "no Divi build cached")
@@ -214,6 +231,7 @@ class ServeTest(unittest.TestCase):
         pages = Path(cls.tmp.name)
         (pages / "landing.txt").write_text(LANDING.read_text())
         (pages / "partial.txt").write_text(UNSUPPORTED_PAGE)
+        (pages / "exactonly.txt").write_text(EXACT_ONLY_PAGE)
         (pages / "broken.txt").write_bytes(b"\xff\xfe[et_pb_section][/et_pb_section]")  # not UTF-8
         cls.port = free_port()
         cls.proc = subprocess.Popen([sys.executable, str(PREVIEW), "serve", "--pages", str(pages),
@@ -263,10 +281,18 @@ class ServeTest(unittest.TestCase):
                 self.assertEqual(get(self.port, path)[0], 404)
 
     def test_unsupported_modules_show_the_exact_banner(self):
-        status, body, _ = get(self.port, "/partial")
+        status, body, _ = get(self.port, "/exactonly")
         self.assertEqual(status, 200)
         self.assertIn("exact preview: add --exact", body.decode("utf-8"))
         self.assertNotIn("exact preview: add --exact", get(self.port, "/landing")[1].decode("utf-8"))
+
+    def test_site_data_modules_show_the_draft_preview_banner(self):
+        status, body, _ = get(self.port, "/partial")
+        self.assertEqual(status, 200)
+        html = body.decode("utf-8")
+        self.assertIn("WordPress draft preview", html)
+        self.assertNotIn("add --exact", html)
+        self.assertNotIn("id=\"pp-preview-banner\"", get(self.port, "/landing")[1].decode("utf-8"))
 
     def test_render_error_returns_500_with_the_error(self):
         status, body, _ = get(self.port, "/broken")

@@ -119,6 +119,61 @@ generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
 - `heldout-outofscope.txt` "T26 re-measure": markup 0.9015, CSS 0.7674. What is left is Task 27's
   contact form and engine features no batch covers yet: section dividers, transforms and
   filters.
+- Task 27 (forms, maps and fallbacks: contact form + field, email optin + custom field, map,
+  fullwidth map + pin) added `forms-tuned-contact-form.txt`, `forms-tuned-signup.txt`,
+  `maps-tuned-map.txt`, `maps-tuned-fullwidth-map.txt` and the held-out page `forms-heldout.txt`
+  (conditional logic, captcha off with a left-icon submit button, an AWeber single-name optin
+  with responsive name width, custom fields of four types, a map with three pins and a fullwidth
+  map on one page, forms and optins inside a specialty section's inner row). Its pre-fix row was
+  measured before its real render was looked at: CSS exact, markup 197 of 198 elements. The one
+  miss was not a T27 module: the Fullwidth Header prints `.et_pb_header_content_wrapper` even
+  without content (`render_element(..., 'required' => false)`). After that fix the page became
+  tuned. Engine changes made while tuning (the older tuned fixtures still match exactly):
+  the `form_field` family (`process_advanced_form_field_options()`: field background/text
+  colours for normal, hover and focus, with placeholder selectors; `MarginPadding::
+  process_advanced_css()` for the fields' own margin and padding; `formfield.py`); the `height`
+  family (`process_height_options()`, generic: responsive values print on every device, falling
+  back to the option's `default_tablet`/`default_phone`, e.g. the map's 350px/200px); border radii
+  print whenever they differ from the option's default (`'on||||'` unless the option sets one,
+  such as the optin fields' `on|3px|3px|3px|3px`), no longer skipping all-zero values; the
+  optin's focus border only with `use_focus_border_color`; a button's background uses the
+  option's `css.important` (Contact Form's `plugin_only`); hover transitions for `custom_margin`,
+  `height`/`max_height` and the form-field colours (`get_transition_*_fields_css_props`); the
+  CSS minifier drops spaces around `+`; `property_values()` gives tablet/phone the default when
+  responsive editing is off (`get_property_values()`). `build_schema.py` now keeps the `height`
+  and `form_field` families in the compact schema.
+- Forms and determinism: real Divi prints a new nonce and random captcha digits (`rand(1, 15)`)
+  on every contact form render, and a checksum input in the optin. None of them reaches the
+  comparison, which reads tags, classes and builder CSS only, so no normalization is needed
+  (`fidelity.py` docstring, pinned by `tests/test_fidelity.py`). The Python renderer prints a
+  fixed `1 + 1` captcha and a placeholder nonce; the optin checksum is Divi's own
+  `md5(serialize($attrs))` and matches Playground. Attribute values the harness can't see
+  (input patterns, conditional-logic JSON, the checksum) are unit-tested against the values real
+  Divi printed (`tests/test_render_engine.py`).
+- Email Optin: the form prints only once a list is chosen. Real pages store it as
+  `<account>|<list id>` from the site's connected provider account, so the fixtures use values
+  like `mailchimp_list="Studio|a1b2c3d4"` (the validator now accepts that pair for `*_list`
+  fields). No provider API is called at render time; a signup custom field without a type
+  prints only its label, as in Divi (its default type is `none`).
+- Maps: Divi prints an empty `.et_pb_map` with data attributes and the pins as hidden children;
+  its JS draws the Google map with the site's key. The preview matches the markup and CSS; the
+  canvas stays empty without a key. An inset box shadow targets `.box-shadow-overlay`, but the
+  map's markup has no overlay element (Divi's JS adds none either). The map's CSS filters
+  (`child_filter_*`) are not ported.
+- WordPress-data modules (Task 27): blog, portfolio, filterable portfolio, fullwidth portfolio,
+  post slider, fullwidth post slider, post title, fullwidth post title, post content, fullwidth
+  post content, post navigation, comments, sidebar, menu and fullwidth menu show the live site's
+  posts, projects, menus, comments or widgets. The Python preview renders a blue dashed block
+  naming what the module shows; the coverage report lists them under `needs_site_data`, apart
+  from `unsupported_modules`, because the `--exact` preview can't show them either (a fresh
+  Playground WordPress has no posts, menus or media): the WordPress draft preview is the check.
+  Gallery attachment IDs (the media library) and oEmbed videos moved to `needs_site_data` too.
+  Search and Login need no site data and are not ported: they stay in `unsupported_modules`
+  with a red block that points to `--exact` (tests/test_render_fallbacks.py,
+  tests/test_preview_cli.py).
+- `heldout-outofscope.txt` "T27 re-measure": markup 0.9893, CSS 0.7674. Every module on it is
+  now supported, so the test checks its ratio (>= 0.9) again. What is left is engine features
+  no batch covers: the section divider, the heading's transform and the text's CSS filter.
 
 ## Metrics
 
@@ -133,3 +188,6 @@ generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
 | interactive-heldout.txt | T26 held-out pre-fix | circle_counter, countdown_timer, counter, counters, fullwidth_slider, pricing_table, pricing_tables, slide, tab, tabs, video_slider, video_slider_item | no | 1.0000 | 1.0000 | 2026-09-25 |
 | interactive-heldout.txt | T26 held-out post-fix | circle_counter, countdown_timer, counter, counters, fullwidth_slider, pricing_table, pricing_tables, slide, tab, tabs, video_slider, video_slider_item | yes | 1.0000 | 1.0000 | 2026-09-25 |
 | heldout-outofscope.txt | T26 re-measure | circle_counter, contact_field, contact_form, countdown_timer, counter, counters, heading, icon, pricing_table, pricing_tables, social_media_follow, social_media_follow_network, tab, tabs, testimonial, text | no | 0.9015 | 0.7674 | 2026-09-25 |
+| forms-heldout.txt | T27 held-out pre-fix | button, contact_field, contact_form, countdown_timer, fullwidth_header, fullwidth_map, map, map_pin, signup, signup_custom_field, text | no | 0.9975 | 1.0000 | 2026-09-25 |
+| forms-heldout.txt | T27 held-out post-fix | button, contact_field, contact_form, countdown_timer, fullwidth_header, fullwidth_map, map, map_pin, signup, signup_custom_field, text | yes | 1.0000 | 1.0000 | 2026-09-25 |
+| heldout-outofscope.txt | T27 re-measure | circle_counter, contact_field, contact_form, countdown_timer, counter, counters, heading, icon, pricing_table, pricing_tables, social_media_follow, social_media_follow_network, tab, tabs, testimonial, text | no | 0.9893 | 0.7674 | 2026-09-25 |

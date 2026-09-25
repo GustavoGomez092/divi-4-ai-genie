@@ -4139,6 +4139,11 @@
      "module_alignment": "%%order_class%%.et_pb_toggle"
     }
    },
+   "height": {
+    "css": {
+     "main": "%%order_class%% .et_pb_toggle_content"
+    }
+   },
    "button": false
   }
  }

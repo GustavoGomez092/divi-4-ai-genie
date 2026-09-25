@@ -5630,7 +5630,8 @@
     "use_padding": true,
     "draggable_padding": true
    },
-   "max_width": []
+   "max_width": [],
+   "height": []
   }
  }
 }

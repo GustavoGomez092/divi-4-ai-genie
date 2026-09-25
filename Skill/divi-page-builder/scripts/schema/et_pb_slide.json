@@ -4877,6 +4877,7 @@
      "max_width": {}
     }
    },
+   "height": false,
    "button": {
     "button": {
      "css": {

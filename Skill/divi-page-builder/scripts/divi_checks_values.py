@@ -69,6 +69,12 @@ def value_problems(res, attr: str, value: str) -> List[Problem]:
             return [("error", "E_VALUE_FORMAT", "global_colors_info must be JSON (escape \" as %22, [ as %91, ] as %93)", "")]
     options = field.get("options")
     if ftype in SELECT_TYPES and options:
+        # Email Optin lists: the schema only knows '0|none' and the manage actions; real values
+        # are '<account>|<list id>' pairs from the site's connected accounts (Signup.php render()
+        # splits them on the last '|').
+        if (ftype == "select_with_option_groups" and attr.endswith("_list") and "|" in value
+                and not value.startswith("manage|")):
+            return []
         if value not in options:
             shown = ", ".join(options[:12]) + (" …" if len(options) > 12 else "")
             return [("error", "E_BAD_OPTION", f"'{value}' is not an option for {attr}", f"Options: {shown}")]

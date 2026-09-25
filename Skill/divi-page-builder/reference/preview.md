@@ -154,6 +154,11 @@ renders correctly without them, just with fallback fonts and missing images.
   Playground WordPress has no client pages, so Divi's fallback menu differs. This is the only
   visual difference the spike measured against a live page (about 0.02–0.04% of pixels, all in
   the header nav band).
+- **Modules that show the site's own data render empty or generic here**: blog, portfolios,
+  post sliders, post title/content, post navigation, comments, sidebar and menus read posts,
+  projects, menus, comments and widgets that only the client's site has. Check them in the
+  WordPress draft preview. (The Python preview draws a labelled placeholder for them and lists
+  them as "needs the live site's data", not as a reason to add `--exact`.)
 - **Animations need JavaScript** — a plain screenshot or a static reading of the HTML won't
   show them; open the page in a browser (`serve`) to see them run.
 - **Fonts and images need network to *look* right.** Google Fonts and remote images referenced

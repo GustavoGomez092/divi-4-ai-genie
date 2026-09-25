@@ -6195,6 +6195,7 @@
     }
    },
    "max_width": [],
+   "height": [],
    "button": {
     "button": {
      "css": {
@@ -6210,6 +6211,57 @@
      "margin_padding": {
       "css": {
        "important": "all"
+      }
+     }
+    }
+   },
+   "form_field": {
+    "form_field": {
+     "css": {
+      "main": "%%order_class%% input[type=\"password\"], %%order_class%% input[type=\"text\"], %%order_class%% textarea, %%order_class%% .input",
+      "hover": "%%order_class%% input[type=\"text\"]:hover, %%order_class%% textarea:hover, %%order_class%% .input:hover",
+      "focus": "%%order_class%% .et_pb_newsletter_form p input:focus",
+      "focus_hover": "%%order_class%% .et_pb_newsletter_form p input:focus:hover",
+      "placeholder_focus": "%%order_class%% .et_pb_newsletter_form p input:focus::-webkit-input-placeholder, %%order_class%% .et_pb_newsletter_form p input:focus::-moz-placeholder, %%order_class%% .et_pb_newsletter_form p input:focus:-ms-input-placeholder",
+      "padding": "%%order_class%% .et_pb_newsletter_form .input",
+      "margin": "%%order_class%% .et_pb_newsletter_form .et_pb_contact_form_field",
+      "important": [
+       "padding",
+       "margin"
+      ]
+     },
+     "box_shadow": {
+      "name": "fields",
+      "css": {
+       "main": "%%order_class%% .et_pb_newsletter_form .input"
+      }
+     },
+     "border_styles": {
+      "form_field": {
+       "name": "fields",
+       "css": {
+        "main": {
+         "border_radii": "%%order_class%% .et_pb_newsletter_form p input",
+         "border_styles": "%%order_class%% .et_pb_newsletter_form p input"
+        }
+       }
+      },
+      "form_field_focus": {
+       "name": "fields_focus",
+       "css": {
+        "main": {
+         "border_radii": "%%order_class%% .et_pb_newsletter_form p input:focus",
+         "border_styles": "%%order_class%% .et_pb_newsletter_form p input:focus"
+        }
+       }
+      }
+     },
+     "font_field": {
+      "css": {
+       "main": "%%order_class%% .et_pb_newsletter_form .input",
+       "hover": "%%order_class%% .et_pb_newsletter_form .input:hover",
+       "text_shadow": "%%order_class%%.et_pb_login input",
+       "important": "plugin_only"
       }
      }
     }

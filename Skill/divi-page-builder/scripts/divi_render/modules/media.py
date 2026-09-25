@@ -93,11 +93,11 @@ class Video(Module):
 
 def video_html(m: Module, src: str, webm: str) -> str:
     """Video.php / VideoSliderItem.php get_video(): YouTube/Vimeo URLs go through WordPress oEmbed,
-    which needs the network; here they become the iframe oEmbed would return (listed in the
-    coverage report as video_oembed). Anything else is a native <video> with its mp4/webm sources."""
+    which needs the live site; here they become the iframe oEmbed would return (listed in the
+    coverage report's needs_site_data as video_oembed). Anything else is a native <video> with its mp4/webm sources."""
     embed = oembed_iframe(src)
     if embed:
-        m.ctx.count_unsupported("video_oembed")
+        m.ctx.count_site_data("video_oembed")
         return embed
     return ("\n\t\t\t\t<video controls>\n\t\t\t\t\t"
             + (f'<source type="video/mp4" src="{esc_url(src)}" />' if src else "") + "\n\t\t\t\t\t"
@@ -196,7 +196,7 @@ class Gallery(Module):
         ids = [i.strip() for i in p.get("gallery_ids", "").split(",") if i.strip()]
         if not ids:  # get_gallery() found no attachments: render() returns ''
             return ""
-        self.ctx.count_unsupported("gallery_attachments", len(ids))
+        self.ctx.count_site_data("gallery_attachments", len(ids))   # the media library
         orientation = "portrait" if p.get("orientation", "") == "portrait" else "landscape"
         num = re.match(r"\s*(\d+)", p.get("posts_number", ""))
         per_page = (int(num.group(1)) if num else 0) or 4  # 0 === intval( $posts_number ) ? 4 : ...

@@ -10,8 +10,8 @@ from pathlib import Path
 RESP_SUFFIXES = ("_tablet", "_phone", "_last_edited")
 STRUCTURE = {"et_pb_section", "et_pb_row", "et_pb_row_inner", "et_pb_column", "et_pb_column_inner"}
 # advanced_fields families the Python renderer (scripts/divi_render) reads, and UI-only keys it never needs.
-RENDER_FAMILIES = ("fonts", "text", "background", "borders", "box_shadow", "margin_padding", "max_width",
-                   "button", "overflow")
+RENDER_FAMILIES = ("fonts", "text", "background", "borders", "box_shadow", "margin_padding", "max_width", "height",
+                   "button", "overflow", "form_field")
 UI_KEYS = {"label", "description", "label_prefix"}
 
 

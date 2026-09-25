@@ -50,6 +50,14 @@ class AttributeTest(unittest.TestCase):
         self.assertIn(("error", "E_BAD_OPTION", "title_level"), found('[et_pb_heading title_level="h7"][/et_pb_heading]'))
         self.assertIn(("error", "E_BAD_OPTION", "use_icon"), found('[et_pb_blurb use_icon="yes"][/et_pb_blurb]'))
 
+    def test_email_provider_list_accepts_site_specific_account_list_pairs(self):
+        # The schema can only list '0|none' and the manage actions: the real values are
+        # '<account>|<list id>' pairs from the live site's connected provider accounts.
+        self.assertEqual(found('[et_pb_signup mailchimp_list="Studio|a1b2c3d4"][/et_pb_signup]', "error"), [])
+        self.assertEqual(found('[et_pb_signup aweber_list="0|none"][/et_pb_signup]', "error"), [])
+        self.assertIn(("error", "E_BAD_OPTION", "mailchimp_list"), found('[et_pb_signup mailchimp_list="a1b2c3d4"][/et_pb_signup]'))
+        self.assertIn(("error", "E_BAD_OPTION", "mailchimp_list"), found('[et_pb_signup mailchimp_list="manage|oops"][/et_pb_signup]'))
+
     def test_units(self):
         self.assertEqual(found('[et_pb_heading title_font_size="48px"][/et_pb_heading]', "error"), [])
         self.assertIn(("error", "E_BAD_UNIT", "title_font_size"), found('[et_pb_heading title_font_size="48parsecs"][/et_pb_heading]'))

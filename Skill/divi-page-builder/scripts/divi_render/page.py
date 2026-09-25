@@ -106,7 +106,9 @@ def document(ctx: Ctx, builder_html: str, builder_css: str, title: str, with_js:
 
 def coverage_report(ctx: Ctx) -> dict:
     """Per module type: count, attributes set, attributes never read ('ignored'); plus the
-    unsupported modules and features (placeholders, section dividers, patterns...)."""
+    unsupported modules and features the --exact preview can show (placeholders, section
+    dividers, patterns...) and, apart from them, what needs the live site's data (posts, menus,
+    media, comments, widgets, oEmbed), which neither preview can show."""
     by_tag: dict = {}
     for c in ctx.coverage:
         t = by_tag.setdefault(c["tag"], {"count": 0, "supported": c["supported"], "attrs": 0, "ignored": {}})
@@ -117,6 +119,7 @@ def coverage_report(ctx: Ctx) -> dict:
     total = sum(c["attrs"] for c in ctx.coverage)
     ign = sum(len(c["ignored"]) for c in ctx.coverage)
     return {"modules": len(ctx.coverage), "unsupported_modules": dict(ctx.unsupported),
+            "needs_site_data": dict(ctx.site_data),
             "attrs_total": total, "attrs_ignored": ign,
             "attr_coverage_pct": round(100 * (total - ign) / total, 1) if total else 100.0,
             "by_tag": by_tag}

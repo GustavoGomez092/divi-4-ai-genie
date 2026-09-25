@@ -78,11 +78,14 @@ class ButtonOptions:
             decl += f"padding-right: {'0.7em' if left else '2em'};"
         if on_hover == "off" and not pad[3]:
             decl += f"padding-left:{'2em' if left else '0.7em'};"
+        # the background goes through Background::get_background_style() with the option's
+        # css.important (any truthy value, e.g. Contact Form's 'plugin_only')
+        bg_imp = " !important" if css.get("important") else ""
         bgc = p.get(f"{opt}_bg_color", "")
         if bgc and p.get(f"{opt}_bg_enable_color", "on") != "off":
-            decl += f"background-color:{bgc};"
+            decl += f"background-color:{bgc}{bg_imp};"
         if p.get(f"{opt}_bg_use_color_gradient", "") == "on":
-            decl += f"background-image:{self.gradient(opt + '_bg')};"
+            decl += f"background-image:{self.gradient(opt + '_bg')}{bg_imp};"
         self.css(proc, decl)
 
         # hover
@@ -96,7 +99,7 @@ class ButtonOptions:
             hdecl += f"padding-right: {'0.7em' if left else '2em'};padding-left: {'2em' if left else '0.7em'};"
         hbg = hover_value(p, f"{opt}_bg_color")
         if hbg:
-            hdecl += f"background-image:initial;background-color:{hbg};"
+            hdecl += f"background-image:initial{bg_imp};background-color:{hbg}{bg_imp};"
         if hdecl:
             self.css(add_hover_to_selectors(proc), hdecl)
 

@@ -4,11 +4,13 @@
   python3 preview.py render PAGE [--out FILE] [--tokens tokens.json | --divi VER] [--no-js] [--exact]
       Writes one standalone HTML file (Divi's CSS/JS inlined, icon fonts and theme images as data:
       URIs, so it works opened from disk or over HTTP) and prints the coverage summary: modules the
-      Python renderer doesn't support and attributes it ignored. Default --out: <page name>.html.
+      Python renderer doesn't support (--exact renders them), content that needs the live site's
+      data (posts, menus, media, comments, widgets: neither preview has it, so check the WordPress
+      draft preview) and attributes it ignored. Default --out: <page name>.html.
   python3 preview.py serve [--pages DIR] [--port 8765] [--tokens tokens.json | --divi VER] [--no-js] [--exact]
       Serves http://127.0.0.1:PORT/<name> for every DIR/<name>.txt, re-rendered on each request.
       The page polls for edits and reloads itself. Divi's fonts/images/JS come from /__divi/...
-      Pages with unsupported modules show a banner.
+      Pages with unsupported modules or site-data content show a banner saying which preview can show them.
   python3 preview.py doctor
       Reports Python, the cache dir, cached Divi versions and whether Node is present (only
       needed for --exact).
@@ -52,8 +54,12 @@ RELOAD_JS = """<script>(function(){var m=null;setInterval(function(){fetch('/__m
 .then(function(r){return r.text()}).then(function(t){if(m===null){m=t}else if(t!==m){location.reload()}})
 .catch(function(){})},1000)})();</script>"""
 BANNER = ('<div id="pp-preview-banner" style="position:fixed;z-index:999999;left:0;right:0;bottom:0;padding:8px 14px;'
-          'background:#e11d48;color:#fff;font:13px/1.4 -apple-system,Segoe UI,sans-serif">'
-          'Not rendered by the Python preview: %s. For the exact preview: add --exact.</div>')
+          'background:#e11d48;color:#fff;font:13px/1.4 -apple-system,Segoe UI,sans-serif">%s</div>')
+BANNER_EXACT = "Not rendered by the Python preview: %s. For the exact preview: add --exact."
+BANNER_SITE = ("Needs the live site's data: %s. Neither preview can show it (the --exact preview is a fresh "
+               "WordPress with no posts, menus or media); check the WordPress draft preview.")
+SITE_DATA_HINT = ("needs the live site's data (placeholders; neither preview can show posts, menus, media, "
+                  "comments or widgets, check the WordPress draft preview): ")
 
 
 class UsageError(Exception):
@@ -78,7 +84,22 @@ def resolve_divi_version(divi: str | None, tokens: str | None) -> str:
 
 
 def unsupported_items(coverage: dict) -> dict:
+    """What the Python preview doesn't render but the --exact preview does."""
     return {k: n for k, n in coverage.get("unsupported_modules", {}).items() if n}
+
+
+def site_data_items(coverage: dict) -> dict:
+    """What needs the live site's data: neither preview can show it."""
+    return {k: n for k, n in coverage.get("needs_site_data", {}).items() if n}
+
+
+def banner_html(coverage: dict) -> str:
+    parts = []
+    if unsupported_items(coverage):
+        parts.append(BANNER_EXACT % html.escape(", ".join(sorted(unsupported_items(coverage)))))
+    if site_data_items(coverage):
+        parts.append(BANNER_SITE % html.escape(", ".join(sorted(site_data_items(coverage)))))
+    return BANNER % "<br>".join(parts) if parts else ""
 
 
 NETWORK_NOTE = {
@@ -103,6 +124,9 @@ def coverage_summary(coverage: dict, assets: str = "embedded") -> str:
     if features:
         lines.append("unsupported features (not rendered; use --exact): "
                      + ", ".join(f"{k} x{n}" for k, n in sorted(features.items())))
+    site = site_data_items(coverage)
+    if site:
+        lines.append(SITE_DATA_HINT + ", ".join(f"{k} x{n}" for k, n in sorted(site.items())))
     for tag, info in sorted(coverage.get("by_tag", {}).items()):
         if info["supported"] and info["ignored"]:
             lines.append(f"ignored attributes on {tag}: " + ", ".join(sorted(info["ignored"])))
@@ -211,13 +235,14 @@ def make_handler(pages: Path, version: str, with_js: bool):
             sys.stderr.write(f"[{name}] " + coverage_summary(result.coverage, "served").replace("\n", f"\n[{name}] ") + "\n")
             page = result.html
             unsupported = unsupported_items(result.coverage)
-            if unsupported:
-                banner = BANNER % html.escape(", ".join(sorted(unsupported)))
+            banner = banner_html(result.coverage)
+            if banner:
                 page = page.replace("</body>", banner + "\n</body>", 1)
             page = page.replace("</body>", (RELOAD_JS % name) + "\n</body>", 1)
             headers = {"X-Render-Ms": f"{(time.perf_counter() - t0) * 1000:.1f}",
                        "X-Attr-Coverage": str(result.coverage["attr_coverage_pct"]),
-                       "X-Unsupported": json.dumps(unsupported)[:500]}
+                       "X-Unsupported": json.dumps(unsupported)[:500],
+                       "X-Needs-Site-Data": json.dumps(site_data_items(result.coverage))[:500]}
             return self.send(200, page.encode("utf-8"), extra=headers)
     return Handler
 

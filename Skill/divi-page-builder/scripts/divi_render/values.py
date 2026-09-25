@@ -162,13 +162,13 @@ def any_value(p: Props, name: str, device: str = "desktop", default: str = "", f
 
 
 def property_values(p: Props, name: str, default: str = "", force: bool = False) -> dict:
+    """ResponsiveOptions::get_property_values(): without responsive editing, tablet and phone
+    keep `default` (Signup's fullwidth fields pass 'on')."""
     vals = {d: default for d in DEVICES}
     vals["desktop"] = any_value(p, name, "desktop", default, force)
     if resp_enabled(p, name):
         vals["tablet"] = any_value(p, name, "tablet", default, force)
         vals["phone"] = any_value(p, name, "phone", default, force)
-    else:
-        vals["tablet"] = vals["phone"] = ""
     return vals
 
 

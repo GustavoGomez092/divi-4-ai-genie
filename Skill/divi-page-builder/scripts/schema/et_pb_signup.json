@@ -6963,6 +6963,7 @@
     }
    },
    "max_width": [],
+   "height": [],
    "button": {
     "button": {
      "css": {
@@ -6977,6 +6978,85 @@
      "margin_padding": {
       "css": {
        "important": "all"
+      }
+     }
+    }
+   },
+   "form_field": {
+    "form_field": {
+     "css": {
+      "main": "%%order_class%% .et_pb_newsletter_form p .input",
+      "background_color": "%%order_class%% .et_pb_newsletter_form p input[type=\"text\"], %%order_class%% .et_pb_newsletter_form p textarea, %%order_class%% .et_pb_newsletter_form p select, %%order_class%% .et_pb_newsletter_form p .input[type=\"checkbox\"] + label i, %%order_class%% .et_pb_newsletter_form p .input[type=\"radio\"] + label i",
+      "background_color_hover": "%%order_class%% .et_pb_newsletter_form p input[type=\"text\"]:hover, %%order_class%% .et_pb_newsletter_form p textarea:hover, %%order_class%% .et_pb_newsletter_form p select:hover, %%order_class%% .et_pb_newsletter_form p .input[type=\"checkbox\"] + label:hover i, %%order_class%% .et_pb_newsletter_form p .input[type=\"radio\"] + label:hover i",
+      "focus_background_color": "%%order_class%% .et_pb_newsletter_form p input.input:focus, %%order_class%% .et_pb_newsletter_form p textarea:focus, %%order_class%% .et_pb_newsletter_form p select:focus",
+      "form_text_color": "%%order_class%% .et_pb_newsletter_form p input[type=\"text\"], %%order_class%% .et_pb_newsletter_form p textarea, %%order_class%% .et_pb_newsletter_form p select, %%order_class%% .et_pb_newsletter_form p .input[type=\"checkbox\"] + label i:before",
+      "form_text_color_hover": "%%order_class%% .et_pb_newsletter_form p input[type=\"text\"]:hover, %%order_class%% .et_pb_newsletter_form p textarea:hover, %%order_class%% .et_pb_newsletter_form p select:hover, %%order_class%% .et_pb_newsletter_form p .input[type=\"checkbox\"] + label:hover i:before",
+      "focus_text_color": "%%order_class%% .et_pb_newsletter_form p .input:focus",
+      "placeholder_focus": "%%order_class%% .et_pb_newsletter_form p .input:focus::-webkit-input-placeholder, %%order_class%% .et_pb_newsletter_form p .input:focus::-moz-placeholder, %%order_class%% .et_pb_newsletter_form p .input:focus:-ms-input-placeholder, %%order_class%% .et_pb_newsletter_form p textarea:focus::-webkit-input-placeholder, %%order_class%% .et_pb_newsletter_form p textarea:focus::-moz-placeholder, %%order_class%% .et_pb_newsletter_form p textarea:focus:-ms-input-placeholder",
+      "important": [
+       "form_text_color"
+      ]
+     },
+     "box_shadow": {
+      "name": "fields",
+      "css": {
+       "main": "%%order_class%% .et_pb_newsletter_form .input"
+      },
+      "default_on_fronts": {
+       "color": "",
+       "position": ""
+      }
+     },
+     "border_styles": {
+      "form_field": {
+       "name": "fields",
+       "css": {
+        "main": {
+         "border_radii": "%%order_class%% .et_pb_newsletter_form p input[type=\"text\"], %%order_class%% .et_pb_newsletter_form p textarea, %%order_class%% .et_pb_newsletter_form p select, %%order_class%% .et_pb_newsletter_form p .input[type=\"radio\"] + label i, %%order_class%% .et_pb_newsletter_form p .input[type=\"checkbox\"] + label i",
+         "border_styles": "%%order_class%% .et_pb_newsletter_form p input[type=\"text\"], %%order_class%% .et_pb_newsletter_form p textarea, %%order_class%% .et_pb_newsletter_form p select, %%order_class%% .et_pb_newsletter_form p .input[type=\"radio\"] + label i, %%order_class%% .et_pb_newsletter_form p .input[type=\"checkbox\"] + label i"
+        }
+       }
+      },
+      "form_field_focus": {
+       "name": "fields_focus",
+       "css": {
+        "main": {
+         "border_radii": "%%order_class%% .et_pb_newsletter_form p input[type=\"text\"]:focus",
+         "border_styles": "%%order_class%% .et_pb_newsletter_form p input[type=\"text\"]:focus"
+        }
+       }
+      }
+     },
+     "font_field": {
+      "css": {
+       "main": [
+        "%%order_class%%.et_pb_contact_field .et_pb_contact_field_options_title",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input::-webkit-input-placeholder",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input::-moz-placeholder",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input:-ms-input-placeholder",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input[type=checkbox] + label",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input[type=radio] + label"
+       ],
+       "hover": [
+        "%%order_class%%.et_pb_contact_field .et_pb_contact_field_options_title:hover",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input:hover",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input:hover::-webkit-input-placeholder",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input:hover::-moz-placeholder",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input:hover:-ms-input-placeholder",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input[type=checkbox] + label:hover",
+        "%%order_class%%.et_pb_subscribe .et_pb_newsletter_form .input[type=radio] + label:hover"
+       ],
+       "important": "plugin_only"
+      }
+     },
+     "margin_padding": {
+      "css": {
+       "main": "%%order_class%% .et_pb_newsletter_form p.et_pb_newsletter_field",
+       "padding": "%%order_class%% .et_pb_newsletter_form .input, %%order_class%% .et_pb_newsletter_form input[type=\"text\"], %%order_class%% .et_pb_newsletter_form p.et_pb_newsletter_field input[type=\"text\"], %%order_class%% .et_pb_newsletter_form textarea, %%order_class%% .et_pb_newsletter_form p.et_pb_newsletter_field textarea, %%order_class%% .et_pb_newsletter_form select",
+       "important": [
+        "custom_padding"
+       ]
       }
      }
     }

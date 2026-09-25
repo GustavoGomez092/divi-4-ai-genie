@@ -2721,6 +2721,18 @@
     }
    },
    "max_width": [],
+   "height": {
+    "css": {
+     "main": "%%order_class%% > .et_pb_map"
+    },
+    "options": {
+     "height": {
+      "default": "440px",
+      "default_tablet": "350px",
+      "default_phone": "200px"
+     }
+    }
+   },
    "button": false
   }
  }

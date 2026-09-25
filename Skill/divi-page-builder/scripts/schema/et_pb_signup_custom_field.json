@@ -3080,7 +3080,53 @@
      ]
     }
    },
-   "max_width": []
+   "max_width": [],
+   "height": [],
+   "form_field": {
+    "form_field": {
+     "css": {
+      "main": ".et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input",
+      "background_color": ".et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% input[type=\"text\"], .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% textarea, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% select, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input[type=\"checkbox\"] + label i, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input[type=\"radio\"] + label i",
+      "background_color_hover": ".et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% input[type=\"text\"]:hover, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% textarea:hover, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% select:hover, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input[type=\"checkbox\"] + label:hover i, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input[type=\"radio\"] + label:hover i",
+      "focus_background_color": ".et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% input.input:focus, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% textarea:focus, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% select:focus",
+      "form_text_color": ".et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% input[type=\"text\"], .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% textarea, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% select, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input[type=\"checkbox\"] + label i:before",
+      "form_text_color_hover": ".et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% input[type=\"text\"]:hover, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% textarea:hover, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% select:hover, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input[type=\"checkbox\"] + label:hover i:before",
+      "focus_text_color": ".et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input:focus",
+      "placeholder_focus": ".et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input:focus::-webkit-input-placeholder, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input:focus::-moz-placeholder, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% .input:focus:-ms-input-placeholder, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% textarea:focus::-webkit-input-placeholder, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% textarea:focus::-moz-placeholder, .et_pb_newsletter_form .et_pb_newsletter_fields %%order_class%% textarea:focus:-ms-input-placeholder",
+      "important": [
+       "form_text_color",
+       "padding",
+       "margin"
+      ]
+     },
+     "margin_padding": false,
+     "box_shadow": false,
+     "border_styles": false,
+     "font_field": {
+      "css": {
+       "main": [
+        "%%order_class%%.et_pb_contact_field .et_pb_contact_field_options_title",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input::-webkit-input-placeholder",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input::-moz-placeholder",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:-ms-input-placeholder",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=checkbox] + label",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=radio] + label"
+       ],
+       "hover": [
+        "%%order_class%%.et_pb_contact_field .et_pb_contact_field_options_title:hover",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:hover",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:hover::-webkit-input-placeholder",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:hover::-moz-placeholder",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:hover:-ms-input-placeholder",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=checkbox] + label:hover",
+        ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=radio] + label:hover"
+       ],
+       "important": "plugin_only"
+      }
+     }
+    }
+   }
   }
  }
 }

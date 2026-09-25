@@ -10,6 +10,12 @@ Markup: the balanced `.et-l` block of both files -> sequence of (tag, class list
 element; reports exact-sequence equality and a difflib ratio over that sequence.
 CSS: (media, single selector, declaration) triples of builder rules (selectors containing a module
 order class such as .et_pb_text_3) - same method as research/playground-prototype/compare.py.
+
+Determinism: only tags, class lists and builder CSS are compared, never attribute values or text.
+What real Divi prints differently on every request therefore needs no normalization: the contact
+form's `_wpnonce-et-pb-contact-form-submitted-N` value and its captcha digits (rand(1, 15), in the
+question text and the data-first_digit/data-second_digit attributes), and the Email Optin's
+checksum input (tests/test_fidelity.py pins this).
 """
 import argparse
 import difflib

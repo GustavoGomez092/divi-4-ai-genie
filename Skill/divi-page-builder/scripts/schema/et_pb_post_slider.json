@@ -6278,6 +6278,11 @@
      }
     }
    },
+   "height": {
+    "css": {
+     "main": "%%order_class%%, %%order_class%% .et_pb_slide"
+    }
+   },
    "button": {
     "button": {
      "css": {

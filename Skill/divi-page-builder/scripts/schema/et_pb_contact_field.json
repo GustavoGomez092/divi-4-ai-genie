@@ -2688,7 +2688,36 @@
     }
    },
    "max_width": [],
-   "button": false
+   "height": {
+    "css": {
+     "main": "%%order_class%% input[type=text], %%order_class%% input[type=email], %%order_class%% textarea, %%order_class%%[data-type=checkbox], %%order_class%%[data-type=radio], %%order_class%%[data-type=select], %%order_class%%[data-type=select] select"
+    }
+   },
+   "button": false,
+   "form_field": {
+    "form_field": {
+     "css": {
+      "background_color": "%%order_class%%.et_pb_contact_field .input, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"] + label i, %%order_class%%.et_pb_contact_field .input[type=\"radio\"] + label i",
+      "main": "%%order_class%%.et_pb_contact_field .input",
+      "background_color_hover": "%%order_class%%.et_pb_contact_field .input:hover, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"] + label:hover i,  %%order_class%%.et_pb_contact_field .input[type=\"radio\"] + label:hover i",
+      "focus_background_color": "%%order_class%%.et_pb_contact_field .input:focus, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"]:active + label i, %%order_class%%.et_pb_contact_field .input[type=\"radio\"]:active + label i",
+      "focus_background_color_hover": "%%order_class%%.et_pb_contact_field .input:focus:hover, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"]:active:hover + label i, %%order_class%%.et_pb_contact_field .input[type=\"radio\"]:active:hover + label i",
+      "form_text_color": "%%order_class%%.et_pb_contact_field .input, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"] + label, %%order_class%%.et_pb_contact_field .input[type=\"radio\"] + label, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"]:checked + label i:before",
+      "form_text_color_hover": "%%order_class%%.et_pb_contact_field .input:hover, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"]:hover + label,\n\t\t\t\t\t\t%%order_class%%.et_pb_contact_field .input[type=\"radio\"]:hover + label, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"]:checked:hover + label i:before",
+      "focus_text_color": "%%order_class%%.et_pb_contact_field .input:focus, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"]:active + label,\n\t\t\t\t\t\t%%order_class%%.et_pb_contact_field .input[type=\"radio\"]:active + label, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"]:checked:active + label i:before",
+      "focus_text_color_hover": "%%order_class%%.et_pb_contact_field .input:focus:hover, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"]:active:hover + label,\n\t\t\t\t\t\t%%order_class%%.et_pb_contact_field .input[type=\"radio\"]:active:hover + label, %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"]:checked:active:hover + label i:before"
+     },
+     "margin_padding": false,
+     "box_shadow": false,
+     "border_styles": false,
+     "font_field": {
+      "css": {
+       "main": "%%order_class%%.et_pb_contact_field .et_pb_contact_field_options_title,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input::placeholder,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input::-webkit-input-placeholder,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input::-moz-placeholder,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input:-ms-input-placeholder,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input[type=checkbox] + label,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input[type=radio] + label",
+       "important": "plugin_only"
+      }
+     }
+    }
+   }
   }
  }
 }

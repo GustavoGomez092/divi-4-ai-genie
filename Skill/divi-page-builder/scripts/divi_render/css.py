@@ -26,6 +26,7 @@ def minify_sel(s: str) -> str:
     s = re.sub(r"\s+", " ", s).strip()
     s = re.sub(r"\s*,\s*", ",", s)
     s = re.sub(r"\s*>\s*", ">", s)
+    s = re.sub(r"\s*\+\s*", "+", s)
     return s
 
 

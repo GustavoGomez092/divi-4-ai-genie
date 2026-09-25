@@ -4457,6 +4457,7 @@
      "module_alignment": "%%order_class%%.et_pb_contact_form_container.et_pb_module"
     }
    },
+   "height": [],
    "button": {
     "button": {
      "css": {
@@ -4473,6 +4474,47 @@
      "margin_padding": {
       "css": {
        "important": "all"
+      }
+     }
+    }
+   },
+   "form_field": {
+    "form_field": {
+     "css": {
+      "main": "%%order_class%% .input",
+      "background_color": "%%order_class%% .input, %%order_class%% .input[type=\"checkbox\"] + label i, %%order_class%% .input[type=\"radio\"] + label i",
+      "background_color_hover": "%%order_class%% .input:hover, %%order_class%% .input[type=\"checkbox\"]:hover + label i, %%order_class%% .input[type=\"radio\"]:hover + label i",
+      "focus_background_color": "%%order_class%% .input:focus, %%order_class%% .input[type=\"checkbox\"]:active + label i, %%order_class%% .input[type=\"radio\"]:active + label i",
+      "focus_background_color_hover": "%%order_class%% .input:focus:hover, %%order_class%% .input[type=\"checkbox\"]:active:hover + label i, %%order_class%% .input[type=\"radio\"]:active:hover + label i",
+      "placeholder_focus": "%%order_class%% p .input:focus::-webkit-input-placeholder, %%order_class%% p .input:focus::-moz-placeholder, %%order_class%% p .input:focus:-ms-input-placeholder, %%order_class%% p textarea:focus::-webkit-input-placeholder, %%order_class%% p textarea:focus::-moz-placeholder, %%order_class%% p textarea:focus:-ms-input-placeholder",
+      "padding": "%%order_class%% .et_pb_contact_field .input",
+      "margin": "%%order_class%% .et_pb_contact_field",
+      "form_text_color": "%%order_class%% .input, %%order_class%% .input[type=\"checkbox\"] + label, %%order_class%% .input[type=\"radio\"] + label, %%order_class%% .input[type=\"checkbox\"]:checked + label i:before",
+      "form_text_color_hover": "%%order_class%% .input:hover, %%order_class%% .input[type=\"checkbox\"]:hover + label, %%order_class%% .input[type=\"radio\"]:hover + label, %%order_class%% .input[type=\"checkbox\"]:checked:hover + label i:before",
+      "focus_text_color": "%%order_class%% .input:focus, %%order_class%% .input[type=\"checkbox\"]:active + label, %%order_class%% .input[type=\"radio\"]:active + label, %%order_class%% .input[type=\"checkbox\"]:checked:active + label i:before",
+      "focus_text_color_hover": "%%order_class%% .input:focus:hover, %%order_class%% .input[type=\"checkbox\"]:active:hover + label, %%order_class%% .input[type=\"radio\"]:active:hover + label, %%order_class%% .input[type=\"checkbox\"]:checked:active:hover + label i:before"
+     },
+     "box_shadow": false,
+     "border_styles": false,
+     "font_field": {
+      "css": {
+       "main": "%%order_class%%.et_pb_contact_form_container .input, %%order_class%%.et_pb_contact_form_container .input::placeholder, %%order_class%%.et_pb_contact_form_container .input::-webkit-input-placeholder, %%order_class%%.et_pb_contact_form_container .input::-moz-placeholder, %%order_class%%.et_pb_contact_form_container .input:-ms-input-placeholder, %%order_class%%.et_pb_contact_form_container .input[type=checkbox] + label, %%order_class%%.et_pb_contact_form_container .input[type=radio] + label",
+       "hover": [
+        "%%order_class%%.et_pb_contact_form_container .input:hover",
+        "%%order_class%%.et_pb_contact_form_container .input:hover::placeholder",
+        "%%order_class%%.et_pb_contact_form_container .input:hover::-webkit-input-placeholder",
+        "%%order_class%%.et_pb_contact_form_container .input:hover::-moz-placeholder",
+        "%%order_class%%.et_pb_contact_form_container .input:hover:-ms-input-placeholder",
+        "%%order_class%%.et_pb_contact_form_container .input[type=checkbox]:hover + label",
+        "%%order_class%%.et_pb_contact_form_container .input[type=radio]:hover + label"
+       ]
+      }
+     },
+     "margin_padding": {
+      "css": {
+       "main": "%%order_class%% .input",
+       "padding": "%%order_class%% .et_pb_contact_field .input",
+       "margin": "%%order_class%% .et_pb_contact_field"
       }
      }
     }

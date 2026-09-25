@@ -5856,6 +5856,11 @@
     }
    },
    "max_width": [],
+   "height": {
+    "css": {
+     "main": "%%order_class%%"
+    }
+   },
    "button": false
   }
  }

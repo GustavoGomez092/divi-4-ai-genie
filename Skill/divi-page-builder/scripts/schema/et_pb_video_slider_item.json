@@ -684,6 +684,7 @@
    },
    "margin_padding": false,
    "max_width": false,
+   "height": false,
    "button": false
   }
  }

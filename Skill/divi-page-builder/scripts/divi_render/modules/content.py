@@ -157,7 +157,8 @@ class FullwidthHeader(Module):
         title = f'<{lvl} class="et_pb_module_header">{p.get("title")}</{lvl}>' if p.get("title", "") else ""
         sub = f'<span class="et_pb_fullwidth_header_subhead">{p.get("subhead")}</span>' if p.get("subhead", "") else ""
         content = module_content(self.node)
-        body = f'<div class="et_pb_header_content_wrapper">{content}</div>' if content else ""
+        # render_element(..., 'required' => false): the wrapper prints even without content
+        body = f'<div class="et_pb_header_content_wrapper">{content}</div>'
         btns = ""
         for n in ("one", "two"):
             if p.get(f"button_{n}_text", ""):

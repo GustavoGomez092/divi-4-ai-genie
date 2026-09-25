@@ -15,6 +15,7 @@ from .background import BackgroundOptions
 from .buttons import ButtonOptions
 from .css import StyleSheet, add_hover_to_order_class, add_hover_to_selectors
 from .data import module_def
+from .formfield import FormFieldOptions
 from .options import DesignOptions
 from .values import (DEVICES, Props, hover_enabled, hover_value, icon_css_content, icon_font, multiply_unit,
                      property_values, range_value, resp_enabled)
@@ -52,7 +53,8 @@ class Ctx:
         self.styles = StyleSheet()
         self.fonts: set = set()
         self.coverage: list = []
-        self.unsupported: dict = {}
+        self.unsupported: dict = {}   # not rendered by the Python preview (the --exact preview renders it)
+        self.site_data: dict = {}     # needs the live site's posts/menus/media/...: neither preview has them
         # parent state visible to children while they render
         self.specialty = False
         self.specialty_col_type = ""
@@ -64,6 +66,8 @@ class Ctx:
         self.tabs = None
         self.pricing = None
         self.video_slider = None
+        self.half_width_counter = 0       # $et_pb_half_width_counter (form fields)
+        self.contact_form_num = None      # $et_pb_contact_form_num (the last contact form rendered)
         self.letter_spacing_fix: dict = {}  # slug -> {prefixed selector: same}
 
     def next_index(self, slug: str) -> int:
@@ -74,8 +78,11 @@ class Ctx:
     def count_unsupported(self, key: str, n: int = 1):
         self.unsupported[key] = self.unsupported.get(key, 0) + n
 
+    def count_site_data(self, key: str, n: int = 1):
+        self.site_data[key] = self.site_data.get(key, 0) + n
 
-class Module(DesignOptions, BackgroundOptions, ButtonOptions):
+
+class Module(DesignOptions, BackgroundOptions, ButtonOptions, FormFieldOptions):
     """One shortcode node: props (schema defaults + attrs), order class, CSS classes."""
     slug = ""
     mask_markup = ""
@@ -218,11 +225,14 @@ class Module(DesignOptions, BackgroundOptions, ButtonOptions):
         self.process_text_orientation()
         self.process_background()
         self.process_borders()
+        self.process_height()
         self.process_overflow()
         self.process_custom_margin()
         self.process_max_width()
         self.process_button()
+        self.process_form_field()
         self.process_box_shadow()
+        self.process_form_field_spacing()
         self.process_transitions()
 
     def render(self) -> str:

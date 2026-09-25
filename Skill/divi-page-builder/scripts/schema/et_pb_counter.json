@@ -2846,6 +2846,11 @@
      "module_alignment": ".et_pb_counters %%order_class%%"
     }
    },
+   "height": {
+    "css": {
+     "main": "%%order_class%% .et_pb_counter_container, %%order_class%% .et_pb_counter_container .et_pb_counter_amount"
+    }
+   },
    "button": false
   }
  }

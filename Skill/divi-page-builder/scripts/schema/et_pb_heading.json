@@ -2749,7 +2749,8 @@
     "css": {
      "important": "all"
     }
-   }
+   },
+   "height": []
   }
  }
 }

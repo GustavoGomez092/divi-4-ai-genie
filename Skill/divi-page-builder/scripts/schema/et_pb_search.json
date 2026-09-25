@@ -3176,9 +3176,43 @@
     }
    },
    "max_width": [],
+   "height": [],
    "button": false,
    "overflow": {
     "default": "hidden"
+   },
+   "form_field": {
+    "form_field": {
+     "css": {
+      "main": "%%order_class%% form input.et_pb_s",
+      "hover": "%%order_class%% form input.et_pb_s:hover",
+      "focus": "%%order_class%% form input.et_pb_s:focus",
+      "focus_hover": "%%order_class%% form input.et_pb_s:focus:hover"
+     },
+     "placeholder": false,
+     "margin_padding": false,
+     "box_shadow": false,
+     "border_styles": false,
+     "font_field": {
+      "css": {
+       "main": "%%order_class%% form input.et_pb_s, %%order_class%% form input.et_pb_s::placeholder, %%order_class%% form input.et_pb_s::-webkit-input-placeholder, %%order_class%% form input.et_pb_s::-ms-input-placeholder, %%order_class%% form input.et_pb_s::-moz-placeholder",
+       "placeholder": true,
+       "important": [
+        "line-height",
+        "text-shadow"
+       ]
+      },
+      "line_height": {
+       "default": "1em"
+      },
+      "font_size": {
+       "default": "14px"
+      },
+      "letter_spacing": {
+       "default": "0px"
+      }
+     }
+    }
    }
   }
  }

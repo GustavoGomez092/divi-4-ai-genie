@@ -2997,6 +2997,7 @@
     }
    },
    "max_width": false,
+   "height": false,
    "button": false
   }
  }

@@ -66,6 +66,19 @@ class CompareTest(unittest.TestCase):
         self.assertEqual(result["css"]["truth_decls"], 2)
         self.assertEqual(result["css"]["missing"], 0)
 
+    def test_per_request_form_values_do_not_affect_the_comparison(self):
+        # Divi prints a fresh nonce and random captcha digits on every contact form render; the
+        # markup comparison reads tags and classes only, so two renders stay identical.
+        def form(nonce, a, b):
+            return ('<div class="et-l et-l--post"><div class="et_pb_contact"><form class="et_pb_contact_form clearfix">'
+                    f'<p class="clearfix"><span class="et_pb_contact_captcha_question">{a} + {b}</span> = '
+                    f'<input type="text" class="input et_pb_contact_captcha" data-first_digit="{a}" data-second_digit="{b}">'
+                    f'</p><input type="hidden" id="_wpnonce-et-pb-contact-form-submitted-0" value="{nonce}" />'
+                    '</form></div></div>')
+        result = fidelity.compare(form("92b852bfe5", 4, 9), form("0000000000", 1, 1))
+        self.assertTrue(result["markup"]["tag_class_sequence_equal"])
+        self.assertEqual(result["markup"]["tag_class_seq_ratio"], 1.0)
+
 
 @unittest.skipUnless(shutil.which("node"), "node not installed")
 class GroundTruthTest(unittest.TestCase):

@@ -6293,6 +6293,7 @@
     }
    },
    "max_width": [],
+   "height": [],
    "button": {
     "button": {
      "css": {
@@ -6310,6 +6311,61 @@
      "margin_padding": {
       "css": {
        "important": "all"
+      }
+     }
+    }
+   },
+   "form_field": {
+    "form_field": {
+     "css": {
+      "main": "%%order_class%% #commentform textarea, %%order_class%% #commentform input[type='text'], %%order_class%% #commentform input[type='email'], %%order_class%% #commentform input[type='url']",
+      "hover": "%%order_class%% #commentform textarea:hover, %%order_class%% #commentform input[type='text']:hover, %%order_class%% #commentform input[type='email']:hover, %%order_class%% #commentform input[type='url']:hover",
+      "focus": "%%order_class%% #commentform textarea:focus, %%order_class%% #commentform input[type='text']:focus, %%order_class%% #commentform input[type='email']:focus, %%order_class%% #commentform input[type='url']:focus",
+      "focus_hover": "%%order_class%% #commentform textarea:focus:hover, %%order_class%% #commentform input[type='text']:focus:hover, %%order_class%% #commentform input[type='email']:focus:hover, %%order_class%% #commentform input[type='url']:focus:hover",
+      "placeholder": "%%order_class%% #commentform textarea::-webkit-input-placeholder, %%order_class%% #commentform textarea::-moz-placeholder, %%order_class%% #commentform textarea:-ms-input-placeholder, %%order_class%% #commentform input::-webkit-input-placeholder, %%order_class%% #commentform input::-moz-placeholder, %%order_class%% #commentform input:-ms-input-placeholder",
+      "placeholder_focus": "%%order_class%% #commentform textarea:focus::-webkit-input-placeholder, %%order_class%% #commentform textarea:focus::-moz-placeholder, %%order_class%% #commentform textarea:focus:-ms-input-placeholder, %%order_class%% #commentform input:focus::-webkit-input-placeholder, %%order_class%% #commentform input:focus::-moz-placeholder, %%order_class%% #commentform input:focus:-ms-input-placeholder",
+      "margin": "%%order_class%% #commentform .comment-form-comment, %%order_class%% #commentform .comment-form-author, %%order_class%% #commentform .comment-form-email, %%order_class%% #commentform .comment-form-url"
+     },
+     "box_shadow": {
+      "name": "fields",
+      "css": {
+       "main": "%%order_class%% #commentform textarea, %%order_class%% #commentform input[type='text'], %%order_class%% #commentform input[type='email'], %%order_class%% #commentform input[type='url']"
+      }
+     },
+     "border_styles": {
+      "form_field": {
+       "name": "fields",
+       "css": {
+        "main": {
+         "border_radii": "%%order_class%% #commentform textarea, %%order_class%% #commentform input[type='text'], %%order_class%% #commentform input[type='email'], %%order_class%% #commentform input[type='url']",
+         "border_styles": "%%order_class%% #commentform textarea, %%order_class%% #commentform input[type='text'], %%order_class%% #commentform input[type='email'], %%order_class%% #commentform input[type='url']"
+        },
+        "important": "all"
+       }
+      },
+      "form_field_focus": {
+       "name": "fields_focus",
+       "css": {
+        "main": {
+         "border_radii": "%%order_class%% #commentform textarea:focus, %%order_class%% #commentform input[type='text']:focus, %%order_class%% #commentform input[type='email']:focus, %%order_class%% #commentform input[type='url']:focus",
+         "border_styles": "%%order_class%% #commentform textarea:focus, %%order_class%% #commentform input[type='text']:focus, %%order_class%% #commentform input[type='email']:focus, %%order_class%% #commentform input[type='url']:focus"
+        }
+       }
+      }
+     },
+     "font_field": {
+      "css": {
+       "main": "%%order_class%% #commentform textarea, %%order_class%% #commentform input[type='text'], %%order_class%% #commentform input[type='email'], %%order_class%% #commentform input[type='url'], %%order_class%% #commentform label",
+       "important": "all"
+      },
+      "line_height": {
+       "default": "1em"
+      },
+      "font_size": {
+       "default": "18px"
+      },
+      "letter_spacing": {
+       "default": "0px"
       }
      }
     }

@@ -10,7 +10,9 @@ when no Divi build is cached or Node/Playground can't produce the truth.
   touch the working tree) under the stage label in RENDER_FIDELITY_STAGE (required; rows are keyed
   by fixture and stage). When every listed module is supported they must also reach a
   tag/class sequence ratio >= 0.9; while some aren't, each unsupported module must instead be
-  listed in the coverage report (the fallback contract), because a placeholder can't match.
+  listed in the coverage report (the fallback contract: `unsupported_modules`, or
+  `needs_site_data` for modules that show the site's posts, menus, comments or widgets), because
+  a placeholder can't match.
 """
 import datetime
 import json
@@ -161,7 +163,7 @@ class RenderFidelityTest(unittest.TestCase):
                                    r["markup"]["tag_class_seq_ratio"], r["css"]["ratio"], stage=STAGE)
                 unsupported = [m for m in fx["modules"] if m not in divi_render.SUPPORTED_MODULES]
                 if unsupported:
-                    listed = result.coverage["unsupported_modules"]
+                    listed = {**result.coverage["unsupported_modules"], **result.coverage["needs_site_data"]}
                     self.assertEqual([m for m in unsupported if m not in listed], [])
                 else:
                     self.assertGreaterEqual(r["markup"]["tag_class_seq_ratio"], MIN_HELDOUT_RATIO, json.dumps(r, indent=1))

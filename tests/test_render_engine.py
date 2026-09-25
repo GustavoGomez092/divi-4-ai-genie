@@ -74,3 +74,45 @@ class DataModuleHelpersTest(unittest.TestCase):
             pricing_items("+Design\n-Renderings\n&#8211;Weekends\n\nPermits"),
             '<li><span>Design</span></li><li class="et_pb_not_available"><span>Renderings</span></li>'
             '<li class="et_pb_not_available"><span>Weekends</span></li><li><span>Permits</span></li>')
+
+
+class FormHelpersTest(unittest.TestCase):
+    """Task 27: attribute values of the form modules. The fidelity harness compares tags, classes
+    and CSS only, so these pin values real Divi printed on Playground (forms-*.txt fixtures)."""
+
+    def props(self, **attrs):
+        from divi_render.values import Props
+        return Props(attrs)
+
+    def test_input_pattern_title_and_maxlength(self):
+        from divi_render.modules.forms import field_pattern
+        self.assertEqual(field_pattern(self.props(allowed_symbols="letters", min_length="2", max_length="40")),
+                         (' pattern="[A-Za-z\\s\\-]{2,40}"',
+                          ' title="Only letters allowed.Minimum length: 2 characters. Maximum length: 40 characters."',
+                          ' maxlength="40"'))
+        self.assertEqual(field_pattern(self.props(allowed_symbols="numbers", max_length="5")),
+                         (' pattern="[0-9\\s\\-]{0,5}"', ' title="Only numbers allowed.Maximum length: 5 characters."', ""))
+        self.assertEqual(field_pattern(self.props(min_length="4")),
+                         (' pattern=".{4,}"', ' title="Minimum length: 4 characters. "', ""))
+        self.assertEqual(field_pattern(self.props(allowed_symbols="all")), ("", "", ""))
+
+    def test_conditional_logic_rules_become_data_attributes(self):
+        from divi_render.modules.forms import conditional_attrs
+        rules = '[{"field":"zip","condition":"is not empty","value":""},{"field":"reason","condition":"is","value":"Estimate"}]'
+        self.assertEqual(
+            conditional_attrs(self.props(conditional_logic="on", conditional_logic_relation="on",
+                                         conditional_logic_rules=rules)),
+            ' data-conditional-logic="[[&quot;zip&quot;,&quot;is not empty&quot;,&quot;&quot;],[&quot;reason&quot;,'
+            '&quot;is&quot;,&quot;Estimate&quot;]]" data-conditional-relation="all"')
+        self.assertTrue(conditional_attrs(self.props(conditional_logic="on", conditional_logic_relation="off",
+                                                     conditional_logic_rules=rules)).endswith(' data-conditional-relation="any"'))
+        self.assertEqual(conditional_attrs(self.props(conditional_logic="off", conditional_logic_rules=rules)), "")
+
+    def test_signup_checksum_is_md5_of_the_php_serialized_attributes(self):
+        import hashlib
+        from divi_render.modules.forms import php_serialize
+        self.assertEqual(php_serialize({"title": "Café", "x": ""}), 'a:2:{s:5:"title";s:5:"Café";s:1:"x";s:0:"";}')
+        doc = parse((FIXTURES / "render" / "forms-tuned-signup.txt").read_text())
+        signup = next(n for n, _, _ in doc.walk() if n.tag == "et_pb_signup")
+        # the value real Divi printed for the first signup of forms-tuned-signup.txt
+        self.assertEqual(hashlib.md5(php_serialize(signup.attrs).encode()).hexdigest(), "f3076ae46f36856dee3524c616f93e38")

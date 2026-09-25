@@ -23,5 +23,10 @@
   {"file": "interactive-tuned-video-slider.txt", "modules": ["et_pb_video_slider", "et_pb_video_slider_item"], "tuned": true},
   {"file": "interactive-tuned-fullwidth-slider.txt", "modules": ["et_pb_fullwidth_slider", "et_pb_slide"], "tuned": true},
   {"file": "interactive-heldout.txt", "modules": ["et_pb_circle_counter", "et_pb_countdown_timer", "et_pb_counter", "et_pb_counters", "et_pb_fullwidth_slider", "et_pb_pricing_table", "et_pb_pricing_tables", "et_pb_slide", "et_pb_tab", "et_pb_tabs", "et_pb_video_slider", "et_pb_video_slider_item"], "tuned": true},
-  {"file": "interactive-tuned-slide-fonts-overlays.txt", "modules": ["et_pb_fullwidth_slider", "et_pb_slide", "et_pb_slider"], "tuned": true}
+  {"file": "interactive-tuned-slide-fonts-overlays.txt", "modules": ["et_pb_fullwidth_slider", "et_pb_slide", "et_pb_slider"], "tuned": true},
+  {"file": "forms-tuned-contact-form.txt", "modules": ["et_pb_contact_field", "et_pb_contact_form"], "tuned": true},
+  {"file": "forms-tuned-signup.txt", "modules": ["et_pb_signup", "et_pb_signup_custom_field"], "tuned": true},
+  {"file": "maps-tuned-map.txt", "modules": ["et_pb_map", "et_pb_map_pin"], "tuned": true},
+  {"file": "maps-tuned-fullwidth-map.txt", "modules": ["et_pb_fullwidth_map", "et_pb_map_pin"], "tuned": true},
+  {"file": "forms-heldout.txt", "modules": ["et_pb_button", "et_pb_contact_field", "et_pb_contact_form", "et_pb_countdown_timer", "et_pb_fullwidth_header", "et_pb_fullwidth_map", "et_pb_map", "et_pb_map_pin", "et_pb_signup", "et_pb_signup_custom_field", "et_pb_text"], "tuned": true}
 ]}

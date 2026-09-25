@@ -11,8 +11,8 @@ from __future__ import annotations
 import re
 
 from .css import add_hover_to_order_class, add_hover_to_selectors
-from .values import (BOX_SHADOW_PRESETS, DEVICES, SIDES, TEXT_SHADOW_PRESETS, any_value, four_sides, hover_value,
-                     range_value, resp_enabled)
+from .values import (BOX_SHADOW_PRESETS, DEVICES, SIDES, TEXT_SHADOW_PRESETS, any_value, four_sides, hover_enabled,
+                     hover_value, range_value, resp_enabled)
 
 WEBSAFE_FONTS = {"Georgia": "serif", "Times New Roman": "serif", "Arial": "sans-serif",
                  "Trebuchet": "sans-serif", "Verdana": "sans-serif"}
@@ -281,6 +281,10 @@ class DesignOptions:
         for bname, b in borders.items():
             if b is False or not isinstance(b, (dict, list)):
                 continue
+            # process_advanced_borders_options(): Login/Signup focus borders need their toggle
+            if (bname == "fields_focus" and self.render_slug in ("et_pb_login", "et_pb_signup")
+                    and self.props.get("use_focus_border_color", "") != "on"):
+                continue
             self._process_border(bname, b if isinstance(b, dict) else {})
         if self.render_slug not in NO_WITH_BORDER_CLASS:
             for k, v in self.attrs.items():
@@ -294,22 +298,29 @@ class DesignOptions:
         main = ((b.get("css") or {}).get("main") or {}) if isinstance(b.get("css"), dict) else {}
         radii_sel = main.get("border_radii", self.main) if isinstance(main, dict) else self.main
         styles_sel = main.get("border_styles", self.main) if isinstance(main, dict) else self.main
-        # radii (desktop + responsive)
+        # radii (desktop + responsive), Border::get_radii_style(): printed when the value differs
+        # from the default ('on||||' unless the option sets one); tablet compares with desktop and
+        # phone with tablet
+        defaults = b.get("defaults") if isinstance(b.get("defaults"), dict) else {}
         for dev in DEVICES:
             key = f"border_radii{suf}" + ("" if dev == "desktop" else f"_{dev}")
             r = p.get(key, "")
             if not r or (dev != "desktop" and not resp_enabled(p, f"border_radii{suf}")):
                 continue
-            parts = (r.split("|") + [""] * 5)[:5]
-            vals = [x or "0" for x in parts[1:5]]
-            if all(v in ("0", "0px", "") for v in vals):
+            default = defaults.get("border_radii") or "on||||"
+            if dev != "desktop":
+                prev = f"border_radii{suf}" + ("_tablet" if dev == "phone" else "")
+                default = dict.get(p, prev, "") or default
+            parts = r.split("|")
+            if r == default or len(parts) != 5:
                 continue
+            vals = [x or "0" for x in parts[1:5]]
             d = f"border-radius: {' '.join(vals)};"
             if self.render_slug not in NO_RADIUS_OVERFLOW:
                 d += " overflow: hidden;"
             self.css(radii_sel, d, dev)
         # styles
-        defaults = b.get("defaults", {}).get("border_styles", {}) if isinstance(b.get("defaults"), dict) else {}
+        defaults = defaults.get("border_styles", {}) if isinstance(defaults.get("border_styles"), dict) else {}
         for dev in DEVICES:
             decl = ""
             for prop in ("width", "style", "color"):
@@ -461,6 +472,33 @@ class DesignOptions:
             self.css(css.get("module_alignment") or css.get("main") or "%%order_class%%.et_pb_module",
                      ALIGN_MARGINS.get(al, ""))
 
+    def process_height(self):
+        """process_height_options(): height/min-height/max-height on css.<key>, css.main or
+        main_css. With responsive editing every device prints its value or the option's
+        default_<device> (the map's 350px/200px); otherwise only a non-default desktop value."""
+        h = self.af.get("height")
+        if not isinstance(h, (dict, list)):
+            return
+        h = h if isinstance(h, dict) else {}
+        css, opts, p = h.get("css") or {}, h.get("options") or {}, self.props
+        for key in ("height", "min_height", "max_height"):
+            if h.get(f"use_{key}", True) is False:
+                continue
+            prop, sel = key.replace("_", "-"), css.get(key) or css.get("main") or self.main
+            o = opts.get(key) if isinstance(opts.get(key), dict) else {}
+            default = o.get("default", self.field_default(key))
+            value = p.get(key, "") or default
+            if resp_enabled(p, key):
+                for dev in DEVICES:
+                    v = value if dev == "desktop" else (p.get(f"{key}_{dev}", "") or o.get(f"default_{dev}", ""))
+                    if v:
+                        self.css(sel, f"{prop}: {range_value(v)};", dev)
+            elif value and value != default:
+                self.css(sel, f"{prop}: {value};")
+            hv = hover_value(p, key) or value
+            if hover_enabled(p, key) and hv and hv != value:
+                self.css(add_hover_to_selectors(sel), f"{prop}: {hv};")
+
     # hover transitions --------------------------------------------------------------------
     def _box_shadow_transition_selector(self, key: str) -> str:
         """get_transition_box_shadow_fields_css_props(): the option's css.main (default: the order
@@ -473,6 +511,28 @@ class DesignOptions:
             sel += ", " + overlay_selector(sel)
         return sel
 
+    def _height_transitions(self) -> dict:
+        """get_transition_height_fields_css_props(): height and max-height on css.main."""
+        h = self.af.get("height")
+        if not isinstance(h, (dict, list)):
+            return {}
+        sel = ((h if isinstance(h, dict) else {}).get("css") or {}).get("main") or "%%order_class%%"
+        return {"height": {"height": sel}, "max_height": {"max-height": sel}}
+
+    def _form_field_transitions(self) -> dict:
+        """get_transition_form_field_fields_css_props(): colours and spacing on css.main, text
+        colours also on its placeholders."""
+        ff = self.af.get("form_field")
+        out = {}
+        for key, st in (ff.items() if isinstance(ff, dict) else ()):
+            sel = ((st if isinstance(st, dict) else {}).get("css") or {}).get("main") or "%%order_class%% input"
+            ph = f"{sel}::placeholder, {sel}::-webkit-input-placeholder, {sel}::-moz-placeholder, {sel}::-ms-input-placeholder"
+            out.update({f"{key}_background_color": {"background-color": sel}, f"{key}_text_color": {"color": f"{ph}, {sel}"},
+                        f"{key}_focus_background_color": {"background-color": sel},
+                        f"{key}_focus_text_color": {"color": f"{ph}, {sel}"},
+                        f"{key}_custom_margin": {"margin": sel}, f"{key}_custom_padding": {"padding": sel}})
+        return out
+
     def process_transitions(self):
         """process_hover_transitions(): one transition rule over the selectors of hover-enabled props."""
         p = self.props
@@ -483,7 +543,10 @@ class DesignOptions:
         btns = self.af.get("button") if isinstance(self.af.get("button"), dict) else {}
         bg_main = ((self.af.get("background") or {}).get("css") or {}).get("main") or self.main \
             if isinstance(self.af.get("background"), dict) else self.main
-        tmap = {"background": {"background-color": bg_main, "background-image": bg_main}, **self.TRANSITIONS}
+        tmap = {**self._form_field_transitions(), **self._height_transitions(),
+                "background": {"background-color": bg_main, "background-image": bg_main}, **self.TRANSITIONS}
+        mp = self.af.get("margin_padding") if isinstance(self.af.get("margin_padding"), dict) else {}
+        tmap.setdefault("custom_margin", {"margin": (mp.get("css") or {}).get("margin") or "%%order_class%%"})
         props, sels = [], []
         for k in hovered:
             if k in tmap:  # get_transition_fields_css_props(): explicit css props + selectors
