@@ -85,6 +85,10 @@ class ParseTest(unittest.TestCase):
         self.assertEqual(serialize(doc), src)
         self.assertEqual(doc.nodes[0].value("title"), title)
 
+    def test_unescape_decodes_only_lowercase_5c(self):
+        self.assertEqual(unescape_attr_value("a%5cb"), "a\\b")
+        self.assertEqual(unescape_attr_value("a%5Cb"), "a%5Cb")
+
     def test_backslash_escaped_only_for_css_and_json_attrs(self):
         self.assertEqual(escape_attr_value("a\\b", "custom_css_main_element"), "a%92b")
         self.assertEqual(escape_attr_value("a\\b", "select_options"), "a%92b")

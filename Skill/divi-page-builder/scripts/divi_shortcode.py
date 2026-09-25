@@ -210,6 +210,8 @@ def serialize_node(node: Node) -> str:
         if node.self_closing and not node.children:
             return opening
     else:
+        # attrs were edited: rebuilds via build_open_tag, which drops the "/" self-closing
+        # marker, so a node that was originally self-closing gets an explicit close tag below.
         opening = build_open_tag(node)
     inner = "".join(c.value if isinstance(c, Text) else serialize_node(c) for c in node.children)
     return opening + inner + (node.raw_close or f"[/{node.tag}]")
@@ -235,7 +237,8 @@ def escape_attr_value(value: str, attr: str = "") -> str:
 
 
 def unescape_attr_value(value: str) -> str:
-    for enc, dec in (("%22", '"'), ("%91", "["), ("%93", "]"), ("%92", "\\"), ("%5c", "\\"), ("%5C", "\\")):
+    # Decode set per class-et-builder-element.php:2294 (lowercase %5c only, not %5C).
+    for enc, dec in (("%22", '"'), ("%91", "["), ("%93", "]"), ("%92", "\\"), ("%5c", "\\")):
         value = value.replace(enc, dec)
     return value
 
