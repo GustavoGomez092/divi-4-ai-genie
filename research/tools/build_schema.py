@@ -17,7 +17,8 @@ UI_KEYS = {"label", "description", "label_prefix"}
 
 def _strip_ui(value):
     if isinstance(value, dict):
-        return {k: _strip_ui(v) for k, v in value.items() if k not in UI_KEYS}
+        # only UI *text* is dropped: a font family may itself be named "label" (countdown timer)
+        return {k: _strip_ui(v) for k, v in value.items() if not (k in UI_KEYS and isinstance(v, str))}
     if isinstance(value, list):
         return [_strip_ui(v) for v in value]
     return value

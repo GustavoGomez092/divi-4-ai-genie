@@ -77,6 +77,10 @@ class SchemaTest(unittest.TestCase):
         # Divi's declaration order (and so the CSS cascade) follows advanced_fields order: not sorted
         self.assertEqual(list(af["fonts"]), ["header", "body", "body_link", "body_ul", "body_ol", "body_quote"])
         self.assertEqual(self.schema.module("et_pb_column_inner").render["main_css"], "%%order_class%%")
+        # a font family *named* "label" is configuration, not UI text
+        timer_fonts = self.schema.module("et_pb_countdown_timer").render["advanced_fields"]["fonts"]
+        self.assertEqual(list(timer_fonts), ["header", "numbers", "separator", "label"])
+        self.assertIn("css", timer_fonts["label"])
 
     def test_calibration_against_real_pages(self):
         unresolved = set()
@@ -112,6 +116,12 @@ class BuildSchemaRenderConfigTest(unittest.TestCase):
                 "button": False,
             },
         })
+
+    def test_render_config_keeps_non_string_label_keys(self):
+        import build_schema
+        module = {"advanced_fields": {"fonts": {"label": {"label": "Label", "css": {"main": "%%order_class%% p.label"}}}}}
+        self.assertEqual(build_schema.render_config(module)["advanced_fields"],
+                         {"fonts": {"label": {"css": {"main": "%%order_class%% p.label"}}}})
 
     def test_render_config_defaults(self):
         import build_schema

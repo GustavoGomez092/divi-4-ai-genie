@@ -10,9 +10,14 @@ preview. `tests/test_render_fidelity.py` compares it with real Divi, rendered th
 - **CSS ratio:** the Jaccard similarity of the builder CSS as `(media, selector, declaration)`
   triples. 1.0 means no missing or extra declarations.
 
+Recording is opt-in: run
+`RENDER_FIDELITY_RECORD=1 python3 -m unittest discover -s tests -p 'test_render_fidelity.py'` to
+upsert the held-out rows below. Without the variable the test only checks and never writes this
+file.
+
 Tuned fixtures (`tuned: true`) must match exactly: the sequences are equal and 0 declarations are
-missing or extra. The test records a row below for each held-out fixture (`tuned: false`) on each
-run, one row per fixture per day. Following the procedure for Tasks 25–27, a held-out page is
+missing or extra. With recording on, the test upserts a row below for each held-out fixture
+(`tuned: false`), one row per fixture per day. Following the procedure for Tasks 25–27, a held-out page is
 measured **before** any fix. That pre-fix row is the honest number for how well the renderer
 generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
 

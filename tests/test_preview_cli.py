@@ -24,8 +24,9 @@ import fetch_divi
 PREVIEW = SCRIPTS / "preview.py"
 VERSION = fetch_divi.newest_cached()
 LANDING = FIXTURES / "valid" / "handwritten-landing.txt"
+# et_pb_sidebar needs WordPress widgets: it always renders as the fallback in the Python preview.
 UNSUPPORTED_PAGE = ('[et_pb_section][et_pb_row][et_pb_column type="4_4"]'
-                    '[et_pb_testimonial author="A"]Great[/et_pb_testimonial]'
+                    '[et_pb_sidebar area="sidebar-1"][/et_pb_sidebar]'
                     '[/et_pb_column][/et_pb_row][/et_pb_section]')
 
 
@@ -69,6 +70,60 @@ class DoctorAndExactTest(unittest.TestCase):
 
     def test_usage_without_command_exits_2(self):
         self.assertEqual(run().returncode, 2)
+
+
+class ExactArgsTest(unittest.TestCase):
+    """--exact hands the parsed command to preview.mjs, so Node gets the same page/port/flags."""
+
+    def setUp(self):
+        sys.path.insert(0, str(SCRIPTS))
+        import preview
+        self.preview = preview
+
+    def args(self, *argv):
+        return self.preview.exact_args(self.preview.build_parser().parse_args(list(argv)))
+
+    def test_serve_forwards_port_pages_and_version(self):
+        with tempfile.TemporaryDirectory() as d:
+            got = self.args("serve", "--pages", d, "--port=9123", "--divi", "4.27.9", "--exact", "--no-js")
+            self.assertEqual(got, ["serve", "--pages", str(Path(d).resolve()), "--port", "9123", "--divi", "4.27.9"])
+
+    def test_serve_default_port_is_forwarded_too(self):
+        got = self.args("serve", "--exact")
+        self.assertEqual(got[got.index("--port") + 1], "8765")
+        self.assertEqual(got[got.index("--pages") + 1], str(Path(".").resolve()))
+
+    def test_render_forwards_page_out_and_tokens(self):
+        got = self.args("render", "p.txt", "--exact", "--out", "o.html", "--tokens", "t.json")
+        self.assertEqual(got, ["render", str(Path("p.txt").resolve()), "--out", str(Path("o.html").resolve()),
+                               "--tokens", str(Path("t.json").resolve())])
+
+
+class ResolveAssetTest(unittest.TestCase):
+    def setUp(self):
+        sys.path.insert(0, str(SCRIPTS))
+        from divi_render.assets import resolve_asset
+        self.resolve = resolve_asset
+        self.tmp = tempfile.TemporaryDirectory()
+        root = Path(self.tmp.name)
+        self.theme = root / "Divi"
+        (self.theme / "css").mkdir(parents=True)
+        (self.theme / "css" / "a.css").write_text("a{}")
+        (self.theme / "functions.php").write_text("<?php")
+        (root / "outside.css").write_text("secret{}")
+        (self.theme / "css" / "escape.css").symlink_to(root / "outside.css")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_static_file_inside_theme_resolves(self):
+        self.assertEqual(self.resolve(self.theme, "css/a.css"), (self.theme / "css" / "a.css").resolve())
+
+    def test_escapes_and_non_static_files_are_refused(self):
+        for rel in ("../outside.css", "css/../../outside.css", "/../outside.css", "css/escape.css",
+                    "functions.php", "css", "css/missing.css"):
+            with self.subTest(rel=rel):
+                self.assertIsNone(self.resolve(self.theme, rel))
 
 
 class VersionResolutionTest(unittest.TestCase):
@@ -133,6 +188,7 @@ class RenderTest(unittest.TestCase):
         self.assertIn('id="logo"', html)
         self.assertRegex(html, r'<img src="data:image/png;base64,[^"]+"[^>]*id="logo"')
         self.assertIn("coverage", r.stdout)
+        self.assertIn("load from the network", r.stdout)
 
     def test_default_out_is_page_name_in_cwd(self):
         with tempfile.TemporaryDirectory() as d:
@@ -146,7 +202,7 @@ class RenderTest(unittest.TestCase):
             page.write_text(UNSUPPORTED_PAGE)
             r = run("render", page, "--divi", VERSION, "--no-js", cwd=d)
         self.assertEqual(r.returncode, 0, r.stderr)
-        self.assertIn("et_pb_testimonial", r.stdout)
+        self.assertIn("et_pb_sidebar", r.stdout)
         self.assertIn("--exact", r.stdout)
 
 
@@ -158,10 +214,11 @@ class ServeTest(unittest.TestCase):
         pages = Path(cls.tmp.name)
         (pages / "landing.txt").write_text(LANDING.read_text())
         (pages / "partial.txt").write_text(UNSUPPORTED_PAGE)
+        (pages / "broken.txt").write_bytes(b"\xff\xfe[et_pb_section][/et_pb_section]")  # not UTF-8
         cls.port = free_port()
         cls.proc = subprocess.Popen([sys.executable, str(PREVIEW), "serve", "--pages", str(pages),
                                      "--port", str(cls.port), "--divi", VERSION],
-                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         deadline = time.time() + 20
         while time.time() < deadline:
             try:
@@ -181,8 +238,6 @@ class ServeTest(unittest.TestCase):
             cls.proc.wait(timeout=10)
         except subprocess.TimeoutExpired:
             cls.proc.kill()
-        cls.proc.stdout.close()
-        cls.proc.stderr.close()
         cls.tmp.cleanup()
 
     def test_page_is_rendered_with_assets_under_divi_route(self):
@@ -201,7 +256,8 @@ class ServeTest(unittest.TestCase):
         self.assertGreater(len(body), 10000)
 
     def test_path_traversal_is_refused(self):
-        for path in ("/__divi/../../etc/passwd", "/__divi/%2e%2e/%2e%2e/etc/passwd",
+        for path in ("/__divi/../../etc/passwd", "/__divi/%2e%2e/%2e%2e/etc/passwd", "/__divi/../../x.css",
+                     "/__divi/../Divi-4.27.9/Divi/style.css/../../../../../x.css", "/__divi/%2e%2e/%2e%2e/x.css",
                      "/__divi/../../../../../../etc/passwd", "/__divi/functions.php"):
             with self.subTest(path=path):
                 self.assertEqual(get(self.port, path)[0], 404)
@@ -211,6 +267,12 @@ class ServeTest(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertIn("exact preview: add --exact", body.decode("utf-8"))
         self.assertNotIn("exact preview: add --exact", get(self.port, "/landing")[1].decode("utf-8"))
+
+    def test_render_error_returns_500_with_the_error(self):
+        status, body, _ = get(self.port, "/broken")
+        self.assertEqual(status, 500)
+        self.assertIn("UnicodeDecodeError", body.decode("utf-8"))
+        self.assertEqual(get(self.port, "/landing")[0], 200)  # the server keeps serving
 
     def test_index_and_missing_page(self):
         status, body, _ = get(self.port, "/")

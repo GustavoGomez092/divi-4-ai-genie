@@ -78,8 +78,9 @@ def theme_dir(version: str, cache_dir: Optional[Path] = None) -> Optional[Path]:
     return d if (d / "style.css").is_file() else None
 
 
-def _list_cached(cache_dir: Path):
-    cache_dir = Path(cache_dir)
+def list_cached(cache_dir: Optional[Path] = None) -> list:
+    """All cached Divi versions (those with a readable style.css), oldest first."""
+    cache_dir = Path(cache_dir) if cache_dir is not None else default_cache_dir()
     if not cache_dir.exists():
         return []
     out = []
@@ -92,8 +93,7 @@ def _list_cached(cache_dir: Path):
 
 
 def newest_cached(cache_dir: Optional[Path] = None) -> Optional[str]:
-    cache_dir = Path(cache_dir) if cache_dir is not None else default_cache_dir()
-    versions = _list_cached(cache_dir)
+    versions = list_cached(cache_dir)
     return versions[-1] if versions else None
 
 

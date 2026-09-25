@@ -5,13 +5,15 @@ Playground (research/tools/ground_truth.py, cached outside the repo); the whole 
 when no Divi build is cached or Node/Playground can't produce the truth.
 
 - tuned fixtures: the .et-l tag/class sequence and the builder CSS declaration sets must be equal.
-- held-out fixtures (tuned: false): must render without crashing; their metrics are recorded in
-  research/render-fidelity.md. When every listed module is supported they must also reach a
+- held-out fixtures (tuned: false): must render without crashing. With RENDER_FIDELITY_RECORD=1
+  their metrics are recorded in research/render-fidelity.md (opt-in, so ordinary test runs never
+  touch the working tree). When every listed module is supported they must also reach a
   tag/class sequence ratio >= 0.9; while some aren't, each unsupported module must instead be
   listed in the coverage report (the fallback contract), because a placeholder can't match.
 """
 import datetime
 import json
+import os
 import re
 import unittest
 from pathlib import Path
@@ -27,6 +29,7 @@ RENDER_FIXTURES = FIXTURES / "render"
 MANIFEST = RENDER_FIXTURES / "manifest.json"
 METRICS = ROOT / "research" / "render-fidelity.md"
 MIN_HELDOUT_RATIO = 0.9
+RECORD = os.environ.get("RENDER_FIDELITY_RECORD") == "1"
 TABLE_HEADER = "| Fixture | Modules | Tuned | Markup ratio | CSS ratio | Date |"
 
 
@@ -104,6 +107,10 @@ class RenderFidelityTest(unittest.TestCase):
                 r = fidelity.compare(self.truth[fx["file"]], self.render(fx).html)
                 detail = json.dumps({"markup": r["markup"], "css": r["css"], "missing": r["missing_examples"],
                                      "extra": r["extra_examples"]}, indent=1)
+                # guard against vacuous passes (e.g. the builder CSS not being found at all)
+                self.assertGreater(r["css"]["truth_decls"], 0, detail)
+                self.assertGreater(r["css"]["common"] + r["css"]["extra"], 0, detail)
+                self.assertGreater(r["markup"]["truth_elements"], 0, detail)
                 self.assertTrue(r["markup"]["tag_class_sequence_equal"], detail)
                 self.assertEqual(r["css"]["missing"], 0, detail)
                 self.assertEqual(r["css"]["extra"], 0, detail)
@@ -113,8 +120,9 @@ class RenderFidelityTest(unittest.TestCase):
             with self.subTest(fixture=fx["file"]):
                 result = self.render(fx)
                 r = fidelity.compare(self.truth[fx["file"]], result.html)
-                record_metrics(Path(fx["file"]).name, fx["modules"], False,
-                               r["markup"]["tag_class_seq_ratio"], r["css"]["ratio"])
+                if RECORD:
+                    record_metrics(Path(fx["file"]).name, fx["modules"], False,
+                                   r["markup"]["tag_class_seq_ratio"], r["css"]["ratio"])
                 unsupported = [m for m in fx["modules"] if m not in divi_render.SUPPORTED_MODULES]
                 if unsupported:
                     listed = result.coverage["unsupported_modules"]

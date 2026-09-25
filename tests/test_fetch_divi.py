@@ -86,6 +86,17 @@ class CacheLayoutTest(unittest.TestCase):
             _seed_cached(cache, "4.9.0")
             self.assertEqual(fetch_divi.newest_cached(cache), "4.27.10")
 
+    def test_list_cached_is_public_and_sorted(self):
+        with tempfile.TemporaryDirectory() as cache:
+            _seed_cached(cache, "4.27.10")
+            _seed_cached(cache, "4.9.0")
+            (Path(cache) / "Divi-5.0.0").mkdir()  # no style.css: not a usable build
+            self.assertEqual(fetch_divi.list_cached(cache), ["4.9.0", "4.27.10"])
+        with tempfile.TemporaryDirectory() as cache, \
+                mock.patch.dict(os.environ, {"PP_DIVI_CACHE": cache}):
+            _seed_cached(cache, "4.1.0")
+            self.assertEqual(fetch_divi.list_cached(), ["4.1.0"])
+
     def test_newest_cached_none_when_empty(self):
         with tempfile.TemporaryDirectory() as cache:
             self.assertIsNone(fetch_divi.newest_cached(cache))

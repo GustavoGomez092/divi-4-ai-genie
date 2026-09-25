@@ -32,6 +32,7 @@ import shutil
 import subprocess
 import sys
 import time
+import traceback
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlparse
@@ -80,7 +81,15 @@ def unsupported_items(coverage: dict) -> dict:
     return {k: n for k, n in coverage.get("unsupported_modules", {}).items() if n}
 
 
-def coverage_summary(coverage: dict) -> str:
+NETWORK_NOTE = {
+    "embedded": "note: Divi's icon fonts and theme images are embedded; web fonts (Google Fonts), jQuery "
+                "if no WordPress copy is cached, and any remote content images load from the network",
+    "served": "note: Divi's icon fonts and theme images come from /__divi/; web fonts (Google Fonts), jQuery "
+              "if no WordPress copy is cached, and any remote content images load from the network",
+}
+
+
+def coverage_summary(coverage: dict, assets: str = "embedded") -> str:
     stats = coverage.get("stats", {})
     lines = [f"coverage: {coverage['modules']} modules, {coverage['attr_coverage_pct']}% of "
              f"{coverage['attrs_total']} attributes read (Divi {stats.get('divi_version')}, "
@@ -99,17 +108,34 @@ def coverage_summary(coverage: dict) -> str:
             lines.append(f"ignored attributes on {tag}: " + ", ".join(sorted(info["ignored"])))
     for problem in stats.get("parse_problems", []):
         lines.append(f"parse problem: {problem}")
+    lines.append(NETWORK_NOTE[assets])
     return "\n".join(lines)
 
 
-def run_exact(argv: list) -> int:
-    """Hands the same command to the real-Divi preview (Playground). --no-js has no meaning there."""
+def exact_args(a) -> list:
+    """preview.mjs arguments for the parsed command: the same page, output, pages dir, port and
+    Divi version, with paths made absolute. Every value is forwarded explicitly (including our
+    default port, so Node listens where this CLI would have). --no-js has no meaning there."""
+    if a.cmd == "render":
+        args = ["render", str(Path(a.page).resolve())]
+        if a.out:
+            args += ["--out", str(Path(a.out).resolve())]
+    else:
+        args = ["serve", "--pages", str(Path(a.pages).resolve()), "--port", str(a.port)]
+    if a.divi:
+        args += ["--divi", a.divi]
+    if a.tokens:
+        args += ["--tokens", str(Path(a.tokens).resolve())]
+    return args
+
+
+def run_exact(a) -> int:
+    """Hands the command to the real-Divi preview (Playground)."""
     node = shutil.which("node")
     if not node:
         print(f"preview: {NODE_GUIDANCE}", file=sys.stderr)
         return 2
-    args = [a for a in argv if a not in ("--exact", "--no-js")]
-    return subprocess.call([node, str(PREVIEW_MJS), *args])
+    return subprocess.call([node, str(PREVIEW_MJS), *exact_args(a)])
 
 
 def _renderer():
@@ -172,8 +198,17 @@ def make_handler(pages: Path, version: str, with_js: bool):
             if not name or "/" in name or not f.is_file():
                 return self.send(404, b"no such page", "text/plain")
             t0 = time.perf_counter()
-            result = dr.render_page(f.read_text(encoding="utf-8"), divi_version=version, title=name,
-                                    with_js=with_js, asset_base=DIVI_ROUTE)
+            try:
+                result = dr.render_page(f.read_text(encoding="utf-8"), divi_version=version, title=name,
+                                        with_js=with_js, asset_base=DIVI_ROUTE)
+            except Exception:  # a local dev server: show the error instead of dropping the connection
+                tb = traceback.format_exc()
+                sys.stderr.write(f"render error in {f}:\n{tb}")
+                body = (f"<!DOCTYPE html><title>Render error: {html.escape(name)}</title>"
+                        f"<h1>Render error in {html.escape(str(f))}</h1><pre>{html.escape(tb)}</pre>"
+                        + RELOAD_JS % name)
+                return self.send(500, body.encode("utf-8"))
+            sys.stderr.write(f"[{name}] " + coverage_summary(result.coverage, "served").replace("\n", f"\n[{name}] ") + "\n")
             page = result.html
             unsupported = unsupported_items(result.coverage)
             if unsupported:
@@ -213,7 +248,7 @@ def cmd_serve(a) -> int:
 # ----------------------------------------------------------------------------- doctor / fetch
 def cmd_doctor(a) -> int:
     from divi_render.assets import find_jquery
-    cached = fetch_divi._list_cached(fetch_divi.default_cache_dir())
+    cached = fetch_divi.list_cached()
     node = shutil.which("node")
     node_version = ""
     if node:
@@ -272,7 +307,7 @@ def main(argv=None) -> int:
         return 2
     a = ap.parse_args(argv)
     if getattr(a, "exact", False):
-        return run_exact(argv)
+        return run_exact(a)
     commands = {"render": cmd_render, "serve": cmd_serve, "doctor": cmd_doctor, "fetch-divi": cmd_fetch_divi}
     try:
         return commands[a.cmd](a)
