@@ -12,9 +12,11 @@ import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import List, Optional
+from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from divi_checks_structure import check_structure  # noqa: E402
+from divi_checks_values import check_attributes  # noqa: E402
 from divi_schema import Schema, load_schema  # noqa: E402
 from divi_shortcode import Document, parse  # noqa: E402
 
@@ -51,6 +53,9 @@ def validate_source(source: str, schema: Schema, tokens: Optional[dict] = None,
     doc = parse(source)
     report = Reporter(doc)
     check_structure(doc, schema, report)
+    known = {p["uuid"] for lst in (tokens or {}).get("presets", {}).values() for p in lst}
+    host = urlparse(site_url or (tokens or {}).get("site", {}).get("url", "")).hostname
+    check_attributes(doc, schema, report, known_presets=known, site_host=host)
     return report.findings
 
 
