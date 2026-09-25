@@ -93,11 +93,12 @@ class Video(Module):
 
 def video_html(m: Module, src: str, webm: str) -> str:
     """Video.php / VideoSliderItem.php get_video(): YouTube/Vimeo URLs go through WordPress oEmbed,
-    which needs the live site; here they become the iframe oEmbed would return (listed in the
-    coverage report's needs_site_data as video_oembed). Anything else is a native <video> with its mp4/webm sources."""
+    which needs the network; here they become the iframe oEmbed would return (listed in the
+    coverage report's unsupported_modules as video_oembed: the --exact preview fetches the real
+    embed when it has network). Anything else is a native <video> with its mp4/webm sources."""
     embed = oembed_iframe(src)
     if embed:
-        m.ctx.count_site_data("video_oembed")
+        m.ctx.count_unsupported("video_oembed")
         return embed
     return ("\n\t\t\t\t<video controls>\n\t\t\t\t\t"
             + (f'<source type="video/mp4" src="{esc_url(src)}" />' if src else "") + "\n\t\t\t\t\t"

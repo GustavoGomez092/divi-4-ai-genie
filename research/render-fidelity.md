@@ -167,7 +167,10 @@ generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
   naming what the module shows; the coverage report lists them under `needs_site_data`, apart
   from `unsupported_modules`, because the `--exact` preview can't show them either (a fresh
   Playground WordPress has no posts, menus or media): the WordPress draft preview is the check.
-  Gallery attachment IDs (the media library) and oEmbed videos moved to `needs_site_data` too.
+  Gallery attachment IDs (the media library) moved to `needs_site_data` too. oEmbed videos
+  (`video_oembed`) stay in `unsupported_modules`: they need the network, not the site's data, and
+  the `--exact` preview fetches the real embed when it has network (fix round 1: a Playground
+  render of a YouTube `et_pb_video` produced the real oEmbed iframe).
   Search and Login need no site data and are not ported: they stay in `unsupported_modules`
   with a red block that points to `--exact` (tests/test_render_fallbacks.py,
   tests/test_preview_cli.py).

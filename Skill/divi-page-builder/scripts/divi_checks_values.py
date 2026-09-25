@@ -19,6 +19,12 @@ STATE_TOGGLE_RE = re.compile(r"^(on|off)(\|\w+)?$")
 SELECT_TYPES = {"select", "select_animation", "select-pattern", "select-mask", "text_align", "align", "position",
                 "divider", "select_with_option_groups", "select_box_shadow", "presets_shadow", "yes_no_button"}
 COLOR_TYPES = {"color", "color-alpha"}
+# `<provider>_list` of every email provider the Email Optin offers (Signup.php init():
+# providers()->names_by_slug(), i.e. core/components/api/email/*; FeedBurner has no list).
+EMAIL_PROVIDER_LISTS = {f"{p}_list" for p in (
+    "activecampaign", "aweber", "campaign_monitor", "constant_contact", "convertkit", "emma", "feedblitz",
+    "fluentcrm", "getresponse", "hubspot", "icontact", "infusionsoft", "madmimi", "mailchimp", "mailerlite",
+    "mailpoet", "mailster", "ontraport", "salesforce", "sendinblue")}
 LINE_STYLES = {"", "solid", "double", "dotted", "dashed", "wavy"}
 IMAGE_ATTRS = ("src", "image", "background_image", "logo", "image_url", "portrait_url", "logo_image_url")
 
@@ -71,9 +77,9 @@ def value_problems(res, attr: str, value: str) -> List[Problem]:
     if ftype in SELECT_TYPES and options:
         # Email Optin lists: the schema only knows '0|none' and the manage actions; real values
         # are '<account>|<list id>' pairs from the site's connected accounts (Signup.php render()
-        # splits them on the last '|').
-        if (ftype == "select_with_option_groups" and attr.endswith("_list") and "|" in value
-                and not value.startswith("manage|")):
+        # splits them on the last '|'). Only the email providers' lists: recaptcha_list (spam
+        # protection) never holds such a pair.
+        if attr in EMAIL_PROVIDER_LISTS and "|" in value and not value.startswith("manage|"):
             return []
         if value not in options:
             shown = ", ".join(options[:12]) + (" …" if len(options) > 12 else "")

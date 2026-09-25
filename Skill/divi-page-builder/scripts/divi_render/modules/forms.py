@@ -39,6 +39,13 @@ def php_serialize(attrs: dict) -> str:
     return f"a:{len(attrs)}:{{" + "".join(s(k) + s(v) for k, v in attrs.items()) + "}"
 
 
+def strip_all_tags(text) -> str:
+    """wp_strip_all_tags(): drops <script>/<style> elements with their content, then every tag,
+    then trims."""
+    text = re.sub(r"<(script|style)[^>]*?>.*?</\1>", "", str(text), flags=re.S | re.I)
+    return re.sub(r"<[^>]*>", "", text).strip()
+
+
 def sortable_options(value: str) -> list:
     """A sortable_list value ('[{"value":..,"checked":..,"dragID":..}]', brackets possibly as
     &#91;/&#93;) as a list of dicts; [] when it isn't valid JSON."""
@@ -231,7 +238,7 @@ class ContactField(Module):
             items = ""
             for i, o in enumerate(sortable_options(opts)):
                 oid = o.get("id", o.get("dragID", ""))
-                value = str(o.get("value", ""))
+                value = label = strip_all_tags(o.get("value", ""))   # ContactFormItem.php: both stripped
                 link = (f' <a href="{esc_url(o["link_url"])}" target="_blank">{esc(o.get("link_text", ""))}</a>'
                         if o.get("link_url") else "")
                 if req == "required" and not value and link:
@@ -240,7 +247,7 @@ class ContactField(Module):
                 checked = ' checked="checked"' if o.get("checked") == 1 else ""
                 items += (f'<span class="et_pb_contact_field_checkbox">\n\t\t\t\t\t\t\t<input type="checkbox" id="{cid}" '
                           f'class="input" value="{esc(value)}"{checked} data-id="{esc(str(oid))}">\n\t\t\t\t\t\t\t'
-                          f'<label for="{cid}"><i></i>{o.get("value", "")}{link}</label>\n\t\t\t\t\t\t</span>')
+                          f'<label for="{cid}"><i></i>{label}{link}</label>\n\t\t\t\t\t\t</span>')
             return (f'<input class="et_pb_checkbox_handle" type="hidden" name="{name}" {data}>\n\t\t\t\t\t'
                     f'<span class="et_pb_contact_field_options_wrapper">\n\t\t\t\t\t\t<span class="et_pb_contact_field_'
                     f'options_title">{esc(title)}</span>\n\t\t\t\t\t\t<span class="et_pb_contact_field_options_list">'
@@ -250,7 +257,7 @@ class ContactField(Module):
             items = "" if opts or p.get("radio_options", "") else "No options added."
             for i, o in enumerate(opts):
                 rid = f"et_pb_contact_{esc(fid)}_{num}_{count}_{i}"
-                value = esc(str(o.get("value", "")))
+                value = esc(strip_all_tags(o.get("value", "")))   # value and label: esc_attr(wp_strip_all_tags())
                 checked = " checked='checked'" if o.get("checked") == 1 else ""
                 link = (f' <a href="{esc_url(o["link_url"])}" target="_blank">{esc(o.get("link_text", ""))}</a>'
                         if o.get("link_url") else "")
@@ -263,8 +270,8 @@ class ContactField(Module):
                     f'{items}</span>\n\t\t\t\t\t</span>')
         if ftype == "select":
             options = f'<option value="">{esc(title)}</option>' + "".join(
-                f'<option value="{esc(str(o.get("value", "")))}"'
-                + (f' data-id="{esc(str(o["id"]))}"' if "id" in o else "") + f'>{o.get("value", "")}</option>'
+                f'<option value="{esc(strip_all_tags(o.get("value", "")))}"'
+                + (f' data-id="{esc(str(o["id"]))}"' if "id" in o else "") + f'>{strip_all_tags(o.get("value", ""))}</option>'
                 for o in sortable_options(p.get("select_options", "")))
             return (f'<select id="{name}" class="et_pb_contact_select input" name="{name}" {data}>\n\t\t\t\t\t\t'
                     f'{options}\n\t\t\t\t\t</select>')

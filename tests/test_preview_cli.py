@@ -29,6 +29,9 @@ LANDING = FIXTURES / "valid" / "handwritten-landing.txt"
 UNSUPPORTED_PAGE = ('[et_pb_section][et_pb_row][et_pb_column type="4_4"]'
                     '[et_pb_sidebar area="sidebar-1"][/et_pb_sidebar]'
                     '[/et_pb_column][/et_pb_row][/et_pb_section]')
+OEMBED_PAGE = ('[et_pb_section][et_pb_row][et_pb_column type="4_4"]'
+               '[et_pb_video src="https://www.youtube.com/watch?v=dQw4w9WgXcQ"][/et_pb_video]'
+               '[/et_pb_column][/et_pb_row][/et_pb_section]')
 EXACT_ONLY_PAGE = ('[et_pb_section][et_pb_row][et_pb_column type="4_4"]'
                    '[et_pb_search][/et_pb_search]'
                    '[/et_pb_column][/et_pb_row][/et_pb_section]')
@@ -101,6 +104,24 @@ class ExactArgsTest(unittest.TestCase):
         got = self.args("render", "p.txt", "--exact", "--out", "o.html", "--tokens", "t.json")
         self.assertEqual(got, ["render", str(Path("p.txt").resolve()), "--out", str(Path("o.html").resolve()),
                                "--tokens", str(Path("t.json").resolve())])
+
+
+class BannerTest(unittest.TestCase):
+    def setUp(self):
+        sys.path.insert(0, str(SCRIPTS))
+        import preview
+        self.preview = preview
+
+    def test_oembed_banner_points_to_exact_and_mentions_network(self):
+        html = self.preview.banner_html({"unsupported_modules": {"video_oembed": 1}, "needs_site_data": {}})
+        self.assertIn("add --exact", html)
+        self.assertIn("network", html)
+        self.assertNotIn("draft preview", html)
+
+    def test_site_data_banner_points_to_the_draft_preview(self):
+        html = self.preview.banner_html({"unsupported_modules": {}, "needs_site_data": {"et_pb_blog": 1}})
+        self.assertIn("WordPress draft preview", html)
+        self.assertNotIn("add --exact", html)
 
 
 class ResolveAssetTest(unittest.TestCase):
@@ -214,6 +235,13 @@ class RenderTest(unittest.TestCase):
         self.assertIn("needs the live site's data", line)
         self.assertIn("WordPress draft preview", line)
         self.assertNotIn("--exact", out)
+
+    def test_coverage_summary_sends_oembed_to_exact_with_network(self):
+        out = self.render_summary(OEMBED_PAGE)
+        line = next(l for l in out.splitlines() if "video_oembed" in l)
+        self.assertIn("--exact", line)
+        self.assertIn("network", line)
+        self.assertNotIn("draft preview", out)
 
     def test_coverage_summary_lists_unsupported_modules_for_exact(self):
         out = self.render_summary(EXACT_ONLY_PAGE)

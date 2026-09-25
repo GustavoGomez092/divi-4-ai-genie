@@ -116,3 +116,72 @@ class FormHelpersTest(unittest.TestCase):
         signup = next(n for n, _, _ in doc.walk() if n.tag == "et_pb_signup")
         # the value real Divi printed for the first signup of forms-tuned-signup.txt
         self.assertEqual(hashlib.md5(php_serialize(signup.attrs).encode()).hexdigest(), "f3076ae46f36856dee3524c616f93e38")
+
+
+class ContactFieldMarkupTest(unittest.TestCase):
+    """Task 27 fix round: ContactFormItem::render() input markup (ids, names, required markers,
+    option labels). Expected strings are what real Divi printed on Playground for
+    forms-tuned-contact-form.txt (whitespace between tags collapsed)."""
+
+    def field(self, shortcode: str):
+        from divi_render.modules.forms import ContactField
+        node = next(n for n in parse(shortcode).nodes if isinstance(n, Node))
+        return ContactField(node, Ctx(StubTheme({})))
+
+    def html(self, shortcode: str, fid: str, num: int = 0, count: int = 0) -> str:
+        import re
+        f = self.field(shortcode)
+        out = f.input_html(f.props.get("field_type"), fid, f.props.get("field_title"), num, count)
+        return re.sub(r">\s+<", "><", out)
+
+    def test_text_input(self):
+        self.assertEqual(
+            self.html('[et_pb_contact_field field_id="Name" field_title="Full name" allowed_symbols="letters" '
+                      'min_length="2" max_length="40"][/et_pb_contact_field]', "name"),
+            '<input type="text" id="et_pb_contact_name_0" class="input" value="" name="et_pb_contact_name_0" '
+            'data-required_mark="required" data-field_type="input" data-original_id="name" placeholder="Full name" '
+            'pattern="[A-Za-z\\s\\-]{2,40}" title="Only letters allowed.Minimum length: 2 characters. Maximum length: '
+            '40 characters." maxlength="40">')
+
+    def test_textarea_not_required(self):
+        self.assertEqual(
+            self.html('[et_pb_contact_field field_id="Message" field_title="Tell us about the project" field_type="text" '
+                      'required_mark="off"][/et_pb_contact_field]', "message"),
+            '<textarea name="et_pb_contact_message_0" id="et_pb_contact_message_0" class="et_pb_contact_message input" '
+            'data-required_mark="not_required" data-field_type="text" data-original_id="message" '
+            'placeholder="Tell us about the project"></textarea>')
+
+    def test_checkbox_group(self):
+        self.assertEqual(
+            self.html('[et_pb_contact_field field_id="Contact" field_title="Contact me by" field_type="checkbox" '
+                      'checkbox_options="%91{%22value%22:%22Email%22,%22checked%22:1,%22dragID%22:0},'
+                      '{%22value%22:%22Phone%22,%22checked%22:0,%22dragID%22:1}%93"][/et_pb_contact_field]',
+                      "contact", count=3),
+            '<input class="et_pb_checkbox_handle" type="hidden" name="et_pb_contact_contact_0" data-required_mark="required" '
+            'data-field_type="checkbox" data-original_id="contact"><span class="et_pb_contact_field_options_wrapper">'
+            '<span class="et_pb_contact_field_options_title">Contact me by</span><span class="et_pb_contact_field_options_list">'
+            '<span class="et_pb_contact_field_checkbox"><input type="checkbox" id="et_pb_contact_contact_3_0" class="input" '
+            'value="Email" checked="checked" data-id="0"><label for="et_pb_contact_contact_3_0"><i></i>Email</label></span>'
+            '<span class="et_pb_contact_field_checkbox"><input type="checkbox" id="et_pb_contact_contact_3_1" class="input" '
+            'value="Phone" data-id="1"><label for="et_pb_contact_contact_3_1"><i></i>Phone</label></span></span></span>')
+
+    def test_select(self):
+        self.assertEqual(
+            self.html('[et_pb_contact_field field_id="Service" field_title="Service" field_type="select" '
+                      'select_options="%91{%22value%22:%22Design%22,%22checked%22:0,%22dragID%22:0},'
+                      '{%22value%22:%22Build%22,%22checked%22:0,%22dragID%22:1}%93"][/et_pb_contact_field]', "service"),
+            '<select id="et_pb_contact_service_0" class="et_pb_contact_select input" name="et_pb_contact_service_0" '
+            'data-required_mark="required" data-field_type="select" data-original_id="service"><option value="">Service'
+            '</option><option value="Design">Design</option><option value="Build">Build</option></select>')
+
+    def test_option_text_is_stripped_of_tags(self):
+        # wp_strip_all_tags() on every option value and label (ContactFormItem.php render())
+        opts = ('%91{%22value%22:%22<b>Email</b> me <script>x()</script>%22,%22checked%22:0,%22dragID%22:0}%93')
+        for ftype in ("checkbox", "radio", "select"):
+            with self.subTest(ftype=ftype):
+                out = self.html(f'[et_pb_contact_field field_id="Pick" field_title="Pick" field_type="{ftype}" '
+                                f'{ftype}_options="{opts}"][/et_pb_contact_field]', "pick")
+                self.assertIn('value="Email me"', out)
+                self.assertIn("Email me</", out)
+                self.assertNotIn("<b>", out)
+                self.assertNotIn("script", out)

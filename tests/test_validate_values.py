@@ -57,6 +57,16 @@ class AttributeTest(unittest.TestCase):
         self.assertEqual(found('[et_pb_signup aweber_list="0|none"][/et_pb_signup]', "error"), [])
         self.assertIn(("error", "E_BAD_OPTION", "mailchimp_list"), found('[et_pb_signup mailchimp_list="a1b2c3d4"][/et_pb_signup]'))
         self.assertIn(("error", "E_BAD_OPTION", "mailchimp_list"), found('[et_pb_signup mailchimp_list="manage|oops"][/et_pb_signup]'))
+        self.assertEqual(found('[et_pb_signup convertkit_list="Main|98765"][/et_pb_signup]', "error"), [])
+
+    def test_spam_provider_list_is_not_an_email_list(self):
+        # recaptcha_list (Signup and Contact Form spam protection) only holds '0|none' or a manage
+        # action; the account|list exemption is for email provider lists only.
+        for tag in ("et_pb_signup", "et_pb_contact_form"):
+            with self.subTest(tag=tag):
+                self.assertIn(("error", "E_BAD_OPTION", "recaptcha_list"),
+                              found(f'[{tag} recaptcha_list="totally|bogus"][/{tag}]'))
+                self.assertEqual(found(f'[{tag} recaptcha_list="0|none"][/{tag}]', "error"), [])
 
     def test_units(self):
         self.assertEqual(found('[et_pb_heading title_font_size="48px"][/et_pb_heading]', "error"), [])

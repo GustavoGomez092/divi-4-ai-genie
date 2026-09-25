@@ -1,11 +1,11 @@
 """Offline fallbacks of the Python renderer for content that needs WordPress or the network
-(Tasks 25 and 27): gallery attachment IDs, oEmbed video URLs and the modules that show the site's
-own data (posts, menus, comments, widgets). Real Divi can't be the reference here (a fresh
+(Tasks 25 and 27): gallery attachment IDs, oEmbed video URLs (network) and the modules that show
+the site's own data (posts, menus, comments, widgets). Real Divi can't be the reference here (a fresh
 Playground site has no posts, media, menus or network), so these check the documented behaviour.
 
 The coverage report keeps two lists apart: `unsupported_modules` (the Python preview doesn't
-render it; the --exact preview does) and `needs_site_data` (only the live site has the data, so
-neither preview can show it; the WordPress draft preview is the check).
+render it; the --exact preview does, with network for oEmbed) and `needs_site_data` (only the live
+site has the data, so neither preview can show it; the WordPress draft preview is the check).
 """
 import re
 import unittest
@@ -61,12 +61,14 @@ class FallbackTest(unittest.TestCase):
         html, cov = self.render(f'[et_pb_video src="https://www.youtube.com/watch?v=dQw4w9WgXcQ" {B}][/et_pb_video]')
         self.assertIn('src="https://www.youtube.com/embed/dQw4w9WgXcQ?feature=oembed"', html)
         self.assertNotIn("<video", html.split('class="et_pb_video_box"')[1][:200])
-        self.assertEqual(cov["needs_site_data"].get("video_oembed"), 1)
+        # oEmbed needs the network, not the site's data: the --exact preview fetches the real embed
+        self.assertEqual(cov["unsupported_modules"].get("video_oembed"), 1)
+        self.assertNotIn("video_oembed", cov["needs_site_data"])
 
     def test_self_hosted_video_is_a_native_player(self):
         html, cov = self.render(f'[et_pb_video src="https://example.com/a.mp4" {B}][/et_pb_video]')
         self.assertIn('<source type="video/mp4" src="https://example.com/a.mp4" />', html)
-        self.assertNotIn("video_oembed", cov["needs_site_data"])
+        self.assertNotIn("video_oembed", cov["unsupported_modules"])
 
     def test_site_data_modules_render_a_block_that_points_to_the_draft_preview(self):
         for tag in ("et_pb_blog", "et_pb_portfolio", "et_pb_filterable_portfolio", "et_pb_fullwidth_portfolio",

@@ -56,6 +56,9 @@ RELOAD_JS = """<script>(function(){var m=null;setInterval(function(){fetch('/__m
 BANNER = ('<div id="pp-preview-banner" style="position:fixed;z-index:999999;left:0;right:0;bottom:0;padding:8px 14px;'
           'background:#e11d48;color:#fff;font:13px/1.4 -apple-system,Segoe UI,sans-serif">%s</div>')
 BANNER_EXACT = "Not rendered by the Python preview: %s. For the exact preview: add --exact."
+# Unsupported features whose exact rendering also needs the network (like web fonts and images).
+FEATURE_NOTES = {"video_oembed": "YouTube/Vimeo embeds come from oEmbed over the network; --exact shows the real "
+                                 "embed when it has network"}
 BANNER_SITE = ("Needs the live site's data: %s. Neither preview can show it (the --exact preview is a fresh "
                "WordPress with no posts, menus or media); check the WordPress draft preview.")
 SITE_DATA_HINT = ("needs the live site's data (placeholders; neither preview can show posts, menus, media, "
@@ -95,8 +98,10 @@ def site_data_items(coverage: dict) -> dict:
 
 def banner_html(coverage: dict) -> str:
     parts = []
-    if unsupported_items(coverage):
-        parts.append(BANNER_EXACT % html.escape(", ".join(sorted(unsupported_items(coverage)))))
+    unsupported = unsupported_items(coverage)
+    if unsupported:
+        parts.append(BANNER_EXACT % html.escape(", ".join(sorted(unsupported))))
+        parts += [html.escape(FEATURE_NOTES[k]) + "." for k in sorted(unsupported) if k in FEATURE_NOTES]
     if site_data_items(coverage):
         parts.append(BANNER_SITE % html.escape(", ".join(sorted(site_data_items(coverage)))))
     return BANNER % "<br>".join(parts) if parts else ""
@@ -123,7 +128,8 @@ def coverage_summary(coverage: dict, assets: str = "embedded") -> str:
                      + ", ".join(f"{k} x{n}" for k, n in sorted(modules.items())))
     if features:
         lines.append("unsupported features (not rendered; use --exact): "
-                     + ", ".join(f"{k} x{n}" for k, n in sorted(features.items())))
+                     + ", ".join(f"{k} x{n}" + (f" ({FEATURE_NOTES[k]})" if k in FEATURE_NOTES else "")
+                                 for k, n in sorted(features.items())))
     site = site_data_items(coverage)
     if site:
         lines.append(SITE_DATA_HINT + ", ".join(f"{k} x{n}" for k, n in sorted(site.items())))
