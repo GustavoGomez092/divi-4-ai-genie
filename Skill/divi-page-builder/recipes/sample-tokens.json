@@ -1,0 +1,1187 @@
+{
+ "site": {
+  "url": "https://miamirapidplumbing.example",
+  "divi_version": "4.27.9",
+  "source_pages": [
+   {
+    "id": 101,
+    "url": "https://miamirapidplumbing.example/"
+   }
+  ],
+  "extracted_at": "2026-09-25T04:22:47+00:00"
+ },
+ "colors": {
+  "palette": [
+   {
+    "hex": "#0b2a3c",
+    "uses": 6,
+    "roles": [
+     "background_color",
+     "button_text_color",
+     "number_text_color",
+     "title_text_color"
+    ]
+   },
+   {
+    "hex": "#ffffff",
+    "uses": 5,
+    "roles": [
+     "background_color",
+     "button_text_color",
+     "title_text_color"
+    ]
+   },
+   {
+    "hex": "#f97316",
+    "uses": 5,
+    "roles": [
+     "button_bg_color",
+     "icon_color"
+    ]
+   },
+   {
+    "hex": "#475569",
+    "uses": 3,
+    "roles": [
+     "text_text_color",
+     "title_text_color"
+    ]
+   },
+   {
+    "hex": "#ea580c",
+    "uses": 2,
+    "roles": [
+     "button_bg_color__hover"
+    ]
+   },
+   {
+    "hex": "#f1f5f9",
+    "uses": 2,
+    "roles": [
+     "background_color",
+     "text_text_color"
+    ]
+   },
+   {
+    "hex": "#cbd5e1",
+    "uses": 1,
+    "roles": [
+     "text_text_color"
+    ]
+   }
+  ],
+  "global": {},
+  "customizer": {
+   "body_text": "#666",
+   "heading": "#333",
+   "link": "#2ea3f2",
+   "accent": "#2EA3F2",
+   "body_font": "Open Sans",
+   "body_size": "14px"
+  }
+ },
+ "typography": {
+  "heading_font": "Montserrat",
+  "body_font": "Lato",
+  "scale": {
+   "h1": {
+    "color": "#ffffff",
+    "font": "Montserrat|700|||||||",
+    "letter_spacing": "",
+    "line_height": "",
+    "size": "56px",
+    "size_phone": "34px",
+    "size_tablet": "42px"
+   },
+   "h2": {
+    "color": "#0b2a3c",
+    "font": "Montserrat|700|||||||",
+    "letter_spacing": "",
+    "line_height": "",
+    "size": "40px",
+    "size_phone": "28px",
+    "size_tablet": "32px"
+   },
+   "h3": {
+    "color": "#475569",
+    "font": "Lato||||||||",
+    "letter_spacing": "",
+    "line_height": "",
+    "size": "18px",
+    "size_phone": "",
+    "size_tablet": ""
+   },
+   "h4": {
+    "color": "#ffffff",
+    "font": "Montserrat|700|||||||",
+    "letter_spacing": "",
+    "line_height": "",
+    "size": "30px",
+    "size_phone": "",
+    "size_tablet": ""
+   }
+  },
+  "loaded_fonts": [
+   "Open Sans",
+   "Montserrat",
+   "Lato"
+  ]
+ },
+ "spacing": {
+  "section_padding": [
+   [
+    "70px||70px||true|false",
+    2
+   ],
+   [
+    "96px||96px||true|false",
+    1
+   ],
+   [
+    "90px||90px||true|false",
+    1
+   ],
+   [
+    "80px||80px||true|false",
+    1
+   ]
+  ],
+  "row": {
+   "width": [
+    [
+     "90%",
+     1
+    ]
+   ],
+   "max_width": [
+    [
+     "1200px",
+     1
+    ]
+   ]
+  }
+ },
+ "shapes": {
+  "radii": [
+   [
+    "6px",
+    2
+   ]
+  ],
+  "shadows": []
+ },
+ "presets": {
+  "et_pb_button": [
+   {
+    "uuid": "11111111-2222-3333-4444-555555555555",
+    "uses": 1
+   }
+  ]
+ },
+ "module_styles": {
+  "et_pb_section": [
+   {
+    "uses": 1,
+    "attrs": {
+     "background_color": "#0b2a3c",
+     "custom_padding": "96px||96px||true|false",
+     "custom_padding_last_edited": "on|phone",
+     "custom_padding_phone": "48px||48px||true|false",
+     "custom_padding_tablet": "64px||64px||true|false"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "column_type": ""
+     }
+    ]
+   },
+   {
+    "uses": 1,
+    "attrs": {
+     "background_color": "#ffffff",
+     "custom_padding": "90px||90px||true|false",
+     "custom_padding_last_edited": "on|phone",
+     "custom_padding_phone": "45px||45px||true|false",
+     "custom_padding_tablet": "60px||60px||true|false"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "column_type": ""
+     }
+    ]
+   },
+   {
+    "uses": 1,
+    "attrs": {
+     "background_color": "#0b2a3c",
+     "custom_padding": "70px||70px||true|false",
+     "custom_padding_last_edited": "on|phone",
+     "custom_padding_phone": "40px||40px||true|false",
+     "custom_padding_tablet": "50px||50px||true|false"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "column_type": ""
+     }
+    ]
+   },
+   {
+    "uses": 1,
+    "attrs": {
+     "background_color": "#ffffff",
+     "custom_padding": "80px||80px||true|false",
+     "custom_padding_last_edited": "on|phone",
+     "custom_padding_phone": "40px||40px||true|false",
+     "custom_padding_tablet": "55px||55px||true|false"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "column_type": ""
+     }
+    ]
+   },
+   {
+    "uses": 1,
+    "attrs": {
+     "background_color": "#f1f5f9",
+     "custom_padding": "70px||70px||true|false",
+     "custom_padding_last_edited": "on|phone",
+     "custom_padding_phone": "40px||40px||true|false",
+     "custom_padding_tablet": "50px||50px||true|false"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "column_type": ""
+     }
+    ]
+   }
+  ],
+  "et_pb_row": [
+   {
+    "uses": 5,
+    "attrs": {},
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 1,
+      "section_label": "Why Choose Us",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 1,
+      "section_label": "Why Choose Us",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 2,
+      "section_label": "Free Quote CTA",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 3,
+      "section_label": "About",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 4,
+      "section_label": "By The Numbers",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#f1f5f9",
+       "image": false
+      },
+      "column_type": ""
+     }
+    ]
+   },
+   {
+    "uses": 1,
+    "attrs": {
+     "max_width": "1200px",
+     "width": "90%"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 0,
+      "section_label": "Hero",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": ""
+     }
+    ]
+   }
+  ],
+  "et_pb_column": [
+   {
+    "uses": 10,
+    "attrs": {},
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 0,
+      "section_label": "Hero",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 0,
+      "section_label": "Hero",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 1,
+      "section_label": "Why Choose Us",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 1,
+      "section_label": "Why Choose Us",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 1,
+      "section_label": "Why Choose Us",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 1,
+      "section_label": "Why Choose Us",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 2,
+      "section_label": "Free Quote CTA",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 3,
+      "section_label": "About",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 4,
+      "section_label": "By The Numbers",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#f1f5f9",
+       "image": false
+      },
+      "column_type": ""
+     },
+     {
+      "section_index": 4,
+      "section_label": "By The Numbers",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#f1f5f9",
+       "image": false
+      },
+      "column_type": ""
+     }
+    ]
+   }
+  ],
+  "et_pb_heading": [
+   {
+    "uses": 1,
+    "attrs": {
+     "title_font": "Montserrat|700|||||||",
+     "title_font_size": "56px",
+     "title_font_size_last_edited": "on|phone",
+     "title_font_size_phone": "34px",
+     "title_font_size_tablet": "42px",
+     "title_level": "h1",
+     "title_text_color": "#ffffff"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 0,
+      "section_label": "Hero",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": "1_2"
+     }
+    ]
+   },
+   {
+    "uses": 1,
+    "attrs": {
+     "title_font": "Montserrat|700|||||||",
+     "title_font_size": "40px",
+     "title_font_size_last_edited": "on|phone",
+     "title_font_size_phone": "28px",
+     "title_font_size_tablet": "32px",
+     "title_level": "h2",
+     "title_text_color": "#0b2a3c"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 1,
+      "section_label": "Why Choose Us",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": "4_4"
+     }
+    ]
+   },
+   {
+    "uses": 1,
+    "attrs": {
+     "title_font": "Montserrat|700|||||||",
+     "title_font_size": "30px",
+     "title_level": "h4",
+     "title_text_color": "#ffffff"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 2,
+      "section_label": "Free Quote CTA",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": "4_4"
+     }
+    ]
+   }
+  ],
+  "et_pb_text": [
+   {
+    "uses": 1,
+    "attrs": {
+     "text_font": "Lato||||||||",
+     "text_font_size": "18px",
+     "text_text_color": "#cbd5e1"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 0,
+      "section_label": "Hero",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": "1_2"
+     }
+    ]
+   },
+   {
+    "uses": 1,
+    "attrs": {
+     "text_font": "Lato||||||||",
+     "text_font_size": "18px",
+     "text_text_color": "#f1f5f9"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 2,
+      "section_label": "Free Quote CTA",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": "4_4"
+     }
+    ]
+   },
+   {
+    "uses": 1,
+    "attrs": {
+     "text_font": "Lato|700|||||||",
+     "text_font_size": "22px",
+     "text_line_height": "1.6em",
+     "text_text_color": "#475569"
+    },
+    "preset": "default",
+    "module_class": "pp-lead",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 3,
+      "section_label": "About",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": "4_4"
+     }
+    ]
+   }
+  ],
+  "et_pb_button": [
+   {
+    "uses": 1,
+    "attrs": {
+     "button_bg_color": "#f97316",
+     "button_bg_color__hover": "#ea580c",
+     "button_bg_color__hover_enabled": "on|hover",
+     "button_border_radius": "6px",
+     "button_text_color": "#ffffff",
+     "custom_button": "on"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 0,
+      "section_label": "Hero",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": "1_2"
+     }
+    ]
+   },
+   {
+    "uses": 1,
+    "attrs": {
+     "button_bg_color": "#f97316",
+     "button_bg_color__hover": "#ea580c",
+     "button_bg_color__hover_enabled": "on|hover",
+     "button_border_radius": "6px",
+     "button_text_color": "#0b2a3c",
+     "custom_button": "on"
+    },
+    "preset": "11111111-2222-3333-4444-555555555555",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 2,
+      "section_label": "Free Quote CTA",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": "4_4"
+     }
+    ]
+   }
+  ],
+  "et_pb_image": [
+   {
+    "uses": 1,
+    "attrs": {},
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [
+     "src"
+    ],
+    "contexts": [
+     {
+      "section_index": 0,
+      "section_label": "Hero",
+      "section_tone": "dark",
+      "section_background": {
+       "color": "#0b2a3c",
+       "image": false
+      },
+      "column_type": "1_2"
+     }
+    ]
+   }
+  ],
+  "et_pb_blurb": [
+   {
+    "uses": 3,
+    "attrs": {
+     "header_level": "h3",
+     "icon_color": "#f97316"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 1,
+      "section_label": "Why Choose Us",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": "1_3"
+     },
+     {
+      "section_index": 1,
+      "section_label": "Why Choose Us",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": "1_3"
+     },
+     {
+      "section_index": 1,
+      "section_label": "Why Choose Us",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#ffffff",
+       "image": false
+      },
+      "column_type": "1_3"
+     }
+    ]
+   }
+  ],
+  "et_pb_number_counter": [
+   {
+    "uses": 2,
+    "attrs": {
+     "number_font": "Montserrat|700|||||||",
+     "number_font_size": "56px",
+     "number_text_color": "#0b2a3c",
+     "title_font": "Lato||||||||",
+     "title_font_size": "18px",
+     "title_text_color": "#475569"
+    },
+    "preset": "default",
+    "module_class": "",
+    "module_id": "",
+    "custom_css": {},
+    "media": [],
+    "contexts": [
+     {
+      "section_index": 4,
+      "section_label": "By The Numbers",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#f1f5f9",
+       "image": false
+      },
+      "column_type": "1_2"
+     },
+     {
+      "section_index": 4,
+      "section_label": "By The Numbers",
+      "section_tone": "light",
+      "section_background": {
+       "color": "#f1f5f9",
+       "image": false
+      },
+      "column_type": "1_2"
+     }
+    ]
+   }
+  ]
+ },
+ "section_exemplars": [
+  {
+   "tag": "et_pb_section",
+   "attrs": {
+    "admin_label": "Hero",
+    "background_color": "#0b2a3c",
+    "custom_padding": "96px||96px||true|false",
+    "custom_padding_tablet": "64px||64px||true|false",
+    "custom_padding_phone": "48px||48px||true|false",
+    "custom_padding_last_edited": "on|phone"
+   },
+   "media": [],
+   "children": [
+    {
+     "tag": "et_pb_row",
+     "attrs": {
+      "column_structure": "1_2,1_2",
+      "width": "90%",
+      "max_width": "1200px"
+     },
+     "media": [],
+     "children": [
+      {
+       "tag": "et_pb_column",
+       "attrs": {
+        "type": "1_2"
+       },
+       "media": [],
+       "children": [
+        {
+         "tag": "et_pb_heading",
+         "attrs": {
+          "title_level": "h1",
+          "title_font": "Montserrat|700|||||||",
+          "title_text_color": "#ffffff",
+          "title_font_size": "56px",
+          "title_font_size_tablet": "42px",
+          "title_font_size_phone": "34px",
+          "title_font_size_last_edited": "on|phone"
+         },
+         "media": [],
+         "children": []
+        },
+        {
+         "tag": "et_pb_text",
+         "attrs": {
+          "text_font": "Lato||||||||",
+          "text_text_color": "#cbd5e1",
+          "text_font_size": "18px"
+         },
+         "media": [],
+         "children": []
+        },
+        {
+         "tag": "et_pb_button",
+         "attrs": {
+          "custom_button": "on",
+          "button_text_color": "#ffffff",
+          "button_bg_color": "#f97316",
+          "button_border_radius": "6px",
+          "button_bg_color__hover": "#ea580c",
+          "button_bg_color__hover_enabled": "on|hover"
+         },
+         "media": [],
+         "children": []
+        }
+       ]
+      },
+      {
+       "tag": "et_pb_column",
+       "attrs": {
+        "type": "1_2"
+       },
+       "media": [],
+       "children": [
+        {
+         "tag": "et_pb_image",
+         "attrs": {},
+         "media": [
+          "src"
+         ],
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "tag": "et_pb_section",
+   "attrs": {
+    "admin_label": "Why Choose Us",
+    "background_color": "#ffffff",
+    "custom_padding": "90px||90px||true|false",
+    "custom_padding_tablet": "60px||60px||true|false",
+    "custom_padding_phone": "45px||45px||true|false",
+    "custom_padding_last_edited": "on|phone"
+   },
+   "media": [],
+   "children": [
+    {
+     "tag": "et_pb_row",
+     "attrs": {},
+     "media": [],
+     "children": [
+      {
+       "tag": "et_pb_column",
+       "attrs": {
+        "type": "4_4"
+       },
+       "media": [],
+       "children": [
+        {
+         "tag": "et_pb_heading",
+         "attrs": {
+          "title_level": "h2",
+          "title_font": "Montserrat|700|||||||",
+          "title_text_color": "#0b2a3c",
+          "title_font_size": "40px",
+          "title_font_size_tablet": "32px",
+          "title_font_size_phone": "28px",
+          "title_font_size_last_edited": "on|phone"
+         },
+         "media": [],
+         "children": []
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "tag": "et_pb_row",
+     "attrs": {
+      "column_structure": "1_3,1_3,1_3"
+     },
+     "media": [],
+     "children": [
+      {
+       "tag": "et_pb_column",
+       "attrs": {
+        "type": "1_3"
+       },
+       "media": [],
+       "children": [
+        {
+         "tag": "et_pb_blurb",
+         "attrs": {
+          "icon_color": "#f97316",
+          "header_level": "h3"
+         },
+         "media": [],
+         "children": []
+        }
+       ]
+      },
+      {
+       "tag": "et_pb_column",
+       "attrs": {
+        "type": "1_3"
+       },
+       "media": [],
+       "children": [
+        {
+         "tag": "et_pb_blurb",
+         "attrs": {
+          "icon_color": "#f97316",
+          "header_level": "h3"
+         },
+         "media": [],
+         "children": []
+        }
+       ]
+      },
+      {
+       "tag": "et_pb_column",
+       "attrs": {
+        "type": "1_3"
+       },
+       "media": [],
+       "children": [
+        {
+         "tag": "et_pb_blurb",
+         "attrs": {
+          "icon_color": "#f97316",
+          "header_level": "h3"
+         },
+         "media": [],
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "tag": "et_pb_section",
+   "attrs": {
+    "admin_label": "Free Quote CTA",
+    "background_color": "#0b2a3c",
+    "custom_padding": "70px||70px||true|false",
+    "custom_padding_tablet": "50px||50px||true|false",
+    "custom_padding_phone": "40px||40px||true|false",
+    "custom_padding_last_edited": "on|phone"
+   },
+   "media": [],
+   "children": [
+    {
+     "tag": "et_pb_row",
+     "attrs": {},
+     "media": [],
+     "children": [
+      {
+       "tag": "et_pb_column",
+       "attrs": {
+        "type": "4_4"
+       },
+       "media": [],
+       "children": [
+        {
+         "tag": "et_pb_heading",
+         "attrs": {
+          "title_level": "h4",
+          "title_font": "Montserrat|700|||||||",
+          "title_text_color": "#ffffff",
+          "title_font_size": "30px"
+         },
+         "media": [],
+         "children": []
+        },
+        {
+         "tag": "et_pb_text",
+         "attrs": {
+          "text_font": "Lato||||||||",
+          "text_text_color": "#f1f5f9",
+          "text_font_size": "18px"
+         },
+         "media": [],
+         "children": []
+        },
+        {
+         "tag": "et_pb_button",
+         "attrs": {
+          "custom_button": "on",
+          "button_text_color": "#0b2a3c",
+          "button_bg_color": "#f97316",
+          "button_border_radius": "6px",
+          "button_bg_color__hover": "#ea580c",
+          "button_bg_color__hover_enabled": "on|hover"
+         },
+         "media": [],
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "tag": "et_pb_section",
+   "attrs": {
+    "admin_label": "About",
+    "background_color": "#ffffff",
+    "custom_padding": "80px||80px||true|false",
+    "custom_padding_tablet": "55px||55px||true|false",
+    "custom_padding_phone": "40px||40px||true|false",
+    "custom_padding_last_edited": "on|phone"
+   },
+   "media": [],
+   "children": [
+    {
+     "tag": "et_pb_row",
+     "attrs": {},
+     "media": [],
+     "children": [
+      {
+       "tag": "et_pb_column",
+       "attrs": {
+        "type": "4_4"
+       },
+       "media": [],
+       "children": [
+        {
+         "tag": "et_pb_text",
+         "attrs": {
+          "text_font": "Lato|700|||||||",
+          "text_text_color": "#475569",
+          "text_font_size": "22px",
+          "text_line_height": "1.6em"
+         },
+         "media": [],
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "tag": "et_pb_section",
+   "attrs": {
+    "admin_label": "By The Numbers",
+    "background_color": "#f1f5f9",
+    "custom_padding": "70px||70px||true|false",
+    "custom_padding_tablet": "50px||50px||true|false",
+    "custom_padding_phone": "40px||40px||true|false",
+    "custom_padding_last_edited": "on|phone"
+   },
+   "media": [],
+   "children": [
+    {
+     "tag": "et_pb_row",
+     "attrs": {
+      "column_structure": "1_2,1_2"
+     },
+     "media": [],
+     "children": [
+      {
+       "tag": "et_pb_column",
+       "attrs": {
+        "type": "1_2"
+       },
+       "media": [],
+       "children": [
+        {
+         "tag": "et_pb_number_counter",
+         "attrs": {
+          "number_font": "Montserrat|700|||||||",
+          "number_text_color": "#0b2a3c",
+          "number_font_size": "56px",
+          "title_font": "Lato||||||||",
+          "title_text_color": "#475569",
+          "title_font_size": "18px"
+         },
+         "media": [],
+         "children": []
+        }
+       ]
+      },
+      {
+       "tag": "et_pb_column",
+       "attrs": {
+        "type": "1_2"
+       },
+       "media": [],
+       "children": [
+        {
+         "tag": "et_pb_number_counter",
+         "attrs": {
+          "number_font": "Montserrat|700|||||||",
+          "number_text_color": "#0b2a3c",
+          "number_font_size": "56px",
+          "title_font": "Lato||||||||",
+          "title_text_color": "#475569",
+          "title_font_size": "18px"
+         },
+         "media": [],
+         "children": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
