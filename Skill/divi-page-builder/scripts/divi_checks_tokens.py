@@ -1,7 +1,7 @@
 """Warn when a page uses colors, fonts or section spacing that are not part of the site's design tokens."""
 from __future__ import annotations
 
-from divi_checks_values import is_color_field, normalize_color
+from divi_checks_values import COLOR_RE, is_color_field, normalize_color
 
 
 def _palette(tokens: dict) -> set:
@@ -40,7 +40,8 @@ def check_tokens(doc, schema, tokens: dict, report) -> None:
             if not value:
                 continue
             ftype = res.field.get("type")
-            if is_color_field(res.base, res.field):
+            if (res.kind in ("field", "hover", "sticky", "responsive") and not name.endswith("_last_edited")
+                    and is_color_field(res.base, res.field) and COLOR_RE.match(value.strip())):
                 color = normalize_color(value)
                 if color.startswith("gcid-"):
                     if color not in gcids:

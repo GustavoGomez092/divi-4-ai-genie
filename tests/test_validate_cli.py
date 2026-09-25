@@ -33,6 +33,11 @@ class TokensTest(unittest.TestCase):
         self.assertIn("W_OFF_PALETTE_COLOR", self.codes(section('[et_pb_button button_bg_color="#123456"][/et_pb_button]')))
         self.assertNotIn("W_OFF_PALETTE_COLOR", self.codes(section('[et_pb_button button_bg_color="#F97316"][/et_pb_button]')))
 
+    def test_state_toggle_and_last_edited_are_not_off_palette_colors(self):
+        src = section('[et_pb_heading title_text_color="#ffffff" title_text_color__hover="#f97316" '
+                       'title_text_color__hover_enabled="on|hover" title_font_size_last_edited="on|phone"][/et_pb_heading]')
+        self.assertNotIn("W_OFF_PALETTE_COLOR", self.codes(src))
+
     def test_unknown_global_color(self):
         self.assertIn("W_UNKNOWN_GLOBAL_COLOR", self.codes(section('[et_pb_blurb icon_color="gcid-other"][/et_pb_blurb]')))
 
