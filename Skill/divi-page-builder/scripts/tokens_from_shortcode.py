@@ -8,9 +8,8 @@ from collections import Counter, defaultdict
 from typing import List
 
 from divi_checks_values import COLOR_TYPES, normalize_color
-from divi_shortcode import Node, unescape_attr_value
+from divi_shortcode import Node
 
-PRESET_ATTR_RE = re.compile(r'_module_preset\s*=\s*"([^"]*)"|_module_preset\s*=\s*\'([^\']*)\'|_module_preset\s*=\s*([^\s\'"\]]+)')
 STRUCTURAL_ATTRS = {"column_structure", "type", "fullwidth", "specialty", "specialty_columns",
                     "saved_specialty_column_type", "admin_label"}
 LEVEL_FIELDS = ("title_level", "header_level", "toggle_level")
@@ -52,21 +51,6 @@ def _section_context(section: Node, index: int):
             "section_background": {"color": color, "image": bool(image)}}
 
 
-def _preset_value(node: Node) -> str:
-    """The module's _module_preset, from the first occurrence in the raw tag.
-
-    A shortcode tag can carry a duplicate attribute; node.value() resolves duplicates
-    last-write-wins (matching WordPress's own shortcode_parse_atts and this repo's
-    W_DUPLICATE_ATTR check). For preset *detection*, the first-written value better
-    reflects which preset the module was actually built from, so scan raw_open directly.
-    """
-    m = PRESET_ATTR_RE.search(node.raw_open or "")
-    if m is None:
-        return node.value("_module_preset") or "default"
-    raw = next(g for g in m.groups() if g is not None)
-    return unescape_attr_value(raw) or "default"
-
-
 def _skeleton(node: Node, schema):
     mod = schema.module(node.tag)
     attrs = {k: node.value(k) for k in node.attrs
@@ -104,7 +88,7 @@ def tokens_from_documents(docs: List, schema) -> dict:
                 if node.value("max_width"):
                     row_max[node.value("max_width")] += 1
             design = {k: node.value(k) for k in node.attrs if is_design_attr(mod, k)}
-            preset = _preset_value(node)
+            preset = node.value("_module_preset") or "default"
             if preset != "default":
                 presets[node.tag][preset] += 1
             key = json.dumps([sorted(design.items()), preset, node.value("module_class")])

@@ -61,9 +61,16 @@ class TokensFromShortcodeTest(unittest.TestCase):
         self.assertIn("title_font_size", flat)
 
     def test_presets_counted(self):
-        src = SRC.replace('[et_pb_button button_text', '[et_pb_button _module_preset="aaaa-bbbb" button_text', 1)
+        src = SRC.replace(
+            'button_url="tel:+13055550100" _builder_version="4.27.9" _module_preset="default"',
+            'button_url="tel:+13055550100" _builder_version="4.27.9" _module_preset="aaaa-bbbb"', 1)
         t = tokens_from_documents([parse(src)], SCHEMA)
         self.assertEqual(t["presets"]["et_pb_button"], [{"uuid": "aaaa-bbbb", "uses": 1}])
+
+    def test_duplicate_module_preset_last_wins(self):
+        src = '[et_pb_button button_text="Click" button_url="#" _module_preset="x" _module_preset="y"][/et_pb_button]'
+        t = tokens_from_documents([parse(src)], SCHEMA)
+        self.assertEqual(t["presets"]["et_pb_button"], [{"uuid": "y", "uses": 1}])
 
 
 if __name__ == "__main__":
