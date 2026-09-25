@@ -1,8 +1,9 @@
-"""Basic modules: Heading, Text, Button, Image, Divider (templates from each module's render())."""
+"""Basic modules: Heading, Text, Button, Image, Divider, Code / Fullwidth Code and Icon (templates from each
+module's render())."""
 from __future__ import annotations
 
 from ..base import Module, base_classes, module_wrap, register
-from ..values import (DEVICES, SIDES, decode_icon, esc, esc_url, four_sides, hover_value, module_content, new_window,
+from ..values import (DEVICES, SIDES, any_value, decode_icon, esc, esc_url, four_sides, hover_value, module_content, new_window,
                       property_values, resp_enabled)
 
 BUTTON_RELS = ("bookmark", "external", "nofollow", "noreferrer", "noopener")
@@ -172,3 +173,66 @@ class Divider(Module):
         if v and v != "none":
             self.css("%%order_class%%", f"max-height: {v};")
         return f'<div class="{self.classname()}"><div class="et_pb_divider_internal"></div></div>'
+
+
+@register("et_pb_code", "et_pb_fullwidth_code")
+class Code(Module):
+    """Code.php / FullwidthCode.php: the raw content inside .et_pb_code_inner (no wptexturize)."""
+
+    def render(self):
+        self.process_additional()
+        base_classes(self)
+        self.add_class(self.text_orientation_class())
+        raw = self.node.content.strip("\n")
+        return (f'<div class="{self.classname()}">\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t{self.mask_markup}\n'
+                f'\t\t\t\t<div class="et_pb_code_inner">{raw}</div>\n\t\t\t</div>')
+
+
+@register("et_pb_icon")
+class Icon(Module):
+    slug = "et_pb_icon"
+    ICON = "%%order_class%% .et_pb_icon_wrap .et-pb-icon"
+    has_video_background = False
+    TRANSITIONS = {"icon_color": {"color": ICON}}
+
+    def alignment(self, dev: str) -> str:
+        """Icon::get_alignment(): tablet/phone only when responsive editing is on."""
+        p = self.props
+        if dev == "desktop":
+            v = p.get("align", "")
+        else:
+            v = any_value(p, f"align_{dev}", dev) if resp_enabled(p, "align") else ""
+        return {"force_left": "left", "justified": "justify"}.get(v, v)
+
+    def render(self):
+        p = self.props
+        self.process_additional()
+        # Icon.php render(): the desktop rule pulls the icon to its side; tablet/phone always print
+        # auto side margins (even without a responsive value), then pull to the side again.
+        values = {}
+        for dev in DEVICES:
+            a = self.alignment(dev)
+            v = {"text-align": a}
+            if dev != "desktop":
+                v["margin-left"] = "auto" if a != "left" else ""
+                v["margin-right"] = "auto" if a != "left" else ""
+            if a and a != "center":
+                v[f"margin-{a}"] = "0"
+            values[dev] = v
+        self.responsive_css(values, "%%order_class%%")
+        self.icon_style("font_icon", self.ICON)
+        self.generate_styles("icon_color", self.ICON, "color", hover_loc="suffix")
+        self.generate_styles("icon_width", self.ICON, "font-size", typ="range", hover_loc="suffix")
+        icon = p.get("font_icon", "")
+        bs = p.get("box_shadow_style", "") != "none"
+        wrap_cls, overlay = ("has-box-shadow-overlay", '<div class="box-shadow-overlay"></div>') if bs else ("", "")
+        glyph = esc(decode_icon(icon)) if icon else ""
+        out = (f'<span class="et_pb_icon_wrap {wrap_cls}">{overlay}{self.mask_markup}'
+               f'<span class="et-pb-icon">{glyph}</span></span>')
+        if p.get("url", ""):
+            title = f'title="{esc(p.get("title_text"))}"' if p.get("title_text", "") else ""
+            out = f'<a href="{esc_url(p.get("url"))}"{new_window(p)} {title}>{out}</a>'
+        base_classes(self)
+        if p.get("animation_style", "") not in ("", "none"):
+            self.add_class("et-waypoint")
+        return f'<div class="{self.classname()}">\n\t\t\t\t{out}\n\t\t\t</div>'

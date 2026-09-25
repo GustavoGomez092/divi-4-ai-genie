@@ -15,7 +15,8 @@ from .buttons import ButtonOptions
 from .css import StyleSheet, add_hover_to_order_class, add_hover_to_selectors
 from .data import module_def
 from .options import DesignOptions
-from .values import DEVICES, Props, hover_enabled, hover_value, property_values, range_value, resp_enabled
+from .values import (DEVICES, Props, hover_enabled, hover_value, icon_css_content, icon_font, multiply_unit,
+                     property_values, range_value, resp_enabled)
 
 # Attributes that never affect output (bookkeeping), excluded from the coverage report.
 META_ATTRS = {"_builder_version", "_module_preset", "hover_enabled", "locked", "global_colors_info",
@@ -50,6 +51,7 @@ class Ctx:
         self.slider = None
         self.slide_num = 0
         self.accordion = None
+        self.social_follow = None
 
     def next_index(self, slug: str) -> int:
         n = self.counters.get(slug, 0)
@@ -65,6 +67,8 @@ class Module(DesignOptions, ButtonOptions):
     slug = ""
     mask_markup = ""
     box_shadow_overlay = False
+    # render() calls video_background(), which adds et_pb_section_video_on_hover (Icon doesn't)
+    has_video_background = True
 
     def __init__(self, node: Node, ctx: Ctx, parent=None):
         self.node, self.ctx, self.parent = node, ctx, parent
@@ -77,10 +81,20 @@ class Module(DesignOptions, ButtonOptions):
         self._mdef = mdef
         self.attrs = {k: node.value(k) for k in node.attrs}
         self.props = Props({**self.defaults, **self.attrs})
+        self._clear_global_defaults(ctx.theme.global_settings())
         self.props.read.clear()
         self.index = ctx.next_index(self.render_slug)
         self.order_class = f"{self.render_slug}_{self.index}"
         self.classes: list = []
+
+    def _clear_global_defaults(self, globals_: dict):
+        """ET_Builder_Element::_maybe_remove_global_default_values_from_props(): on the front end a
+        prop equal to its ET_Global_Settings default (e.g. the gallery's overlay colour) is emptied,
+        so it prints no CSS; text_orientation is always printed."""
+        for k in list(self.props):
+            g = globals_.get(f"{self.node.tag}-{k}")
+            if g and k != "text_orientation" and dict.get(self.props, k) == g:
+                dict.__setitem__(self.props, k, "")
 
     # -- utilities
     def field_default(self, name: str) -> str:
@@ -120,6 +134,8 @@ class Module(DesignOptions, ButtonOptions):
 
     def hover_background_class(self) -> str:
         """video_background(): any element whose background has hover enabled gets this class."""
+        if not self.has_video_background:
+            return ""
         return "et_pb_section_video_on_hover" if hover_enabled(self.props, "background") else ""
 
     def bg_layout_class(self) -> str:
@@ -146,10 +162,43 @@ class Module(DesignOptions, ButtonOptions):
                 hs = add_hover_to_order_class(selector) if hover_loc == "order_class" else add_hover_to_selectors(selector)
                 self.css(hs, f"{prop}:{hv}{imp}")
 
+    def responsive_css(self, values: dict, selector: str):
+        """ResponsiveOptions::generate_responsive_css() with per-device {property: value} dicts;
+        empty values (and devices left with none) are skipped."""
+        for dev in DEVICES:
+            decl = "".join(f"{k}: {x};" for k, x in (values.get(dev) or {}).items() if k and x != "")
+            if decl:
+                self.css(selector, decl, dev)
+
+    def icon_style(self, base: str, selector: str, content: bool = False):
+        """generate_styles() with utility_arg icon_font_family(_and_content) (StyleProcessor::
+        process_extended_icon): the icon font, weight and, optionally, the glyph as `content`."""
+        icon = self.props.get(base, "")
+        if not icon:
+            return
+        fam, w = icon_font(icon)
+        decl = f"font-family: {fam} !important; font-weight: {w} !important;"
+        if content:
+            decl += f" content: {icon_css_content(icon)} !important;"
+        self.css(selector, decl)
+
+    def overlay_icon_size(self, selector: str, fmt: str):
+        """StyleProcessor::process_overlay_icon_font_size() for `icon_font_size`: `fmt` with
+        {0} = size and {1} = half the size, per device, plus the hover value on the
+        :hover-suffixed selector (Video play icon, Testimonial quote icon)."""
+        vals = property_values(self.props, "icon_font_size")
+        for dev in DEVICES:
+            if vals[dev]:
+                self.css(selector, fmt.format(vals[dev], multiply_unit(vals[dev], 0.5, 0)), dev)
+        hv = hover_value(self.props, "icon_font_size")
+        if hv:
+            self.css(add_hover_to_selectors(selector), fmt.format(hv, multiply_unit(hv, 0.5, 0)))
+
     def process_additional(self):
         """process_additional_options(): the generic design-option engine."""
         self.process_fonts()
         self.process_text_shadow()
+        self.process_text_orientation()
         self.process_background()
         self.process_borders()
         self.process_overflow()
@@ -181,6 +230,17 @@ def base_classes(m: Module, slug: Optional[str] = None):
         m.classes.append("et_animated")
     if any(k.endswith("__hover_enabled") and v == "on" for k, v in m.attrs.items()):
         m.classes.append("et_hover_enabled")
+
+
+def bg_layout_classes(m: Module, text_color: bool = False) -> list:
+    """BackgroundLayout::get_background_layout_class(): the layout class per device, plus the
+    et_pb_text_color_dark* classes when `text_color` (Audio)."""
+    vals = property_values(m.props, "background_layout")
+    out = [f"et_pb_bg_layout_{vals['desktop']}"]
+    out += [f"et_pb_bg_layout_{vals[d]}_{d}" for d in ("tablet", "phone") if vals[d]]
+    if text_color:
+        out += [f"et_pb_text_color_dark{'' if d == 'desktop' else '_' + d}" for d in DEVICES if vals[d] == "light"]
+    return out
 
 
 # ----------------------------------------------------------------------------- dispatch

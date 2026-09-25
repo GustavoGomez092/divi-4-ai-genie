@@ -25,8 +25,15 @@ ALIGN_MARGINS = {"left": "margin-left: 0px !important; margin-right: auto !impor
                  "center": "margin-left: auto !important; margin-right: auto !important;",
                  "right": "margin-left: auto !important; margin-right: 0px !important;"}
 # Modules whose border radius doesn't add overflow:hidden, and that never get et_pb_with_border.
-NO_RADIUS_OVERFLOW = ("et_pb_social_media_follow", "et_pb_menu")
+NO_RADIUS_OVERFLOW = ("et_pb_social_media_follow", "et_pb_social_media_follow_network", "et_pb_menu",
+                      "et_pb_fullwidth_menu")  # process_advanced_borders_options() $no_overflow_module
 NO_WITH_BORDER_CLASS = ("et_pb_accordion", "et_pb_accordion_item", "et_pb_pricing_table", "et_pb_tabs", "et_pb_toggle")
+
+
+def overlay_selector(sel: str) -> str:
+    """BoxShadow::get_overlay_selector(): 'X' -> 'X>.box-shadow-overlay, X.et-box-shadow-no-overlay'."""
+    parts = (x.strip() for x in sel.split(","))
+    return ", ".join(f"{x}>.box-shadow-overlay, {x}.et-box-shadow-no-overlay" for x in parts)
 
 
 class DesignOptions:
@@ -172,8 +179,8 @@ class DesignOptions:
             if not s.strip():
                 continue
             for sel in (main if isinstance(main, list) else [main]):
-                if state == "hover":
-                    sel = css.get("hover") or add_hover_to_order_class(sel)
+                if state == "hover":  # process_advanced_fonts_options(): css.hover or add_hover_to_selectors()
+                    sel = css.get("hover") or add_hover_to_selectors(sel)
                 self.css(sel, s)
         self._process_font_responsive(opt, css, imp)
 
@@ -217,6 +224,26 @@ class DesignOptions:
             sel = (txt.get("css") or {}).get("text_shadow") or self.main
             self.css(sel, f"text-shadow: {h} {v} {b} {color};")
 
+    def process_text_orientation(self):
+        """process_advanced_text_options(): modules whose `text` options name a text_orientation
+        selector get text-align rules (desktop only when it differs from the field default)."""
+        txt = self.af.get("text")
+        css = txt.get("css") if isinstance(txt, dict) else None
+        if not isinstance(css, dict) or not css.get("text_orientation"):
+            return
+        p = self.props
+        dflt = self.field_default("text_orientation")
+
+        def align(v):  # et_pb_get_alignment()
+            return {"force_left": "left", "justified": "justify"}.get(v, v)
+        desktop = align(p.get("text_orientation", ""))
+        vals = {"desktop": desktop if desktop != dflt else ""}
+        for dev in ("tablet", "phone"):
+            vals[dev] = align(any_value(p, f"text_orientation_{dev}", dev, dflt))
+        for dev in DEVICES:
+            if vals[dev]:
+                self.css(css["text_orientation"], f"text-align: {vals[dev]};", dev)
+
     # background ---------------------------------------------------------------------------
     def gradient(self, prefix: str = "background") -> str:
         p = self.props
@@ -242,7 +269,8 @@ class DesignOptions:
         p = self.props
         css = bg.get("css") or {}
         sel = selector or css.get("main") or self.main
-        imp = " !important" if (important if important is not None else css.get("important") == "all") else ""
+        # process_advanced_background_options(): any truthy css.important ('all' or true)
+        imp = " !important" if (important if important is not None else bool(css.get("important"))) else ""
         use_color = bg.get("use_background_color", True) if use_color is None else use_color
         decls = []
         images = []
@@ -273,7 +301,9 @@ class DesignOptions:
             self.css(sel, " ".join(decls))
         hc = hover_value(p, f"{prefix}_color")
         if use_color is True and hc:
-            self.css(add_hover_to_order_class(sel), f"background-image: initial; background-color: {hc}{imp};")
+            # process_advanced_background_options(): css.hover, else add_hover_to_selectors(main)
+            self.css(css.get("hover") or add_hover_to_selectors(sel),
+                     f"background-image: initial{imp}; background-color: {hc}{imp};")
         if p.get(f"{prefix}_enable_mask_style", "") == "on" and bg.get("use_background_mask"):
             self._background_mask(prefix, sel)
         if p.get(f"{prefix}_enable_pattern_style", "") == "on":
@@ -397,12 +427,18 @@ class DesignOptions:
             if css.get("important"):
                 val = val.rstrip(";") + " !important;"
             sel = css.get("main", "%%order_class%%")
-            self.css(sel, val)
+            overlay = css.get("overlay")
+            # process_box_shadow(): an inset shadow on an `overlay: inset` option (or any shadow
+            # with `overlay: always`) goes on the overlay element (BoxShadow::get_overlay_selector())
+            def on_overlay(s, v):
+                return overlay_selector(s) if ("inset" in v and overlay == "inset") or overlay == "always" else s
+            self.css(on_overlay(sel, val), val)
             hv = self.box_shadow_value(suf, hover=True)
             if hv and hv != self.box_shadow_value(suf):
-                hsel = add_hover_to_order_class(sel) if name == "default" else add_hover_to_selectors(sel)
-                self.css(css.get("hover") or hsel, hv)
-            if "inset" in val and css.get("overlay") == "inset":
+                hsel = css.get("hover") or (add_hover_to_order_class(sel) if name == "default"
+                                            else add_hover_to_selectors(sel))
+                self.css(on_overlay(hsel, hv), hv)
+            if "inset" in val and overlay == "inset":
                 self.box_shadow_overlay = True
 
     def process_overflow(self):
@@ -434,7 +470,9 @@ class DesignOptions:
                 else:
                     if not resp_enabled(p, kind):
                         continue
-                    v = p.get(f"{kind}_{dev}", "") or (p.get(f"{kind}_tablet", "") if dev == "phone" else "")
+                    # process_advanced_custom_margin_options(): each breakpoint uses its own raw
+                    # value; an empty phone value does not inherit the tablet one.
+                    v = p.get(f"{kind}_{dev}", "")
                 if not v:
                     continue
                 decl = "".join(f"{prop}-{side}: {range_value(val) if val != 'auto' else 'auto'}{imp};"
@@ -449,29 +487,48 @@ class DesignOptions:
 
     # sizing -------------------------------------------------------------------------------
     def process_max_width(self):
+        """process_max_width_options(): width/max-width on css.<key> or css.main or the order
+        class (not main_css); with responsive editing on, the desktop value moves into a
+        min-width:981px query."""
         mw = self.af.get("max_width")
-        if mw is False or mw is None:
+        if not isinstance(mw, (dict, list)):
             return
         mw = mw if isinstance(mw, dict) else {}
         css = mw.get("css") or {}
         p = self.props
-        imp = " !important" if css.get("important") == "all" else ""
+        imp = " !important" if "important" in css else ""
         opts = mw.get("options") or {}
         for prop, key in (("width", "width"), ("max-width", "max_width")):
+            if mw.get(f"use_{key}", True) is False:
+                continue
             dflt = (opts.get(key) or {}).get("default", "") or self.field_default(key)
+            sel = css.get(key) or css.get("main") or "%%order_class%%"
+            responsive = resp_enabled(p, key)
             for dev in DEVICES:
                 v = any_value(p, key, dev) if dev != "desktop" else p.get(key, "")
-                if dev != "desktop" and not resp_enabled(p, key):
+                if dev != "desktop" and not responsive:
                     continue
                 if not v or v == dflt or v in ("auto", "none") and dev == "desktop":
                     continue
-                self.css(css.get(key) or css.get("main") or self.main, f"{prop}: {v}{imp};", dev)
+                self.css(sel, f"{prop}: {v}{imp};", "desktop_only" if dev == "desktop" and responsive else dev)
         # module alignment (only meaningful with a width)
         al = p.get("module_alignment", "")
         if al and (p.get("max_width", "") or p.get("width", "")) and mw.get("use_module_alignment", True) is not False:
-            self.css(css.get("module_alignment") or f"{self.main}.et_pb_module", ALIGN_MARGINS.get(al, ""))
+            self.css(css.get("module_alignment") or css.get("main") or "%%order_class%%.et_pb_module",
+                     ALIGN_MARGINS.get(al, ""))
 
     # hover transitions --------------------------------------------------------------------
+    def _box_shadow_transition_selector(self, key: str) -> str:
+        """get_transition_box_shadow_fields_css_props(): the option's css.main (default: the order
+        class), plus the overlay selectors when its overlay is `inset` or `always`."""
+        bs = self.af.get("box_shadow") if isinstance(self.af.get("box_shadow"), dict) else {}
+        opt = next((n for n in bs if n != "default" and key.endswith(f"_{n}")), "default")
+        css = (bs.get(opt) or {}).get("css") or {} if isinstance(bs.get(opt), dict) else {}
+        sel = css.get("main", "%%order_class%%")
+        if css.get("overlay") in ("inset", "always"):
+            sel += ", " + overlay_selector(sel)
+        return sel
+
     def process_transitions(self):
         """process_hover_transitions(): one transition rule over the selectors of hover-enabled props."""
         p = self.props
@@ -497,6 +554,7 @@ class DesignOptions:
             sel = self.main
             if k.startswith("box_shadow"):
                 prop = "box-shadow"
+                sel = self._box_shadow_transition_selector(k)
             elif k.endswith("bg_color") or k == "background_color":
                 prop = "background-color"
             elif k.endswith("text_color"):

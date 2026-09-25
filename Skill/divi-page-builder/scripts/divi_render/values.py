@@ -43,6 +43,16 @@ def range_value(val: str, option_type: str = "") -> str:
     return to_css_decimal(num) + unit
 
 
+def multiply_unit(value: str, mult: float, min_value=None) -> str:
+    """et_builder_multiply_value_has_unit(): '64px' * 0.5 -> '32px' (PHP float-to-string)."""
+    m = re.match(r"^\s*(-?\d*\.?\d+)", value)
+    num = float(m.group(1)) if m else 0.0
+    num_s = ("%.14G" % num)
+    unit = value.replace(num_s, "", 1)
+    product = num * mult if (min_value is None or min_value < num) else min_value
+    return ("%.14G" % product) + unit
+
+
 def four_sides(value: str) -> list:
     """'10px|auto||5px|true|false' -> the four side values (top, right, bottom, left)."""
     return (value.split("|") + [""] * 4)[:4]

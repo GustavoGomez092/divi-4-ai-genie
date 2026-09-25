@@ -65,6 +65,7 @@ class Theme:
         self.embed = embed and not asset_base
         self._gfonts = None
         self._static_css = None
+        self._globals = None
         self._uris: dict = {}
 
     @classmethod
@@ -131,6 +132,20 @@ class Theme:
             return None
         m2 = re.search(r"'%s'\s*=>\s*'([^']*)'" % ratio, m.group(1))
         return m2.group(1) if m2 else None
+
+    def global_settings(self) -> dict:
+        """ET_Global_Settings' module defaults ('et_pb_gallery-hover_overlay_color' -> value) from
+        includes/builder/class-et-global-settings.php: literal values and the $font_defaults-style
+        helper arrays they reference (other expressions are skipped)."""
+        if self._globals is None:
+            src = self.read_text("includes/builder/class-et-global-settings.php")
+            helpers = {name: dict(re.findall(r"'(\w+)'\s*=>\s*'([^']*)'", body))
+                       for name, body in re.findall(r"\$(\w+)\s*=\s*array\((.*?)\);", src, re.S)}
+            self._globals = {}
+            for key, lit, var, sub in re.findall(
+                    r"'(et_pb_\w+-\w+)'\s*=>\s*(?:'([^']*)'|\$(\w+)\['(\w+)'\])", src):
+                self._globals.setdefault(key, lit if not var else helpers.get(var, {}).get(sub, ""))
+        return self._globals
 
     def scripts(self) -> list:
         return [js for js in (self.read_text(r) for r in DIVI_JS) if js]

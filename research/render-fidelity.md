@@ -43,6 +43,33 @@ generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
   placeholders and are listed in the coverage report, so a ratio of 0.9 cannot be reached yet.
   Until they are supported, the test checks that every one of them appears in the coverage report
   instead of checking the ratio.
+- Task 25 (content modules: icon, code, fullwidth code, fullwidth image, video, audio, gallery,
+  testimonial, team member, social media follow + network) added one tuned fixture per module
+  (`content-tuned-*.txt`) and the held-out page `content-heldout.txt`. The held-out page's first
+  row was measured before any fix: the markup matched exactly and 4 of 110 CSS declarations were
+  missing, 1 extra. All five came from one engine gap: an inset box shadow on an option whose
+  `overlay` is `inset` goes on `X>.box-shadow-overlay, X.et-box-shadow-no-overlay`
+  (`BoxShadow::get_overlay_selector()`), and the box-shadow hover transition lists those
+  selectors too. After that fix the page became tuned (second row).
+- Engine fixes found while tuning the Task 25 fixtures (each checked against the existing
+  fixtures, which still match exactly): background hover goes on `css.hover` or
+  `add_hover_to_selectors(main)` (Background.php), and `important: true` counts like `"all"`;
+  font hover rules use `add_hover_to_selectors` (`process_advanced_fonts_options`); a phone
+  margin/padding no longer inherits the tablet value (`process_advanced_custom_margin_options`);
+  width/max-width default to the order class, not `main_css`, and move into a
+  `min-width:981px` query when responsive (`process_max_width_options`); `text.css.text_orientation`
+  prints `text-align` (`process_advanced_text_options`); props equal to their ET_Global_Settings
+  default are emptied (`_maybe_remove_global_default_values_from_props`, read from the cached
+  theme's `class-et-global-settings.php`); social follow networks skip the border-radius
+  `overflow:hidden`.
+- Media that needs WordPress or the network: the gallery's `gallery_ids` are media-library IDs.
+  A fresh Playground site has no attachments, so real Divi prints only the gallery's CSS, and the
+  tuned fixture checks exactly that. With IDs, the Python renderer draws Divi's grid (or slider)
+  markup with grey placeholder images and counts them as `gallery_attachments` in the coverage
+  report (`tests/test_render_fallbacks.py`). YouTube and Vimeo URLs need oEmbed. Instead, the
+  renderer prints the iframe oEmbed would return and counts it as `video_oembed`. Self-hosted
+  video and audio use Divi's own `<video>` and `wp_audio_shortcode()` markup, and the fixtures
+  use those.
 
 ## Metrics
 
@@ -51,3 +78,5 @@ generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
 | heldout2-inscope.txt | accordion, accordion_item, blurb, button, cta, divider, fullwidth_header, heading, image, number_counter, slide, slider, text | no | 0.9574 | 0.9469 | 2026-09-24 |
 | heldout2-inscope.txt | accordion, accordion_item, blurb, button, cta, divider, fullwidth_header, heading, image, number_counter, slide, slider, text | yes | 1.0000 | 1.0000 | 2026-09-24 |
 | heldout-outofscope.txt | circle_counter, contact_field, contact_form, countdown_timer, counter, counters, heading, icon, pricing_table, pricing_tables, social_media_follow, social_media_follow_network, tab, tabs, testimonial, text | no | 0.2022 | 0.1860 | 2026-09-24 |
+| content-heldout.txt | audio, code, fullwidth_code, fullwidth_image, gallery, icon, social_media_follow, social_media_follow_network, team_member, testimonial, video | no | 1.0000 | 0.9550 | 2026-09-24 |
+| content-heldout.txt | audio, code, fullwidth_code, fullwidth_image, gallery, icon, social_media_follow, social_media_follow_network, team_member, testimonial, video | yes | 1.0000 | 1.0000 | 2026-09-24 |
