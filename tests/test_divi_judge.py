@@ -24,7 +24,7 @@ def flatten_divi(items):
 
 
 class DiviJudgeTest(unittest.TestCase):
-    FILES = ["handwritten-landing.txt", "unicode.txt", "divi-ai-section.txt", "divi-ai-layout.txt"]
+    FILES = ["handwritten-landing.txt", "unicode.txt", "divi-ai-section.txt", "divi-ai-layout.txt", "faq-jsonld.txt"]
 
     def test_parse_agrees_with_divi(self):
         mismatches = []

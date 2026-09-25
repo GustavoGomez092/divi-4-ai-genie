@@ -83,7 +83,15 @@ copying for a three-up feature row: a full-width heading row (`et_pb_row` with n
 | [Process steps](sections/process-steps.md) | section | numbered "how it works" walkthrough with a styled numeral eyebrow per step |
 | [Tabs](sections/tabs.md) | section | `et_pb_tabs`-based grouping of related content (service categories, plan tiers) behind clickable tabs |
 | [Service area list](sections/service-area-list.md) | section | `h2` + multi-column `<ul>` of served cities, linked to their own location pages when they exist |
-| _more to come_ | — | Tasks 18-19 populate `sections/`, `pages/` and `edits/` below; this table grows as each recipe lands. |
+| [Testimonials](sections/testimonials.md) | section | three-up `et_pb_testimonial` grid or an `et_pb_slider` cycling through customer quotes |
+| [Pricing](sections/pricing.md) | section | `et_pb_pricing_tables` comparison of 2-4 service tiers with one raised as the recommended plan |
+| [FAQ](sections/faq.md) | section | `et_pb_accordion` questions paired with a matching `FAQPage` JSON-LD block for a rich-result snippet |
+| [CTA band](sections/cta-band.md) | section | short, high-contrast `et_pb_cta` band with a contrasting button between content sections |
+| [Contact](sections/contact.md) | section | `et_pb_contact_form` lead form paired with an optional `et_pb_map` of the business's location |
+| [Team](sections/team.md) | section | 2-4 `et_pb_team_member`s introducing real staff by name, title and photo |
+| [Gallery](sections/gallery.md) | section | `et_pb_gallery` grid of Media Library photos with a lightbox on click |
+| [Video](sections/video.md) | section | `et_pb_video` embed behind a lazy-loaded poster image and play button |
+| _more to come_ | — | Task 19 populates `pages/` and `edits/` below; this table grows as each recipe lands. |
 
 - `sections/` — single-section patterns (hero, feature row, CTA band, …).
 - `pages/` — full-page compositions built from more than one section recipe.
