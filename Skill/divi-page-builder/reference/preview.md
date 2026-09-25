@@ -297,7 +297,8 @@ Playground:
 | A stray Playground server keeps a port busy after Ctrl-C or a crash | `serve`'s child process wasn't cleaned up. | `preview.mjs` kills the whole process group on `SIGINT`/`SIGTERM`/exit; if one is still running, find it with `lsof -i :9400` (or your `--port`) and kill it manually. |
 | Credentials show up somewhere they shouldn't | This would be a bug. | `ET_USERNAME`/`ET_API_KEY` are read only from `process.env`, used only in request URLs, and every error message that could echo a URL redacts them first. File an issue if you find a counterexample. |
 
-**The WordPress draft preview (`scripts/publish.py draft`) is the authoritative visual check**
+**Order: local preview first, WordPress draft second.** The user approves the local preview before anything
+is pushed; only then does the WordPress draft preview (`scripts/publish.py draft`) serve as the final check
 for anything neither preview can show: client Customizer settings, global colors/presets, the
 real site header/menu, plugins, a child theme, and any content that needs the live site's data.
 Use `preview.py` for fast, portable, offline-capable iteration on a layout's own builder markup

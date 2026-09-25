@@ -60,8 +60,8 @@ deliberately left out, per the "no navigation-heavy sections" rule for a PPC pag
 
 ## Checklist
 - [ ] `python3 scripts/validate.py page.txt --tokens tokens.json` — 0 errors and no heading warnings (`tokens.json` is the target site's own, from `scripts/extract_tokens.py`; `recipes/sample-tokens.json` is only the worked example's fictional brand)
-- [ ] `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` — fast visual check (open `preview.html`; see [preview](../../reference/preview.md))
-- [ ] `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"` — saves a **draft** (validates first) and prints its `preview_url`; share it and publish only after the user approves ([publishing](../../reference/publishing.md))
+- [ ] `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` — show the user `preview.html` (or `preview.py serve`) and **stop until they approve it**; fast visual check (open `preview.html`; see [preview](../../reference/preview.md))
+- [ ] Only after the user approves the local preview: `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"` — saves a **draft** (validates first) and prints its `preview_url`; share it and publish only after the user approves ([publishing](../../reference/publishing.md))
 - [ ] exactly one H1 on the page
 - [ ] no skipped heading levels (`validate.py` reports any as `W_HEADING_SKIP`, and a second H1 as `E_MULTIPLE_H1`)
 - [ ] the hero has exactly one call to action (the form) — no competing button

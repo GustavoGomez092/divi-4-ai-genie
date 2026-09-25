@@ -117,8 +117,9 @@ against the **target site's** `tokens.json` (from `scripts/extract_tokens.py`, s
    read every warning (heading outline, off-token values, external images). To check one section
    on its own, validate it with `--fragment` (a lone section has no H1).
 2. **Preview** — `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html`,
-   then open `preview.html` (no Node/PHP/WordPress needed; see `reference/preview.md`).
-3. **Draft** — `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"`
+   then show it to the user (no Node/PHP/WordPress needed; see `reference/preview.md`) and **stop
+   until they approve it**. Nothing is uploaded to the site before that approval.
+3. **Draft** (after the user approves the local preview) — `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"`
    saves a WordPress draft and prints its `preview_url`; the user reviews it there, and only then
    is it published (`reference/publishing.md`).
 
