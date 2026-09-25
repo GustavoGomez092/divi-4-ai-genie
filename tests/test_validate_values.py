@@ -27,8 +27,9 @@ class AttributeTest(unittest.TestCase):
         self.assertIn("did you mean", fs[0].hint)
 
     def test_illegal_suffix(self):
-        self.assertIn(("error", "E_UNKNOWN_ATTR", "use_icon__hover"),
-                      found('[et_pb_blurb use_icon__hover="on"][/et_pb_blurb]'))
+        fs = found('[et_pb_blurb use_icon__hover="on"][/et_pb_blurb]')
+        self.assertIn(("error", "E_UNKNOWN_ATTR", "use_icon__hover"), fs)
+        self.assertNotIn(("warning", "W_HOVER_DISABLED", "use_icon__hover"), fs)
 
     def test_raw_bracket_and_positional(self):
         fs = found('[et_pb_heading title="Save [now]" stray][/et_pb_heading]')
@@ -40,6 +41,10 @@ class AttributeTest(unittest.TestCase):
 
     def test_single_quoted_value_warns(self):
         self.assertIn(("warning", "W_ATTR_QUOTING", "title"), found("[et_pb_heading title='x'][/et_pb_heading]"))
+
+    def test_raw_quote(self):
+        self.assertIn(("error", "E_RAW_QUOTE", "title"),
+                      found('[et_pb_heading title=\'He said "hi"\'][/et_pb_heading]'))
 
     def test_select_and_yes_no(self):
         self.assertIn(("error", "E_BAD_OPTION", "title_level"), found('[et_pb_heading title_level="h7"][/et_pb_heading]'))
@@ -63,6 +68,11 @@ class AttributeTest(unittest.TestCase):
     def test_spacing_string(self):
         self.assertEqual(found('[et_pb_blurb custom_margin="10px|auto||5%|false|false"][/et_pb_blurb]', "error"), [])
         self.assertIn(("error", "E_VALUE_FORMAT", "custom_margin"), found('[et_pb_blurb custom_margin="10px|20px|30px|40px|x|y|z"][/et_pb_blurb]'))
+
+    def test_border_radius_units(self):
+        self.assertIn(("error", "E_VALUE_FORMAT", "border_radii"),
+                      found('[et_pb_blurb border_radii="on|10deg|10deg|10deg|10deg"][/et_pb_blurb]'))
+        self.assertEqual(found('[et_pb_blurb border_radii="on|10px|10px|10px|10px"][/et_pb_blurb]', "error"), [])
 
     def test_icon(self):
         for ok in ("&#xf0a9;||fa||900", "&#xe03b;||divi||400", "%%43%%"):

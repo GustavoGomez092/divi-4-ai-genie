@@ -105,7 +105,8 @@ def value_problems(res, attr: str, value: str) -> List[Problem]:
         return []
     if ftype == "border-radius":
         parts = value.split("|")
-        if len(parts) != 5 or parts[0] not in ("", "on", "off") or not all(_length_ok(p, None) for p in parts[1:]):
+        units = [u.lower() for u in field.get("units", [])] or None
+        if len(parts) != 5 or parts[0] not in ("", "on", "off") or not all(_length_ok(p, units) for p in parts[1:]):
             return [("error", "E_VALUE_FORMAT", f"'{value}' is not a Divi border radius", "on|top-left|top-right|bottom-right|bottom-left")]
         return []
     if ftype == "select_icon":
@@ -128,6 +129,9 @@ def check_attributes(doc, schema, report, known_presets=frozenset(), site_host: 
             if node.quoting.get(name, '"') != '"':
                 report("warning", "W_ATTR_QUOTING", f"{name} is not double-quoted", node=node, path=path, attr=name,
                        hint="Divi always writes name=\"value\".")
+                if '"' in raw:
+                    report("error", "E_RAW_QUOTE", f"{name} contains a raw double quote", node=node, path=path, attr=name,
+                           value=raw, hint="Write \" as %22 and double-quote the value.")
             if "[" in raw or "]" in raw:
                 report("error", "E_RAW_BRACKET", f"{name} contains a raw [ or ]", node=node, path=path, attr=name, value=raw,
                        hint="Write [ as %91 and ] as %93.")
@@ -150,7 +154,7 @@ def check_attributes(doc, schema, report, known_presets=frozenset(), site_host: 
         for name in node.attrs:
             for state in ("hover", "sticky"):
                 suffix = f"__{state}"
-                if name.endswith(suffix):
+                if name.endswith(suffix) and mod.resolve(name) is not None:
                     base = name[: -len(suffix)]
                     key = "background" if base in ("background_color", "background_image") else base
                     if not node.value(f"{key}__{state}_enabled").startswith("on"):
