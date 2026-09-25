@@ -69,7 +69,7 @@ Field type: `font`. Nine `|`-separated parts (missing trailing parts are treated
 | # | part | grammar |
 |---|---|---|
 | 1 | family | font family name, e.g. `Lato`, `Montserrat` |
-| 2 | weight | `100`–`900`, `on`, `off`, or empty |
+| 2 | weight | a multiple of 100 from `100` to `900` (`100`, `200`, ... `900`), `on`, `off`, or empty |
 | 3 | italic | `on`, `off`, or empty |
 | 4 | uppercase | `on`, `off`, or empty |
 | 5 | underline | `on`, `off`, or empty |
@@ -86,7 +86,10 @@ Field type: `font`. Nine `|`-separated parts (missing trailing parts are treated
 `on`/`off` in part 8 (line color) — parts 3–7 accept only `on`/`off`/empty, but part 8 must be a
 color and part 9 must be a line style; `title_font="Montserrat|700|||||||"` (used in
 `tests/fixtures/valid/handwritten-landing.txt`) — 7 trailing empty parts, i.e. no italic/underline/
-etc. and no line color/style — is the normal "just set the family and weight" idiom.
+etc. and no line color/style — is the normal "just set the family and weight" idiom. Another common
+mistake: a weight that isn't a multiple of 100 — `text_font="Lato|750|||||||"` (or any other
+non-hundred value, `on`/`off` aside) triggers `W_FONT_WEIGHT` (a warning, not blocking); use one of
+`100`, `200`, `300`, `400`, `500`, `600`, `700`, `800`, `900`.
 
 ## Spacing (6 parts)
 

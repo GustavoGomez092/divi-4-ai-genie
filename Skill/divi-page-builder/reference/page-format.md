@@ -51,19 +51,40 @@ settings are read, never written, by a hand-authored page.
 
 ## Escaping
 
-Attribute values are escaped **once**, uniformly, regardless of which attribute they're on (with
-one URL-attribute caveat below). Content between a text-bearing module's tags is **not** escaped
-this way — see the last row.
+Attribute values are escaped **once**. `"`, `[` and `]` are escaped uniformly, regardless of which
+attribute they're on (with one URL-attribute caveat below); `\` (backslash) is **not** uniform —
+which attributes get it encoded on write depends on the attribute name/content, though Divi decodes
+`%92`/`%5c` back to `\` on *read* for any attribute (see the backslash row below). Content between
+a text-bearing module's tags is **not** escaped this way — see the last row.
 
 | character | write as | why | correct | incorrect |
 |---|---|---|---|---|
 | `"` (double quote) | `%22` | a raw `"` inside a double-quoted attribute value terminates the attribute early (WordPress's attribute regex stops at the first unescaped `"`), producing stray tokens (`E_POSITIONAL_ATTR`) instead of one attribute. | `title="Say %22hi%22"` | `title="Say "hi""` |
 | `[` | `%91` | a raw `[` inside an attribute value can be misread as the start of a nested shortcode tag by WordPress's tag matcher. `validate.py` flags any raw `[`/`]` in an attribute as `E_RAW_BRACKET`. | `title="Save %9120%%93 today"` (decodes to `Save [20%] today`) | `title="Save [20%] today"` |
 | `]` | `%93` | same reason as `[` — a raw `]` can be misread as closing a shortcode tag early. | (see above) | (see above) |
-| `\` (backslash) | `%92` (general attributes and `checkbox_options`/`radio_options`/`select_options`/`conditional_logic_rules`) | Divi's own Visual Builder templates decode `%92` back to `\` for display (`class-et-builder-element.php:11596`,`:11653`); a raw backslash round-trips fine on the front end but doesn't match what the Visual Builder itself writes, so a page you hand-author with a literal `\` will look "dirty" the moment someone opens it in the builder and it re-saves. | `custom_css_main_element="content: %22%922014%22;"` | `custom_css_main_element="content: \"\2014\";"` |
+| `\` (backslash) — **only for `custom_css_*` attributes and the 4 JSON attributes** `checkbox_options`/`radio_options`/`select_options`/`conditional_logic_rules` | `%92` | this is what Divi's own write-side shortcode builder actually does, confirmed at `includes/builder/functions.php:2063-2067` (`$json_attributes = array( 'checkbox_options', 'radio_options', 'select_options', 'conditional_logic_rules' ); if ( 0 === strpos( $attribute, 'custom_css_' ) \|\| in_array( $attribute, $json_attributes, true ) ) { $value = str_ireplace( '\\', '%92', $value ); }`). This is also exactly what this skill's own `escape_attr_value()` implements (`Skill/divi-page-builder/scripts/divi_shortcode.py`: `attr.startswith("custom_css_") or attr in BACKSLASH_ATTRS`). | `custom_css_main_element="content: %22%922014%22;"` | `custom_css_main_element="content: \"\2014\";"` |
+| `\` (backslash) — **every other attribute** | leave as a literal `\` | Divi's write-side code does **not** encode a backslash for ordinary attributes at all — it stays a literal `\` in the saved shortcode. (`escape_attr_value()` matches this: it only touches `\` for the `custom_css_*`/JSON-attribute case above, everything else is untouched.) | `title="Say it ain't so\, ref: A\B"` | — (there's no wrong way to write a literal `\` here; encoding it as `%92` is simply unnecessary, not incorrect — see the read-side note below) |
+| `\` (backslash) — **`breadcrumb_separator` specifically** | `%5c` (not `%92`) | Divi's write-side code special-cases this one attribute, encoding `\` as `%5c` instead of the `%92` used everywhere else (`includes/builder/functions.php:2059-2061`: `if ( 'breadcrumb_separator' === $attribute ) { $value = str_ireplace( '\\', '%5c', $value ); }`). | `breadcrumb_separator="%5c"` | `breadcrumb_separator="\"` |
 | `<` | avoid entirely; use `&lt;` inside HTML content, or rephrase attribute text | WordPress empties (or worse — see below) any shortcode attribute value containing a `<` that isn't part of a complete `<tag>...</tag>` pair. `validate.py` flags this as `E_ATTR_LT`. **Confirmed against the real site** (`research/tools/notes/doc-experiments.md`, experiment 2): a bare `<` in `et_pb_heading`'s `title` didn't just blank that title — `wptexturize()` (which runs before Divi's own shortcode parsing on every page load) desynced its quote tracking at the `<`, and the rest of the shortcode string, including the closing tags for the section/row/column that held it, was dumped onto the page as literal unrendered text. | `title="Revenue less than 5%"` | `title="Revenue < 5%"` |
 | newline, inside `custom_css_*` only | `\|\|` (two pipes) | the Visual Builder's custom-CSS textareas store each line joined by `\|\|` and turn it back into `\n` only for display (`class-et-builder-element.php:24209/24223/24237`, confirmed in experiment 1). A raw newline inside a shortcode attribute value is unusual but not itself flagged by the parser; `\|\|` is simply what real Divi output always uses for multi-line CSS. | `custom_css_main_element="color: red;\|\|font-weight: bold;"` (two rules) | `custom_css_main_element="color: red;\nfont-weight: bold;"` (a literal `\n`, which the builder will show as one line containing the two characters `\`+`n`) |
 | — content between a text-bearing module's tags | write raw HTML, not escaped | unlike attributes, a leaf module's inner content is returned to the front end byte-for-byte when the module's `vb_support` is `'on'` (true for every ordinary text module) — Divi runs `html_entity_decode()` on it only when `vb_support` is **not** `'on'` and the content has no line breaks (`research/tools/notes/escaping.md`, "Content" section). Don't pre-encode `&amp;`, `&lt;`, etc. unless you actually want that literal entity to survive; it will not be decoded away for you on a normal text module. | `[et_pb_text ...]<p>Terms &amp; conditions apply.</p>[/et_pb_text]` | `[et_pb_text ...]<p>Terms %26amp%3B conditions apply.</p>[/et_pb_text]` (attribute-style escaping doesn't apply to content, so this renders literally) |
+
+**Read side vs. write side, for backslash specifically.** The three backslash rows above describe
+what Divi's own shortcode *builder* writes (`functions.php`, the write side). Divi's *reader* is
+less picky: when a module's attributes are loaded for rendering, `%92` **and** `%5c` are both
+decoded back to a literal `\` for **any** attribute, not just the ones the write side actually
+encodes for (`class-et-builder-element.php:2294`:
+`str_replace( array( '%22', '%92', '%91', '%93', '%5c' ), array( '"', '\\', '&#91;', '&#93;', '\\' ), $processed_attr_value )`
+— unconditional, not gated by attribute name). Practical consequence: writing `%92` in some
+attribute Divi itself would never encode that way (say, a plain `title`) still decodes to `\` when
+the page renders — it's just not what real Divi output would have written there. This skill's own
+`escape_attr_value()` only implements the `custom_css_*`/JSON-attribute case (the one row above
+that's actually load-bearing for content this skill generates); it does not special-case
+`breadcrumb_separator`, dynamic-content values, or the three date-format attributes
+(`et_pb_blog.meta_date`, `et_pb_post_title.date_format`, `et_pb_fullwidth_post_title.date_format`)
+from `functions.php:2069-2081` — those are real Divi behaviors, but ones hand-authored pages built
+by this skill are unlikely to ever hit (dynamic content and custom date-format strings aren't
+part of this skill's authoring surface).
 
 Caveat (documented in `research/tools/notes/escaping.md`, not exercised by any of this skill's own
 examples): for **URL-type attributes only** (`url`, `button_link`, `button_url`, `image_src`,
