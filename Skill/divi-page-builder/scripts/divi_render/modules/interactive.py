@@ -1,6 +1,8 @@
 """Interactive modules: Accordion + Accordion Item, Toggle, Slider / Fullwidth Slider + Slide, Tabs + Tab."""
 from __future__ import annotations
 
+import re
+
 from ..base import Module, base_classes, module_wrap, register
 from ..values import (DEVICES, esc, esc_url, hover_value, icon_css_content, icon_font, module_content,
                       property_values)
@@ -156,6 +158,10 @@ class FullwidthSlider(Slider):
         p = self.props
         self.classes = [c for c in self.classes if c != self.render_slug]
         self.add_class("et_pb_slider")
+        # FullwidthSlider.php adds et_pb_preload when $et_pb_slider_has_video is set, but nothing in
+        # Divi 4.27.9 ever sets it to true (before_render() resets it to false; Slider.php doesn't
+        # check it). A slide with a background video gets et_pb_section_video et_pb_preload itself
+        # (video_background()); interactive-tuned-slide-fonts-overlays.txt pins both.
         if p.get("show_arrows", "") == "off":
             self.add_class("et_pb_slider_no_arrows")
         if p.get("show_pagination", "") == "off":
@@ -210,8 +216,12 @@ class Slide(Module):
             self.inherit(sl)
         self.process_additional()
         self.ctx.slide_num += 1
+        video_bg = self.video_background()
+        overlays = self.overlays()
         base_classes(self)
         self.classes = ["et_pb_slide", self.order_class]
+        if video_bg:  # video_background(): the wrapper gets et_pb_section_video + et_pb_preload
+            self.add_class("et_pb_section_video", "et_pb_preload")
         self.add_class(self.hover_background_class())
         self.add_class(f"et_pb_bg_layout_{p.get('background_layout', '') or 'dark'}")
         image = p.get("image", "")
@@ -220,6 +230,10 @@ class Slide(Module):
         align = p.get("alignment", "") or "center"
         if align != "bottom":
             self.add_class(f"et_pb_media_alignment_{align}")
+        if p.get("use_bg_overlay", "") == "on":
+            self.add_class("et_pb_slider_with_overlay")
+        if p.get("use_text_overlay", "") == "on":
+            self.add_class("et_pb_slider_with_text_overlay")
         if self.ctx.slide_num == 1:
             self.add_class("et-pb-active-slide")
         # arrows / dots colours per active slide: $et_pb_slider has no 'order_class', so the
@@ -244,10 +258,48 @@ class Slide(Module):
                    f'{p.get("button_text")}</a></div>')
         img = (f'<div class="et_pb_slide_image"><img decoding="async" src="{esc_url(image)}" '
                f'alt="{esc(p.get("image_alt", ""))}" /></div>' if image else "")
-        return (f'<div class="{" ".join(self.classes)}" data-slide-id="{self.order_class}">\n\t\t\t\t\n\t\t\t\t\n'
+        text = f"{title}{body}"
+        if p.get("use_text_overlay", "") == "on":
+            text = f'<div class="et_pb_text_overlay_wrapper">\n\t\t\t\t\t{text}\n\t\t\t\t</div>'
+        return (f'<div class="{" ".join(self.classes)}" data-slide-id="{self.order_class}">\n\t\t\t\t\n'
+                f'\t\t\t\t{overlays}\n'
                 f'\t\t\t\t<div class="et_pb_container clearfix">\n\t\t\t\t\t<div class="et_pb_slider_container_inner">\n'
-                f'\t\t\t\t\t\t{img}\n\t\t\t\t\t\t<div class="et_pb_slide_description">\n\t\t\t\t\t\t\t{title}{body}\n\t\t\t\t\t\t\t{btn}\n'
-                f'\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t</div>\n\t\t\t')
+                f'\t\t\t\t\t\t{img}\n\t\t\t\t\t\t<div class="et_pb_slide_description">\n\t\t\t\t\t\t\t{text}\n\t\t\t\t\t\t\t{btn}\n'
+                f'\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t{video_bg}\n\t\t\t\t\n\t\t\t\t\n\t\t\t</div>\n\t\t\t')
+
+    def overlays(self) -> str:
+        """SliderItem.php render(): the background overlay (colour on its container, markup
+        returned), the text overlay colour and the text overlay radius (printed even without the
+        overlay), all responsive, none with hover."""
+        p = self.props
+        wrapper = "%%order_class%%.et_pb_slide .et_pb_text_overlay_wrapper"
+        markup = ""
+        if p.get("use_bg_overlay", "") == "on":
+            self.generate_styles("bg_overlay_color", "%%order_class%%.et_pb_slide .et_pb_slide_overlay_container",
+                                 "background-color", hover=False)
+            markup = '<div class="et_pb_slide_overlay_container"></div>'
+        if p.get("use_text_overlay", "") == "on":
+            self.generate_styles("text_overlay_color", wrapper, "background-color", hover=False)
+        self.generate_styles("text_border_radius", wrapper, "border-radius", typ="range", hover=False)
+        return markup
+
+    def video_background(self) -> str:
+        """ET_Builder_Element::video_background() + get_video_background(), desktop only: a muted
+        looping <video> in .et_pb_section_video_bg (tablet/phone/hover videos aren't ported)."""
+        p = self.props
+        mp4 = p.get("background_video_mp4", "") if p.get("background_enable_video_mp4", "on") != "off" else ""
+        webm = p.get("background_video_webm", "") if p.get("background_enable_video_webm", "on") != "off" else ""
+        if not (mp4 or webm):
+            return ""
+        size = "".join(f' {k}="{int(re.sub(r"[^0-9-].*", "", v) or 0)}"' for k, v in
+                       (("width", p.get("background_video_width", "")), ("height", p.get("background_video_height", ""))) if v)
+        sources = "\n\t\t\t\t".join(
+            [f'<source type="video/mp4" src="{esc_url(mp4)}" />' if mp4 else "",
+             f'<source type="video/webm" src="{esc_url(webm)}" />' if webm else ""])
+        pause = " et_pb_video_play_outside_viewport" if p.get("background_video_pause_outside_viewport", "") == "off" else ""
+        allow = " et_pb_allow_player_pause" if p.get("allow_player_pause", "") == "on" else ""
+        return (f'<span class="et_pb_section_video_bg  {allow}{pause}">\n\t\t\t\t\t\n\t\t\t<video loop="loop" autoplay '
+                f'playsinline muted {size}>\n\t\t\t\t{sources}\n\t\t\t</video>\n\t\t\t\t</span>')
 
     def process_background(self, *a, **kw):
         p = self.props
@@ -256,8 +308,6 @@ class Slide(Module):
             self.css("%%order_class%%", f"background-color: {color};")
         super().process_background(selector=".et_pb_slider %%order_class%%")
 
-    def process_fonts(self):
-        pass  # the parent slider's fonts cover the slides; per-slide fonts not ported yet
 
 
 @register("et_pb_tabs")

@@ -1,14 +1,14 @@
 """The generic design-option engine (ET_Builder_Element::process_additional_options), driven by
-each module's `advanced_fields`: fonts, text shadow, background, borders, box shadow, overflow,
-custom margin/padding, width/max-width and hover transitions. The button family is in buttons.py.
+each module's `advanced_fields`: fonts, text shadow, borders, box shadow, overflow, custom
+margin/padding, width/max-width and hover transitions. The background family is in background.py,
+the button family in buttons.py.
 
 A mixin of Module (base.py): it relies on self.props, self.af, self.main, self.attrs, self.css()
 and self.field_default().
 """
 from __future__ import annotations
 
-import base64
-import html
+import re
 
 from .css import add_hover_to_order_class, add_hover_to_selectors
 from .values import (BOX_SHADOW_PRESETS, DEVICES, SIDES, TEXT_SHADOW_PRESETS, any_value, four_sides, hover_value,
@@ -18,9 +18,6 @@ WEBSAFE_FONTS = {"Georgia": "serif", "Times New Roman": "serif", "Arial": "sans-
                  "Trebuchet": "sans-serif", "Verdana": "sans-serif"}
 FONT_STACKS = {"sans-serif": "Helvetica, Arial, Lucida, sans-serif", "serif": 'Georgia, "Times New Roman", serif',
                "cursive": "cursive"}
-BG_POSITIONS = {"top_left": "left top", "top_center": "center top", "top_right": "right top",
-                "center_left": "left center", "center_right": "right center", "bottom_left": "left bottom",
-                "bottom_center": "center bottom", "bottom_right": "right bottom"}
 ALIGN_MARGINS = {"left": "margin-left: 0px !important; margin-right: auto !important;",
                  "center": "margin-left: auto !important; margin-right: auto !important;",
                  "right": "margin-left: auto !important; margin-right: 0px !important;"}
@@ -96,6 +93,31 @@ class DesignOptions:
         for opt, st in fonts.items():
             if isinstance(st, dict):
                 self._process_font(opt, st)
+        # process_advanced_fonts_options() ends by re-emitting every selector on the module class's
+        # letter-spacing fix list, with the current order class; the list lives on the (shared)
+        # module instance, so it carries over to later modules of the same type on the page
+        for sel in self.ctx.letter_spacing_fix.get(self.render_slug, {}).values():
+            self.css(sel, "font-variant-ligatures: no-common-ligatures;")
+
+    def _letter_spacing_fix(self, selector: str, prefixes, style: str, default: str):
+        """maybe_push_element_to_letter_spacing_fix_list(): the key is the prefixed selector; the
+        "value" is the whole declaration minus 'letter-spacing' and non-alphanumerics, read with
+        intval(), so a style that starts with another property counts as the default."""
+        if "letter-spacing" not in style.strip() or not selector:
+            return
+        fix = self.ctx.letter_spacing_fix.setdefault(self.render_slug, {})
+        value = re.sub(r"[^a-zA-Z0-9]", "", style.replace("letter-spacing", ""))
+
+        def intval(v):
+            m = re.match(r"\s*[+-]?\d+", v)
+            return int(m.group(0)) if m else 0
+        is_default = (intval(default) == 0 and intval(value) == 0) or value == default
+        for prefix in prefixes:
+            key = ",".join(prefix + part for part in selector.split(","))
+            if not is_default:
+                fix[key] = key
+            else:
+                fix.pop(key, None)
 
     def _process_font(self, opt: str, st: dict):
         p = self.props
@@ -175,6 +197,7 @@ class DesignOptions:
             tmain = css.get("text_shadow") or css.get("main") or self.main
             self.css(tmain if isinstance(tmain, list) else [tmain], f"text-shadow: {h} {v_} {b_} {col};")
         main = css.get("main") or self.main
+        ls_default = self.field_default(f"{opt}_letter_spacing")
         for state, s in (("default", style), ("hover", hover_style)):
             if not s.strip():
                 continue
@@ -182,6 +205,7 @@ class DesignOptions:
                 if state == "hover":  # process_advanced_fonts_options(): css.hover or add_hover_to_selectors()
                     sel = css.get("hover") or add_hover_to_selectors(sel)
                 self.css(sel, s)
+                self._letter_spacing_fix(sel, ("body.safari ", "body.iphone ", "body.uiwebview "), s.strip(), ls_default)
         self._process_font_responsive(opt, css, imp)
 
     def _process_font_responsive(self, opt: str, css: dict, imp):
@@ -210,6 +234,9 @@ class DesignOptions:
                 else:
                     decl = f"{prop}: {v}{important};"
                 self.css(sel, decl, dev)
+                if mob == "letter_spacing":  # tablet -> body.uiwebview, phone -> body.iphone
+                    self._letter_spacing_fix(sel, ("body.uiwebview " if dev == "tablet" else "body.iphone ",), decl,
+                                             self.field_default(f"{opt}_letter_spacing"))
 
     def process_text_shadow(self):
         p = self.props
@@ -243,92 +270,6 @@ class DesignOptions:
         for dev in DEVICES:
             if vals[dev]:
                 self.css(css["text_orientation"], f"text-align: {vals[dev]};", dev)
-
-    # background ---------------------------------------------------------------------------
-    def gradient(self, prefix: str = "background") -> str:
-        p = self.props
-        stops = p.get(f"{prefix}_color_gradient_stops", "") or "#2b87da 0%|#29c4a9 100%"
-        typ = p.get(f"{prefix}_color_gradient_type", "") or "linear"
-        direction = p.get(f"{prefix}_color_gradient_direction", "") or "180deg"
-        radial = p.get(f"{prefix}_color_gradient_direction_radial", "") or "center"
-        repeat = "repeating-" if p.get(f"{prefix}_color_gradient_repeat", "") == "on" else ""
-        stop_css = ",".join(s.strip() for s in stops.split("|"))
-        if typ == "linear":
-            return f"{repeat}linear-gradient({direction},{stop_css})"
-        if typ in ("radial", "circular"):
-            return f"{repeat}radial-gradient(circle at {radial},{stop_css})"
-        if typ == "conic":
-            return f"{repeat}conic-gradient(from {direction} at {radial},{stop_css})"
-        return f"{repeat}radial-gradient(ellipse at {radial},{stop_css})"
-
-    def process_background(self, prefix: str = "background", selector: str | None = None, important=None,
-                           use_color=None):
-        bg = self.af.get("background")
-        if not isinstance(bg, dict):
-            return
-        p = self.props
-        css = bg.get("css") or {}
-        sel = selector or css.get("main") or self.main
-        # process_advanced_background_options(): any truthy css.important ('all' or true)
-        imp = " !important" if (important if important is not None else bool(css.get("important"))) else ""
-        use_color = bg.get("use_background_color", True) if use_color is None else use_color
-        decls = []
-        images = []
-        if p.get(f"use_{prefix}_color_gradient", "") == "on" and p.get(f"{prefix}_enable_color_gradient", "on") != "off":
-            images.append(("gradient", self.gradient(prefix)))
-        img = p.get(f"{prefix}_image", "")
-        if img and p.get(f"{prefix}_enable_image", "on") != "off" and p.get("parallax", "off") != "on":
-            images.append(("image", f"url({html.escape(img, quote=False)})"))
-        if images:
-            if len(images) == 2 and p.get(f"{prefix}_color_gradient_overlays_image", "") != "on":
-                images.reverse()
-            decls.append(f"background-image: {', '.join(v for _, v in images)}{imp};")
-            if img:
-                for f, prop, d in (("size", "background-size", "cover"), ("position", "background-position", "center"),
-                                   ("repeat", "background-repeat", "no-repeat")):
-                    v = p.get(f"{prefix}_{f}", "") or d
-                    if v != d:
-                        decls.append(f"{prop}: {BG_POSITIONS.get(v, v) if f == 'position' else v};")
-                blend = p.get(f"{prefix}_blend", "")
-                if blend and blend != "normal":
-                    decls.append(f"background-blend-mode: {blend};")
-        color = p.get(f"{prefix}_color", "")
-        if bg.get("has_background_color_toggle") and p.get("use_background_color", "on") == "off":
-            color = ""
-        if use_color is True and color and p.get(f"{prefix}_enable_color", "on") != "off":
-            decls.append(f"background-color: {color}{imp};")
-        if decls:
-            self.css(sel, " ".join(decls))
-        hc = hover_value(p, f"{prefix}_color")
-        if hc and (use_color is True or bg.get("use_background_color_gradient", True) != "fields_only"):
-            # process_advanced_background_options(): css.hover, else add_hover_to_selectors(main);
-            # a 'fields_only' colour (Bar Counters) still resets the image but prints no colour
-            decl = f"background-image: initial{imp};"
-            if use_color is True:
-                decl += f" background-color: {hc}{imp};"
-            self.css(css.get("hover") or add_hover_to_selectors(sel), decl)
-        if p.get(f"{prefix}_enable_mask_style", "") == "on" and bg.get("use_background_mask"):
-            self._background_mask(prefix, sel)
-        if p.get(f"{prefix}_enable_pattern_style", "") == "on":
-            self.ctx.count_unsupported("background_pattern")
-
-    def _background_mask(self, prefix: str, sel: str):
-        p = self.props
-        mstyle = p.get(f"{prefix}_mask_style", "") or "layer-blob"
-        variant = "default"
-        tr = p.get(f"{prefix}_mask_transform", "")
-        if tr:
-            variant = ("rotated" if "rotate" in tr else "default") + ("-inverted" if "invert" in tr else "")
-        svg_inner = self.ctx.theme.mask_svg(mstyle, variant, p.get(f"{prefix}_mask_aspect_ratio", "") or "landscape")
-        if svg_inner is None:
-            self.ctx.count_unsupported("mask:" + mstyle, 0)
-            return
-        color_m = p.get(f"{prefix}_mask_color", "") or "#ffffff"
-        svg = (f'<svg  fill="{color_m}" viewBox="0 0 1920 1440" preserveAspectRatio="none" '
-               f'xmlns="http://www.w3.org/2000/svg">{svg_inner}</svg>')
-        data = base64.b64encode(svg.encode()).decode()
-        self.css(f"{sel} > .et_pb_background_mask", f"background-image: url(data:image/svg+xml;base64,{data});")
-        self.mask_markup = '<span class="et_pb_background_mask"></span>'
 
     # borders ------------------------------------------------------------------------------
     def process_borders(self):

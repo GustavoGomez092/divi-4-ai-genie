@@ -11,6 +11,7 @@ from typing import Optional
 from divi_shortcode import Node, Text
 
 from .assets import Theme
+from .background import BackgroundOptions
 from .buttons import ButtonOptions
 from .css import StyleSheet, add_hover_to_order_class, add_hover_to_selectors
 from .data import module_def
@@ -63,6 +64,7 @@ class Ctx:
         self.tabs = None
         self.pricing = None
         self.video_slider = None
+        self.letter_spacing_fix: dict = {}  # slug -> {prefixed selector: same}
 
     def next_index(self, slug: str) -> int:
         n = self.counters.get(slug, 0)
@@ -73,7 +75,7 @@ class Ctx:
         self.unsupported[key] = self.unsupported.get(key, 0) + n
 
 
-class Module(DesignOptions, ButtonOptions):
+class Module(DesignOptions, BackgroundOptions, ButtonOptions):
     """One shortcode node: props (schema defaults + attrs), order class, CSS classes."""
     slug = ""
     mask_markup = ""

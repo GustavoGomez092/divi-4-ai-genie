@@ -94,6 +94,24 @@ generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
   inherited `__hover_enabled` values count for its hover transitions. Bar Counters and the
   fullwidth slider never call `video_background()`, so they don't get
   `et_pb_section_video_on_hover` (the bar counter items do).
+- Task 26 fix round: slides now render their own fonts (header/body, responsive and hover),
+  the background overlay (`use_bg_overlay`: `.et_pb_slide_overlay_container` markup and colour),
+  the text overlay (`use_text_overlay`: `.et_pb_text_overlay_wrapper` around title and content,
+  its colour) and the text overlay radius, plus a desktop background video (the slide gets
+  `et_pb_section_video et_pb_preload`). The slider itself never gets `et_pb_preload`: FullwidthSlider.php
+  checks `$et_pb_slider_has_video`, but nothing in 4.27.9 sets it to true.
+  `interactive-tuned-slide-fonts-overlays.txt` measured markup 0.6667 and CSS 0.2391 (11/46)
+  before the fix and matches exactly after it. The fonts engine also gained Divi's letter-spacing
+  ligature fix (`maybe_push_element_to_letter_spacing_fix_list()`): a font rule that is only a
+  non-default letter-spacing puts its selector, prefixed with `body.safari`/`body.iphone`/
+  `body.uiwebview`, on a list kept per module type; from then on, every module of that type on
+  the page prints `font-variant-ligatures: no-common-ligatures` for it with its own order class.
+  Background handling moved from `options.py` into `background.py`.
+- Blind spot: `fidelity.py` only counts selectors that contain an order class as a class
+  (`.x_0`). Rules scoped by an attribute, such as the slider's
+  `.et_pb_slider[data-active-slide="et_pb_slide_0"] .et-pb-slider-arrows …`, have the order
+  class inside quotes and aren't counted, so a CSS ratio of 1.0 does not verify them. They are
+  ported from SliderItem.php but unchecked.
 - Countdown timer determinism: the server-side output depends only on `date_time` and the site's
   `gmt_offset` (0 on a fresh Playground site); `data-end-timestamp` is the date read as UTC and
   the digits are left empty for the JS. The fixtures still use fixed past dates (2019–2022) so

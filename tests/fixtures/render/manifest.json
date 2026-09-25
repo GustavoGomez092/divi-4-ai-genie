@@ -22,5 +22,6 @@
   {"file": "interactive-tuned-pricing.txt", "modules": ["et_pb_pricing_table", "et_pb_pricing_tables"], "tuned": true},
   {"file": "interactive-tuned-video-slider.txt", "modules": ["et_pb_video_slider", "et_pb_video_slider_item"], "tuned": true},
   {"file": "interactive-tuned-fullwidth-slider.txt", "modules": ["et_pb_fullwidth_slider", "et_pb_slide"], "tuned": true},
-  {"file": "interactive-heldout.txt", "modules": ["et_pb_circle_counter", "et_pb_countdown_timer", "et_pb_counter", "et_pb_counters", "et_pb_fullwidth_slider", "et_pb_pricing_table", "et_pb_pricing_tables", "et_pb_slide", "et_pb_tab", "et_pb_tabs", "et_pb_video_slider", "et_pb_video_slider_item"], "tuned": true}
+  {"file": "interactive-heldout.txt", "modules": ["et_pb_circle_counter", "et_pb_countdown_timer", "et_pb_counter", "et_pb_counters", "et_pb_fullwidth_slider", "et_pb_pricing_table", "et_pb_pricing_tables", "et_pb_slide", "et_pb_tab", "et_pb_tabs", "et_pb_video_slider", "et_pb_video_slider_item"], "tuned": true},
+  {"file": "interactive-tuned-slide-fonts-overlays.txt", "modules": ["et_pb_fullwidth_slider", "et_pb_slide", "et_pb_slider"], "tuned": true}
 ]}
