@@ -17,8 +17,10 @@ Use a WordPress **Application Password**, not the account's login password:
    plain HTTP unless `wp_is_application_passwords_available()` is forced true (e.g. by setting
    `WP_ENVIRONMENT_TYPE` to `local` — only appropriate for local development, never for a
    client's real site).
-4. Store credentials as environment variables, never in code or config files:
+4. Store credentials as environment variables, never in code or config files. Every `curl`
+   example on this page also uses `$SITE` for the site's base URL (no trailing slash):
    ```bash
+   export SITE="https://client-site.example"
    export WP_USER="editor@client.example"
    export WP_APP_PASSWORD="xxxx xxxx xxxx xxxx xxxx xxxx"
    ```
@@ -175,6 +177,16 @@ curl -s -X POST -u "$WP_USER:$WP_APP_PASSWORD" -H 'Content-Type: application/jso
 `--context=edit` is required to get the raw (unfiltered) `content.raw` — a plain `GET` without
 it returns `content.rendered`, which has already been through `do_shortcode()` and is
 **not** valid shortcode to feed back in.
+
+**Decision point on `validate.py --baseline`'s exit status.** `--baseline original.txt` tells
+`validate.py` to only fail on findings that are *new* relative to the original page — anything
+already present in `original.txt` (a pre-existing warning/error on the live page, not
+introduced by this edit) does not block. Concretely:
+- **Exit 1** (new errors, not present in the baseline) — **stop, fix the edit, and do not
+  `POST`** until it exits 0.
+- **Exit 0** — safe to `POST`, even if `validate.py` still reports pre-existing findings that
+  were already there in `original.txt`; those aren't your edit's fault and don't block the
+  update.
 
 You only need to send the fields you're changing — a `POST` update with just `{"content":
 ...}` leaves title, status, template, and everything else untouched.
