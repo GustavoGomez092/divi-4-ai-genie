@@ -30,7 +30,11 @@ python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15
 
 # 5. Editing a page that is ALREADY published/scheduled/private: see "Editing a live page" below —
 #    draft --page-id refuses this case, so review a copy first, then apply with publish --content
+#    (keeps the page's visibility: private stays private, scheduled stays scheduled)
 python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 --content page.txt --yes
+
+# 6. Only when the user explicitly wants a private/scheduled page made public now
+python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 --status publish --yes
 ```
 
 **Draft-first, always.** `draft` never publishes — the page is created or updated with
@@ -39,6 +43,14 @@ explicit step that flips `status` to `publish`, and it refuses (exit 1, no HTTP 
 `--yes` is given. Only pass `--yes` after the user has looked at the draft's `preview_url`
 (from `draft`'s JSON output) and approved it — never as a default or automatic follow-up to
 `draft`.
+
+**Visibility is never changed by accident.** `publish --page-id ID` first reads the page
+(`GET /pages/ID?context=edit`). If it is `private` or `future` (scheduled), `publish --content`
+sends only `content` and `meta`, so the page stays private or keeps its scheduled date, and
+`publish` without `--content` refuses (exit 1) because the only thing it could do is change
+the visibility. Pass `--status publish` only when the user explicitly asks to make that page
+public now. A `draft`/`pending` page is published (`status: "publish"`), and a `publish` page
+stays `publish`.
 
 **Editing a live page.** `draft --page-id ID` first fetches the page's current `status`
 (`GET /pages/ID?context=edit`) and refuses (exit 1, no update) if it is `publish`, `future`,
@@ -54,10 +66,17 @@ while it's being reviewed. It proceeds normally for a page whose status is `draf
    python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 \
      --content page.txt --yes
    ```
-   This validates `page.txt` first (refusing on errors, exit 1, no HTTP calls), uploads any
-   local images the same way `draft` does, then sends `content`, `status: "publish"`, and
-   `meta._et_pb_use_builder: "on"` to `/pages/15` in a single `POST` — the page is never left
-   in a `draft` state in between. `--yes` is still required.
+   This reads the page, validates `page.txt` against the page's current content as the
+   baseline (refusing on new errors, exit 1, nothing written), uploads any local images the
+   same way `draft` does, then sends `content` and `meta._et_pb_use_builder: "on"` to
+   `/pages/15` in a single `POST` — plus `status: "publish"` unless the page is `private` or
+   `future`, whose visibility is kept. The page is never left in a `draft` state in between.
+   `--yes` is still required.
+3. **Delete the review copy** once the edit is live, so a stale duplicate draft doesn't linger
+   in Pages → Drafts: `curl -s -X DELETE -u "$WP_USER:$WP_APP_PASSWORD"
+   "$SITE/wp-json/wp/v2/pages/REVIEW_ID?force=true"` (`REVIEW_ID` is the `id` that step 1's
+   `draft` printed; `force=true` deletes it permanently). Without `?force=true` the REST DELETE
+   moves it to Trash instead, which is also fine — WordPress empties Trash after 30 days.
 
 **Local images.** Reference images in the page source as `./images/hero.jpg`, `../hero.jpg`,
 or `file:///abs/path.jpg` (paths resolved relative to the page file's own folder, or absolute
@@ -78,14 +97,21 @@ those are owned by `draft`/`publish` themselves (setting `status` there, for exa
 silently bypass the `--yes` approval gate); such a value is a usage error (exit 2, no HTTP
 calls), not a validation error.
 
-**Validation.** `draft` (and `publish --content`) run `validate_source` before doing anything
-else and refuse (exit 1, no HTTP calls at all — no uploads, no draft/publish) if there are any
-blocking errors, printing each finding to stderr the same way `validate.py` does. Local image
+**Validation.** `draft` (and `publish --content`) run `validate_source` before uploading or
+writing anything and refuse (exit 1 — no uploads, no draft/publish) if there are any blocking
+errors, printing each finding to stderr the same way `validate.py` does. Like
+`validate.py --baseline`, they validate against a **baseline**: `--baseline original.txt` if
+given, otherwise — whenever `--page-id` is given — the page's current `content.raw` (read with
+`GET /pages/ID?context=edit`, the only HTTP call made before validation). Errors already present
+in the baseline (for example a Divi 3 `use_border_color` on a legacy page, `E_UNKNOWN_ATTR`)
+are pre-existing and don't block; any new error still does. A brand-new page (`draft` without
+`--page-id` or `--baseline`) has no baseline, so every error blocks. Local image
 paths are all resolved and checked for existence up front, before any is uploaded, so one
 missing image never leaves an earlier one uploaded as an orphan (exit 2, zero media uploads).
 
-**Exit codes:** `0` success · `1` validation errors, `publish` without `--yes`, or `draft
---page-id` refusing to unpublish a live page · `2` usage error (including a missing
+**Exit codes:** `0` success · `1` validation errors, `publish` without `--yes`, `draft
+--page-id` refusing to unpublish a live page, or `publish` without `--content` refusing to
+change a private/scheduled page's visibility · `2` usage error (including a missing
 `WP_APP_PASSWORD`, a malformed `--page-fields`, or a missing local image), HTTP error, or I/O
 error. HTTP error messages include only the method/path and WordPress's own `code`/`message`
 — never the password or a full URL with credentials.
@@ -290,8 +316,11 @@ running it against a currently `publish`/`future`/`private` page would take that
 `publish.py` guards against this itself (see "Editing a live page" in the "Using publish.py"
 section above): `draft --page-id` checks the page's current status first and refuses if it's
 live, and the fix is `publish.py publish --page-id ID --content edited.txt --yes`, which sends
-`content` and `status: "publish"` together in one request — the same shape as this section's
-raw `curl` example, but staying published throughout instead of round-tripping through draft.
+`content` (and, for a page that is already `publish`, `status: "publish"`) in one request — the
+same shape as this section's raw `curl` example, staying live throughout instead of
+round-tripping through draft. For a `private` or `future` page it sends no `status` at all, so
+the page stays private or scheduled; only `--status publish` changes that. It validates against
+the page's current content as the baseline, like `validate.py --baseline` above.
 
 ## 7. CSS cache behavior
 

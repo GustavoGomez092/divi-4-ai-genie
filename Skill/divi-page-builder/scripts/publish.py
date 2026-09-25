@@ -3,16 +3,21 @@
 
   publish.py fetch   --site URL --user USER --page-id ID --out FILE
   publish.py media   --site URL --user USER FILE --alt TEXT
-  publish.py draft   PAGE --site URL --user USER --title TITLE [--slug S] [--page-id ID] [--tokens tokens.json] [--page-fields JSON]
-  publish.py publish --site URL --user USER --page-id ID --yes [--content PAGE]
+  publish.py draft   PAGE --site URL --user USER --title TITLE [--slug S] [--page-id ID] [--baseline FILE]
+                     [--tokens tokens.json] [--page-fields JSON]
+  publish.py publish --site URL --user USER --page-id ID --yes [--content PAGE] [--baseline FILE] [--status publish]
 
 The password is read from env WP_APP_PASSWORD and never printed. `draft` validates the page first and
 refuses on errors; image attributes pointing at local files (file://, ./, ../) are uploaded to the
 Media Library and rewritten. Pages are saved as drafts; `publish` requires --yes (after user approval).
+Validation baseline: with --baseline FILE, or (with --page-id) the page's current content.raw, findings
+already present there are pre-existing and do not block, exactly like `validate.py --baseline`.
 `--page-fields` may not set status/content/meta (those are managed by the command itself) and must be
 a JSON object. `draft --page-id` refuses to touch a page that is currently publish/future/private,
 since forcing it back to draft would take a client's live page offline — use `publish --page-id ID
---content PAGE --yes` instead, after reviewing a separate draft copy.
+--content PAGE --yes` instead, after reviewing a separate draft copy. `publish` never changes the
+visibility of a page that is private or scheduled (future): with --content it sends only content and
+meta, and without --content it refuses; pass `--status publish` to deliberately make it public now.
 Exit status: 0 ok, 1 validation errors or refused, 2 usage/HTTP/I-O error.
 """
 from __future__ import annotations
@@ -26,7 +31,7 @@ import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
-from urllib.parse import unquote, urlparse
+from urllib.parse import quote, unquote, urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from divi_checks_values import IMAGE_ATTRS  # noqa: E402
@@ -68,10 +73,16 @@ class WordPress:
             raise PublishError(f"cannot reach {self.site}: {exc.reason}") from None
 
 
+def content_disposition(filename: str) -> str:
+    """ASCII-only Content-Disposition: an ASCII fallback name plus RFC 5987 filename* for the real one."""
+    fallback = "".join(c if " " <= c <= "~" and c not in '"\\' else "_" for c in filename)
+    return f"attachment; filename=\"{fallback}\"; filename*=UTF-8''{quote(filename, safe='')}"
+
+
 def upload_media(wp: WordPress, path: Path, alt: str) -> dict:
     ctype = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
     media = wp.request("POST", "/media", data=path.read_bytes(),
-                       headers={"Content-Type": ctype, "Content-Disposition": f'attachment; filename="{path.name}"'})
+                       headers={"Content-Type": ctype, "Content-Disposition": content_disposition(path.name)})
     if alt:
         wp.request("POST", f"/media/{media['id']}", json_body={"alt_text": alt})
     return {"id": media["id"], "url": media["source_url"], "file": str(path)}
@@ -152,6 +163,31 @@ def cmd_media(wp, a):
 
 
 LIVE_STATUSES = ("publish", "future", "private")
+KEEP_VISIBILITY = ("private", "future")
+
+
+def blocking_errors(source: str, label: str, tokens=None, baseline=None, verb: str = "save") -> bool:
+    """Print blocking (non-pre-existing) errors to stderr; return True if there are any."""
+    findings = validate_source(source, load_schema(), tokens=tokens, baseline=baseline)
+    errors = [f for f in findings if f.level == "error" and not f.preexisting]
+    if not errors:
+        return False
+    for f in errors:
+        print(f"{label}:{f.line}:{f.col} {f.code} {f.path}: {f.message}", file=sys.stderr)
+    pre = sum(f.level == "error" and f.preexisting for f in findings)
+    note = f" ({pre} pre-existing error(s) in the baseline ignored)" if pre else ""
+    print(f"refusing to {verb}: {len(errors)} validation error(s){note}; run scripts/validate.py for details",
+          file=sys.stderr)
+    return True
+
+
+def _baseline(a, current):
+    """Explicit --baseline FILE wins; otherwise the page's current content.raw (when fetched)."""
+    if a.baseline:
+        return Path(a.baseline).read_text(encoding="utf-8")
+    if current is not None:
+        return (current.get("content") or {}).get("raw")
+    return None
 
 
 def cmd_draft(wp, a):
@@ -159,20 +195,17 @@ def cmd_draft(wp, a):
     page_path = Path(a.page)
     source = page_path.read_text(encoding="utf-8")
     tokens = json.loads(Path(a.tokens).read_text()) if a.tokens else None
-    errors = [f for f in validate_source(source, load_schema(), tokens=tokens) if f.level == "error"]
-    if errors:
-        for f in errors:
-            print(f"{a.page}:{f.line}:{f.col} {f.code} {f.path}: {f.message}", file=sys.stderr)
-        print(f"refusing to save: {len(errors)} validation error(s); run scripts/validate.py for details", file=sys.stderr)
+    current = wp.request("GET", f"/pages/{a.page_id}?context=edit") if a.page_id else None
+    if blocking_errors(source, a.page, tokens=tokens, baseline=_baseline(a, current), verb="save"):
         return 1
-    if a.page_id:
-        current = wp.request("GET", f"/pages/{a.page_id}?context=edit")
+    if current is not None:
         status = current.get("status")
         if status in LIVE_STATUSES:
             print(f"page {a.page_id} is {status}; saving it as a draft would take it offline. "
                   f"Create a review copy instead: publish.py draft PAGE --title … (no --page-id), "
                   f"share its preview_url, and after approval apply it with: "
-                  f"publish.py publish --page-id {a.page_id} --content PAGE --yes", file=sys.stderr)
+                  f"publish.py publish --page-id {a.page_id} --content PAGE --yes "
+                  f"(that keeps the page's current visibility: {status} stays {status})", file=sys.stderr)
             return 1
     content, uploaded = upload_local_images(wp, source, page_path.resolve().parent)
     body = {"title": a.title, "content": content, "status": "draft", "meta": {"_et_pb_use_builder": "on"}}
@@ -190,18 +223,24 @@ def cmd_publish(wp, a):
     if not a.yes:
         print("refusing to publish without --yes (publish only after the user approves the draft)", file=sys.stderr)
         return 1
+    current = wp.request("GET", f"/pages/{a.page_id}?context=edit")
+    status = current.get("status")
+    keep_visibility = status in KEEP_VISIBILITY and a.status != "publish"
     if a.content:
         page_path = Path(a.content)
         source = page_path.read_text(encoding="utf-8")
-        errors = [f for f in validate_source(source, load_schema()) if f.level == "error"]
-        if errors:
-            for f in errors:
-                print(f"{a.content}:{f.line}:{f.col} {f.code} {f.path}: {f.message}", file=sys.stderr)
-            print(f"refusing to publish: {len(errors)} validation error(s); run scripts/validate.py for details", file=sys.stderr)
+        if blocking_errors(source, a.content, baseline=_baseline(a, current), verb="publish"):
             return 1
         content, _uploaded = upload_local_images(wp, source, page_path.resolve().parent)
-        body = {"content": content, "status": "publish", "meta": {"_et_pb_use_builder": "on"}}
+        body = {"content": content, "meta": {"_et_pb_use_builder": "on"}}
+        if not keep_visibility:
+            body["status"] = "publish"
     else:
+        if keep_visibility:
+            print(f"page {a.page_id} is {status}; publishing it would change its visibility. "
+                  f"Nothing to do without --content; pass --status publish only if the user wants it public now.",
+                  file=sys.stderr)
+            return 1
         body = {"status": "publish"}
     page = wp.request("POST", f"/pages/{a.page_id}", json_body=body)
     _print({"id": page["id"], "status": page.get("status", ""), "link": page.get("link", "")})
@@ -226,11 +265,17 @@ def main(argv=None) -> int:
     p.add_argument("--slug")
     p.add_argument("--page-id", type=int)
     p.add_argument("--tokens")
+    p.add_argument("--baseline", help="original page source; errors already in it do not block "
+                                      "(default with --page-id: the page's current content)")
     p.add_argument("--page-fields", help="extra JSON fields for the page, e.g. a template (see reference/publishing.md)")
     p = sub.add_parser("publish", parents=[common])
     p.add_argument("--page-id", type=int, required=True)
     p.add_argument("--yes", action="store_true")
     p.add_argument("--content", help="also update content from this page file in the same publish request")
+    p.add_argument("--baseline", help="original page source; errors already in it do not block "
+                                      "(default: the page's current content)")
+    p.add_argument("--status", choices=["publish"],
+                   help="explicitly make a private/scheduled page public now (otherwise its visibility is kept)")
     a = ap.parse_args(argv)
     password = os.environ.get("WP_APP_PASSWORD", "")
     if not password:

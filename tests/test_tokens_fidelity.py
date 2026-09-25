@@ -2,9 +2,11 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import unittest
+from pathlib import Path
 
-from _paths import FIXTURES, SCRIPTS, WP_LOCAL
+from _paths import FIXTURES, SCRIPTS, WP_LOCAL, live_only
 
 PAGE = FIXTURES / "valid" / "brand-kit.txt"
 
@@ -16,13 +18,16 @@ def wp(*args):
     return out.stdout.strip()
 
 
+@live_only
 class TokensFidelityTest(unittest.TestCase):
     def test_round_trip_through_wordpress(self):
         user = wp("user", "list", "--role=administrator", "--field=user_login").splitlines()[0]
         password = wp("user", "application-password", "create", user, "fidelity-test", "--porcelain")
         page_id = wp("post", "create", str(PAGE), "--post_type=page", "--post_status=publish",
                      "--post_title=Plan Test: fidelity", "--porcelain")
-        out = FIXTURES / "html" / "fidelity-tokens.json"
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        out = Path(tmp.name) / "fidelity-tokens.json"  # never write into the source tree
         try:
             wp("post", "meta", "update", page_id, "_et_pb_use_builder", "on")
             env = dict(os.environ, WP_APP_PASSWORD=password)

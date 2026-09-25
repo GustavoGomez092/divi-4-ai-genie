@@ -9,7 +9,7 @@ import unittest
 import urllib.parse
 from pathlib import Path
 
-from _paths import FIXTURES, SKILL, WP_LOCAL
+from _paths import FIXTURES, SKILL, WP_LOCAL, live_only, live_tests_enabled
 from divi_shortcode import parse
 
 PREVIEW = SKILL / "scripts" / "preview" / "preview.mjs"
@@ -73,7 +73,10 @@ def _decls(html, require_id=False):
 
 
 def _et_env():
-    """Elegant Themes credentials from the local test site's DB, passed only via the child env (never printed)."""
+    """Elegant Themes credentials from the local test site's DB, passed only via the child env (never printed).
+    Only with PP_LIVE_TESTS=1; otherwise the renderer works from the Divi cache alone."""
+    if not live_tests_enabled():
+        return {}
     out = subprocess.run([str(WP_LOCAL), "option", "get", "et_automatic_updates_options", "--format=json"],
                          capture_output=True, text=True)
     if out.returncode != 0:
@@ -125,6 +128,7 @@ class PreviewTest(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, proc.stderr[-500:])
             self.assertIn(VERSION, proc.stdout + proc.stderr)
 
+    @live_only
     def test_page11_builder_css_matches_live(self):
         live = subprocess.run(["curl", "-s", "http://divi-test.local/probe-divi-ai-emergency-plumber/"],
                               capture_output=True, text=True).stdout
@@ -136,6 +140,7 @@ class PreviewTest(unittest.TestCase):
         html, _ = self.render(FIXTURES / "valid" / "divi-ai-layout.txt")
         self.assertEqual(sorted(_decls(live)), sorted(_decls(html, require_id=True)))
 
+    @live_only
     def test_no_credentials_in_output(self):
         env = _et_env()
         _, logs = self.render(FIXTURES / "valid" / "handwritten-landing.txt")

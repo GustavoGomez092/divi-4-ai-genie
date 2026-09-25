@@ -9,7 +9,7 @@ import unittest
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
-from _paths import FIXTURES, SCRIPTS, WP_LOCAL
+from _paths import FIXTURES, SCRIPTS, WP_LOCAL, live_only
 
 PASSWORD = "abcd EFGH ijkl MNOP qrst UVWX"
 GOOD = (FIXTURES / "valid" / "handwritten-landing.txt").read_text()
@@ -18,6 +18,7 @@ GOOD = (FIXTURES / "valid" / "handwritten-landing.txt").read_text()
 class FakeWP(BaseHTTPRequestHandler):
     calls = []
     page_status = "draft"
+    page_raw = GOOD
 
     def log_message(self, *args):
         pass
@@ -43,7 +44,7 @@ class FakeWP(BaseHTTPRequestHandler):
             return self._reply(401, {"code": "rest_not_logged_in", "message": "You are not currently logged in."})
         if self.path.startswith("/wp-json/wp/v2/pages/101"):
             return self._reply(200, {"id": 101, "status": FakeWP.page_status,
-                                     "link": "http://fake/?page_id=101", "content": {"raw": GOOD}})
+                                     "link": "http://fake/?page_id=101", "content": {"raw": FakeWP.page_raw}})
         self._reply(404, {"code": "rest_no_route", "message": "No route"})
 
     def do_POST(self):
@@ -58,7 +59,7 @@ class FakeWP(BaseHTTPRequestHandler):
         if self.path == "/wp-json/wp/v2/pages":
             return self._reply(201, {"id": 101, "status": "draft", "link": f"http://127.0.0.1:{port}/?page_id=101"})
         if self.path == "/wp-json/wp/v2/pages/101":
-            status = json.loads(body or b"{}").get("status", "draft")
+            status = json.loads(body or b"{}").get("status", FakeWP.page_status)
             return self._reply(200, {"id": 101, "status": status, "link": f"http://127.0.0.1:{port}/?page_id=101"})
         self._reply(404, {"code": "rest_no_route", "message": "No route"})
 
@@ -77,6 +78,7 @@ class PublishFakeServerTest(unittest.TestCase):
     def setUp(self):
         FakeWP.calls.clear()
         FakeWP.page_status = "draft"
+        FakeWP.page_raw = GOOD
 
     def run_cli(self, *args, password=PASSWORD):
         env = dict(os.environ, WP_APP_PASSWORD=password)
@@ -200,12 +202,134 @@ class PublishFakeServerTest(unittest.TestCase):
         proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
                              "--content", str(FIXTURES / "valid" / "handwritten-landing.txt"), "--yes")
         self.assertEqual(proc.returncode, 0, proc.stderr)
-        (call,) = FakeWP.calls
+        get_call, call = FakeWP.calls
+        self.assertEqual(get_call["method"], "GET")
+        self.assertEqual(call["method"], "POST")
         self.assertEqual(call["path"], "/wp-json/wp/v2/pages/101")
         body = json.loads(call["body"])
         self.assertEqual(body["status"], "publish")
         self.assertEqual(body["content"], GOOD)
         self.assertEqual(body["meta"], {"_et_pb_use_builder": "on"})
+
+    # --- C1: publish must not change a page's visibility ---------------------------------------
+    def _publish_content(self, *extra):
+        return self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
+                            "--content", str(FIXTURES / "valid" / "handwritten-landing.txt"), "--yes", *extra)
+
+    def _sent_post(self):
+        posts = [c for c in FakeWP.calls if c["method"] == "POST"]
+        self.assertEqual(len(posts), 1, FakeWP.calls)
+        return json.loads(posts[0]["body"])
+
+    def test_publish_content_keeps_private_page_private(self):
+        FakeWP.page_status = "private"
+        proc = self._publish_content()
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        body = self._sent_post()
+        self.assertNotIn("status", body)
+        self.assertEqual(body["content"], GOOD)
+        self.assertEqual(body["meta"], {"_et_pb_use_builder": "on"})
+        self.assertEqual(json.loads(proc.stdout)["status"], "private")
+
+    def test_publish_content_keeps_scheduled_page_scheduled(self):
+        FakeWP.page_status = "future"
+        proc = self._publish_content()
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertNotIn("status", self._sent_post())
+        self.assertEqual(json.loads(proc.stdout)["status"], "future")
+
+    def test_publish_content_keeps_published_page_published(self):
+        FakeWP.page_status = "publish"
+        proc = self._publish_content()
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(self._sent_post().get("status", "publish"), "publish")
+        self.assertEqual(json.loads(proc.stdout)["status"], "publish")
+
+    def test_publish_status_flag_explicitly_makes_private_page_public(self):
+        FakeWP.page_status = "private"
+        proc = self._publish_content("--status", "publish")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(self._sent_post()["status"], "publish")
+
+    def test_publish_without_content_refuses_to_change_private_visibility(self):
+        FakeWP.page_status = "private"
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101", "--yes")
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("--status publish", proc.stderr)
+        self.assertFalse(any(c["method"] == "POST" for c in FakeWP.calls))
+
+    # --- I1: draft/publish validate against a baseline ------------------------------------------
+    LEGACY = GOOD.replace('[et_pb_text _builder_version="4.27.9"', '[et_pb_text use_border_color="on" _builder_version="4.27.9"', 1)
+    NEW_ERROR = LEGACY.replace('[et_pb_button button_text=', '[et_pb_button colour="red" button_text=', 1)
+
+    def _page_file(self, text):
+        f = tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False)
+        f.write(text)
+        f.close()
+        self.addCleanup(os.unlink, f.name)
+        return f.name
+
+    def test_legacy_fixture_really_has_a_preexisting_unknown_attr(self):
+        self.assertNotEqual(self.LEGACY, GOOD)
+        self.assertNotEqual(self.NEW_ERROR, self.LEGACY)
+
+    def test_draft_page_id_uses_current_content_as_baseline(self):
+        FakeWP.page_raw = self.LEGACY
+        proc = self.run_cli("draft", self._page_file(self.LEGACY), "--site", self.site, "--user", "editor",
+                            "--title", "T", "--page-id", "101")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        get_call = FakeWP.calls[0]
+        self.assertEqual(get_call["method"], "GET")
+        self.assertIn("context=edit", get_call["path"])
+
+    def test_draft_page_id_baseline_still_blocks_new_errors(self):
+        FakeWP.page_raw = self.LEGACY
+        proc = self.run_cli("draft", self._page_file(self.NEW_ERROR), "--site", self.site, "--user", "editor",
+                            "--title", "T", "--page-id", "101")
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("colour", proc.stderr)
+        self.assertNotIn("use_border_color", proc.stderr)
+        self.assertFalse(any(c["method"] == "POST" for c in FakeWP.calls))
+
+    def test_draft_explicit_baseline_file(self):
+        proc = self.run_cli("draft", self._page_file(self.LEGACY), "--site", self.site, "--user", "editor",
+                            "--title", "T", "--baseline", self._page_file(self.LEGACY))
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        proc = self.run_cli("draft", self._page_file(self.LEGACY), "--site", self.site, "--user", "editor",
+                            "--title", "T")
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("use_border_color", proc.stderr)
+
+    def test_publish_content_uses_current_content_as_baseline(self):
+        FakeWP.page_raw = self.LEGACY
+        FakeWP.page_status = "publish"
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
+                            "--content", self._page_file(self.LEGACY), "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
+                            "--content", self._page_file(self.NEW_ERROR), "--yes")
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("colour", proc.stderr)
+
+    def test_publish_content_explicit_baseline_file(self):
+        FakeWP.page_raw = GOOD
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
+                            "--content", self._page_file(self.LEGACY), "--baseline", self._page_file(self.LEGACY),
+                            "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+
+    # --- M6: Content-Disposition for non-Latin-1 filenames --------------------------------------
+    def test_media_upload_non_latin1_filename(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            img = Path(tmp) / "café-日本.jpg"
+            img.write_bytes(b"\xff\xd8\xff fake jpeg")
+            proc = self.run_cli("media", "--site", self.site, "--user", "editor", str(img), "--alt", "x")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        media = FakeWP.calls[0]
+        disp = media["headers"]["Content-Disposition"]
+        disp.encode("ascii")
+        self.assertIn("filename*=UTF-8''caf%C3%A9-%E6%97%A5%E6%9C%AC.jpg", disp)
+        self.assertRegex(disp, r'filename="[ -~]+\.jpg"')
 
     def test_publish_with_content_refuses_invalid_page(self):
         with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
@@ -214,7 +338,8 @@ class PublishFakeServerTest(unittest.TestCase):
                              "--content", f.name, "--yes")
         os.unlink(f.name)
         self.assertEqual(proc.returncode, 1)
-        self.assertEqual(FakeWP.calls, [])
+        # only the read of the current page (status + baseline); nothing is written
+        self.assertEqual([c["method"] for c in FakeWP.calls], ["GET"])
 
     def test_draft_refuses_invalid_page(self):
         with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
@@ -256,8 +381,9 @@ class PublishFakeServerTest(unittest.TestCase):
         self.assertIn("WP_APP_PASSWORD", proc.stderr)
 
 
+@live_only
 class PublishLiveTest(unittest.TestCase):
-    """Round-trip against divi-test.local; skipped when the local site is unavailable."""
+    """Round-trip against divi-test.local; opt-in with PP_LIVE_TESTS=1, and skipped when the site is unavailable."""
 
     def wp(self, *args):
         out = subprocess.run([str(WP_LOCAL), *args], capture_output=True, text=True, timeout=120)

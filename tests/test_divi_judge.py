@@ -2,7 +2,7 @@ import json
 import subprocess
 import unittest
 
-from _paths import FIXTURES, TOOLS, WP_LOCAL
+from _paths import FIXTURES, TOOLS, WP_LOCAL, live_only
 from divi_shortcode import parse
 
 # The five escape sequences unescape_attr_value() decodes (class-et-builder-element.php:2294).
@@ -23,6 +23,7 @@ def flatten_divi(items):
         yield from flatten_divi(item["children"])
 
 
+@live_only
 class DiviJudgeTest(unittest.TestCase):
     FILES = ["handwritten-landing.txt", "unicode.txt", "divi-ai-section.txt", "divi-ai-layout.txt", "faq-jsonld.txt"]
 
