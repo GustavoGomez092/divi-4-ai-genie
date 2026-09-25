@@ -7,6 +7,218 @@ Field names use `{p}` for a module-specific prefix. For example, the Font family
 Columns: **R** responsive (`_tablet`/`_phone` + `_last_edited`), **H** hover (`__hover` + `__hover_enabled`),
 **S** sticky (`__sticky` + `__sticky_enabled`). Value grammars are in [value-formats.md](value-formats.md).
 
+## Animation family
+
+Use it to make a module fade/slide/bounce/zoom/flip/fold/roll into view as the visitor scrolls to
+it. Set `animation_style` first — every other field in this family (direction, duration, delay,
+speed curve, repeat, and the per-effect `animation_intensity_*` fields) only matters once a
+non-`none` style is chosen.
+
+```divi-fragment
+[et_pb_image _builder_version="4.27.9" _module_preset="default" animation_style="fade" animation_direction="bottom" animation_duration="800ms"][/et_pb_image]
+```
+
+## Attributes family
+
+A small, narrow family: today it's just `button_rel`, the `rel="..."` values (bookmark, external,
+nofollow, noreferrer, noopener) Divi adds to a module's link tag. Use it for SEO/security hygiene
+on outbound links (e.g. `nofollow` on a sponsored link, `noopener` on a `target="_blank"` link).
+
+```divi-fragment
+[et_pb_button button_text="Partner site" button_url="https://partner.example" button_rel="nofollow|noopener" _builder_version="4.27.9" _module_preset="default"][/et_pb_button]
+```
+
+## Background family
+
+Set a plain color, a gradient, an image, a video, or a repeating pattern/mask behind a section,
+row, column or module. `background_color`/`background_image` are the two fields with hover support
+(shared under the single `background__hover_enabled` key — see
+[value-formats.md](value-formats.md#hover-__hover-__hover_enabled-and-the-background-group-key)); a
+gradient needs `use_background_color_gradient="on"` before `background_color_gradient_stops` does
+anything.
+
+```divi-fragment
+[et_pb_section _builder_version="4.27.9" _module_preset="default" background_image="https://client.example/wp-content/uploads/2026/09/hero.jpg" background_size="cover" background_position="center"][/et_pb_section]
+```
+
+## Border family
+
+Per-side (or `_all`) border color/width/style, plus `border_radii` for rounded corners. Set
+`border_width_all`/`border_color_all`/`border_style_all` for a uniform border, or the four
+per-side variants (`_top`/`_right`/`_bottom`/`_left`) for different edges.
+
+```divi-fragment
+[et_pb_image _builder_version="4.27.9" _module_preset="default" border_width_all="2px" border_color_all="#0e7c86" border_style_all="solid" border_radii="on|8px|8px|8px|8px"][/et_pb_image]
+```
+
+## Box shadow family
+
+A drop shadow around the whole module. Pick one of `box_shadow_style`'s presets (`preset1`…
+`preset7`, or `none`) for a quick look, then optionally override any of
+`box_shadow_horizontal`/`_vertical`/`_blur`/`_spread`/`_color`/`_position` individually — see
+[value-formats.md](value-formats.md#box-shadow-presets).
+
+```divi-fragment
+[et_pb_image _builder_version="4.27.9" _module_preset="default" box_shadow_style="preset2" box_shadow_color="rgba(0,0,0,0.35)"][/et_pb_image]
+```
+
+## Button family
+
+Styles a module's *own* built-in call-to-action button (`et_pb_cta`'s, `et_pb_blurb`'s "read more"
+button, etc. — not the standalone `et_pb_button` module, which uses these same field names without
+a `{p}` prefix). Requires `custom_{p}="on"` (e.g. `custom_button="on"`) before any of the button's
+own color/font/border/icon/shadow overrides take effect — without it, the button just inherits the
+site's default button styling.
+
+```divi-fragment
+[et_pb_cta title="Need help now?" button_text="Call now" button_url="tel:+13055550100" custom_button="on" button_bg_color="#f97316" button_text_color="#ffffff" _builder_version="4.27.9" _module_preset="default"][/et_pb_cta]
+```
+
+## CSS ID & classes family
+
+`module_id`/`module_class` give a module a stable, hand-chosen selector for custom CSS or JS to
+target, and/or an anchor (`#module_id`) for in-page links. Prefer these over guessing at Divi's
+auto-numbered `.et_pb_text_3`-style selectors, which shift whenever the page is reordered (see
+[structure.md](structure.md#module-numbering)).
+
+```divi-fragment
+[et_pb_text module_id="pricing" module_class="js-pricing-table" _builder_version="4.27.9" _module_preset="default"]<p>Pricing details.</p>[/et_pb_text]
+```
+
+## Custom CSS family
+
+Free-form CSS scoped to the module's own generated selector, with `_before`/`_main_element`/
+`_after` slots (some structural modules add more, like `et_pb_column`'s
+`custom_css_before`/`_main`/`_after`). **Caveat:** the label column in the generated table below
+shows `et_pb_accordion`'s selector (e.g. `.et_pb_accordion_container`) as a stand-in example — every
+module's *actual* main-element selector is different (see that module's own `## Advanced tab`
+section, or its `main_css_element` on its reference page) and often isn't literally
+`.et_pb_<slug>_container`. Multi-line CSS is written with `||` standing in for each newline (see
+[page-format.md](page-format.md#escaping)).
+
+```divi-fragment
+[et_pb_text custom_css_main_element="color: red;||font-weight: bold;" _builder_version="4.27.9" _module_preset="default"]<p>Styled text.</p>[/et_pb_text]
+```
+
+## Display conditions family
+
+Conditionally hides/shows a module (by date/time, logged-in state, and other rules) without
+removing it from `post_content`. See [value-formats.md](value-formats.md#display-conditions) —
+its exact JSON shape isn't independently verified here, so prefer exporting a condition from the
+Visual Builder over hand-writing one.
+
+```divi-fragment
+[et_pb_text _builder_version="4.27.9" _module_preset="default"]<p>No display_conditions set: always visible.</p>[/et_pb_text]
+```
+
+## Filters family
+
+CSS filter effects (blur, brightness, contrast, hue-rotate, invert, opacity, saturate, sepia) and
+blend mode, applied to a module's own content — most useful on images and video to match a site's
+color grading without re-exporting the asset.
+
+```divi-fragment
+[et_pb_image _builder_version="4.27.9" _module_preset="default" filter_saturate="120%" filter_contrast="110%"][/et_pb_image]
+```
+
+## Font family
+
+Typography for one text element inside a module — family/weight/style, size, letter spacing, line
+height, alignment, color, and shadow — repeated once per prefix a module exposes (a heading's
+`title_font`, a blurb's `header_font`/`body_font`, a button's own `{p}_font`, and so on; each
+module's own page lists which prefixes it has). See
+[value-formats.md](value-formats.md#font-string-9-parts) for the 9-part font string grammar.
+
+```divi-fragment
+[et_pb_heading title="Emergency Plumber" title_font="Montserrat|700|||||||" title_text_color="#0b2a3c" title_font_size="48px" _builder_version="4.27.9" _module_preset="default"][/et_pb_heading]
+```
+
+## Position family
+
+Takes a module out of normal document flow with CSS `position` (`relative`/`absolute`/`fixed`),
+then places it with an origin corner/edge plus horizontal/vertical offsets and `z_index`. Used for
+things like a badge pinned to the corner of an image, or an element deliberately overlapping the
+one above it.
+
+```divi-fragment
+[et_pb_image _builder_version="4.27.9" _module_preset="default" positioning="absolute" position_origin_a="top_right" horizontal_offset="-10px" vertical_offset="10px" z_index="5"][/et_pb_image]
+```
+
+## Scroll effects family
+
+Scroll-triggered parallax-style motion (vertical/horizontal move, fade, scale, rotate, blur as the
+element scrolls through the viewport) and, separately in the same family, `sticky_position` and its
+tuning fields (`sticky_limit_top`/`_bottom`, `sticky_offset_top`/`_bottom`,
+`sticky_offset_surrounding`, `sticky_transition`) which turn on CSS sticky positioning for the
+module itself. See [value-formats.md](value-formats.md#scroll-effects) and
+[value-formats.md](value-formats.md#sticky-__sticky-__sticky_enabled).
+
+```divi-fragment
+[et_pb_image _builder_version="4.27.9" _module_preset="default" scroll_vertical_motion_enable="on" scroll_vertical_motion="0|50|50|100|4|0|-4"][/et_pb_image]
+```
+
+## Sizing family
+
+Explicit width/height (and their `max_`/`min_` variants) for a module, plus `module_alignment` for
+how it sits within its column when narrower than the column. Leave at `auto`/`none` (the defaults)
+unless the module genuinely needs a fixed size.
+
+```divi-fragment
+[et_pb_image _builder_version="4.27.9" _module_preset="default" width="300px" module_alignment="center"][/et_pb_image]
+```
+
+## Spacing family
+
+`custom_margin`/`custom_padding` — outer and inner space around a section, row, column or module.
+See [value-formats.md](value-formats.md#spacing-6-parts) for the 6-part
+`top|right|bottom|left|linked_top_bottom|linked_left_right` grammar.
+
+```divi-fragment
+[et_pb_section custom_padding="96px||96px||true|false" _builder_version="4.27.9" _module_preset="default"][/et_pb_section]
+```
+
+## Text family
+
+Whole-module text presentation that isn't tied to one specific text element: `background_layout`
+(`dark`/`light`, which controls Divi's default text-color choice against the module's own
+background), overall text alignment/orientation, and a text shadow for the module's body text as a
+whole (as distinct from the Font family's per-element shadow fields).
+
+```divi-fragment
+[et_pb_text background_layout="dark" text_orientation="center" _builder_version="4.27.9" _module_preset="default"]<p>Centered light text on a dark background.</p>[/et_pb_text]
+```
+
+## Transform family
+
+CSS `transform`: scale, translate, rotate, skew, and transform-origin, each its own composite
+`|`-separated attribute (`transform_scale`, `transform_translate`, ...) — see
+[value-formats.md](value-formats.md#transform-composite-sub-attributes). Useful for a subtle
+hover-zoom on an image, or a deliberately rotated card/badge.
+
+```divi-fragment
+[et_pb_image _builder_version="4.27.9" _module_preset="default" transform_scale="105%|105%" transform_rotate="0deg|0deg|-2deg"][/et_pb_image]
+```
+
+## Transitions family
+
+Sets how long/with what easing a module *animates between* its normal and hover states (this is
+about the CSS transition itself, not whether hover styling is enabled at all — that's each
+individual field's own `__hover_enabled`, per [value-formats.md](value-formats.md#hover-__hover-__hover_enabled-and-the-background-group-key)).
+
+```divi-fragment
+[et_pb_button button_text="Call now" button_url="tel:+13055550100" custom_button="on" button_bg_color="#f97316" button_bg_color__hover="#ea580c" button_bg_color__hover_enabled="on|hover" hover_transition_duration="200ms" hover_transition_speed_curve="ease-in-out" _builder_version="4.27.9" _module_preset="default"][/et_pb_button]
+```
+
+## Visibility family
+
+`disabled_on` hides a module on specific breakpoints (a positional `multiple_checkboxes` value —
+see [value-formats.md](value-formats.md#multiple_checkboxes-positional)), and `overflow-x`/
+`overflow-y` control whether content that doesn't fit is clipped, scrollable, or spills out.
+
+```divi-fragment
+[et_pb_image _builder_version="4.27.9" _module_preset="default" disabled_on="on|off|off"][/et_pb_image]
+```
+
 <!-- BEGIN GENERATED FAMILIES -->
 ## Animation
 <a id="animation"></a>
