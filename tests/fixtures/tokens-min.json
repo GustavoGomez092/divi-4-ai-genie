@@ -1,0 +1,15 @@
+{
+  "site": {"url": "https://client.example", "divi_version": "4.27.9", "source_pages": []},
+  "colors": {
+    "global": {"gcid-brand": "#0e7c86"},
+    "customizer": {"accent": "#2ea3f2"},
+    "palette": [{"hex": "#0b2a3c", "uses": 5, "roles": ["background_color"]},
+                {"hex": "#ffffff", "uses": 9, "roles": ["title_text_color"]},
+                {"hex": "#f97316", "uses": 4, "roles": ["button_bg_color"]}]
+  },
+  "typography": {"heading_font": "Montserrat", "body_font": "Lato", "scale": {}},
+  "spacing": {"section_padding": [["96px||96px||true|false", 3]]},
+  "presets": {"et_pb_button": [{"uuid": "11111111-2222-3333-4444-555555555555", "uses": 2}]},
+  "module_styles": {},
+  "section_exemplars": []
+}

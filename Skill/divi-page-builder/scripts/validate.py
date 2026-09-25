@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections import Counter
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import List, Optional
@@ -16,6 +17,7 @@ from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from divi_checks_structure import check_structure  # noqa: E402
+from divi_checks_tokens import check_tokens  # noqa: E402
 from divi_checks_values import check_attributes  # noqa: E402
 from divi_schema import Schema, load_schema  # noqa: E402
 from divi_shortcode import Document, parse  # noqa: E402
@@ -48,6 +50,15 @@ class Reporter:
                                      tag=node.tag if node is not None else "", attr=attr, value=value, hint=hint))
 
 
+def mark_preexisting(findings, baseline_findings) -> None:
+    pool = Counter((f.code, f.tag, f.attr, f.value) for f in baseline_findings)
+    for f in findings:
+        key = (f.code, f.tag, f.attr, f.value)
+        if pool[key] > 0:
+            pool[key] -= 1
+            f.preexisting = True
+
+
 def validate_source(source: str, schema: Schema, tokens: Optional[dict] = None,
                     site_url: Optional[str] = None, baseline: Optional[str] = None) -> List[Finding]:
     doc = parse(source)
@@ -56,6 +67,10 @@ def validate_source(source: str, schema: Schema, tokens: Optional[dict] = None,
     known = {p["uuid"] for lst in (tokens or {}).get("presets", {}).values() for p in lst}
     host = urlparse(site_url or (tokens or {}).get("site", {}).get("url", "")).hostname
     check_attributes(doc, schema, report, known_presets=known, site_host=host)
+    if tokens:
+        check_tokens(doc, schema, tokens, report)
+    if baseline is not None:
+        mark_preexisting(report.findings, validate_source(baseline, schema, tokens=tokens, site_url=site_url))
     return report.findings
 
 
