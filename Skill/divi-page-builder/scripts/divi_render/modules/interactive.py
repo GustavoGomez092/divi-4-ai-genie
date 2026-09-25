@@ -69,6 +69,7 @@ class AccordionItem(Module):
         base_classes(self, "et_pb_accordion_item")
         self.classes = ["et_pb_toggle", "et_pb_module", "et_pb_accordion_item", self.order_class]
         acc = self.ctx.accordion
+        p.get("open", "")  # honoured below through the siblings' values (first open item wins)
         siblings = acc.node.modules if acc else [self.node]
         first_open = next((i for i, s in enumerate(siblings) if s.value("open") == "on"), 0)
         idx = next(i for i, s in enumerate(siblings) if s is self.node)
@@ -148,6 +149,7 @@ class Slide(Module):
             for k, v in sl.attrs.items():
                 if k not in self.attrs and k in self.fields and k.startswith("background_"):
                     self.props[k] = v
+                    sl.props.read.add(k)
         self.process_additional()
         self.ctx.slide_num += 1
         base_classes(self)
