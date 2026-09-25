@@ -277,3 +277,38 @@ Full findings are in `research/divi-render-engine.md`. The prototype is in `rese
 - **Tests:**
   - render the validator's valid fixtures on the local mirror; every one must produce HTML containing `.et-l` with one `.et_pb_section` per section in the source;
   - render page 11's shortcode and compare builder CSS declarations with the live page (must be identical).
+
+## Addendum B: End-to-end scope and a portable preview (decided 2026-09-24, mid-build)
+
+**Decisions (user):**
+1. The skill must do everything: fetch the design tokens, read the references, compose the page, validate it, preview it, **and send it to the target site**.
+2. The preview must not require anyone to install or run WordPress.
+3. The Divi theme for previews is fetched from the Elegant Themes account.
+
+**Evidence:** `research/playground-spike.md` (GO).
+- Divi 4.27.9 runs inside WordPress Playground (WebAssembly PHP 8.2 + SQLite).
+- Rendering page 11's layout gave byte-identical builder markup, 2,064 of 2,064 identical builder CSS declarations, and a 0.02–0.04% pixel diff (site header menu and counter animation).
+- The Elegant Themes endpoint `api_downloads.php?api_update=1&theme=Divi&version=V&username=…&api_key=…` returns a specific version's zip. The API rate-limits at about 15 calls per 5 minutes.
+- Timings: a cold first run takes about 25 s, a warm render about 1 s while serving. It works offline after the first run.
+
+**Changes:**
+- **Preview (supersedes Addendum A's mirror approach):** `scripts/preview/preview.mjs` (Node ≥ 20) with `serve`, `render`, `fetch-divi` and `doctor`.
+  - The Divi version comes from `tokens.json → site.divi_version`.
+  - Divi zips and caches live in `PP_CACHE_DIR` (user cache) and never enter the repo.
+  - `ET_USERNAME`/`ET_API_KEY` are env-only, never printed, and used only for uncached versions.
+  - Still **stock Divi settings**; the no-client-settings decision in Addendum A stands. The WordPress draft remains the authoritative visual check.
+- **Publishing:** `scripts/publish.py` with `fetch`, `media`, `draft` and `publish`, using Application Passwords from env `WP_APP_PASSWORD`.
+  - `draft` validates first, uploads local images, and saves drafts only.
+  - `publish` requires an explicit `--yes` after user approval.
+  - This moves the "connection phase" publishing tool into this build. The MCP remains out of scope.
+- **Workflow (§5), updated:**
+  1. Intake.
+  2. Tokens (`extract_tokens.py`).
+  3. Plan.
+  4. Compose.
+  5. Validate (`validate.py`).
+  6. Preview (`preview.mjs render|serve`).
+  7. Draft (`publish.py draft`): share the `preview_url`.
+  8. Publish on approval (`publish.py publish --yes`).
+- **Language note:** the Python-stdlib-only rule applies to `.py` scripts. The preview is Node because the Playground runtime is a Node package.
+

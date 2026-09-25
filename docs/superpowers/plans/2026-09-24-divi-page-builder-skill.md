@@ -23,6 +23,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-24-divi-page-builder-skill-design.md`. Read it first; this plan argues from it.
 
+**Execution order (amended 2026-09-24):** Tasks 1–14, then **Task 22**, then Tasks 15–21. Task 14 was rewritten for the WordPress Playground preview, and Task 22 (`publish.py`) was added, after the user widened the scope to end-to-end (spec Addendum B).
+
 ## Global Constraints
 
 - **Dependencies:** shipped scripts (`Skill/divi-page-builder/scripts/*.py`) use the Python 3.9+ standard library only. No pip installs.
@@ -35,7 +37,9 @@
   - `"` → `%22`, `[` → `%91`, `]` → `%93`;
   - `\` → `%92` only for `custom_css_*` and for `checkbox_options`, `radio_options`, `select_options`, `conditional_logic_rules`.
 - **Hover/sticky enable rule:** hover is enabled when `X__hover_enabled` starts with `on`; sticky likewise with `X__sticky_enabled`. `background_color` and `background_image` use the group key `background` (`HoverOptions.php:68-78`, `StickyOptions.php:104-112`).
-- **Preview:** uses the mirror's stock Divi settings. There is no client settings bundle (spec Addendum A).
+- **Preview:** real Divi in WordPress Playground (Task 14, spec Addendum B) with stock Divi settings. There is no client settings bundle (spec Addendum A). The preview scripts are Node `.mjs` (Node ≥ 20), so the Python-stdlib rule applies to `.py` scripts only.
+- **Divi licensing:** Divi zips, unpacked themes and Playground caches live in the user cache (`PP_CACHE_DIR`) and never enter the repo. Elegant Themes credentials come only from `ET_USERNAME`/`ET_API_KEY` and are never printed. Never call the Elegant Themes API when the version is cached (rate limit).
+- **Publishing safety:** `publish.py` validates before saving, saves drafts only, and publishes only with an explicit `--yes` given after the user approves.
 - **Commits:** one commit per task minimum. Message style: `<area>: <what>` (e.g. `validator: structure checks`).
 - **Running tests:** `python3 -m unittest discover -s tests -v`, from the repo root.
 
@@ -78,7 +82,8 @@ Skill/divi-page-builder/
   scripts/tokens_from_html.py               Task 12
   scripts/extract_tokens.py                 Task 12  CLI (REST + public URL)
   scripts/page_edit.py                      Task 19  CLI for surgical edits
-  scripts/preview/render.php, run.sh        Task 14
+  scripts/preview/preview.mjs, fetch-divi.mjs, mu-plugin/, blueprint.json   Task 14 (Playground)
+  scripts/publish.py                        Task 22  fetch/media/draft/publish over REST
 research/tools/
   wp-local.sh                               Task 1   WP-CLI wrapper for LocalWP
   force-all-modules.php, dump-divi-schema.php   (exist)
@@ -3437,41 +3442,57 @@ git commit -m "tokens: end-to-end fidelity test via REST + sample tokens for rec
 
 ---
 
-### Task 14: Local preview: port the renderer, `preview.md`, render tests
+### Task 14: Portable preview on WordPress Playground (amended 2026-09-24)
+
+> Amended after the Playground spike (`research/playground-spike.md`: GO). This replaces the LocalWP-mirror preview. The user decided the skill must preview without a WordPress install, and still without client settings (spec Addendum A/B).
 
 **Files:**
-- Create: `Skill/divi-page-builder/scripts/preview/render.php` (from `research/render-prototype/render.php`)
-- Create: `Skill/divi-page-builder/scripts/preview/run.sh` (from `research/render-prototype/run.sh`)
+- Create: `Skill/divi-page-builder/scripts/preview/preview.mjs`, `fetch-divi.mjs`, `mu-plugin/pp-preview.php`, `blueprint.json`, `.gitignore`. Start from `research/playground-prototype/` and adapt.
 - Create: `Skill/divi-page-builder/reference/preview.md`
 - Test: `tests/test_preview.py`
 
 **Interfaces:**
-- Consumes: the prototype (`research/render-prototype/`) and `wp-local.sh`.
-- Produces: `WP="<wp command for mirror>" scripts/preview/run.sh page.txt out.html [title=…] [embed-images] [no-js]`, which writes one standalone HTML file.
+- Consumes: `tokens.json → site.divi_version` (Task 12); fixtures `handwritten-landing.txt`, `brand-kit.txt` (Task 13), `unicode.txt`, `divi-ai-layout.txt`; `divi_shortcode.parse` (for section counts in tests).
+- Produces the CLI (Node ≥ 20; tested on 24.1):
+  - `node scripts/preview/preview.mjs serve [--pages DIR] [--divi VER | --tokens tokens.json] [--port 9400]` serves `http://127.0.0.1:PORT/?pp_preview=<name>` for each `DIR/<name>.txt`, re-reading the file on every request.
+  - `node scripts/preview/preview.mjs render <page.txt> [--out page.html] [--divi VER | --tokens tokens.json]` writes one self-contained HTML file.
+  - `node scripts/preview/preview.mjs fetch-divi <VER|latest>` warms the cache. It's the only command that needs Elegant Themes credentials.
+  - `node scripts/preview/preview.mjs doctor` prints the Node version (fails if < 20), npx/unzip/tar availability, the cache dir, and cached Divi and WordPress versions. It exits 0 when usable, 1 when not.
+- Env:
+  - `ET_USERNAME`/`ET_API_KEY`: used only to fetch an uncached Divi version, and never printed or written.
+  - `PP_CACHE_DIR`: default `~/.cache/divi-page-builder` (Windows: `%LOCALAPPDATA%\divi-page-builder`).
+  - `PP_PLAYGROUND_CLI`: default pinned `@wp-playground/cli@3.1.55`.
+  - `PP_WP_VERSION`: default `7.1.2`.
+- Divi version resolution: `--divi`, then `--tokens` (`site.divi_version`), then the newest cached version, then `latest` (network). **Never call the Elegant Themes API when the resolved version is already cached.** The API rate-limits at about 15 calls per 5 minutes.
 
-- [ ] **Step 1: Copy the prototype and remove the settings-bundle path**
+- [ ] **Step 1: Read the spike, then copy the prototype**
 
+Read `research/playground-spike.md` in full, especially §1 (the Elegant Themes endpoint and its errors), §3 (the mu-plugin design), §5 (practicalities and quirks) and "Recommendation".
 ```bash
-mkdir -p Skill/divi-page-builder/scripts/preview
-cp research/render-prototype/render.php research/render-prototype/run.sh Skill/divi-page-builder/scripts/preview/
+mkdir -p Skill/divi-page-builder/scripts/preview/mu-plugin
+cp research/playground-prototype/{preview.mjs,fetch-divi.mjs,blueprint.json,.gitignore} Skill/divi-page-builder/scripts/preview/
+cp research/playground-prototype/mu-plugin/pp-preview.php Skill/divi-page-builder/scripts/preview/mu-plugin/
 ```
-Edit `scripts/preview/render.php`:
-- delete the block that starts with the comment `// 0. Optional client site-settings bundle` (prototype lines 76–113, which end at the `WP_CLI::log( 'Applied settings bundle: …' )` block's closing `}`);
-- in the argument regex on prototype line 58, change `(layout|title|settings|meta|embed-images|no-js)` to `(layout|title|meta|embed-images|no-js)`;
-- remove `[settings=bundle.json]` from the usage strings (prototype lines 29–32 and 65).
 
-In `scripts/preview/run.sh`, remove `[settings=client.json]` from the usage comment.
+- [ ] **Step 2: Adapt the prototype into the shipped command**
 
-Verify: `grep -n "settings" Skill/divi-page-builder/scripts/preview/*` shows no settings-bundle references (the word may still appear in unrelated WordPress calls).
+1. Add the `fetch-divi <VER|latest>` subcommand to `preview.mjs` (call `ensureDivi` from `fetch-divi.mjs`), and add `doctor`.
+2. Add `--tokens <file>`, which reads `site.divi_version`, following the resolution order above.
+3. Rename the cache root from `post-pusher` to `divi-page-builder` everywhere (both `.mjs` files and the `.gitignore` comment).
+4. Keep the pinned CLI version, `--prefer-offline`, the WordPress self-download, the PHP pin inside the blueprint, the onboarding-redirect guard and the inline-Google-Fonts-off setting. These are the spike's documented quirk workarounds, and each needs a one-line comment saying why.
+5. Don't add a settings bundle (spec Addendum A: no client settings). Remove any `settings` references the prototype carries.
+6. Audit for secrets: `command grep -n "api_key\|ET_API_KEY\|ET_USERNAME\|console" Skill/divi-page-builder/scripts/preview/*.mjs`. Credentials may only be read from `process.env` and placed in the request URL; no log line may contain them. A failed download must print a redacted URL.
+7. Confirm with `node --check Skill/divi-page-builder/scripts/preview/preview.mjs && node --check Skill/divi-page-builder/scripts/preview/fetch-divi.mjs`.
 
-- [ ] **Step 2: Write the render tests**
+- [ ] **Step 3: Write the tests**
 
-They're skipped when the local site is unavailable.
+They skip cleanly when Node, the cache or credentials are unavailable.
 
 `tests/test_preview.py`:
 ```python
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -3480,76 +3501,113 @@ from pathlib import Path
 from _paths import FIXTURES, SKILL, WP_LOCAL
 from divi_shortcode import parse
 
-RUN = SKILL / "scripts" / "preview" / "run.sh"
+PREVIEW = SKILL / "scripts" / "preview" / "preview.mjs"
+VERSION = "4.27.9"
 
 
-def render(src_path: Path) -> str:
-    with tempfile.TemporaryDirectory() as tmp:
-        out = Path(tmp) / "out.html"
-        proc = subprocess.run([str(RUN), str(src_path), str(out), "no-js"], env=dict(os.environ, WP=str(WP_LOCAL)),
-                              capture_output=True, text=True, timeout=180)
-        if proc.returncode != 0:
-            raise unittest.SkipTest(f"mirror unavailable: {proc.stderr[-300:]}")
-        return out.read_text()
+def _et_env():
+    """Elegant Themes credentials from the local test site's DB, passed only via the child env (never printed)."""
+    out = subprocess.run([str(WP_LOCAL), "option", "get", "et_automatic_updates_options", "--format=json"],
+                         capture_output=True, text=True)
+    if out.returncode != 0:
+        return {}
+    import json
+    data = json.loads(out.stdout[out.stdout.index("{"):])
+    return {"ET_USERNAME": data.get("username", ""), "ET_API_KEY": data.get("api_key", "")}
+
+
+def node(*args, timeout=600):
+    if shutil.which("node") is None:
+        raise unittest.SkipTest("node not installed")
+    env = dict(os.environ, **_et_env())
+    return subprocess.run(["node", str(PREVIEW), *args], capture_output=True, text=True, timeout=timeout, env=env)
 
 
 class PreviewTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        warm = node("fetch-divi", VERSION)
+        if warm.returncode != 0:
+            raise unittest.SkipTest(f"Divi {VERSION} not cached and not fetchable: {warm.stderr[-300:]}")
+
+    def render(self, path, *extra):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "out.html"
+            proc = node("render", str(path), "--out", str(out), "--divi", VERSION, *extra)
+            self.assertEqual(proc.returncode, 0, proc.stderr[-500:])
+            return out.read_text(), proc.stdout + proc.stderr
+
+    def test_doctor(self):
+        proc = node("doctor")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn(VERSION, proc.stdout)
+
     def test_fixtures_render_every_section(self):
         for name in ("handwritten-landing.txt", "brand-kit.txt", "unicode.txt"):
             path = FIXTURES / "valid" / name
-            html = render(path)
+            html, _ = self.render(path)
             self.assertIn('class="et-l', html, name)
             sections = len(parse(path.read_text()).sections())
-            rendered = len(re.findall(r'class="[^"]*\bet_pb_section\b', html))
-            self.assertEqual(rendered, sections, name)
+            self.assertEqual(len(re.findall(r'class="[^"]*\bet_pb_section\b', html)), sections, name)
+
+    def test_tokens_select_divi_version(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "o.html"
+            proc = node("render", str(FIXTURES / "valid" / "handwritten-landing.txt"), "--out", str(out),
+                        "--tokens", str(FIXTURES / "tokens-min.json"))
+            self.assertEqual(proc.returncode, 0, proc.stderr[-500:])
+            self.assertIn(VERSION, proc.stdout + proc.stderr)
 
     def test_page11_builder_css_matches_live(self):
         live = subprocess.run(["curl", "-s", "http://divi-test.local/probe-divi-ai-emergency-plumber/"],
                               capture_output=True, text=True).stdout
         if "et_pb_section" not in live:
             self.skipTest("page 11 not reachable")
-        html = render(FIXTURES / "valid" / "divi-ai-layout.txt")
+        html, _ = self.render(FIXTURES / "valid" / "divi-ai-layout.txt")
         decl = re.compile(r"\.et_pb_[a-z_]+_\d+[^{]*\{[^}]*\}")
         self.assertEqual(sorted(set(decl.findall(html))), sorted(set(decl.findall(live))))
+
+    def test_no_credentials_in_output(self):
+        env = _et_env()
+        _, logs = self.render(FIXTURES / "valid" / "handwritten-landing.txt")
+        for secret in env.values():
+            if secret:
+                self.assertNotIn(secret, logs)
 
 
 if __name__ == "__main__":
     unittest.main()
 ```
+Run: `python3 -m unittest discover -s tests -p 'test_preview.py' -v`
+Expected: all PASS. The first run takes about 30 s because it installs the CLI and WordPress.
 
-- [ ] **Step 3: Run it**
-
-Run: `python3 -m unittest tests/test_preview.py -v`
-Expected: PASS.
-
-If `test_page11_builder_css_matches_live` differs, the likely causes are:
-- the live page now carries CSS from a different cache: visit it once more and re-run;
-- the fixture differs from page 11's stored content: compare with `research/tools/wp-local.sh post get 11 --field=post_content`.
-
-Fix the fixture, not the regex.
+If `test_page11_builder_css_matches_live` differs, compare with the spike's `research/playground-prototype/compare.py` method. The spike measured 2,064 of 2,064 matching declarations; differences usually mean an inline-Google-Fonts or onboarding setting was lost during adaptation.
 
 - [ ] **Step 4: Write `reference/preview.md`**
 
 Required sections:
-1. **What it is:** a headless render on a local mirror, producing a standalone HTML file.
-2. **Mirror setup:**
-   - a LocalWP site with the **same Divi version** as the client (`tokens.json → site.divi_version`);
-   - the same child theme and any style-affecting plugins, if the client uses them;
-   - the WP-CLI command for the mirror (for example `research/tools/wp-local.sh` with `LOCAL_SITE_ID`/`LOCAL_SITE_PATH`).
-3. **Running it:** `WP="…" scripts/preview/run.sh page.txt out/page.html title="…"`, then open the file. Optionally screenshot it with headless Chrome, as in `research/render-prototype/compare.sh`.
-4. **Fidelity limits (must be explicit):**
-   - it uses the mirror's stock Divi settings;
-   - client Customizer values, global presets and global colors are **not** applied, so styling that comes from them looks generic;
-   - animations, counters and sliders need JS;
-   - fonts and images need network access.
-5. **The WordPress draft preview is the authoritative visual check.**
+1. **What it is:** real Divi running in WebAssembly WordPress (Playground). No WordPress install; nothing is written to any site.
+2. **Requirements:** Node ≥ 20 (tested on 24.1) with npx; `unzip` or `tar`; about 1–1.2 GB of disk; Elegant Themes credentials only the first time a Divi version is used. Run `doctor` to check.
+3. **Commands:** `serve`, `render`, `fetch-divi` and `doctor`, each with an example.
+4. **Version selection:** preview on the client's Divi version (`--tokens tokens.json`), and the resolution order.
+5. **Caching and offline:** what's cached where; it works offline after the first run; the Elegant Themes rate limit.
+6. **Fidelity and limits (must be explicit):**
+   - builder markup and CSS are identical to real Divi (the spike's numbers);
+   - it uses **stock Divi settings**, so client Customizer values, global presets and global colors are **not** applied;
+   - the site header and menu are the preview site's, not the client's;
+   - animations need JS;
+   - fonts and images need network to *look* right.
+
+   The WordPress draft preview is the authoritative visual check.
+7. **Troubleshooting:** the spike's quirks and their symptoms.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add Skill/divi-page-builder/scripts/preview Skill/divi-page-builder/reference/preview.md tests/test_preview.py
-git commit -m "preview: headless mirror renderer (no client settings) + docs + render tests"
+git add Skill/divi-page-builder/scripts/preview Skill/divi-page-builder/reference/preview.md tests/test_preview.py research/playground-spike.md research/playground-prototype
+git commit -m "preview: portable Divi preview on WordPress Playground (serve/render/fetch-divi/doctor)"
 ```
+Before committing, confirm `git status --porcelain | command grep -i "\.zip\|/Divi/"` prints nothing. No Divi files or caches may enter the repo.
 
 ---
 
@@ -4012,7 +4070,7 @@ class SkillIndexTest(unittest.TestCase):
         self.assertEqual(missing, [])
 
     def test_scripts_are_documented(self):
-        for script in ("scripts/validate.py", "scripts/extract_tokens.py", "scripts/page_edit.py", "scripts/preview/run.sh"):
+        for script in ("scripts/validate.py", "scripts/extract_tokens.py", "scripts/page_edit.py", "scripts/preview/preview.mjs", "scripts/publish.py"):
             self.assertIn(script, self.text)
 
     def test_short_enough(self):
@@ -4046,8 +4104,8 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 3. **Plan:** map the brief to recipes (`recipes/README.md`, `recipes/pages/`). Show the user the section outline and get a yes before writing.
 4. **Compose:** for each section, follow its recipe. Look up every module in `reference/modules/<slug>.md`, and take every color, font, spacing and button style from `tokens.json`.
 5. **Validate:** `python3 scripts/validate.py page.txt --tokens tokens.json` (add `--baseline original.txt` for edits). Repeat until there are 0 errors; read every warning.
-6. **Preview (optional):** with a local mirror, `WP="…" scripts/preview/run.sh page.txt out/page.html` (`reference/preview.md`). Client Customizer and preset styling looks generic there.
-7. **Publish:** push as a **draft**, share the preview link, and publish only after approval (`reference/publishing.md`). The WordPress draft is the authoritative visual check.
+6. **Preview:** `node scripts/preview/preview.mjs render page.txt --tokens tokens.json --out preview.html` (or `serve` for live reload), then open it (`reference/preview.md`). Client Customizer and preset styling looks generic there.
+7. **Publish:** `python3 scripts/publish.py draft page.txt --site URL --user USER --title "…"` uploads local images and saves a **draft** (it validates first). Share the printed `preview_url`; after the user approves, run `publish.py publish --page-id ID --yes` (`reference/publishing.md`). The WordPress draft is the authoritative visual check.
 
 ## Hard rules
 - **Never invent attributes.** An attribute not on the module's page (or in its linked design families) does not exist; `validate.py` reports it as `E_UNKNOWN_ATTR`.
@@ -4065,7 +4123,8 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 | `scripts/validate.py` | structure, attributes, value formats, tokens; `--baseline` for edits; `--json` |
 | `scripts/extract_tokens.py` | site design tokens via REST (Application Password) + public CSS |
 | `scripts/page_edit.py` | outline / extract / replace / insert / set-attr / delete, surgically |
-| `scripts/preview/run.sh` | headless render on a local mirror WordPress |
+| `scripts/preview/preview.mjs` | real-Divi preview in WordPress Playground: `serve`, `render`, `fetch-divi`, `doctor` |
+| `scripts/publish.py` | `fetch` / `media` / `draft` / `publish` over REST with an Application Password |
 
 ## Reference index
 | file | read it when |
@@ -4140,7 +4199,7 @@ Record in `results.md`:
 
 - [ ] **Step 4: Run with the skill**
 
-Dispatch a fresh subagent with the brief and the instruction "Use the skill at Skill/divi-page-builder/SKILL.md", with file access to the skill. Validate the same way, then publish it with `push_local.sh` and screenshot it at 1440 and 390. Record the same metrics, plus:
+Dispatch a fresh subagent with the brief and the instruction "Use the skill at Skill/divi-page-builder/SKILL.md", with file access to the skill. It should render the page with `scripts/preview/preview.mjs` and save a draft on `divi-test.local` with `scripts/publish.py` (give it a temporary Application Password via env, created as in Task 10 and deleted afterwards). Validate the same way, then screenshot the draft at 1440 and 390. Record the same metrics, plus:
 - every point where the agent hesitated, guessed, or read the wrong file (from its transcript);
 - visual problems seen in the screenshots.
 
@@ -4172,3 +4231,450 @@ Expected: all PASS, `0 failing block(s)`, and `0` leftover test pages.
 git add research/skill-tests Skill/divi-page-builder research/tools/notes
 git commit -m "skill: tested on fresh agents (baseline vs with-skill), docs fixed where agents stumbled"
 ```
+
+---
+
+### Task 22: `publish.py`: fetch, media, draft, publish over REST (added 2026-09-24)
+
+> Added after the user widened the scope: the skill must also send pages to the target site (spec Addendum B). **Execution order:** run this task right after Task 14, before Task 15, because Tasks 20 and 21 depend on it.
+
+**Files:**
+- Create: `Skill/divi-page-builder/scripts/publish.py`
+- Modify: `Skill/divi-page-builder/reference/publishing.md` (Task 10), adding a "Using publish.py" section at the top
+- Test: `tests/test_publish.py`
+
+**Interfaces:**
+- Consumes:
+  - `validate_source`, `load_schema` (Tasks 4-6);
+  - `parse`, `serialize` (Task 2);
+  - `divi_checks_values.IMAGE_ATTRS` (Task 5);
+  - the REST facts recorded in `research/tools/notes/rest-experiments.md` (Task 10).
+- Produces the CLI. The password always comes from env `WP_APP_PASSWORD`. Every command prints one JSON object on stdout.
+  - `publish.py fetch --site URL --user USER --page-id ID --out FILE` writes `content.raw`, printing `{"id", "link", "out"}`.
+  - `publish.py media --site URL --user USER FILE --alt TEXT` uploads one file, printing `{"id", "url"}`.
+  - `publish.py draft PAGE --site URL --user USER --title TITLE [--slug S] [--page-id ID] [--tokens tokens.json] [--page-fields JSON]`:
+    - validates first, and refuses on errors (exit 1, with no HTTP calls);
+    - uploads local images (image attributes whose value starts with `file://`, `./` or `../`, resolved relative to PAGE's folder, with alt text from the module's `alt`/`title_text`) and rewrites them to Media Library URLs;
+    - creates a draft, or updates `--page-id` and keeps it a draft;
+    - prints `{"id", "status", "link", "preview_url", "edit_url", "uploaded": [...]}`.
+  - `publish.py publish --site URL --user USER --page-id ID --yes` prints `{"id", "status", "link"}`. Without `--yes` it exits 1 and makes no HTTP call.
+- Exit codes: 0 ok · 1 validation errors or refused · 2 usage, HTTP or I/O error.
+
+- [ ] **Step 1: Write the failing tests**
+
+They run against a fake WordPress REST server, plus a live check against `divi-test.local`.
+
+`tests/test_publish.py`:
+```python
+import base64
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import threading
+import unittest
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
+
+from _paths import FIXTURES, SCRIPTS, WP_LOCAL
+
+PASSWORD = "abcd EFGH ijkl MNOP qrst UVWX"
+GOOD = (FIXTURES / "valid" / "handwritten-landing.txt").read_text()
+
+
+class FakeWP(BaseHTTPRequestHandler):
+    calls = []
+
+    def log_message(self, *args):
+        pass
+
+    def _reply(self, code, body):
+        data = json.dumps(body).encode()
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def _record(self):
+        length = int(self.headers.get("Content-Length") or 0)
+        body = self.rfile.read(length) if length else b""
+        FakeWP.calls.append({"method": self.command, "path": self.path, "headers": dict(self.headers), "body": body})
+        expected = "Basic " + base64.b64encode(f"editor:{PASSWORD}".encode()).decode()
+        return self.headers.get("Authorization") == expected, body
+
+    def do_GET(self):
+        ok, _ = self._record()
+        if not ok:
+            return self._reply(401, {"code": "rest_not_logged_in", "message": "You are not currently logged in."})
+        if self.path.startswith("/wp-json/wp/v2/pages/101"):
+            return self._reply(200, {"id": 101, "link": "http://fake/?page_id=101", "content": {"raw": GOOD}})
+        self._reply(404, {"code": "rest_no_route", "message": "No route"})
+
+    def do_POST(self):
+        ok, body = self._record()
+        if not ok:
+            return self._reply(401, {"code": "rest_not_logged_in", "message": "You are not currently logged in."})
+        port = self.server.server_address[1]
+        if self.path == "/wp-json/wp/v2/media":
+            return self._reply(201, {"id": 55, "source_url": f"http://127.0.0.1:{port}/wp-content/uploads/hero.jpg"})
+        if self.path == "/wp-json/wp/v2/media/55":
+            return self._reply(200, {"id": 55})
+        if self.path == "/wp-json/wp/v2/pages":
+            return self._reply(201, {"id": 101, "status": "draft", "link": f"http://127.0.0.1:{port}/?page_id=101"})
+        if self.path == "/wp-json/wp/v2/pages/101":
+            status = json.loads(body or b"{}").get("status", "draft")
+            return self._reply(200, {"id": 101, "status": status, "link": f"http://127.0.0.1:{port}/?page_id=101"})
+        self._reply(404, {"code": "rest_no_route", "message": "No route"})
+
+
+class PublishFakeServerTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.server = HTTPServer(("127.0.0.1", 0), FakeWP)
+        cls.site = f"http://127.0.0.1:{cls.server.server_address[1]}"
+        threading.Thread(target=cls.server.serve_forever, daemon=True).start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.shutdown()
+
+    def setUp(self):
+        FakeWP.calls.clear()
+
+    def run_cli(self, *args, password=PASSWORD):
+        env = dict(os.environ, WP_APP_PASSWORD=password)
+        return subprocess.run([sys.executable, str(SCRIPTS / "publish.py"), *args], capture_output=True, text=True, env=env)
+
+    def test_draft_uploads_local_images_and_creates_draft(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "hero.jpg").write_bytes(b"\xff\xd8\xff fake jpeg")
+            page = Path(tmp) / "page.txt"
+            page.write_text(GOOD.replace("https://client.example/wp-content/uploads/2026/09/plumber.jpg", "./hero.jpg"))
+            proc = self.run_cli("draft", str(page), "--site", self.site, "--user", "editor", "--title", "Test Page")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        out = json.loads(proc.stdout)
+        self.assertEqual(out["id"], 101)
+        self.assertEqual(out["status"], "draft")
+        self.assertIn("preview=true", out["preview_url"])
+        self.assertEqual(len(out["uploaded"]), 1)
+        media, alt, create = FakeWP.calls
+        self.assertEqual(media["path"], "/wp-json/wp/v2/media")
+        self.assertIn('filename="hero.jpg"', media["headers"]["Content-Disposition"])
+        self.assertEqual(json.loads(alt["body"])["alt_text"], "Plumber repairing a burst pipe")
+        sent = json.loads(create["body"])
+        self.assertEqual(sent["status"], "draft")
+        self.assertEqual(sent["meta"], {"_et_pb_use_builder": "on"})
+        self.assertIn("/wp-content/uploads/hero.jpg", sent["content"])
+        self.assertNotIn("./hero.jpg", sent["content"])
+
+    def test_draft_update_keeps_draft(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(GOOD)
+        proc = self.run_cli("draft", f.name, "--site", self.site, "--user", "editor", "--title", "T", "--page-id", "101")
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        (call,) = FakeWP.calls
+        self.assertEqual(call["path"], "/wp-json/wp/v2/pages/101")
+        self.assertEqual(json.loads(call["body"])["status"], "draft")
+
+    def test_draft_refuses_invalid_page(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write('[et_pb_section][et_pb_row][et_pb_column type="4_4"][et_pb_text colour="red"]x[/et_pb_text][/et_pb_column][/et_pb_row][/et_pb_section]')
+        proc = self.run_cli("draft", f.name, "--site", self.site, "--user", "editor", "--title", "T")
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("E_UNKNOWN_ATTR", proc.stderr)
+        self.assertEqual(FakeWP.calls, [])
+
+    def test_publish_requires_yes(self):
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101")
+        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(FakeWP.calls, [])
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101", "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(json.loads(proc.stdout)["status"], "publish")
+
+    def test_fetch_writes_raw(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "original.txt"
+            proc = self.run_cli("fetch", "--site", self.site, "--user", "editor", "--page-id", "101", "--out", str(out))
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            self.assertEqual(out.read_text(), GOOD)
+
+    def test_http_error_exit_2_without_leaking_password(self):
+        proc = self.run_cli("fetch", "--site", self.site, "--user", "editor", "--page-id", "101", "--out", "/tmp/x.txt",
+                            password="wrong pass")
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn("rest_not_logged_in", proc.stderr)
+        for stream in (proc.stdout, proc.stderr):
+            self.assertNotIn("wrong pass", stream)
+            self.assertNotIn(PASSWORD, stream)
+
+    def test_missing_password_is_usage_error(self):
+        proc = self.run_cli("fetch", "--site", self.site, "--user", "editor", "--page-id", "101", "--out", "/tmp/x.txt",
+                            password="")
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn("WP_APP_PASSWORD", proc.stderr)
+
+
+class PublishLiveTest(unittest.TestCase):
+    """Round-trip against divi-test.local; skipped when the local site is unavailable."""
+
+    def wp(self, *args):
+        out = subprocess.run([str(WP_LOCAL), *args], capture_output=True, text=True, timeout=120)
+        if out.returncode != 0:
+            raise unittest.SkipTest(f"local site unavailable: {out.stderr[-200:]}")
+        return out.stdout.strip()
+
+    def test_draft_roundtrip_on_local_site(self):
+        user = self.wp("user", "list", "--role=administrator", "--field=user_login").splitlines()[0]
+        password = self.wp("user", "application-password", "create", user, "publish-test", "--porcelain")
+        page_id = None
+        try:
+            env = dict(os.environ, WP_APP_PASSWORD=password)
+            proc = subprocess.run([sys.executable, str(SCRIPTS / "publish.py"), "draft", str(FIXTURES / "valid" / "handwritten-landing.txt"),
+                                   "--site", "http://divi-test.local", "--user", user, "--title", "Plan Test: publish.py"],
+                                  capture_output=True, text=True, env=env)
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            page_id = json.loads(proc.stdout)["id"]
+            self.assertEqual(self.wp("post", "get", str(page_id), "--field=post_status"), "draft")
+            self.assertEqual(self.wp("post", "meta", "get", str(page_id), "_et_pb_use_builder"), "on")
+            self.assertEqual(self.wp("post", "get", str(page_id), "--field=post_content"), GOOD.strip())
+        finally:
+            if page_id:
+                self.wp("post", "delete", str(page_id), "--force")
+            uuid = self.wp("user", "application-password", "list", user, "--name=publish-test", "--field=uuid")
+            self.wp("user", "application-password", "delete", user, uuid)
+
+
+if __name__ == "__main__":
+    unittest.main()
+```
+Run: `python3 -m unittest discover -s tests -p 'test_publish.py' -v`
+Expected: FAIL (`publish.py` doesn't exist).
+
+- [ ] **Step 2: Implement `publish.py`**
+
+`Skill/divi-page-builder/scripts/publish.py`:
+```python
+#!/usr/bin/env python3
+"""Send Divi pages to WordPress over the REST API, authenticated with an Application Password.
+
+  publish.py fetch   --site URL --user USER --page-id ID --out FILE
+  publish.py media   --site URL --user USER FILE --alt TEXT
+  publish.py draft   PAGE --site URL --user USER --title TITLE [--slug S] [--page-id ID] [--tokens tokens.json] [--page-fields JSON]
+  publish.py publish --site URL --user USER --page-id ID --yes
+
+The password is read from env WP_APP_PASSWORD and never printed. `draft` validates the page first and
+refuses on errors; image attributes pointing at local files (file://, ./, ../) are uploaded to the
+Media Library and rewritten. Pages are saved as drafts; `publish` requires --yes (after user approval).
+Exit status: 0 ok, 1 validation errors or refused, 2 usage/HTTP/I-O error.
+"""
+from __future__ import annotations
+
+import argparse
+import base64
+import json
+import mimetypes
+import os
+import sys
+import urllib.error
+import urllib.request
+from pathlib import Path
+from urllib.parse import unquote, urlparse
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from divi_checks_values import IMAGE_ATTRS  # noqa: E402
+from divi_schema import load_schema  # noqa: E402
+from divi_shortcode import escape_attr_value, parse, serialize  # noqa: E402
+from validate import validate_source  # noqa: E402
+
+LOCAL_PREFIXES = ("file://", "./", "../")
+
+
+class PublishError(Exception):
+    pass
+
+
+class WordPress:
+    def __init__(self, site: str, user: str, password: str):
+        self.base = site.rstrip("/") + "/wp-json/wp/v2"
+        self.site = site.rstrip("/")
+        self._auth = "Basic " + base64.b64encode(f"{user}:{password}".encode()).decode()
+
+    def request(self, method: str, path: str, json_body=None, data: bytes = None, headers=None) -> dict:
+        hdrs = {"Authorization": self._auth, "Accept": "application/json", "User-Agent": "divi-page-builder/1.0"}
+        if json_body is not None:
+            data = json.dumps(json_body).encode()
+            hdrs["Content-Type"] = "application/json"
+        hdrs.update(headers or {})
+        req = urllib.request.Request(self.base + path, data=data, method=method, headers=hdrs)
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                return json.loads(resp.read() or b"{}")
+        except urllib.error.HTTPError as exc:
+            try:
+                err = json.loads(exc.read())
+                detail = f"{err.get('code', '')}: {err.get('message', '')}"
+            except ValueError:
+                detail = exc.reason
+            raise PublishError(f"HTTP {exc.code} on {method} {path} — {detail}") from None
+        except urllib.error.URLError as exc:
+            raise PublishError(f"cannot reach {self.site}: {exc.reason}") from None
+
+
+def upload_media(wp: WordPress, path: Path, alt: str) -> dict:
+    ctype = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+    media = wp.request("POST", "/media", data=path.read_bytes(),
+                       headers={"Content-Type": ctype, "Content-Disposition": f'attachment; filename="{path.name}"'})
+    if alt:
+        wp.request("POST", f"/media/{media['id']}", json_body={"alt_text": alt})
+    return {"id": media["id"], "url": media["source_url"], "file": str(path)}
+
+
+def _local_path(value: str, base_dir: Path):
+    if value.startswith("file://"):
+        return Path(unquote(urlparse(value).path))
+    if value.startswith(("./", "../")):
+        return (base_dir / value).resolve()
+    return None
+
+
+def upload_local_images(wp: WordPress, source: str, base_dir: Path):
+    doc = parse(source)
+    uploaded, cache = [], {}
+    for node, _path, _parent in doc.walk():
+        for attr in list(node.attrs):
+            if attr not in IMAGE_ATTRS and not attr.endswith("_image"):
+                continue
+            local = _local_path(node.value(attr), base_dir)
+            if local is None:
+                continue
+            if not local.is_file():
+                raise PublishError(f"{node.tag} {attr}: local image not found: {local}")
+            if local not in cache:
+                alt = node.value("alt") or node.value("title_text") or local.stem.replace("-", " ")
+                cache[local] = upload_media(wp, local, alt)
+                uploaded.append(cache[local])
+            node.attrs[attr] = escape_attr_value(cache[local]["url"], attr)
+    return serialize(doc), uploaded
+
+
+def _preview_url(link: str) -> str:
+    return link + ("&" if "?" in link else "?") + "preview=true"
+
+
+def _print(obj) -> None:
+    print(json.dumps(obj, ensure_ascii=False))
+
+
+def cmd_fetch(wp, a):
+    page = wp.request("GET", f"/pages/{a.page_id}?context=edit")
+    Path(a.out).write_text(page["content"]["raw"], encoding="utf-8")
+    _print({"id": page["id"], "link": page.get("link", ""), "out": a.out})
+    return 0
+
+
+def cmd_media(wp, a):
+    _print(upload_media(wp, Path(a.file), a.alt))
+    return 0
+
+
+def cmd_draft(wp, a):
+    page_path = Path(a.page)
+    source = page_path.read_text(encoding="utf-8")
+    tokens = json.loads(Path(a.tokens).read_text()) if a.tokens else None
+    errors = [f for f in validate_source(source, load_schema(), tokens=tokens) if f.level == "error"]
+    if errors:
+        for f in errors:
+            print(f"{a.page}:{f.line}:{f.col} {f.code} {f.path}: {f.message}", file=sys.stderr)
+        print(f"refusing to save: {len(errors)} validation error(s); run scripts/validate.py for details", file=sys.stderr)
+        return 1
+    content, uploaded = upload_local_images(wp, source, page_path.resolve().parent)
+    body = {"title": a.title, "content": content, "status": "draft", "meta": {"_et_pb_use_builder": "on"}}
+    if a.slug:
+        body["slug"] = a.slug
+    body.update(json.loads(a.page_fields) if a.page_fields else {})
+    page = wp.request("POST", f"/pages/{a.page_id}" if a.page_id else "/pages", json_body=body)
+    _print({"id": page["id"], "status": page.get("status", "draft"), "link": page.get("link", ""),
+            "preview_url": _preview_url(page.get("link", "")),
+            "edit_url": f"{wp.site}/wp-admin/post.php?post={page['id']}&action=edit", "uploaded": uploaded})
+    return 0
+
+
+def cmd_publish(wp, a):
+    if not a.yes:
+        print("refusing to publish without --yes (publish only after the user approves the draft)", file=sys.stderr)
+        return 1
+    page = wp.request("POST", f"/pages/{a.page_id}", json_body={"status": "publish"})
+    _print({"id": page["id"], "status": page.get("status", ""), "link": page.get("link", "")})
+    return 0
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="command", required=True)
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--site", required=True)
+    common.add_argument("--user", required=True)
+    p = sub.add_parser("fetch", parents=[common])
+    p.add_argument("--page-id", type=int, required=True)
+    p.add_argument("--out", required=True)
+    p = sub.add_parser("media", parents=[common])
+    p.add_argument("file")
+    p.add_argument("--alt", required=True)
+    p = sub.add_parser("draft", parents=[common])
+    p.add_argument("page")
+    p.add_argument("--title", required=True)
+    p.add_argument("--slug")
+    p.add_argument("--page-id", type=int)
+    p.add_argument("--tokens")
+    p.add_argument("--page-fields", help="extra JSON fields for the page, e.g. a template (see reference/publishing.md)")
+    p = sub.add_parser("publish", parents=[common])
+    p.add_argument("--page-id", type=int, required=True)
+    p.add_argument("--yes", action="store_true")
+    a = ap.parse_args(argv)
+    password = os.environ.get("WP_APP_PASSWORD", "")
+    if not password:
+        print("publish.py: set WP_APP_PASSWORD to a WordPress Application Password", file=sys.stderr)
+        return 2
+    wp = WordPress(a.site, a.user, password)
+    try:
+        return {"fetch": cmd_fetch, "media": cmd_media, "draft": cmd_draft, "publish": cmd_publish}[a.command](wp, a)
+    except (PublishError, OSError, ValueError, KeyError) as exc:
+        print(f"publish.py: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+```
+
+- [ ] **Step 3: Run the tests**
+
+Run: `python3 -m unittest discover -s tests -p 'test_publish.py' -v`
+Expected: all PASS. `PublishLiveTest` runs against `divi-test.local`, or is skipped if the site is down.
+
+If the live test shows that WordPress altered `post_content` (for example by stripping characters), don't loosen the assertion. Record the difference in `research/tools/notes/rest-experiments.md`, and make the smallest correct fix: either in `publish.py`, if the content must be sent differently, or in `reference/page-format.md`, if authors must avoid a construct.
+
+- [ ] **Step 4: Document it in `reference/publishing.md`**
+
+Add a "Using publish.py" section at the top:
+- one example per command;
+- the draft-first rule;
+- `--yes` only after the user approves the draft;
+- how local images are referenced (`./images/hero.jpg`) and uploaded;
+- `--page-fields` for the layout field found in Task 10 (e.g. a template);
+- exit codes.
+
+Keep the raw `curl` flow below it as the reference for how it works.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add Skill/divi-page-builder/scripts/publish.py Skill/divi-page-builder/reference/publishing.md tests/test_publish.py
+git commit -m "publish: fetch/media/draft/publish over REST with validation-first drafts"
+```
+
