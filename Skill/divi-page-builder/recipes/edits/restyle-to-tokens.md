@@ -4,7 +4,11 @@
 `tokens.json` — a color that was picked with the eyedropper instead of the palette, a font that
 snuck in from a pasted Google Doc, padding that doesn't match the site's spacing scale. This edit
 never changes copy or structure, only design attribute values, and it's driven entirely by what
-`validate.py --tokens` reports, not by eyeballing the page.
+`validate.py --tokens` reports, not by eyeballing the page. **Font restyles follow
+`recipes/README.md` §2 item 5:** a button or tab label's font is never in a `module_styles` bundle
+— restyle it to `colors.customizer.body_font` (fall back to `typography.body_font`); an
+accordion/toggle title's font (`toggle_font`/`closed_toggle_font`) restyles to
+`colors.customizer.heading_font` (fall back to `typography.heading_font`) instead.
 
 ## Command sequence
 
@@ -16,12 +20,14 @@ python3 Skill/divi-page-builder/scripts/validate.py page.txt --tokens tokens.jso
 #   W_OFF_SCALE_SPACING  Section padding <value> is not one the site uses
 #   W_UNKNOWN_GLOBAL_COLOR  <attr> uses global color <gcid>, which the site does not define
 
-# 2. Fix each one with set-attr, using the *actual* token value (colors.palette, typography.*,
-#    spacing.section_padding — never a value that merely looks close).
+# 2. Fix each one with set-attr, using the *actual* token value (colors.palette, colors.customizer,
+#    typography.*, spacing.section_padding — never a value that merely looks close). A button's own
+#    font is never in a module_styles bundle (see recipes/README.md §2 item 5) — it comes from
+#    colors.customizer.body_font (fall back to typography.body_font).
 python3 Skill/divi-page-builder/scripts/page_edit.py page.txt set-attr \
   "et_pb_section[0] > ... > et_pb_button[0]" button_bg_color "#f97316" --out page.txt
 python3 Skill/divi-page-builder/scripts/page_edit.py page.txt set-attr \
-  "et_pb_section[0] > ... > et_pb_button[0]" button_font "Montserrat|600|||||||" --out page.txt
+  "et_pb_section[0] > ... > et_pb_button[0]" button_font "Lato||||||||" --out page.txt
 
 # 3. Re-run validate to confirm every off-brand warning is gone, with --baseline so any warning
 #    that existed before this restyle (e.g. an unrelated off-site image) still reports as
@@ -78,12 +84,15 @@ python3 Skill/divi-page-builder/scripts/validate.py offbrand.txt \
 #   warning W_EXTERNAL_IMAGE     ...src points to client.example, not the site (pre-existing)
 #   Summary: 0 error(s), 3 warning(s), 0 pre-existing
 
-# Fix both, reading the correct values from sample-tokens.json's colors.customizer.accent and
-# typography.heading_font (the same button-on-dark-hero bundle module_styles.et_pb_button uses).
+# Fix both, reading the correct values from sample-tokens.json's colors.customizer.accent (button
+# background) and colors.customizer.body_font (button font). A button's font is never carried by a
+# module_styles.et_pb_button bundle — that bundle's own button_font is null in sample-tokens.json,
+# because Divi lets a button inherit the Customizer's body font unless one is set explicitly (see
+# recipes/README.md §2 item 5) — so button_font always comes from the Customizer, not a bundle.
 python3 Skill/divi-page-builder/scripts/page_edit.py offbrand.txt set-attr \
   "$BTN" button_bg_color "#f97316" --out restyle1.txt
 python3 Skill/divi-page-builder/scripts/page_edit.py restyle1.txt set-attr \
-  "$BTN" button_font "Montserrat|600|||||||" --out restyled.txt
+  "$BTN" button_font "Lato||||||||" --out restyled.txt
 
 python3 Skill/divi-page-builder/scripts/validate.py restyled.txt \
   --tokens Skill/divi-page-builder/recipes/sample-tokens.json \
@@ -108,7 +117,7 @@ off-brand version to the restyled version shows only the button's `button_bg_col
  [et_pb_text _builder_version="4.27.9" _module_preset="default" text_font="Lato||||||||" text_text_color="#cbd5e1" text_font_size="18px"]
  <p>Licensed, insured plumbers at your door in 60 minutes.</p>[/et_pb_text]
 -[et_pb_button button_text="Call (305) 555-0100" button_url="tel:+13055550100" _builder_version="4.27.9" _module_preset="default" custom_button="on" button_text_color="#ffffff" button_bg_color="#2563eb" button_border_radius="6px" button_bg_color__hover="#ea580c" button_bg_color__hover_enabled="on|hover" button_font="Arial|700|||||||"]
-+[et_pb_button button_text="Call (305) 555-0100" button_url="tel:+13055550100" _builder_version="4.27.9" _module_preset="default" custom_button="on" button_text_color="#ffffff" button_bg_color="#f97316" button_border_radius="6px" button_bg_color__hover="#ea580c" button_bg_color__hover_enabled="on|hover" button_font="Montserrat|600|||||||"]
++[et_pb_button button_text="Call (305) 555-0100" button_url="tel:+13055550100" _builder_version="4.27.9" _module_preset="default" custom_button="on" button_text_color="#ffffff" button_bg_color="#f97316" button_border_radius="6px" button_bg_color__hover="#ea580c" button_bg_color__hover_enabled="on|hover" button_font="Lato||||||||"]
  [/et_pb_button]
  [/et_pb_column]
  [et_pb_column type="1_2" _builder_version="4.27.9" _module_preset="default"]
