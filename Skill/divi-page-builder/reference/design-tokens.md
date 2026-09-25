@@ -29,7 +29,8 @@ outside:
   defined) that apply to *every* page, not just ones a module attribute overrides. These aren't in
   the page content at all; they only show up in the **public page's rendered CSS**
   (`tokens_from_html.py`, this task). The selectors `tokens_from_html.py` reads for each value are listed in its own docstring (the
-  discovery notes behind them are repo only: `research/tools/notes/customizer-css.md`), including and why Global Colors in particular are **not**
+  discovery notes behind them are repo only: `research/tools/notes/customizer-css.md`). This is also
+  why Global Colors in particular are **not**
   recoverable this way in general (Divi 4.27.9 resolves a Global Color to a plain hex value before
   emitting CSS — there's no `--gcid-*` variable and no signal left behind once resolved, and an
   *unused* Global Color leaves no trace at all).

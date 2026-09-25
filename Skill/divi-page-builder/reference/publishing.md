@@ -33,7 +33,7 @@ python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15
 #    (keeps the page's visibility: private stays private, scheduled stays scheduled)
 python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 --content page.txt --yes
 
-# 6. Only when the user explicitly wants a private/scheduled page made public now
+# 6. Only when the user explicitly wants a private/scheduled page's status changed to publish
 python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 --status publish --yes
 ```
 
@@ -49,7 +49,8 @@ explicit step that flips `status` to `publish`, and it refuses (exit 1, no HTTP 
 sends only `content` and `meta`, so the page stays private or keeps its scheduled date, and
 `publish` without `--content` refuses (exit 1) because the only thing it could do is change
 the visibility. Pass `--status publish` only when the user explicitly asks to make that page
-public now. A `draft`/`pending` page is published (`status: "publish"`), and a `publish` page
+public (a scheduled page whose date is still in the future stays scheduled in WordPress until
+that date, or until its date is changed). A `draft`/`pending` page is published (`status: "publish"`), and a `publish` page
 stays `publish`.
 
 **Editing a live page.** `draft --page-id ID` first fetches the page's current `status`
@@ -59,7 +60,9 @@ while it's being reviewed. It proceeds normally for a page whose status is `draf
 `pending`. To edit a page that's already live:
 
 1. Create a **review copy** as a new draft (no `--page-id`), and share its `preview_url` for
-   approval: `publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "..."`
+   approval: `publish.py draft page.txt --baseline original.txt --site "$SITE" --user "$WP_USER" --title "..."`
+   (`--baseline` = the live page's content you fetched in step 1 of the workflow, so errors
+   already on a legacy page don't block the review copy)
 2. Once approved, apply the edit to the live page **and** publish it in one request with
    `publish`'s optional `--content`:
    ```bash

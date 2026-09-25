@@ -230,7 +230,9 @@ order, first match wins: `--divi VERSION` → `--tokens tokens.json` (reads `sit
 the file `extract_tokens.py` produces) → the newest version already cached → `latest` from
 Elegant Themes (needs credentials and network — the fallback of last resort). A tokens file whose
 `site.divi_version` is empty (`""`, the version wasn't detected) counts as not giving one: both
-previews fall through to the newest cached version, else `latest`, and print a one-line note.
+previews fall through to the newest cached version, else `latest`, and print a one-line note. A
+tokens file with no `site.divi_version` key at all is refused (exit 2): it isn't an
+`extract_tokens.py` output, so pass `--divi VERSION` instead.
 
 ### Caching
 
