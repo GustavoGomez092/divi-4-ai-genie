@@ -1,0 +1,73 @@
+{
+ "child": null,
+ "extras": {},
+ "fields": {
+  "_builder_version": {
+   "tab": "general",
+   "toggle": "",
+   "type": "skip"
+  },
+  "_dynamic_attributes": {
+   "tab": "general",
+   "toggle": "",
+   "type": "skip"
+  },
+  "_module_preset": {
+   "tab": "general",
+   "toggle": "",
+   "type": "skip"
+  },
+  "content": {
+   "hover": true,
+   "label": "Body",
+   "responsive": true,
+   "tab": "general",
+   "toggle": "main_content",
+   "type": "tiny_mce"
+  },
+  "map_center_map": {
+   "tab": "general",
+   "toggle": "map",
+   "type": "center_map"
+  },
+  "pin_address": {
+   "label": "Map Pin Address",
+   "tab": "general",
+   "toggle": "map",
+   "type": "text"
+  },
+  "pin_address_lat": {
+   "tab": "general",
+   "toggle": "",
+   "type": "hidden"
+  },
+  "pin_address_lng": {
+   "tab": "general",
+   "toggle": "",
+   "type": "hidden"
+  },
+  "title": {
+   "hover": true,
+   "label": "Title",
+   "responsive": true,
+   "tab": "general",
+   "toggle": "main_content",
+   "type": "text"
+  },
+  "zoom_level": {
+   "default": "18",
+   "default_on_front": "",
+   "tab": "general",
+   "toggle": "",
+   "type": "hidden"
+  }
+ },
+ "fullwidth": false,
+ "kind": "child",
+ "name": "Pin",
+ "parents": [
+  "et_pb_fullwidth_map",
+  "et_pb_map"
+ ],
+ "slug": "et_pb_map_pin"
+}
