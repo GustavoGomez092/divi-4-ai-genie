@@ -85,13 +85,13 @@
 | border_width_right_fields_focus | range | length: em, rem, px, cm, mm, in… |  | R H S | Fields Focus Right Border Width |
 | border_width_top_fields | range | length: em, rem, px, cm, mm, in… |  | R H S | Fields Top Border Width |
 | border_width_top_fields_focus | range | length: em, rem, px, cm, mm, in… |  | R H S | Fields Focus Top Border Width |
-| box_shadow_blur_fields | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_fields', {'none': '', 'preset1': '18px', 'preset2': '18px', 'preset3': '18px', 'preset4': '0px', 'preset5': '0px', 'preset6': '18px', 'preset7': '0px'}] | R H S | Box Shadow Blur Strength |
+| box_shadow_blur_fields | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_fields` | R H S | Box Shadow Blur Strength |
 | box_shadow_color_fields | color-alpha | color | rgba(0,0,0,0.3) | R H S | Shadow Color |
-| box_shadow_horizontal_fields | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_fields', {'none': '', 'preset1': '0px', 'preset2': '6px', 'preset3': '0px', 'preset4': '10px', 'preset5': '0px', 'preset6': '0px', 'preset7': '10px'}] | R H S | Box Shadow Horizontal Position |
-| box_shadow_position_fields | select | `outer`, `inner` | ['box_shadow_style_fields', {'none': 'outer', 'preset1': 'outer', 'preset2': 'outer', 'preset3': 'outer', 'preset4': 'outer', 'preset5': 'outer', 'preset6': 'inner', 'preset7': 'inner'}] | R | Box Shadow Position |
-| box_shadow_spread_fields | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_fields', {'none': '', 'preset1': '0px', 'preset2': '0px', 'preset3': '-6px', 'preset4': '0px', 'preset5': '10px', 'preset6': '0px', 'preset7': '0px'}] | R H S | Box Shadow Spread Strength |
+| box_shadow_horizontal_fields | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_fields` | R H S | Box Shadow Horizontal Position |
+| box_shadow_position_fields | select | `outer`, `inner` | depends on `box_shadow_style_fields` | R | Box Shadow Position |
+| box_shadow_spread_fields | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_fields` | R H S | Box Shadow Spread Strength |
 | box_shadow_style_fields | select_box_shadow |  | none | · | Fields Box Shadow |
-| box_shadow_vertical_fields | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_fields', {'none': '', 'preset1': '2px', 'preset2': '6px', 'preset3': '12px', 'preset4': '10px', 'preset5': '6px', 'preset6': '0px', 'preset7': '10px'}] | R H S | Box Shadow Vertical Position |
+| box_shadow_vertical_fields | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_fields` | R H S | Box Shadow Vertical Position |
 | form_field_background_color | color-alpha | color |  | R H S | Fields Background Color |
 | form_field_custom_margin | custom_margin | spacing string |  | R H S | Fields Margin |
 | form_field_custom_padding | custom_padding | spacing string |  | R H S | Fields Padding |
@@ -132,13 +132,13 @@
 | border_width_left_image | range | length: em, rem, px, cm, mm, in… |  | R H S | Image Left Border Width |
 | border_width_right_image | range | length: em, rem, px, cm, mm, in… |  | R H S | Image Right Border Width |
 | border_width_top_image | range | length: em, rem, px, cm, mm, in… |  | R H S | Image Top Border Width |
-| box_shadow_blur_image | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_image', {'none': '', 'preset1': '18px', 'preset2': '18px', 'preset3': '18px', 'preset4': '0px', 'preset5': '0px', 'preset6': '18px', 'preset7': '0px'}] | R H S | Box Shadow Blur Strength |
+| box_shadow_blur_image | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_image` | R H S | Box Shadow Blur Strength |
 | box_shadow_color_image | color-alpha | color | rgba(0,0,0,0.3) | R H S | Shadow Color |
-| box_shadow_horizontal_image | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_image', {'none': '', 'preset1': '0px', 'preset2': '6px', 'preset3': '0px', 'preset4': '10px', 'preset5': '0px', 'preset6': '0px', 'preset7': '10px'}] | R H S | Box Shadow Horizontal Position |
-| box_shadow_position_image | select | `outer`, `inner` | ['box_shadow_style_image', {'none': 'outer', 'preset1': 'outer', 'preset2': 'outer', 'preset3': 'outer', 'preset4': 'outer', 'preset5': 'outer', 'preset6': 'inner', 'preset7': 'inner'}] | R | Box Shadow Position |
-| box_shadow_spread_image | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_image', {'none': '', 'preset1': '0px', 'preset2': '0px', 'preset3': '-6px', 'preset4': '0px', 'preset5': '10px', 'preset6': '0px', 'preset7': '0px'}] | R H S | Box Shadow Spread Strength |
+| box_shadow_horizontal_image | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_image` | R H S | Box Shadow Horizontal Position |
+| box_shadow_position_image | select | `outer`, `inner` | depends on `box_shadow_style_image` | R | Box Shadow Position |
+| box_shadow_spread_image | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_image` | R H S | Box Shadow Spread Strength |
 | box_shadow_style_image | select_box_shadow |  | none | · | Image Box Shadow |
-| box_shadow_vertical_image | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_image', {'none': '', 'preset1': '2px', 'preset2': '6px', 'preset3': '12px', 'preset4': '10px', 'preset5': '6px', 'preset6': '0px', 'preset7': '10px'}] | R H S | Box Shadow Vertical Position |
+| box_shadow_vertical_image | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_image` | R H S | Box Shadow Vertical Position |
 | child_filter_blur | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Image Blur |
 | child_filter_brightness | range |  | 100% | R H S | Image Brightness |
 | child_filter_contrast | range |  | 100% | R H S | Image Contrast |

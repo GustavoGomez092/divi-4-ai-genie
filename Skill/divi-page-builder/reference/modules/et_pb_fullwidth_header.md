@@ -119,13 +119,13 @@
 | border_width_left_image | range | length: em, rem, px, cm, mm, in… |  | R H S | Image Left Border Width |
 | border_width_right_image | range | length: em, rem, px, cm, mm, in… |  | R H S | Image Right Border Width |
 | border_width_top_image | range | length: em, rem, px, cm, mm, in… |  | R H S | Image Top Border Width |
-| box_shadow_blur_image | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_image', {'none': '', 'preset1': '18px', 'preset2': '18px', 'preset3': '18px', 'preset4': '0px', 'preset5': '0px', 'preset6': '18px', 'preset7': '0px'}] | R H S | Box Shadow Blur Strength |
+| box_shadow_blur_image | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_image` | R H S | Box Shadow Blur Strength |
 | box_shadow_color_image | color-alpha | color | rgba(0,0,0,0.3) | R H S | Shadow Color |
-| box_shadow_horizontal_image | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_image', {'none': '', 'preset1': '0px', 'preset2': '6px', 'preset3': '0px', 'preset4': '10px', 'preset5': '0px', 'preset6': '0px', 'preset7': '10px'}] | R H S | Box Shadow Horizontal Position |
-| box_shadow_position_image | select | `outer`, `inner` | ['box_shadow_style_image', {'none': 'outer', 'preset1': 'outer', 'preset2': 'outer', 'preset3': 'outer', 'preset4': 'outer', 'preset5': 'outer', 'preset6': 'inner', 'preset7': 'inner'}] | R | Box Shadow Position |
-| box_shadow_spread_image | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_image', {'none': '', 'preset1': '0px', 'preset2': '0px', 'preset3': '-6px', 'preset4': '0px', 'preset5': '10px', 'preset6': '0px', 'preset7': '0px'}] | R H S | Box Shadow Spread Strength |
+| box_shadow_horizontal_image | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_image` | R H S | Box Shadow Horizontal Position |
+| box_shadow_position_image | select | `outer`, `inner` | depends on `box_shadow_style_image` | R | Box Shadow Position |
+| box_shadow_spread_image | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_image` | R H S | Box Shadow Spread Strength |
 | box_shadow_style_image | select_box_shadow |  | none | · | Image Box Shadow |
-| box_shadow_vertical_image | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_image', {'none': '', 'preset1': '2px', 'preset2': '6px', 'preset3': '12px', 'preset4': '10px', 'preset5': '6px', 'preset6': '0px', 'preset7': '10px'}] | R H S | Box Shadow Vertical Position |
+| box_shadow_vertical_image | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_image` | R H S | Box Shadow Vertical Position |
 | child_filter_blur | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Image Blur |
 | child_filter_brightness | range |  | 100% | R H S | Image Brightness |
 | child_filter_contrast | range |  | 100% | R H S | Image Contrast |
@@ -159,11 +159,11 @@
 | content_link_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Link Line Height |
 | content_link_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Link Text Alignment |
 | content_link_text_color | color-alpha | color |  | R H S | Link Text Color |
-| content_link_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | ['content_link_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0.3em', 'preset4': '0em', 'preset5': '0em'}] | R H S | Link Text Shadow Blur Strength |
+| content_link_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `content_link_text_shadow_style` | R H S | Link Text Shadow Blur Strength |
 | content_link_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Link Text Shadow Color |
-| content_link_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | ['content_link_text_shadow_style', {'none': '0em', 'preset1': '0em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0em', 'preset5': '0.08em'}] | R H S | Link Text Shadow Horizontal Length |
+| content_link_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `content_link_text_shadow_style` | R H S | Link Text Shadow Horizontal Length |
 | content_link_text_shadow_style | presets_shadow |  | none | · | Link Text Shadow |
-| content_link_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | ['content_link_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0.08em', 'preset5': '0.08em'}] | R H S | Link Text Shadow Vertical Length |
+| content_link_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `content_link_text_shadow_style` | R H S | Link Text Shadow Vertical Length |
 | content_ol_font | font | font string |  | R | Ordered List Font |
 | content_ol_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Ordered List Text Size |
 | content_ol_item_indent | range | length: %, em, rem, px, cm, mm… | 0px | R | Ordered List Item Indent |
@@ -172,11 +172,11 @@
 | content_ol_position | select | `inside`, `outside` | inside | R | Ordered List Style Position |
 | content_ol_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Ordered List Text Alignment |
 | content_ol_text_color | color-alpha | color |  | R H S | Ordered List Text Color |
-| content_ol_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | ['content_ol_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0.3em', 'preset4': '0em', 'preset5': '0em'}] | R H S | Ordered List Text Shadow Blur Strength |
+| content_ol_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `content_ol_text_shadow_style` | R H S | Ordered List Text Shadow Blur Strength |
 | content_ol_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Ordered List Text Shadow Color |
-| content_ol_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | ['content_ol_text_shadow_style', {'none': '0em', 'preset1': '0em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0em', 'preset5': '0.08em'}] | R H S | Ordered List Text Shadow Horizontal Length |
+| content_ol_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `content_ol_text_shadow_style` | R H S | Ordered List Text Shadow Horizontal Length |
 | content_ol_text_shadow_style | presets_shadow |  | none | · | Ordered List Text Shadow |
-| content_ol_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | ['content_ol_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0.08em', 'preset5': '0.08em'}] | R H S | Ordered List Text Shadow Vertical Length |
+| content_ol_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `content_ol_text_shadow_style` | R H S | Ordered List Text Shadow Vertical Length |
 | content_ol_type | select | `decimal`, `armenian`, `cjk-ideographic`, `decimal-leading-zero`, `georgian`, `hebrew`, `hiragana`, `hiragana-iroha`, `katakana`, `katakana-iroha`, `lower-alpha`, `lower-greek`, `lower-latin`, `lower-roman`, `upper-alpha` … | decimal | R | Ordered List Style Type |
 | content_quote_border_color | color-alpha | color |  | R H S | Blockquote Border Color |
 | content_quote_border_weight | range | length: em, rem, px, cm, mm, in… | 5px | R H S | Blockquote Border Weight |
@@ -186,11 +186,11 @@
 | content_quote_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Blockquote Line Height |
 | content_quote_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Blockquote Text Alignment |
 | content_quote_text_color | color-alpha | color |  | R H S | Blockquote Text Color |
-| content_quote_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | ['content_quote_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0.3em', 'preset4': '0em', 'preset5': '0em'}] | R H S | Blockquote Text Shadow Blur Strength |
+| content_quote_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `content_quote_text_shadow_style` | R H S | Blockquote Text Shadow Blur Strength |
 | content_quote_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Blockquote Text Shadow Color |
-| content_quote_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | ['content_quote_text_shadow_style', {'none': '0em', 'preset1': '0em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0em', 'preset5': '0.08em'}] | R H S | Blockquote Text Shadow Horizontal Length |
+| content_quote_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `content_quote_text_shadow_style` | R H S | Blockquote Text Shadow Horizontal Length |
 | content_quote_text_shadow_style | presets_shadow |  | none | · | Blockquote Text Shadow |
-| content_quote_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | ['content_quote_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0.08em', 'preset5': '0.08em'}] | R H S | Blockquote Text Shadow Vertical Length |
+| content_quote_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `content_quote_text_shadow_style` | R H S | Blockquote Text Shadow Vertical Length |
 | content_ul_font | font | font string |  | R | Unordered List Font |
 | content_ul_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Unordered List Text Size |
 | content_ul_item_indent | range | length: %, em, rem, px, cm, mm… | 0px | R | Unordered List Item Indent |
@@ -199,11 +199,11 @@
 | content_ul_position | select | `outside`, `inside` | outside | R | Unordered List Style Position |
 | content_ul_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Unordered List Text Alignment |
 | content_ul_text_color | color-alpha | color |  | R H S | Unordered List Text Color |
-| content_ul_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | ['content_ul_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0.3em', 'preset4': '0em', 'preset5': '0em'}] | R H S | Unordered List Text Shadow Blur Strength |
+| content_ul_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `content_ul_text_shadow_style` | R H S | Unordered List Text Shadow Blur Strength |
 | content_ul_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Unordered List Text Shadow Color |
-| content_ul_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | ['content_ul_text_shadow_style', {'none': '0em', 'preset1': '0em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0em', 'preset5': '0.08em'}] | R H S | Unordered List Text Shadow Horizontal Length |
+| content_ul_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `content_ul_text_shadow_style` | R H S | Unordered List Text Shadow Horizontal Length |
 | content_ul_text_shadow_style | presets_shadow |  | none | · | Unordered List Text Shadow |
-| content_ul_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | ['content_ul_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0.08em', 'preset5': '0.08em'}] | R H S | Unordered List Text Shadow Vertical Length |
+| content_ul_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `content_ul_text_shadow_style` | R H S | Unordered List Text Shadow Vertical Length |
 | content_ul_type | select | `disc`, `circle`, `square`, `none` | disc | R | Unordered List Style Type |
 
 ### Button One — `button_one`

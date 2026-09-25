@@ -126,13 +126,13 @@ Used by 60 module/prefix combinations. `{p}` = the prefix listed on each module 
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| box_shadow_blur | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style', {'none': '', 'preset1': '18px', 'preset2': '18px', 'preset3': '18px', 'preset4': '0px', 'preset5': '0px', 'preset6': '18px', 'preset7': '0px'}] | R H S | Box Shadow Blur Strength |
+| box_shadow_blur | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style` | R H S | Box Shadow Blur Strength |
 | box_shadow_color | color-alpha | color | rgba(0,0,0,0.3) | R H S | Shadow Color |
-| box_shadow_horizontal | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style', {'none': '', 'preset1': '0px', 'preset2': '6px', 'preset3': '0px', 'preset4': '10px', 'preset5': '0px', 'preset6': '0px', 'preset7': '10px'}] | R H S | Box Shadow Horizontal Position |
-| box_shadow_position | select | `outer`, `inner` | ['box_shadow_style', {'none': 'outer', 'preset1': 'outer', 'preset2': 'outer', 'preset3': 'outer', 'preset4': 'outer', 'preset5': 'outer', 'preset6': 'inner', 'preset7': 'inner'}] | R | Box Shadow Position |
-| box_shadow_spread | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style', {'none': '', 'preset1': '0px', 'preset2': '0px', 'preset3': '-6px', 'preset4': '0px', 'preset5': '10px', 'preset6': '0px', 'preset7': '0px'}] | R H S | Box Shadow Spread Strength |
+| box_shadow_horizontal | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style` | R H S | Box Shadow Horizontal Position |
+| box_shadow_position | select | `outer`, `inner` | depends on `box_shadow_style` | R | Box Shadow Position |
+| box_shadow_spread | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style` | R H S | Box Shadow Spread Strength |
 | box_shadow_style | select_box_shadow |  | none | · | Box Shadow |
-| box_shadow_vertical | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style', {'none': '', 'preset1': '2px', 'preset2': '6px', 'preset3': '12px', 'preset4': '10px', 'preset5': '6px', 'preset6': '0px', 'preset7': '10px'}] | R H S | Box Shadow Vertical Position |
+| box_shadow_vertical | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style` | R H S | Box Shadow Vertical Position |
 
 ## Button
 <a id="button"></a>
@@ -141,13 +141,13 @@ Used by 17 module/prefix combinations. `{p}` = the prefix listed on each module 
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| box_shadow_blur_{p} | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_button', {'none': '', 'preset1': '18px', 'preset2': '18px', 'preset3': '18px', 'preset4': '0px', 'preset5': '0px', 'preset6': '18px', 'preset7': '0px'}] | R H S | Box Shadow Blur Strength |
+| box_shadow_blur_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` | R H S | Box Shadow Blur Strength |
 | box_shadow_color_{p} | color-alpha | color | rgba(0,0,0,0.3) | R H S | Shadow Color |
-| box_shadow_horizontal_{p} | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_button', {'none': '', 'preset1': '0px', 'preset2': '6px', 'preset3': '0px', 'preset4': '10px', 'preset5': '0px', 'preset6': '0px', 'preset7': '10px'}] | R H S | Box Shadow Horizontal Position |
-| box_shadow_position_{p} | select | `outer`, `inner` | ['box_shadow_style_button', {'none': 'outer', 'preset1': 'outer', 'preset2': 'outer', 'preset3': 'outer', 'preset4': 'outer', 'preset5': 'outer', 'preset6': 'inner', 'preset7': 'inner'}] | R | Box Shadow Position |
-| box_shadow_spread_{p} | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_button', {'none': '', 'preset1': '0px', 'preset2': '0px', 'preset3': '-6px', 'preset4': '0px', 'preset5': '10px', 'preset6': '0px', 'preset7': '0px'}] | R H S | Box Shadow Spread Strength |
+| box_shadow_horizontal_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` | R H S | Box Shadow Horizontal Position |
+| box_shadow_position_{p} | select | `outer`, `inner` | depends on `box_shadow_style_button` | R | Box Shadow Position |
+| box_shadow_spread_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` | R H S | Box Shadow Spread Strength |
 | box_shadow_style_{p} | select_box_shadow |  | none | · | Button Box Shadow |
-| box_shadow_vertical_{p} | range | length: em, rem, px, cm, mm, in… | ['box_shadow_style_button', {'none': '', 'preset1': '2px', 'preset2': '6px', 'preset3': '12px', 'preset4': '10px', 'preset5': '6px', 'preset6': '0px', 'preset7': '10px'}] | R H S | Box Shadow Vertical Position |
+| box_shadow_vertical_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` | R H S | Box Shadow Vertical Position |
 | custom_{p} | yes_no_button | `off`, `on` | off | · | Use Custom Styles For Button  |
 
 ## CSS ID & classes
@@ -211,11 +211,11 @@ Used by 149 module/prefix combinations. `{p}` = the prefix listed on each module
 | {p}_line_height | range | length: %, em, rem, px, cm, mm… | 1.7em | R H S | Text Line Height |
 | {p}_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Text Text Alignment |
 | {p}_text_color | color-alpha | color |  | R H S | Text Text Color |
-| {p}_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | ['text_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0.3em', 'preset4': '0em', 'preset5': '0em'}] | R H S | Text Shadow Blur Strength |
+| {p}_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `text_text_shadow_style` | R H S | Text Shadow Blur Strength |
 | {p}_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Text Shadow Color |
-| {p}_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | ['text_text_shadow_style', {'none': '0em', 'preset1': '0em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0em', 'preset5': '0.08em'}] | R H S | Text Shadow Horizontal Length |
+| {p}_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `text_text_shadow_style` | R H S | Text Shadow Horizontal Length |
 | {p}_text_shadow_style | presets_shadow |  | none | · | Text Shadow |
-| {p}_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | ['text_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0.08em', 'preset5': '0.08em'}] | R H S | Text Shadow Vertical Length |
+| {p}_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `text_text_shadow_style` | R H S | Text Shadow Vertical Length |
 
 ## Position
 <a id="position"></a>
@@ -294,11 +294,11 @@ Used by 42 module/prefix combinations. `{p}` = the prefix listed on each module 
 |---|---|---|---|---|---|
 | background_layout | select | `dark`, `light` | dark | R H S | Text Color |
 | text_orientation | text_align | `left`, `center`, `right`, `justified` |  | R | Text Alignment |
-| text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | ['text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0.3em', 'preset4': '0em', 'preset5': '0em'}] | R H S | Text Shadow Blur Strength |
+| text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `text_shadow_style` | R H S | Text Shadow Blur Strength |
 | text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Text Shadow Color |
-| text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | ['text_shadow_style', {'none': '0em', 'preset1': '0em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0em', 'preset5': '0.08em'}] | R H S | Text Shadow Horizontal Length |
+| text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `text_shadow_style` | R H S | Text Shadow Horizontal Length |
 | text_shadow_style | presets_shadow |  | none | · | Text Shadow |
-| text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | ['text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0.08em', 'preset5': '0.08em'}] | R H S | Text Shadow Vertical Length |
+| text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `text_shadow_style` | R H S | Text Shadow Vertical Length |
 
 ## Transform
 <a id="transform"></a>

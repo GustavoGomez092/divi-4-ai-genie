@@ -84,11 +84,11 @@
 | body_link_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Link Line Height |
 | body_link_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Link Text Alignment |
 | body_link_text_color | color-alpha | color |  | R H S | Link Text Color |
-| body_link_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | ['body_link_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0.3em', 'preset4': '0em', 'preset5': '0em'}] | R H S | Link Text Shadow Blur Strength |
+| body_link_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `body_link_text_shadow_style` | R H S | Link Text Shadow Blur Strength |
 | body_link_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Link Text Shadow Color |
-| body_link_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | ['body_link_text_shadow_style', {'none': '0em', 'preset1': '0em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0em', 'preset5': '0.08em'}] | R H S | Link Text Shadow Horizontal Length |
+| body_link_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `body_link_text_shadow_style` | R H S | Link Text Shadow Horizontal Length |
 | body_link_text_shadow_style | presets_shadow |  | none | · | Link Text Shadow |
-| body_link_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | ['body_link_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0.08em', 'preset5': '0.08em'}] | R H S | Link Text Shadow Vertical Length |
+| body_link_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `body_link_text_shadow_style` | R H S | Link Text Shadow Vertical Length |
 | body_ol_font | font | font string |  | R | Ordered List Font |
 | body_ol_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Ordered List Text Size |
 | body_ol_item_indent | range | length: %, em, rem, px, cm, mm… | 0px | R | Ordered List Item Indent |
@@ -97,11 +97,11 @@
 | body_ol_position | select | `inside`, `outside` | inside | R | Ordered List Style Position |
 | body_ol_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Ordered List Text Alignment |
 | body_ol_text_color | color-alpha | color |  | R H S | Ordered List Text Color |
-| body_ol_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | ['body_ol_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0.3em', 'preset4': '0em', 'preset5': '0em'}] | R H S | Ordered List Text Shadow Blur Strength |
+| body_ol_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `body_ol_text_shadow_style` | R H S | Ordered List Text Shadow Blur Strength |
 | body_ol_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Ordered List Text Shadow Color |
-| body_ol_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | ['body_ol_text_shadow_style', {'none': '0em', 'preset1': '0em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0em', 'preset5': '0.08em'}] | R H S | Ordered List Text Shadow Horizontal Length |
+| body_ol_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `body_ol_text_shadow_style` | R H S | Ordered List Text Shadow Horizontal Length |
 | body_ol_text_shadow_style | presets_shadow |  | none | · | Ordered List Text Shadow |
-| body_ol_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | ['body_ol_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0.08em', 'preset5': '0.08em'}] | R H S | Ordered List Text Shadow Vertical Length |
+| body_ol_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `body_ol_text_shadow_style` | R H S | Ordered List Text Shadow Vertical Length |
 | body_ol_type | select | `decimal`, `armenian`, `cjk-ideographic`, `decimal-leading-zero`, `georgian`, `hebrew`, `hiragana`, `hiragana-iroha`, `katakana`, `katakana-iroha`, `lower-alpha`, `lower-greek`, `lower-latin`, `lower-roman`, `upper-alpha` … | decimal | R | Ordered List Style Type |
 | body_quote_border_color | color-alpha | color |  | R H S | Blockquote Border Color |
 | body_quote_border_weight | range | length: em, rem, px, cm, mm, in… | 5px | R H S | Blockquote Border Weight |
@@ -111,11 +111,11 @@
 | body_quote_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Blockquote Line Height |
 | body_quote_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Blockquote Text Alignment |
 | body_quote_text_color | color-alpha | color |  | R H S | Blockquote Text Color |
-| body_quote_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | ['body_quote_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0.3em', 'preset4': '0em', 'preset5': '0em'}] | R H S | Blockquote Text Shadow Blur Strength |
+| body_quote_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `body_quote_text_shadow_style` | R H S | Blockquote Text Shadow Blur Strength |
 | body_quote_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Blockquote Text Shadow Color |
-| body_quote_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | ['body_quote_text_shadow_style', {'none': '0em', 'preset1': '0em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0em', 'preset5': '0.08em'}] | R H S | Blockquote Text Shadow Horizontal Length |
+| body_quote_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `body_quote_text_shadow_style` | R H S | Blockquote Text Shadow Horizontal Length |
 | body_quote_text_shadow_style | presets_shadow |  | none | · | Blockquote Text Shadow |
-| body_quote_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | ['body_quote_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0.08em', 'preset5': '0.08em'}] | R H S | Blockquote Text Shadow Vertical Length |
+| body_quote_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `body_quote_text_shadow_style` | R H S | Blockquote Text Shadow Vertical Length |
 | body_ul_font | font | font string |  | R | Unordered List Font |
 | body_ul_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Unordered List Text Size |
 | body_ul_item_indent | range | length: %, em, rem, px, cm, mm… | 0px | R | Unordered List Item Indent |
@@ -124,11 +124,11 @@
 | body_ul_position | select | `outside`, `inside` | outside | R | Unordered List Style Position |
 | body_ul_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Unordered List Text Alignment |
 | body_ul_text_color | color-alpha | color |  | R H S | Unordered List Text Color |
-| body_ul_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | ['body_ul_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0.3em', 'preset4': '0em', 'preset5': '0em'}] | R H S | Unordered List Text Shadow Blur Strength |
+| body_ul_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `body_ul_text_shadow_style` | R H S | Unordered List Text Shadow Blur Strength |
 | body_ul_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Unordered List Text Shadow Color |
-| body_ul_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | ['body_ul_text_shadow_style', {'none': '0em', 'preset1': '0em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0em', 'preset5': '0.08em'}] | R H S | Unordered List Text Shadow Horizontal Length |
+| body_ul_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `body_ul_text_shadow_style` | R H S | Unordered List Text Shadow Horizontal Length |
 | body_ul_text_shadow_style | presets_shadow |  | none | · | Unordered List Text Shadow |
-| body_ul_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | ['body_ul_text_shadow_style', {'none': '0em', 'preset1': '0.1em', 'preset2': '0.08em', 'preset3': '0em', 'preset4': '0.08em', 'preset5': '0.08em'}] | R H S | Unordered List Text Shadow Vertical Length |
+| body_ul_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `body_ul_text_shadow_style` | R H S | Unordered List Text Shadow Vertical Length |
 | body_ul_type | select | `disc`, `circle`, `square`, `none` | disc | R | Unordered List Style Type |
 
 ## Advanced tab

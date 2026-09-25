@@ -114,9 +114,17 @@ def _cell(text):
     return str(text).replace("|", "\\|").replace("\n", " ")
 
 
-def _field_row(name, f):
+def _default(f):
     default = f.get("default", f.get("default_on_front", ""))
-    return f"| {_cell(name)} | {_cell(f.get('type', ''))} | {_cell(_values(f))} | {_cell(default)} | {_flags(f)} | {_cell(f.get('label', ''))} |"
+    # Some defaults are conditional on another field's value: [dependent_field, {preset: value}].
+    # Dumping the raw Python repr reads as broken data, so name the dependency instead.
+    if isinstance(default, list) and len(default) == 2 and isinstance(default[1], dict):
+        return f"depends on `{default[0]}`"
+    return default
+
+
+def _field_row(name, f):
+    return f"| {_cell(name)} | {_cell(f.get('type', ''))} | {_cell(_values(f))} | {_cell(_default(f))} | {_flags(f)} | {_cell(f.get('label', ''))} |"
 
 
 HEADER = "| attribute | type | values | default | R H S | label |\n|---|---|---|---|---|---|"

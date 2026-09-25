@@ -56,7 +56,7 @@
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| fullwidth_field | yes_no_button | `on`, `off` | ['parent:layout', {'left_right': 'on', 'right_left': 'on', 'top_bottom': 'off', 'bottom_top': 'off'}] | · | Make Fullwidth |
+| fullwidth_field | yes_no_button | `on`, `off` | depends on `parent:layout` | · | Make Fullwidth |
 
 ### Field — `form_field`
 
