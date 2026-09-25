@@ -22,9 +22,9 @@ class TokensFidelityTest(unittest.TestCase):
         password = wp("user", "application-password", "create", user, "fidelity-test", "--porcelain")
         page_id = wp("post", "create", str(PAGE), "--post_type=page", "--post_status=publish",
                      "--post_title=Plan Test: fidelity", "--porcelain")
-        wp("post", "meta", "update", page_id, "_et_pb_use_builder", "on")
         out = FIXTURES / "html" / "fidelity-tokens.json"
         try:
+            wp("post", "meta", "update", page_id, "_et_pb_use_builder", "on")
             env = dict(os.environ, WP_APP_PASSWORD=password)
             run = subprocess.run([sys.executable, str(SCRIPTS / "extract_tokens.py"), "--site", "http://divi-test.local",
                                   "--user", user, "--page", page_id, "--out", str(out)], env=env, capture_output=True, text=True)

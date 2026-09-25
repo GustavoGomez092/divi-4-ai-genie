@@ -8,7 +8,7 @@
     "url": "https://miamirapidplumbing.example/"
    }
   ],
-  "extracted_at": "2026-09-25T04:22:47+00:00"
+  "extracted_at": "2026-09-25T04:29:31+00:00"
  },
  "colors": {
   "palette": [
@@ -72,12 +72,14 @@
   ],
   "global": {},
   "customizer": {
-   "body_text": "#666",
-   "heading": "#333",
-   "link": "#2ea3f2",
-   "accent": "#2EA3F2",
-   "body_font": "Open Sans",
-   "body_size": "14px"
+   "body_text": "#475569",
+   "heading": "#0b2a3c",
+   "link": "#f97316",
+   "accent": "#f97316",
+   "body_font": "Lato",
+   "heading_font": "Montserrat",
+   "body_size": "16px",
+   "content_width": "1200px"
   }
  },
  "typography": {
@@ -122,7 +124,6 @@
    }
   },
   "loaded_fonts": [
-   "Open Sans",
    "Montserrat",
    "Lato"
   ]
@@ -1183,5 +1184,6 @@
     }
    ]
   }
- ]
+ ],
+ "_note": "Curated sample for recipes: extracted from tests/fixtures/valid/brand-kit.txt; colors.customizer set to the fictional brand's theme settings."
 }
