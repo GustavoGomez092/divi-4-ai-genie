@@ -8,11 +8,14 @@ invent testimonials.** The three quotes below name fictional customers and are i
 placeholders for `sample-tokens.json`'s fictional brand only. On a real client site, every
 testimonial's wording, author name, and star rating must be copied **word for word** from what the
 client supplies in their brief — never rewritten, summarized, condensed, or invented, and never
-sourced by guessing at what a typical review "would probably say." **Neither `et_pb_testimonial`
-nor `et_pb_slide` has its own alt-text attribute for `portrait_url`/`image`** (confirmed against
-both modules' schemas — there is no `portrait_alt`/`image_alt` field on either): Divi renders the
-`<img>`'s `alt` from the uploaded attachment's own Media Library "Alt Text" field, so make sure
-every portrait photo has that field filled in on upload — it cannot be set from this module.
+sourced by guessing at what a typical review "would probably say." **`et_pb_testimonial` has no
+alt-text attribute for `portrait_url`** (confirmed against the module's schema — there is no
+`portrait_alt` field): Divi renders that `<img>`'s `alt` from the uploaded attachment's own Media
+Library "Alt Text" field, so make sure every portrait photo has that field filled in on upload — it
+cannot be set from this module. **`et_pb_slide` is different: it has its own `image_alt`
+attribute** ("Image Alternative Text"), rendered directly as the `<img>`'s `alt` with no Media
+Library fallback (confirmed in Divi's own `SliderItem.php`) — always set `image_alt` whenever a
+slide uses `image`, since there is no attachment-level fallback to catch a missed one.
 
 ## Structure
 
@@ -75,7 +78,9 @@ Slider variant required: [`et_pb_slider`](../../reference/modules/et_pb_slider.m
 `header_level="h3"`, `body_font`, `body_text_color`, `body_font_size`.
 
 Slider variant optional: `show_arrows`/`show_pagination` (both default `on`); `image` on a slide for
-a customer photo (same "no alt attribute" caveat as the grid's `portrait_url`); `button_text`/
+a customer photo — **whenever a slide sets `image`, also set `image_alt`** (required together, not
+independently optional: unlike the grid's `portrait_url`, a slide's photo has no Media Library
+fallback, so an omitted `image_alt` ships an empty `alt` attribute, not a filled-in one); `button_text`/
 `button_link` if a slide should also link out (e.g. to a full review on Google).
 
 ## Responsive rules
@@ -113,5 +118,5 @@ responsive attributes of its own — it's already a single column at every width
 - [ ] `node research/python-renderer-spike/shoot.mjs <outdir> testimonials <url> --width 1440,390` — screenshot at desktop (1440) and phone (390)
 - [ ] `research/tools/wp-local.sh post delete <id> --force` — delete the test page once the screenshots look right
 - [ ] exactly one `h2` — no `h1` on this section; the slider's per-slide name is `h3`, never `h1`/`h2`
-- [ ] every uploaded portrait/photo has its Media Library "Alt Text" filled in (the module itself can't set it)
+- [ ] every grid `portrait_url` photo has its Media Library "Alt Text" filled in (the module itself can't set it); every slide that sets `image` also sets a real `image_alt` (no fallback exists for a slide photo)
 - [ ] every quote/author/rating on a real page traces back to the client's brief — none invented
