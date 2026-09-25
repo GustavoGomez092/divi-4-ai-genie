@@ -91,7 +91,14 @@ copying for a three-up feature row: a full-width heading row (`et_pb_row` with n
 | [Team](sections/team.md) | section | 2-4 `et_pb_team_member`s introducing real staff by name, title and photo |
 | [Gallery](sections/gallery.md) | section | `et_pb_gallery` grid of Media Library photos with a lightbox on click |
 | [Video](sections/video.md) | section | `et_pb_video` embed behind a lazy-loaded poster image and play button |
-| _more to come_ | — | Task 19 populates `pages/` and `edits/` below; this table grows as each recipe lands. |
+| [Service landing](pages/service-landing.md) | page | hero-split → trust bar → services grid → alternating features → stats → testimonials → FAQ → CTA band |
+| [Local SEO location](pages/local-seo-location.md) | page | hero-centered (city in the H1) → services grid → service area list → local testimonials → local FAQ + JSON-LD → contact (map) → CTA band |
+| [PPC lead gen](pages/ppc-lead-gen.md) | page | hero-split with a form in place of the image → trust bar → process steps → testimonials → CTA band; no navigation-heavy sections, one conversion goal |
+| [Product feature](pages/product-feature.md) | page | hero-background-image → alternating features → tabs → pricing → FAQ → CTA band |
+| [Change copy](edits/change-copy.md) | edit | `set-attr` for attribute copy, `extract`→edit→`replace` for body copy |
+| [Insert section](edits/insert-section.md) | edit | compose a new section from a recipe, `insert-after`/`insert-before` an anchor section |
+| [Replace section](edits/replace-section.md) | edit | `extract` the old section, rebuild it from a recipe (reusing its `admin_label`), `replace` |
+| [Restyle to tokens](edits/restyle-to-tokens.md) | edit | run `validate.py --tokens`, fix each off-palette/off-brand finding with `set-attr` |
 
 - `sections/` — single-section patterns (hero, feature row, CTA band, …).
 - `pages/` — full-page compositions built from more than one section recipe.
