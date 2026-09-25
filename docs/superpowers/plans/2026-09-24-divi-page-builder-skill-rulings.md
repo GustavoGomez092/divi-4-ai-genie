@@ -2,6 +2,8 @@
 
 Every decision made while executing `2026-09-24-divi-page-builder-skill.md` (subagent-driven), extracted from the execution ledger at completion (2026-09-25). Format: what was decided — why — what it costs if wrong.
 
+> Commit SHAs below predate the 2026-09-25 history rewrite (git filter-repo stripped the licensed Divi CSS blobs), so they no longer resolve; search `git log` by subject instead.
+
 - Ruling: the plan adds helper modules the spec §3 doesn't list (divi_schema.py, divi_checks_*.py, tokens_from_*.py, page_edit.py) — they are decompositions serving spec requirements (§4.9 validator, §4.10 extractor, §4.11 byte-identical edits) and keep files focused — cost if wrong: SKILL.md lists a few extra script files.
 - Ruling: work happens on main per the user's explicit choice — cost if wrong: no branch to discard; revert by commit range from the ledger.
 - Task 2: Ruling: the plan's focused-test form `python3 -m unittest tests/test_X.py` can't import `_paths` (tests/ isn't on sys.path) — later dispatches use `python3 -m unittest discover -s tests -p 'test_X.py' -v` instead; no code change — cost if wrong: none, command form only
@@ -74,6 +76,6 @@ Every decision made while executing `2026-09-24-divi-page-builder-skill.md` (sub
 
 ## Open at completion
 
-- Licensed Divi CSS removed from the tree (f6908f1) but still present in git history (research/render-prototype/out/*.html, the old tests/fixtures/html/customized-page.html) — history rewrite pending the user's decision, before the first push.
+- Licensed Divi CSS: removed from the tree, and purged from history on 2026-09-25 (user-approved `git filter-repo --strip-blobs-with-ids`; the pre-purge backup bundle is outside the repo).
 - Task 13 Step 5: real-client sanity run (extract tokens → build → validate → preview → draft on a real client site) pending client credentials.
 - Deferred: W_UNSET_FONT validator warning; PreviewTest.setUpClass may call fetch-divi with shell ET_* env when the Divi cache is missing; heading check ignores device-hidden modules and third-party modules' content.
