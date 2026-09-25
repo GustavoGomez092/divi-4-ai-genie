@@ -1,0 +1,120 @@
+{
+ "390": {
+  "truth_size": [
+   390,
+   2276
+  ],
+  "python_size": [
+   390,
+   1976
+  ],
+  "diff_pixels": 213097,
+  "diff_pct": 27.652,
+  "diff_bbox": [
+   0,
+   78,
+   390,
+   1969
+  ],
+  "elements": [
+   97,
+   35
+  ],
+  "geometry_identical_elements": 3,
+  "style_identical_elements": 3,
+  "signature_equal": false,
+  "first_mismatch": [
+   [
+    "DIV",
+    "",
+    0,
+    0,
+    390,
+    2276,
+    "rgb(102, 102, 102)",
+    "rgba(0, 0, 0, 0)",
+    "\"Open Sans\"",
+    "14px",
+    "500",
+    "23.8px",
+    "0px",
+    "0px"
+   ],
+   [
+    "DIV",
+    "",
+    0,
+    0,
+    390,
+    1977,
+    "rgb(102, 102, 102)",
+    "rgba(0, 0, 0, 0)",
+    "\"Open Sans\"",
+    "14px",
+    "500",
+    "23.8px",
+    "0px",
+    "0px"
+   ]
+  ]
+ },
+ "1440": {
+  "truth_size": [
+   1440,
+   1632
+  ],
+  "python_size": [
+   1440,
+   1232
+  ],
+  "diff_pixels": 469918,
+  "diff_pct": 26.488,
+  "diff_bbox": [
+   0,
+   79,
+   1440,
+   1232
+  ],
+  "elements": [
+   97,
+   35
+  ],
+  "geometry_identical_elements": 3,
+  "style_identical_elements": 3,
+  "signature_equal": false,
+  "first_mismatch": [
+   [
+    "DIV",
+    "",
+    0,
+    0,
+    1440,
+    1632,
+    "rgb(102, 102, 102)",
+    "rgba(0, 0, 0, 0)",
+    "\"Open Sans\"",
+    "14px",
+    "500",
+    "23.8px",
+    "0px",
+    "0px"
+   ],
+   [
+    "DIV",
+    "",
+    0,
+    0,
+    1440,
+    1233,
+    "rgb(102, 102, 102)",
+    "rgba(0, 0, 0, 0)",
+    "\"Open Sans\"",
+    "14px",
+    "500",
+    "23.8px",
+    "0px",
+    "0px"
+   ]
+  ]
+ }
+}

@@ -1,0 +1,111 @@
+{
+ "modules": 35,
+ "unsupported_modules": {},
+ "attrs_total": 238,
+ "attrs_ignored": 0,
+ "attr_coverage_pct": 100.0,
+ "by_tag": {
+  "et_pb_heading": {
+   "count": 1,
+   "supported": true,
+   "attrs": 13,
+   "ignored": {}
+  },
+  "et_pb_text": {
+   "count": 2,
+   "supported": true,
+   "attrs": 22,
+   "ignored": {}
+  },
+  "et_pb_button": {
+   "count": 1,
+   "supported": true,
+   "attrs": 26,
+   "ignored": {}
+  },
+  "et_pb_column": {
+   "count": 6,
+   "supported": true,
+   "attrs": 17,
+   "ignored": {}
+  },
+  "et_pb_number_counter": {
+   "count": 2,
+   "supported": true,
+   "attrs": 16,
+   "ignored": {}
+  },
+  "et_pb_divider": {
+   "count": 1,
+   "supported": true,
+   "attrs": 5,
+   "ignored": {}
+  },
+  "et_pb_row": {
+   "count": 4,
+   "supported": true,
+   "attrs": 6,
+   "ignored": {}
+  },
+  "et_pb_section": {
+   "count": 5,
+   "supported": true,
+   "attrs": 14,
+   "ignored": {}
+  },
+  "et_pb_blurb": {
+   "count": 2,
+   "supported": true,
+   "attrs": 24,
+   "ignored": {}
+  },
+  "et_pb_image": {
+   "count": 1,
+   "supported": true,
+   "attrs": 11,
+   "ignored": {}
+  },
+  "et_pb_toggle": {
+   "count": 2,
+   "supported": true,
+   "attrs": 20,
+   "ignored": {}
+  },
+  "et_pb_accordion_item": {
+   "count": 2,
+   "supported": true,
+   "attrs": 2,
+   "ignored": {}
+  },
+  "et_pb_accordion": {
+   "count": 1,
+   "supported": true,
+   "attrs": 7,
+   "ignored": {}
+  },
+  "et_pb_slide": {
+   "count": 2,
+   "supported": true,
+   "attrs": 8,
+   "ignored": {}
+  },
+  "et_pb_slider": {
+   "count": 1,
+   "supported": true,
+   "attrs": 10,
+   "ignored": {}
+  },
+  "et_pb_cta": {
+   "count": 1,
+   "supported": true,
+   "attrs": 19,
+   "ignored": {}
+  },
+  "et_pb_fullwidth_header": {
+   "count": 1,
+   "supported": true,
+   "attrs": 18,
+   "ignored": {}
+  }
+ }
+}

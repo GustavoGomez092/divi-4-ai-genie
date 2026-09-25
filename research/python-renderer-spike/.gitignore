@@ -1,0 +1,7 @@
+# generated renders, ground truth, full-size screenshots (large)
+out/*.html
+out/truth/
+out/shots/
+out/*.py
+out/.tune_start
+# keep: out/sbs-*.png (small side-by-sides), out/*.json (numbers)

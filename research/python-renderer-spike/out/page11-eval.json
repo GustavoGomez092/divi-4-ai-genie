@@ -1,0 +1,26 @@
+{
+ "markup": {
+  "truth_elements": 359,
+  "python_elements": 359,
+  "byte_identical": true,
+  "whitespace_normalized_identical": true,
+  "tag_class_sequence_equal": true,
+  "tag_class_seq_ratio": 1.0,
+  "tag_class_matched_elements": 359,
+  "tag_seq_ratio": 1.0,
+  "elements_with_identical_class_list": 359,
+  "text_node_ratio": 1.0,
+  "diff_sample": []
+ },
+ "css": {
+  "truth_decls": 2063,
+  "python_decls": 2063,
+  "common": 2063,
+  "missing": 0,
+  "extra_or_wrong": 0,
+  "recall_pct": 100.0,
+  "precision_pct": 100.0,
+  "missing_sample": [],
+  "extra_sample": []
+ }
+}

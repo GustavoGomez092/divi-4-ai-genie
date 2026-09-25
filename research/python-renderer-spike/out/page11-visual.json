@@ -1,0 +1,44 @@
+{
+ "390": {
+  "truth_size": [
+   390,
+   9392
+  ],
+  "python_size": [
+   390,
+   9392
+  ],
+  "diff_pixels": 0,
+  "diff_pct": 0.0,
+  "diff_bbox": null,
+  "elements": [
+   302,
+   302
+  ],
+  "geometry_identical_elements": 302,
+  "style_identical_elements": 302,
+  "signature_equal": true,
+  "first_mismatch": null
+ },
+ "1440": {
+  "truth_size": [
+   1440,
+   7070
+  ],
+  "python_size": [
+   1440,
+   7070
+  ],
+  "diff_pixels": 0,
+  "diff_pct": 0.0,
+  "diff_bbox": null,
+  "elements": [
+   302,
+   302
+  ],
+  "geometry_identical_elements": 302,
+  "style_identical_elements": 302,
+  "signature_equal": true,
+  "first_mismatch": null
+ }
+}

@@ -1,0 +1,63 @@
+[
+ {
+  "page": "page11",
+  "render_ms": 48.3,
+  "attr_coverage_pct": 97.9,
+  "elements": "359/359",
+  "byte_identical": true,
+  "css": "2063/2063 (+0 extra)",
+  "px_1440": 0.0,
+  "px_390": 0.0,
+  "geo_1440": "302/302"
+ },
+ {
+  "page": "landing",
+  "render_ms": 17.3,
+  "attr_coverage_pct": 96.9,
+  "elements": "91/91",
+  "byte_identical": false,
+  "css": "82/82 (+0 extra)",
+  "px_1440": 0.0,
+  "px_390": 0.0,
+  "geo_1440": "74/74"
+ },
+ {
+  "page": "heldout-inscope",
+  "render_ms": 25.2,
+  "attr_coverage_pct": 100.0,
+  "elements": "129/129",
+  "byte_identical": false,
+  "css": "454/454 (+0 extra)",
+  "px_1440": 0.0,
+  "px_390": 0.0,
+  "geo_1440": "90/90"
+ },
+ {
+  "page": "heldout2-inscope",
+  "render_ms": 22.0,
+  "attr_coverage_pct": 95.1,
+  "elements": "90/94",
+  "byte_identical": false,
+  "css": "214/223 (+3 extra)",
+  "px_1440": 17.6436,
+  "px_390": 16.9963,
+  "geo_1440": "20/72"
+ },
+ {
+  "page": "heldout-outofscope",
+  "render_ms": 19.4,
+  "attr_coverage_pct": 26.6,
+  "elements": "11/141",
+  "byte_identical": false,
+  "css": "8/43 (+0 extra)",
+  "px_1440": 26.488,
+  "px_390": 27.652,
+  "geo_1440": "3/97"
+ },
+ {
+  "page": "page11 vs LIVE",
+  "px_1440": 0.0,
+  "px_390": 0.0,
+  "geo_1440": "302/302"
+ }
+]

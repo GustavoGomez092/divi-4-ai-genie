@@ -1,0 +1,130 @@
+{
+ "modules": 118,
+ "unsupported_modules": {},
+ "attrs_total": 2445,
+ "attrs_ignored": 52,
+ "attr_coverage_pct": 97.9,
+ "by_tag": {
+  "et_pb_heading": {
+   "count": 14,
+   "supported": true,
+   "attrs": 146,
+   "ignored": {}
+  },
+  "et_pb_text": {
+   "count": 6,
+   "supported": true,
+   "attrs": 346,
+   "ignored": {
+    "box_shadow_position": 6
+   }
+  },
+  "et_pb_button": {
+   "count": 7,
+   "supported": true,
+   "attrs": 84,
+   "ignored": {
+    "custom_padding__hover": 6
+   }
+  },
+  "et_pb_column": {
+   "count": 31,
+   "supported": true,
+   "attrs": 85,
+   "ignored": {
+    "box_shadow_color_last_edited": 4
+   }
+  },
+  "et_pb_image": {
+   "count": 4,
+   "supported": true,
+   "attrs": 27,
+   "ignored": {
+    "box_shadow_color": 3,
+    "box_shadow_position": 3
+   }
+  },
+  "et_pb_row": {
+   "count": 17,
+   "supported": true,
+   "attrs": 36,
+   "ignored": {}
+  },
+  "et_pb_section": {
+   "count": 8,
+   "supported": true,
+   "attrs": 12,
+   "ignored": {
+    "background_color_gradient_end": 1,
+    "background_color_gradient_overlays_image": 1,
+    "background_color_gradient_start": 1,
+    "background_enable_image": 1
+   }
+  },
+  "et_pb_blurb": {
+   "count": 14,
+   "supported": true,
+   "attrs": 1525,
+   "ignored": {
+    "background_mask_style": 13,
+    "icon_alignment": 1
+   }
+  },
+  "et_pb_number_counter": {
+   "count": 2,
+   "supported": true,
+   "attrs": 30,
+   "ignored": {}
+  },
+  "et_pb_divider": {
+   "count": 2,
+   "supported": true,
+   "attrs": 6,
+   "ignored": {}
+  },
+  "et_pb_slide": {
+   "count": 4,
+   "supported": true,
+   "attrs": 8,
+   "ignored": {
+    "sticky_transition": 4
+   }
+  },
+  "et_pb_slider": {
+   "count": 1,
+   "supported": true,
+   "attrs": 62,
+   "ignored": {
+    "background_color": 1
+   }
+  },
+  "et_pb_accordion_item": {
+   "count": 6,
+   "supported": true,
+   "attrs": 7,
+   "ignored": {
+    "open": 1
+   }
+  },
+  "et_pb_accordion": {
+   "count": 1,
+   "supported": true,
+   "attrs": 25,
+   "ignored": {
+    "quote_icon_color": 1
+   }
+  },
+  "et_pb_cta": {
+   "count": 1,
+   "supported": true,
+   "attrs": 46,
+   "ignored": {
+    "background_color_gradient_overlays_image": 1,
+    "background_enable_image": 1,
+    "text_font_size_last_edited": 1,
+    "text_font_size_phone": 1,
+    "text_font_size_tablet": 1
+   }
+  }
+ }
+}

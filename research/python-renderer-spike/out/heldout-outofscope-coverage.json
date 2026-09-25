@@ -1,0 +1,195 @@
+{
+ "modules": 31,
+ "unsupported_modules": {
+  "section_divider": 1,
+  "et_pb_icon": 1,
+  "et_pb_circle_counter": 1,
+  "et_pb_tabs": 1,
+  "et_pb_tab": 2,
+  "et_pb_testimonial": 1,
+  "et_pb_counters": 1,
+  "et_pb_counter": 2,
+  "et_pb_pricing_tables": 1,
+  "et_pb_pricing_table": 1,
+  "et_pb_contact_form": 1,
+  "et_pb_contact_field": 2,
+  "et_pb_social_media_follow": 1,
+  "et_pb_social_media_follow_network": 2,
+  "et_pb_countdown_timer": 1
+ },
+ "attrs_total": 64,
+ "attrs_ignored": 47,
+ "attr_coverage_pct": 26.6,
+ "by_tag": {
+  "et_pb_heading": {
+   "count": 1,
+   "supported": true,
+   "attrs": 7,
+   "ignored": {
+    "animation_duration": 1,
+    "transform_rotate": 1,
+    "transform_scale": 1
+   }
+  },
+  "et_pb_text": {
+   "count": 1,
+   "supported": true,
+   "attrs": 5,
+   "ignored": {
+    "filter_brightness": 1
+   }
+  },
+  "et_pb_column": {
+   "count": 6,
+   "supported": true,
+   "attrs": 6,
+   "ignored": {}
+  },
+  "et_pb_icon": {
+   "count": 1,
+   "supported": false,
+   "attrs": 4,
+   "ignored": {
+    "font_icon": 1,
+    "icon_color": 1,
+    "icon_width": 1
+   }
+  },
+  "et_pb_circle_counter": {
+   "count": 1,
+   "supported": false,
+   "attrs": 3,
+   "ignored": {
+    "bar_bg_color": 1,
+    "number": 1,
+    "title": 1
+   }
+  },
+  "et_pb_row": {
+   "count": 3,
+   "supported": true,
+   "attrs": 0,
+   "ignored": {}
+  },
+  "et_pb_section": {
+   "count": 2,
+   "supported": true,
+   "attrs": 4,
+   "ignored": {
+    "bottom_divider_color": 1,
+    "bottom_divider_height": 1
+   }
+  },
+  "et_pb_tab": {
+   "count": 2,
+   "supported": false,
+   "attrs": 2,
+   "ignored": {
+    "title": 2
+   }
+  },
+  "et_pb_tabs": {
+   "count": 1,
+   "supported": false,
+   "attrs": 2,
+   "ignored": {
+    "active_tab_background_color": 1,
+    "inactive_tab_background_color": 1
+   }
+  },
+  "et_pb_testimonial": {
+   "count": 1,
+   "supported": false,
+   "attrs": 5,
+   "ignored": {
+    "author": 1,
+    "background_color": 1,
+    "company_name": 1,
+    "job_title": 1,
+    "quote_icon_color": 1
+   }
+  },
+  "et_pb_counter": {
+   "count": 2,
+   "supported": false,
+   "attrs": 2,
+   "ignored": {
+    "percent": 2
+   }
+  },
+  "et_pb_counters": {
+   "count": 1,
+   "supported": false,
+   "attrs": 1,
+   "ignored": {
+    "bar_bg_color": 1
+   }
+  },
+  "et_pb_pricing_table": {
+   "count": 1,
+   "supported": false,
+   "attrs": 6,
+   "ignored": {
+    "button_text": 1,
+    "button_url": 1,
+    "currency": 1,
+    "per": 1,
+    "sum": 1,
+    "title": 1
+   }
+  },
+  "et_pb_pricing_tables": {
+   "count": 1,
+   "supported": false,
+   "attrs": 1,
+   "ignored": {
+    "featured_table_background_color": 1
+   }
+  },
+  "et_pb_contact_field": {
+   "count": 2,
+   "supported": false,
+   "attrs": 5,
+   "ignored": {
+    "field_id": 2,
+    "field_title": 2,
+    "field_type": 1
+   }
+  },
+  "et_pb_contact_form": {
+   "count": 1,
+   "supported": false,
+   "attrs": 2,
+   "ignored": {
+    "email": 1,
+    "title": 1
+   }
+  },
+  "et_pb_social_media_follow_network": {
+   "count": 2,
+   "supported": false,
+   "attrs": 6,
+   "ignored": {
+    "background_color": 2,
+    "social_network": 2,
+    "url": 2
+   }
+  },
+  "et_pb_social_media_follow": {
+   "count": 1,
+   "supported": false,
+   "attrs": 0,
+   "ignored": {}
+  },
+  "et_pb_countdown_timer": {
+   "count": 1,
+   "supported": false,
+   "attrs": 3,
+   "ignored": {
+    "background_color": 1,
+    "date_time": 1,
+    "title": 1
+   }
+  }
+ }
+}
