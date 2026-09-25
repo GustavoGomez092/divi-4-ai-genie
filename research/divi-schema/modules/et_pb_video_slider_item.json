@@ -101,7 +101,7 @@
                 }
             }
         },
-        "field_count": 154
+        "field_count": 189
     },
     "fields": {
         "admin_title": {
@@ -609,6 +609,323 @@
                     }
                 }
             }
+        },
+        "transform_scale": {
+            "type": "transform",
+            "label": "Transform Scale",
+            "default": "100%|100%",
+            "default_unit": "%",
+            "range_settings": {
+                "min": -100,
+                "max": 300,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "scale",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_scale_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked__hover": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked__sticky": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_translate": {
+            "type": "transform",
+            "label": "Transform Translate",
+            "default": "0px|0px",
+            "default_unit": "px",
+            "range_settings": {
+                "min": -300,
+                "max": 300,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "translate",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_translate_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked__hover": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked__sticky": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_rotate": {
+            "type": "transform",
+            "label": "Transform Rotate",
+            "default": "0deg|0deg|0deg",
+            "default_unit": "deg",
+            "range_settings": {
+                "min": 0,
+                "max": 360,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_rotate_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate"
+        },
+        "transform_rotate_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate"
+        },
+        "transform_rotate_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate"
+        },
+        "transform_skew": {
+            "type": "transform",
+            "label": "Transform Skew",
+            "default": "0deg|0deg",
+            "default_unit": "deg",
+            "range_settings": {
+                "min": -180,
+                "max": 180,
+                "min_limit": -180,
+                "max_limit": 180,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "skew",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_skew_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked__hover": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked__sticky": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_origin": {
+            "type": "transform",
+            "label": "Transform Origin",
+            "default": "50%|50%",
+            "default_unit": "%",
+            "range_settings": {
+                "min": -50,
+                "max": 150,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "origin",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_origin_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "origin"
+        },
+        "transform_origin_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "origin"
+        },
+        "transform_origin_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "origin"
         },
         "transform_styles_last_edited": {
             "type": "skip",

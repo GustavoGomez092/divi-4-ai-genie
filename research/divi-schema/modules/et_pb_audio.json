@@ -336,7 +336,7 @@
                 }
             }
         },
-        "field_count": 589
+        "field_count": 867
     },
     "fields": {
         "audio": {
@@ -683,6 +683,232 @@
             "default": "1.7em",
             "is_global_default": true
         },
+        "title_text_shadow_style": {
+            "label": "Title Text Shadow",
+            "description": "Pick a text shadow style to enable text shadow for this element. Once enabled, you will be able to customize your text shadow style further. To disable custom text shadow style, choose the None option.",
+            "type": "presets_shadow",
+            "option_category": "configuration",
+            "default": "none",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "title",
+            "affects": [
+                "title_text_shadow_horizontal_length",
+                "title_text_shadow_vertical_length",
+                "title_text_shadow_blur_strength",
+                "title_text_shadow_color"
+            ]
+        },
+        "title_text_shadow_horizontal_length": {
+            "label": "Title Text Shadow Horizontal Length",
+            "description": "Shadow&#039;s horizontal distance from the text. A negative value places the shadow to the left of the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "title_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "title",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "title_text_shadow_vertical_length": {
+            "label": "Title Text Shadow Vertical Length",
+            "description": "Shadow&#039;s vertical distance from the text. A negative value places the shadow above the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "title_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0.08em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "title",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "title_text_shadow_blur_strength": {
+            "label": "Title Text Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": 0,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "title_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0.3em",
+                    "preset4": "0em",
+                    "preset5": "0em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "title",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "title_text_shadow_color": {
+            "label": "Title Text Shadow Color",
+            "description": "The color of the shadow.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "default": "rgba(0,0,0,0.4)",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "title",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "hover_enabled": {
+            "type": "skip",
+            "default": 0
+        },
+        "title_text_shadow_horizontal_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_horizontal_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_horizontal_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_vertical_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_vertical_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_vertical_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_blur_strength_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_blur_strength_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_blur_strength_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
+        "title_text_shadow_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "title"
+        },
         "caption_font": {
             "label": "Caption Font",
             "description": "Choose a custom font to use for the Caption. All Google web fonts are available, or you can upload your own custom font files.",
@@ -821,6 +1047,228 @@
             "hover": "tabs",
             "default": "1.7em",
             "is_global_default": true
+        },
+        "caption_text_shadow_style": {
+            "label": "Caption Text Shadow",
+            "description": "Pick a text shadow style to enable text shadow for this element. Once enabled, you will be able to customize your text shadow style further. To disable custom text shadow style, choose the None option.",
+            "type": "presets_shadow",
+            "option_category": "configuration",
+            "default": "none",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "caption",
+            "affects": [
+                "caption_text_shadow_horizontal_length",
+                "caption_text_shadow_vertical_length",
+                "caption_text_shadow_blur_strength",
+                "caption_text_shadow_color"
+            ]
+        },
+        "caption_text_shadow_horizontal_length": {
+            "label": "Caption Text Shadow Horizontal Length",
+            "description": "Shadow&#039;s horizontal distance from the text. A negative value places the shadow to the left of the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "caption_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "caption_text_shadow_vertical_length": {
+            "label": "Caption Text Shadow Vertical Length",
+            "description": "Shadow&#039;s vertical distance from the text. A negative value places the shadow above the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "caption_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0.08em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "caption_text_shadow_blur_strength": {
+            "label": "Caption Text Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": 0,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "caption_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0.3em",
+                    "preset4": "0em",
+                    "preset5": "0em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "caption_text_shadow_color": {
+            "label": "Caption Text Shadow Color",
+            "description": "The color of the shadow.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "default": "rgba(0,0,0,0.4)",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "caption",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "caption_text_shadow_horizontal_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_horizontal_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_horizontal_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_vertical_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_vertical_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_vertical_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_blur_strength_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_blur_strength_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_blur_strength_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
+        },
+        "caption_text_shadow_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "caption"
         },
         "background_color": {
             "type": "color-alpha",
@@ -2462,6 +2910,2456 @@
             },
             "context": "background"
         },
+        "border_radii": {
+            "label": "Rounded Corners",
+            "type": "border-radius",
+            "hover": "tabs",
+            "tab_slug": "advanced",
+            "toggle_slug": "border",
+            "option_category": "border",
+            "description": "Here you can control the corner radius of this element. Enable the link icon to control all four corners at once, or disable to define custom values for each.",
+            "mobile_options": true,
+            "sticky": true,
+            "allowed_units": [
+                "%",
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ]
+        },
+        "border_styles": {
+            "label": "Border Styles",
+            "description": "You can add borders to any element, customize their appearance and assign unique styles to each edge.",
+            "tab_slug": "advanced",
+            "toggle_slug": "border",
+            "type": "composite",
+            "option_category": "border",
+            "composite_type": "tabbed",
+            "composite_structure": {
+                "border_all": {
+                    "icon": "border-all",
+                    "controls": {
+                        "border_width_all": {
+                            "label": "Border Width",
+                            "description": "Increasing the width of the border will increase its size/thickness.",
+                            "type": "range",
+                            "hover": "tabs",
+                            "default": "",
+                            "default_unit": "px",
+                            "allowed_units": [
+                                "em",
+                                "rem",
+                                "px",
+                                "cm",
+                                "mm",
+                                "in",
+                                "pt",
+                                "pc",
+                                "ex",
+                                "vh",
+                                "vw"
+                            ],
+                            "range_settings": {
+                                "min": 0,
+                                "max": 50,
+                                "step": 1,
+                                "min_limit": 0
+                            },
+                            "context": "border_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_color_all": {
+                            "label": "Border Color",
+                            "description": "Pick a color to be used for the border.",
+                            "type": "color-alpha",
+                            "hover": "tabs",
+                            "default": "",
+                            "context": "border_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_style_all": {
+                            "label": "Border Style",
+                            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+                            "type": "select",
+                            "options": {
+                                "solid": "Solid",
+                                "dashed": "Dashed",
+                                "dotted": "Dotted",
+                                "double": "Double",
+                                "groove": "Groove",
+                                "ridge": "Ridge",
+                                "inset": "Inset",
+                                "outset": "Outset",
+                                "none": "None"
+                            },
+                            "default": "",
+                            "context": "border_styles",
+                            "hover": "tabs",
+                            "mobile_options": true,
+                            "sticky": true
+                        }
+                    }
+                },
+                "border_top": {
+                    "icon": "border-top",
+                    "controls": {
+                        "border_width_top": {
+                            "label": "Top Border Width",
+                            "description": "Increasing the width of the border will increase its size/thickness.",
+                            "type": "range",
+                            "hover": "tabs",
+                            "allow_empty": true,
+                            "default_from": "border_all.controls.border_width_all",
+                            "default_unit": "px",
+                            "allowed_units": [
+                                "em",
+                                "rem",
+                                "px",
+                                "cm",
+                                "mm",
+                                "in",
+                                "pt",
+                                "pc",
+                                "ex",
+                                "vh",
+                                "vw"
+                            ],
+                            "range_settings": {
+                                "min": 0,
+                                "max": 50,
+                                "step": 1,
+                                "min_limit": 0
+                            },
+                            "context": "border_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_color_top": {
+                            "label": "Top Border Color",
+                            "description": "Pick a color to be used for the border.",
+                            "type": "color-alpha",
+                            "hover": "tabs",
+                            "default_from": "border_all.controls.border_color_all",
+                            "context": "border_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_style_top": {
+                            "label": "Top Border Style",
+                            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+                            "type": "select",
+                            "options": {
+                                "solid": "Solid",
+                                "dashed": "Dashed",
+                                "dotted": "Dotted",
+                                "double": "Double",
+                                "groove": "Groove",
+                                "ridge": "Ridge",
+                                "inset": "Inset",
+                                "outset": "Outset",
+                                "none": "None"
+                            },
+                            "default_from": "border_all.controls.border_style_all",
+                            "context": "border_styles",
+                            "hover": "tabs",
+                            "mobile_options": true,
+                            "sticky": true
+                        }
+                    }
+                },
+                "border_right": {
+                    "icon": "border-right",
+                    "controls": {
+                        "border_width_right": {
+                            "label": "Right Border Width",
+                            "description": "Increasing the width of the border will increase its size/thickness.",
+                            "type": "range",
+                            "hover": "tabs",
+                            "allow_empty": true,
+                            "default_from": "border_all.controls.border_width_all",
+                            "default_unit": "px",
+                            "allowed_units": [
+                                "em",
+                                "rem",
+                                "px",
+                                "cm",
+                                "mm",
+                                "in",
+                                "pt",
+                                "pc",
+                                "ex",
+                                "vh",
+                                "vw"
+                            ],
+                            "range_settings": {
+                                "min": 0,
+                                "max": 50,
+                                "step": 1,
+                                "min_limit": 0
+                            },
+                            "context": "border_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_color_right": {
+                            "label": "Right Border Color",
+                            "description": "Pick a color to be used for the border.",
+                            "type": "color-alpha",
+                            "hover": "tabs",
+                            "default_from": "border_all.controls.border_color_all",
+                            "context": "border_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_style_right": {
+                            "label": "Right Border Style",
+                            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+                            "type": "select",
+                            "options": {
+                                "solid": "Solid",
+                                "dashed": "Dashed",
+                                "dotted": "Dotted",
+                                "double": "Double",
+                                "groove": "Groove",
+                                "ridge": "Ridge",
+                                "inset": "Inset",
+                                "outset": "Outset",
+                                "none": "None"
+                            },
+                            "default_from": "border_all.controls.border_style_all",
+                            "context": "border_styles",
+                            "hover": "tabs",
+                            "mobile_options": true,
+                            "sticky": true
+                        }
+                    }
+                },
+                "border_bottom": {
+                    "icon": "border-bottom",
+                    "controls": {
+                        "border_width_bottom": {
+                            "label": "Bottom Border Width",
+                            "description": "Increasing the width of the border will increase its size/thickness.",
+                            "type": "range",
+                            "hover": "tabs",
+                            "allow_empty": true,
+                            "default_from": "border_all.controls.border_width_all",
+                            "default_unit": "px",
+                            "allowed_units": [
+                                "em",
+                                "rem",
+                                "px",
+                                "cm",
+                                "mm",
+                                "in",
+                                "pt",
+                                "pc",
+                                "ex",
+                                "vh",
+                                "vw"
+                            ],
+                            "range_settings": {
+                                "min": 0,
+                                "max": 50,
+                                "step": 1,
+                                "min_limit": 0
+                            },
+                            "context": "border_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_color_bottom": {
+                            "label": "Bottom Border Color",
+                            "description": "Pick a color to be used for the border.",
+                            "type": "color-alpha",
+                            "hover": "tabs",
+                            "default_from": "border_all.controls.border_color_all",
+                            "context": "border_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_style_bottom": {
+                            "label": "Bottom Border Style",
+                            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+                            "type": "select",
+                            "options": {
+                                "solid": "Solid",
+                                "dashed": "Dashed",
+                                "dotted": "Dotted",
+                                "double": "Double",
+                                "groove": "Groove",
+                                "ridge": "Ridge",
+                                "inset": "Inset",
+                                "outset": "Outset",
+                                "none": "None"
+                            },
+                            "default_from": "border_all.controls.border_style_all",
+                            "context": "border_styles",
+                            "hover": "tabs",
+                            "mobile_options": true,
+                            "sticky": true
+                        }
+                    }
+                },
+                "border_left": {
+                    "icon": "border-left",
+                    "controls": {
+                        "border_width_left": {
+                            "label": "Left Border Width",
+                            "description": "Increasing the width of the border will increase its size/thickness.",
+                            "type": "range",
+                            "hover": "tabs",
+                            "allow_empty": true,
+                            "default_from": "border_all.controls.border_width_all",
+                            "default_unit": "px",
+                            "allowed_units": [
+                                "em",
+                                "rem",
+                                "px",
+                                "cm",
+                                "mm",
+                                "in",
+                                "pt",
+                                "pc",
+                                "ex",
+                                "vh",
+                                "vw"
+                            ],
+                            "range_settings": {
+                                "min": 0,
+                                "max": 50,
+                                "step": 1,
+                                "min_limit": 0
+                            },
+                            "context": "border_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_color_left": {
+                            "label": "Left Border Color",
+                            "description": "Pick a color to be used for the border.",
+                            "type": "color-alpha",
+                            "hover": "tabs",
+                            "default_from": "border_all.controls.border_color_all",
+                            "context": "border_styles",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_style_left": {
+                            "label": "Left Border Style",
+                            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+                            "type": "select",
+                            "options": {
+                                "solid": "Solid",
+                                "dashed": "Dashed",
+                                "dotted": "Dotted",
+                                "double": "Double",
+                                "groove": "Groove",
+                                "ridge": "Ridge",
+                                "inset": "Inset",
+                                "outset": "Outset",
+                                "none": "None"
+                            },
+                            "default_from": "border_all.controls.border_style_all",
+                            "context": "border_styles",
+                            "hover": "tabs",
+                            "mobile_options": true,
+                            "sticky": true
+                        }
+                    }
+                }
+            }
+        },
+        "border_width_all": {
+            "label": "Border Width",
+            "description": "Increasing the width of the border will increase its size/thickness.",
+            "type": "range",
+            "hover": "tabs",
+            "default": "",
+            "default_unit": "px",
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "min_limit": 0
+            },
+            "context": "border_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_all",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_color_all": {
+            "label": "Border Color",
+            "description": "Pick a color to be used for the border.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "default": "",
+            "context": "border_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_all",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_style_all": {
+            "label": "Border Style",
+            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+            "type": "select",
+            "options": {
+                "solid": "Solid",
+                "dashed": "Dashed",
+                "dotted": "Dotted",
+                "double": "Double",
+                "groove": "Groove",
+                "ridge": "Ridge",
+                "inset": "Inset",
+                "outset": "Outset",
+                "none": "None"
+            },
+            "default": "",
+            "context": "border_styles",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_all",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_width_top": {
+            "label": "Top Border Width",
+            "description": "Increasing the width of the border will increase its size/thickness.",
+            "type": "range",
+            "hover": "tabs",
+            "allow_empty": true,
+            "default_unit": "px",
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "min_limit": 0
+            },
+            "context": "border_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_top",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_color_top": {
+            "label": "Top Border Color",
+            "description": "Pick a color to be used for the border.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "context": "border_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_top",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_style_top": {
+            "label": "Top Border Style",
+            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+            "type": "select",
+            "options": {
+                "solid": "Solid",
+                "dashed": "Dashed",
+                "dotted": "Dotted",
+                "double": "Double",
+                "groove": "Groove",
+                "ridge": "Ridge",
+                "inset": "Inset",
+                "outset": "Outset",
+                "none": "None"
+            },
+            "context": "border_styles",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_top",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_width_right": {
+            "label": "Right Border Width",
+            "description": "Increasing the width of the border will increase its size/thickness.",
+            "type": "range",
+            "hover": "tabs",
+            "allow_empty": true,
+            "default_unit": "px",
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "min_limit": 0
+            },
+            "context": "border_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_right",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_color_right": {
+            "label": "Right Border Color",
+            "description": "Pick a color to be used for the border.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "context": "border_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_right",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_style_right": {
+            "label": "Right Border Style",
+            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+            "type": "select",
+            "options": {
+                "solid": "Solid",
+                "dashed": "Dashed",
+                "dotted": "Dotted",
+                "double": "Double",
+                "groove": "Groove",
+                "ridge": "Ridge",
+                "inset": "Inset",
+                "outset": "Outset",
+                "none": "None"
+            },
+            "context": "border_styles",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_right",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_width_bottom": {
+            "label": "Bottom Border Width",
+            "description": "Increasing the width of the border will increase its size/thickness.",
+            "type": "range",
+            "hover": "tabs",
+            "allow_empty": true,
+            "default_unit": "px",
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "min_limit": 0
+            },
+            "context": "border_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_bottom",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_color_bottom": {
+            "label": "Bottom Border Color",
+            "description": "Pick a color to be used for the border.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "context": "border_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_bottom",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_style_bottom": {
+            "label": "Bottom Border Style",
+            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+            "type": "select",
+            "options": {
+                "solid": "Solid",
+                "dashed": "Dashed",
+                "dotted": "Dotted",
+                "double": "Double",
+                "groove": "Groove",
+                "ridge": "Ridge",
+                "inset": "Inset",
+                "outset": "Outset",
+                "none": "None"
+            },
+            "context": "border_styles",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_bottom",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_width_left": {
+            "label": "Left Border Width",
+            "description": "Increasing the width of the border will increase its size/thickness.",
+            "type": "range",
+            "hover": "tabs",
+            "allow_empty": true,
+            "default_unit": "px",
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "min_limit": 0
+            },
+            "context": "border_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_left",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_color_left": {
+            "label": "Left Border Color",
+            "description": "Pick a color to be used for the border.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "context": "border_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_left",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_style_left": {
+            "label": "Left Border Style",
+            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+            "type": "select",
+            "options": {
+                "solid": "Solid",
+                "dashed": "Dashed",
+                "dotted": "Dotted",
+                "double": "Double",
+                "groove": "Groove",
+                "ridge": "Ridge",
+                "inset": "Inset",
+                "outset": "Outset",
+                "none": "None"
+            },
+            "context": "border_styles",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles",
+            "composite_tab": "border_left",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_radii_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_radii_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_radii_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "border"
+        },
+        "border_width_all_tablet": {
+            "type": "skip"
+        },
+        "border_width_all_phone": {
+            "type": "skip"
+        },
+        "border_width_all_last_edited": {
+            "type": "skip"
+        },
+        "border_color_all_tablet": {
+            "type": "skip"
+        },
+        "border_color_all_phone": {
+            "type": "skip"
+        },
+        "border_color_all_last_edited": {
+            "type": "skip"
+        },
+        "border_style_all_tablet": {
+            "type": "skip"
+        },
+        "border_style_all_phone": {
+            "type": "skip"
+        },
+        "border_style_all_last_edited": {
+            "type": "skip"
+        },
+        "border_width_top_tablet": {
+            "type": "skip"
+        },
+        "border_width_top_phone": {
+            "type": "skip"
+        },
+        "border_width_top_last_edited": {
+            "type": "skip"
+        },
+        "border_color_top_tablet": {
+            "type": "skip"
+        },
+        "border_color_top_phone": {
+            "type": "skip"
+        },
+        "border_color_top_last_edited": {
+            "type": "skip"
+        },
+        "border_style_top_tablet": {
+            "type": "skip"
+        },
+        "border_style_top_phone": {
+            "type": "skip"
+        },
+        "border_style_top_last_edited": {
+            "type": "skip"
+        },
+        "border_width_right_tablet": {
+            "type": "skip"
+        },
+        "border_width_right_phone": {
+            "type": "skip"
+        },
+        "border_width_right_last_edited": {
+            "type": "skip"
+        },
+        "border_color_right_tablet": {
+            "type": "skip"
+        },
+        "border_color_right_phone": {
+            "type": "skip"
+        },
+        "border_color_right_last_edited": {
+            "type": "skip"
+        },
+        "border_style_right_tablet": {
+            "type": "skip"
+        },
+        "border_style_right_phone": {
+            "type": "skip"
+        },
+        "border_style_right_last_edited": {
+            "type": "skip"
+        },
+        "border_width_bottom_tablet": {
+            "type": "skip"
+        },
+        "border_width_bottom_phone": {
+            "type": "skip"
+        },
+        "border_width_bottom_last_edited": {
+            "type": "skip"
+        },
+        "border_color_bottom_tablet": {
+            "type": "skip"
+        },
+        "border_color_bottom_phone": {
+            "type": "skip"
+        },
+        "border_color_bottom_last_edited": {
+            "type": "skip"
+        },
+        "border_style_bottom_tablet": {
+            "type": "skip"
+        },
+        "border_style_bottom_phone": {
+            "type": "skip"
+        },
+        "border_style_bottom_last_edited": {
+            "type": "skip"
+        },
+        "border_width_left_tablet": {
+            "type": "skip"
+        },
+        "border_width_left_phone": {
+            "type": "skip"
+        },
+        "border_width_left_last_edited": {
+            "type": "skip"
+        },
+        "border_color_left_tablet": {
+            "type": "skip"
+        },
+        "border_color_left_phone": {
+            "type": "skip"
+        },
+        "border_color_left_last_edited": {
+            "type": "skip"
+        },
+        "border_style_left_tablet": {
+            "type": "skip"
+        },
+        "border_style_left_phone": {
+            "type": "skip"
+        },
+        "border_style_left_last_edited": {
+            "type": "skip"
+        },
+        "border_radii_image": {
+            "label": "Image Rounded Corners",
+            "type": "border-radius",
+            "hover": "tabs",
+            "tab_slug": "advanced",
+            "toggle_slug": "image",
+            "attr_suffix": "_image",
+            "option_category": "border",
+            "description": "Here you can control the corner radius of this element. Enable the link icon to control all four corners at once, or disable to define custom values for each.",
+            "mobile_options": true,
+            "sticky": true,
+            "allowed_units": [
+                "%",
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ]
+        },
+        "border_styles_image": {
+            "label": "Image Border Styles",
+            "description": "You can add borders to any element, customize their appearance and assign unique styles to each edge.",
+            "tab_slug": "advanced",
+            "toggle_slug": "image",
+            "type": "composite",
+            "attr_suffix": "_image",
+            "option_category": "border",
+            "composite_type": "tabbed",
+            "composite_structure": {
+                "border_all": {
+                    "icon": "border-all",
+                    "controls": {
+                        "border_width_all_image": {
+                            "label": "Image Border Width",
+                            "description": "Increasing the width of the border will increase its size/thickness.",
+                            "type": "range",
+                            "hover": "tabs",
+                            "default": "",
+                            "default_unit": "px",
+                            "allowed_units": [
+                                "em",
+                                "rem",
+                                "px",
+                                "cm",
+                                "mm",
+                                "in",
+                                "pt",
+                                "pc",
+                                "ex",
+                                "vh",
+                                "vw"
+                            ],
+                            "range_settings": {
+                                "min": 0,
+                                "max": 50,
+                                "step": 1,
+                                "min_limit": 0
+                            },
+                            "context": "border_styles_image",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_color_all_image": {
+                            "label": "Image Border Color",
+                            "description": "Pick a color to be used for the border.",
+                            "type": "color-alpha",
+                            "hover": "tabs",
+                            "default": "",
+                            "context": "border_styles_image",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_style_all_image": {
+                            "label": "Image Border Style",
+                            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+                            "type": "select",
+                            "options": {
+                                "solid": "Solid",
+                                "dashed": "Dashed",
+                                "dotted": "Dotted",
+                                "double": "Double",
+                                "groove": "Groove",
+                                "ridge": "Ridge",
+                                "inset": "Inset",
+                                "outset": "Outset",
+                                "none": "None"
+                            },
+                            "default": "",
+                            "context": "border_styles_image",
+                            "hover": "tabs",
+                            "mobile_options": true,
+                            "sticky": true
+                        }
+                    }
+                },
+                "border_top": {
+                    "icon": "border-top",
+                    "controls": {
+                        "border_width_top_image": {
+                            "label": "Image Top Border Width",
+                            "description": "Increasing the width of the border will increase its size/thickness.",
+                            "type": "range",
+                            "hover": "tabs",
+                            "allow_empty": true,
+                            "default_from": "border_all.controls.border_width_all_image",
+                            "default_unit": "px",
+                            "allowed_units": [
+                                "em",
+                                "rem",
+                                "px",
+                                "cm",
+                                "mm",
+                                "in",
+                                "pt",
+                                "pc",
+                                "ex",
+                                "vh",
+                                "vw"
+                            ],
+                            "range_settings": {
+                                "min": 0,
+                                "max": 50,
+                                "step": 1,
+                                "min_limit": 0
+                            },
+                            "context": "border_styles_image",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_color_top_image": {
+                            "label": "Image Top Border Color",
+                            "description": "Pick a color to be used for the border.",
+                            "type": "color-alpha",
+                            "hover": "tabs",
+                            "default_from": "border_all.controls.border_color_all_image",
+                            "context": "border_styles_image",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_style_top_image": {
+                            "label": "Image Top Border Style",
+                            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+                            "type": "select",
+                            "options": {
+                                "solid": "Solid",
+                                "dashed": "Dashed",
+                                "dotted": "Dotted",
+                                "double": "Double",
+                                "groove": "Groove",
+                                "ridge": "Ridge",
+                                "inset": "Inset",
+                                "outset": "Outset",
+                                "none": "None"
+                            },
+                            "default_from": "border_all.controls.border_style_all_image",
+                            "context": "border_styles_image",
+                            "hover": "tabs",
+                            "mobile_options": true,
+                            "sticky": true
+                        }
+                    }
+                },
+                "border_right": {
+                    "icon": "border-right",
+                    "controls": {
+                        "border_width_right_image": {
+                            "label": "Image Right Border Width",
+                            "description": "Increasing the width of the border will increase its size/thickness.",
+                            "type": "range",
+                            "hover": "tabs",
+                            "allow_empty": true,
+                            "default_from": "border_all.controls.border_width_all_image",
+                            "default_unit": "px",
+                            "allowed_units": [
+                                "em",
+                                "rem",
+                                "px",
+                                "cm",
+                                "mm",
+                                "in",
+                                "pt",
+                                "pc",
+                                "ex",
+                                "vh",
+                                "vw"
+                            ],
+                            "range_settings": {
+                                "min": 0,
+                                "max": 50,
+                                "step": 1,
+                                "min_limit": 0
+                            },
+                            "context": "border_styles_image",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_color_right_image": {
+                            "label": "Image Right Border Color",
+                            "description": "Pick a color to be used for the border.",
+                            "type": "color-alpha",
+                            "hover": "tabs",
+                            "default_from": "border_all.controls.border_color_all_image",
+                            "context": "border_styles_image",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_style_right_image": {
+                            "label": "Image Right Border Style",
+                            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+                            "type": "select",
+                            "options": {
+                                "solid": "Solid",
+                                "dashed": "Dashed",
+                                "dotted": "Dotted",
+                                "double": "Double",
+                                "groove": "Groove",
+                                "ridge": "Ridge",
+                                "inset": "Inset",
+                                "outset": "Outset",
+                                "none": "None"
+                            },
+                            "default_from": "border_all.controls.border_style_all_image",
+                            "context": "border_styles_image",
+                            "hover": "tabs",
+                            "mobile_options": true,
+                            "sticky": true
+                        }
+                    }
+                },
+                "border_bottom": {
+                    "icon": "border-bottom",
+                    "controls": {
+                        "border_width_bottom_image": {
+                            "label": "Image Bottom Border Width",
+                            "description": "Increasing the width of the border will increase its size/thickness.",
+                            "type": "range",
+                            "hover": "tabs",
+                            "allow_empty": true,
+                            "default_from": "border_all.controls.border_width_all_image",
+                            "default_unit": "px",
+                            "allowed_units": [
+                                "em",
+                                "rem",
+                                "px",
+                                "cm",
+                                "mm",
+                                "in",
+                                "pt",
+                                "pc",
+                                "ex",
+                                "vh",
+                                "vw"
+                            ],
+                            "range_settings": {
+                                "min": 0,
+                                "max": 50,
+                                "step": 1,
+                                "min_limit": 0
+                            },
+                            "context": "border_styles_image",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_color_bottom_image": {
+                            "label": "Image Bottom Border Color",
+                            "description": "Pick a color to be used for the border.",
+                            "type": "color-alpha",
+                            "hover": "tabs",
+                            "default_from": "border_all.controls.border_color_all_image",
+                            "context": "border_styles_image",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_style_bottom_image": {
+                            "label": "Image Bottom Border Style",
+                            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+                            "type": "select",
+                            "options": {
+                                "solid": "Solid",
+                                "dashed": "Dashed",
+                                "dotted": "Dotted",
+                                "double": "Double",
+                                "groove": "Groove",
+                                "ridge": "Ridge",
+                                "inset": "Inset",
+                                "outset": "Outset",
+                                "none": "None"
+                            },
+                            "default_from": "border_all.controls.border_style_all_image",
+                            "context": "border_styles_image",
+                            "hover": "tabs",
+                            "mobile_options": true,
+                            "sticky": true
+                        }
+                    }
+                },
+                "border_left": {
+                    "icon": "border-left",
+                    "controls": {
+                        "border_width_left_image": {
+                            "label": "Image Left Border Width",
+                            "description": "Increasing the width of the border will increase its size/thickness.",
+                            "type": "range",
+                            "hover": "tabs",
+                            "allow_empty": true,
+                            "default_from": "border_all.controls.border_width_all_image",
+                            "default_unit": "px",
+                            "allowed_units": [
+                                "em",
+                                "rem",
+                                "px",
+                                "cm",
+                                "mm",
+                                "in",
+                                "pt",
+                                "pc",
+                                "ex",
+                                "vh",
+                                "vw"
+                            ],
+                            "range_settings": {
+                                "min": 0,
+                                "max": 50,
+                                "step": 1,
+                                "min_limit": 0
+                            },
+                            "context": "border_styles_image",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_color_left_image": {
+                            "label": "Image Left Border Color",
+                            "description": "Pick a color to be used for the border.",
+                            "type": "color-alpha",
+                            "hover": "tabs",
+                            "default_from": "border_all.controls.border_color_all_image",
+                            "context": "border_styles_image",
+                            "mobile_options": true,
+                            "sticky": true
+                        },
+                        "border_style_left_image": {
+                            "label": "Image Left Border Style",
+                            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+                            "type": "select",
+                            "options": {
+                                "solid": "Solid",
+                                "dashed": "Dashed",
+                                "dotted": "Dotted",
+                                "double": "Double",
+                                "groove": "Groove",
+                                "ridge": "Ridge",
+                                "inset": "Inset",
+                                "outset": "Outset",
+                                "none": "None"
+                            },
+                            "default_from": "border_all.controls.border_style_all_image",
+                            "context": "border_styles_image",
+                            "hover": "tabs",
+                            "mobile_options": true,
+                            "sticky": true
+                        }
+                    }
+                }
+            }
+        },
+        "border_width_all_image": {
+            "label": "Image Border Width",
+            "description": "Increasing the width of the border will increase its size/thickness.",
+            "type": "range",
+            "hover": "tabs",
+            "default": "",
+            "default_unit": "px",
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "min_limit": 0
+            },
+            "context": "border_styles_image",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_all",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_color_all_image": {
+            "label": "Image Border Color",
+            "description": "Pick a color to be used for the border.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "default": "",
+            "context": "border_styles_image",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_all",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_style_all_image": {
+            "label": "Image Border Style",
+            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+            "type": "select",
+            "options": {
+                "solid": "Solid",
+                "dashed": "Dashed",
+                "dotted": "Dotted",
+                "double": "Double",
+                "groove": "Groove",
+                "ridge": "Ridge",
+                "inset": "Inset",
+                "outset": "Outset",
+                "none": "None"
+            },
+            "default": "",
+            "context": "border_styles_image",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_all",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_width_top_image": {
+            "label": "Image Top Border Width",
+            "description": "Increasing the width of the border will increase its size/thickness.",
+            "type": "range",
+            "hover": "tabs",
+            "allow_empty": true,
+            "default_unit": "px",
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "min_limit": 0
+            },
+            "context": "border_styles_image",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_top",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_color_top_image": {
+            "label": "Image Top Border Color",
+            "description": "Pick a color to be used for the border.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "context": "border_styles_image",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_top",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_style_top_image": {
+            "label": "Image Top Border Style",
+            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+            "type": "select",
+            "options": {
+                "solid": "Solid",
+                "dashed": "Dashed",
+                "dotted": "Dotted",
+                "double": "Double",
+                "groove": "Groove",
+                "ridge": "Ridge",
+                "inset": "Inset",
+                "outset": "Outset",
+                "none": "None"
+            },
+            "context": "border_styles_image",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_top",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_width_right_image": {
+            "label": "Image Right Border Width",
+            "description": "Increasing the width of the border will increase its size/thickness.",
+            "type": "range",
+            "hover": "tabs",
+            "allow_empty": true,
+            "default_unit": "px",
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "min_limit": 0
+            },
+            "context": "border_styles_image",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_right",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_color_right_image": {
+            "label": "Image Right Border Color",
+            "description": "Pick a color to be used for the border.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "context": "border_styles_image",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_right",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_style_right_image": {
+            "label": "Image Right Border Style",
+            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+            "type": "select",
+            "options": {
+                "solid": "Solid",
+                "dashed": "Dashed",
+                "dotted": "Dotted",
+                "double": "Double",
+                "groove": "Groove",
+                "ridge": "Ridge",
+                "inset": "Inset",
+                "outset": "Outset",
+                "none": "None"
+            },
+            "context": "border_styles_image",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_right",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_width_bottom_image": {
+            "label": "Image Bottom Border Width",
+            "description": "Increasing the width of the border will increase its size/thickness.",
+            "type": "range",
+            "hover": "tabs",
+            "allow_empty": true,
+            "default_unit": "px",
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "min_limit": 0
+            },
+            "context": "border_styles_image",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_bottom",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_color_bottom_image": {
+            "label": "Image Bottom Border Color",
+            "description": "Pick a color to be used for the border.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "context": "border_styles_image",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_bottom",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_style_bottom_image": {
+            "label": "Image Bottom Border Style",
+            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+            "type": "select",
+            "options": {
+                "solid": "Solid",
+                "dashed": "Dashed",
+                "dotted": "Dotted",
+                "double": "Double",
+                "groove": "Groove",
+                "ridge": "Ridge",
+                "inset": "Inset",
+                "outset": "Outset",
+                "none": "None"
+            },
+            "context": "border_styles_image",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_bottom",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_width_left_image": {
+            "label": "Image Left Border Width",
+            "description": "Increasing the width of the border will increase its size/thickness.",
+            "type": "range",
+            "hover": "tabs",
+            "allow_empty": true,
+            "default_unit": "px",
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "range_settings": {
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "min_limit": 0
+            },
+            "context": "border_styles_image",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_left",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_color_left_image": {
+            "label": "Image Left Border Color",
+            "description": "Pick a color to be used for the border.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "context": "border_styles_image",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_left",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_style_left_image": {
+            "label": "Image Left Border Style",
+            "description": "Borders support various different styles, each of which will change the shape of the border element.",
+            "type": "select",
+            "options": {
+                "solid": "Solid",
+                "dashed": "Dashed",
+                "dotted": "Dotted",
+                "double": "Double",
+                "groove": "Groove",
+                "ridge": "Ridge",
+                "inset": "Inset",
+                "outset": "Outset",
+                "none": "None"
+            },
+            "context": "border_styles_image",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "border_styles_image",
+            "composite_tab": "border_left",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_radii_image_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_radii_image_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_radii_image_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "border_width_all_image_tablet": {
+            "type": "skip"
+        },
+        "border_width_all_image_phone": {
+            "type": "skip"
+        },
+        "border_width_all_image_last_edited": {
+            "type": "skip"
+        },
+        "border_color_all_image_tablet": {
+            "type": "skip"
+        },
+        "border_color_all_image_phone": {
+            "type": "skip"
+        },
+        "border_color_all_image_last_edited": {
+            "type": "skip"
+        },
+        "border_style_all_image_tablet": {
+            "type": "skip"
+        },
+        "border_style_all_image_phone": {
+            "type": "skip"
+        },
+        "border_style_all_image_last_edited": {
+            "type": "skip"
+        },
+        "border_width_top_image_tablet": {
+            "type": "skip"
+        },
+        "border_width_top_image_phone": {
+            "type": "skip"
+        },
+        "border_width_top_image_last_edited": {
+            "type": "skip"
+        },
+        "border_color_top_image_tablet": {
+            "type": "skip"
+        },
+        "border_color_top_image_phone": {
+            "type": "skip"
+        },
+        "border_color_top_image_last_edited": {
+            "type": "skip"
+        },
+        "border_style_top_image_tablet": {
+            "type": "skip"
+        },
+        "border_style_top_image_phone": {
+            "type": "skip"
+        },
+        "border_style_top_image_last_edited": {
+            "type": "skip"
+        },
+        "border_width_right_image_tablet": {
+            "type": "skip"
+        },
+        "border_width_right_image_phone": {
+            "type": "skip"
+        },
+        "border_width_right_image_last_edited": {
+            "type": "skip"
+        },
+        "border_color_right_image_tablet": {
+            "type": "skip"
+        },
+        "border_color_right_image_phone": {
+            "type": "skip"
+        },
+        "border_color_right_image_last_edited": {
+            "type": "skip"
+        },
+        "border_style_right_image_tablet": {
+            "type": "skip"
+        },
+        "border_style_right_image_phone": {
+            "type": "skip"
+        },
+        "border_style_right_image_last_edited": {
+            "type": "skip"
+        },
+        "border_width_bottom_image_tablet": {
+            "type": "skip"
+        },
+        "border_width_bottom_image_phone": {
+            "type": "skip"
+        },
+        "border_width_bottom_image_last_edited": {
+            "type": "skip"
+        },
+        "border_color_bottom_image_tablet": {
+            "type": "skip"
+        },
+        "border_color_bottom_image_phone": {
+            "type": "skip"
+        },
+        "border_color_bottom_image_last_edited": {
+            "type": "skip"
+        },
+        "border_style_bottom_image_tablet": {
+            "type": "skip"
+        },
+        "border_style_bottom_image_phone": {
+            "type": "skip"
+        },
+        "border_style_bottom_image_last_edited": {
+            "type": "skip"
+        },
+        "border_width_left_image_tablet": {
+            "type": "skip"
+        },
+        "border_width_left_image_phone": {
+            "type": "skip"
+        },
+        "border_width_left_image_last_edited": {
+            "type": "skip"
+        },
+        "border_color_left_image_tablet": {
+            "type": "skip"
+        },
+        "border_color_left_image_phone": {
+            "type": "skip"
+        },
+        "border_color_left_image_last_edited": {
+            "type": "skip"
+        },
+        "border_style_left_image_tablet": {
+            "type": "skip"
+        },
+        "border_style_left_image_phone": {
+            "type": "skip"
+        },
+        "border_style_left_image_last_edited": {
+            "type": "skip"
+        },
+        "box_shadow_style": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow",
+            "default_on_child": true,
+            "label": "Box Shadow",
+            "type": "select_box_shadow",
+            "default": "none",
+            "affects": [
+                "box_shadow_horizontal",
+                "box_shadow_vertical",
+                "box_shadow_blur",
+                "box_shadow_spread",
+                "box_shadow_color",
+                "box_shadow_position"
+            ],
+            "description": "Pick a box shadow style to enable box shadow for this element. Once enabled, you will be able to customize your box shadow style further. To disable custom box shadow style, choose the None option."
+        },
+        "box_shadow_horizontal": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow",
+            "show_if_not": {
+                "box_shadow_style": "none"
+            },
+            "default_on_child": true,
+            "type": "range",
+            "range_settings": {
+                "min": -80,
+                "max": 80,
+                "step": 1
+            },
+            "default": [
+                "box_shadow_style",
+                {
+                    "none": "",
+                    "preset1": "0px",
+                    "preset2": "6px",
+                    "preset3": "0px",
+                    "preset4": "10px",
+                    "preset5": "0px",
+                    "preset6": "0px",
+                    "preset7": "10px"
+                }
+            ],
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "px",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "label": "Box Shadow Horizontal Position",
+            "description": "Shadow&#039;s horizontal distance from the element. A negative value places the shadow to the left of the element."
+        },
+        "box_shadow_vertical": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow",
+            "show_if_not": {
+                "box_shadow_style": "none"
+            },
+            "default_on_child": true,
+            "type": "range",
+            "range_settings": {
+                "min": -80,
+                "max": 80,
+                "step": 1
+            },
+            "default": [
+                "box_shadow_style",
+                {
+                    "none": "",
+                    "preset1": "2px",
+                    "preset2": "6px",
+                    "preset3": "12px",
+                    "preset4": "10px",
+                    "preset5": "6px",
+                    "preset6": "0px",
+                    "preset7": "10px"
+                }
+            ],
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "px",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "label": "Box Shadow Vertical Position",
+            "description": "Shadow&#039;s vertical distance from the element. A negative value places the shadow above the element."
+        },
+        "box_shadow_blur": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow",
+            "show_if_not": {
+                "box_shadow_style": "none"
+            },
+            "default_on_child": true,
+            "type": "range",
+            "range_settings": {
+                "min": 0,
+                "max": 80,
+                "step": 1
+            },
+            "default": [
+                "box_shadow_style",
+                {
+                    "none": "",
+                    "preset1": "18px",
+                    "preset2": "18px",
+                    "preset3": "18px",
+                    "preset4": "0px",
+                    "preset5": "0px",
+                    "preset6": "18px",
+                    "preset7": "0px"
+                }
+            ],
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "px",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "label": "Box Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter."
+        },
+        "box_shadow_spread": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow",
+            "show_if_not": {
+                "box_shadow_style": "none"
+            },
+            "default_on_child": true,
+            "type": "range",
+            "range_settings": {
+                "min": -80,
+                "max": 80,
+                "step": 1
+            },
+            "default": [
+                "box_shadow_style",
+                {
+                    "none": "",
+                    "preset1": "0px",
+                    "preset2": "0px",
+                    "preset3": "-6px",
+                    "preset4": "0px",
+                    "preset5": "10px",
+                    "preset6": "0px",
+                    "preset7": "0px"
+                }
+            ],
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "px",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "label": "Box Shadow Spread Strength",
+            "description": "Increasing the spread strength will increase the density of the box shadow. Higher density results in a more intense shadow."
+        },
+        "box_shadow_color": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow",
+            "show_if_not": {
+                "box_shadow_style": "none"
+            },
+            "default_on_child": true,
+            "label": "Shadow Color",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "default": "rgba(0,0,0,0.3)",
+            "field_template": "color",
+            "mobile_options": true,
+            "sticky": true,
+            "description": "The color of the shadow."
+        },
+        "box_shadow_position": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow",
+            "show_if_not": {
+                "box_shadow_style": "none"
+            },
+            "default_on_child": true,
+            "label": "Box Shadow Position",
+            "description": "Choose whether you would like the shadow to appear outside your module, lifting the module up from the page, or inside the module, setting the module downwards within the page.",
+            "type": "select",
+            "default": [
+                "box_shadow_style",
+                {
+                    "none": "outer",
+                    "preset1": "outer",
+                    "preset2": "outer",
+                    "preset3": "outer",
+                    "preset4": "outer",
+                    "preset5": "outer",
+                    "preset6": "inner",
+                    "preset7": "inner"
+                }
+            ],
+            "options": {
+                "outer": "Outer Shadow",
+                "inner": "Inner Shadow"
+            },
+            "mobile_options": true
+        },
+        "box_shadow_horizontal_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_horizontal_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_horizontal_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_vertical_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_vertical_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_vertical_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_blur_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_blur_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_blur_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_spread_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_spread_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_spread_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_position_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_position_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_position_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "box_shadow"
+        },
+        "box_shadow_style_image": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "image",
+            "default_on_child": true,
+            "label": "Image Box Shadow",
+            "type": "select_box_shadow",
+            "default": "none",
+            "affects": [
+                "box_shadow_horizontal_image",
+                "box_shadow_vertical_image",
+                "box_shadow_blur_image",
+                "box_shadow_spread_image",
+                "box_shadow_color_image",
+                "box_shadow_position_image"
+            ],
+            "description": "Pick a box shadow style to enable box shadow for this element. Once enabled, you will be able to customize your box shadow style further. To disable custom box shadow style, choose the None option."
+        },
+        "box_shadow_horizontal_image": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "image",
+            "show_if_not": {
+                "box_shadow_style_image": "none"
+            },
+            "default_on_child": true,
+            "type": "range",
+            "range_settings": {
+                "min": -80,
+                "max": 80,
+                "step": 1
+            },
+            "default": [
+                "box_shadow_style_image",
+                {
+                    "none": "",
+                    "preset1": "0px",
+                    "preset2": "6px",
+                    "preset3": "0px",
+                    "preset4": "10px",
+                    "preset5": "0px",
+                    "preset6": "0px",
+                    "preset7": "10px"
+                }
+            ],
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "px",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "label": "Box Shadow Horizontal Position",
+            "description": "Shadow&#039;s horizontal distance from the element. A negative value places the shadow to the left of the element."
+        },
+        "box_shadow_vertical_image": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "image",
+            "show_if_not": {
+                "box_shadow_style_image": "none"
+            },
+            "default_on_child": true,
+            "type": "range",
+            "range_settings": {
+                "min": -80,
+                "max": 80,
+                "step": 1
+            },
+            "default": [
+                "box_shadow_style_image",
+                {
+                    "none": "",
+                    "preset1": "2px",
+                    "preset2": "6px",
+                    "preset3": "12px",
+                    "preset4": "10px",
+                    "preset5": "6px",
+                    "preset6": "0px",
+                    "preset7": "10px"
+                }
+            ],
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "px",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "label": "Box Shadow Vertical Position",
+            "description": "Shadow&#039;s vertical distance from the element. A negative value places the shadow above the element."
+        },
+        "box_shadow_blur_image": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "image",
+            "show_if_not": {
+                "box_shadow_style_image": "none"
+            },
+            "default_on_child": true,
+            "type": "range",
+            "range_settings": {
+                "min": 0,
+                "max": 80,
+                "step": 1
+            },
+            "default": [
+                "box_shadow_style_image",
+                {
+                    "none": "",
+                    "preset1": "18px",
+                    "preset2": "18px",
+                    "preset3": "18px",
+                    "preset4": "0px",
+                    "preset5": "0px",
+                    "preset6": "18px",
+                    "preset7": "0px"
+                }
+            ],
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "px",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "label": "Box Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter."
+        },
+        "box_shadow_spread_image": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "image",
+            "show_if_not": {
+                "box_shadow_style_image": "none"
+            },
+            "default_on_child": true,
+            "type": "range",
+            "range_settings": {
+                "min": -80,
+                "max": 80,
+                "step": 1
+            },
+            "default": [
+                "box_shadow_style_image",
+                {
+                    "none": "",
+                    "preset1": "0px",
+                    "preset2": "0px",
+                    "preset3": "-6px",
+                    "preset4": "0px",
+                    "preset5": "10px",
+                    "preset6": "0px",
+                    "preset7": "0px"
+                }
+            ],
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "px",
+            "hover": "tabs",
+            "mobile_options": true,
+            "sticky": true,
+            "label": "Box Shadow Spread Strength",
+            "description": "Increasing the spread strength will increase the density of the box shadow. Higher density results in a more intense shadow."
+        },
+        "box_shadow_color_image": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "image",
+            "show_if_not": {
+                "box_shadow_style_image": "none"
+            },
+            "default_on_child": true,
+            "label": "Shadow Color",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "default": "rgba(0,0,0,0.3)",
+            "field_template": "color",
+            "mobile_options": true,
+            "sticky": true,
+            "description": "The color of the shadow."
+        },
+        "box_shadow_position_image": {
+            "option_category": "layout",
+            "tab_slug": "advanced",
+            "toggle_slug": "image",
+            "show_if_not": {
+                "box_shadow_style_image": "none"
+            },
+            "default_on_child": true,
+            "label": "Box Shadow Position",
+            "description": "Choose whether you would like the shadow to appear outside your module, lifting the module up from the page, or inside the module, setting the module downwards within the page.",
+            "type": "select",
+            "default": [
+                "box_shadow_style_image",
+                {
+                    "none": "outer",
+                    "preset1": "outer",
+                    "preset2": "outer",
+                    "preset3": "outer",
+                    "preset4": "outer",
+                    "preset5": "outer",
+                    "preset6": "inner",
+                    "preset7": "inner"
+                }
+            ],
+            "options": {
+                "outer": "Outer Shadow",
+                "inner": "Inner Shadow"
+            },
+            "mobile_options": true
+        },
+        "box_shadow_horizontal_image_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_horizontal_image_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_horizontal_image_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_vertical_image_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_vertical_image_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_vertical_image_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_blur_image_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_blur_image_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_blur_image_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_spread_image_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_spread_image_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_spread_image_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_color_image_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_color_image_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_color_image_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_position_image_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_position_image_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
+        "box_shadow_position_image_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "image"
+        },
         "transform_styles": {
             "label": "Transform",
             "tab_slug": "advanced",
@@ -2738,6 +5636,323 @@
                     }
                 }
             }
+        },
+        "transform_scale": {
+            "type": "transform",
+            "label": "Transform Scale",
+            "default": "100%|100%",
+            "default_unit": "%",
+            "range_settings": {
+                "min": -100,
+                "max": 300,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "scale",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_scale_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked__hover": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked__sticky": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_translate": {
+            "type": "transform",
+            "label": "Transform Translate",
+            "default": "0px|0px",
+            "default_unit": "px",
+            "range_settings": {
+                "min": -300,
+                "max": 300,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "translate",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_translate_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked__hover": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked__sticky": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_rotate": {
+            "type": "transform",
+            "label": "Transform Rotate",
+            "default": "0deg|0deg|0deg",
+            "default_unit": "deg",
+            "range_settings": {
+                "min": 0,
+                "max": 360,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_rotate_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate"
+        },
+        "transform_rotate_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate"
+        },
+        "transform_rotate_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate"
+        },
+        "transform_skew": {
+            "type": "transform",
+            "label": "Transform Skew",
+            "default": "0deg|0deg",
+            "default_unit": "deg",
+            "range_settings": {
+                "min": -180,
+                "max": 180,
+                "min_limit": -180,
+                "max_limit": 180,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "skew",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_skew_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked__hover": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked__sticky": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_origin": {
+            "type": "transform",
+            "label": "Transform Origin",
+            "default": "50%|50%",
+            "default_unit": "%",
+            "range_settings": {
+                "min": -50,
+                "max": 150,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "origin",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_origin_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "origin"
+        },
+        "transform_origin_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "origin"
+        },
+        "transform_origin_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "origin"
         },
         "transform_styles_last_edited": {
             "type": "skip",
@@ -4047,6 +7262,228 @@
             "toggle_slug": "hover_transitions",
             "mobile_options": true
         },
+        "text_shadow_style": {
+            "label": "Text Shadow",
+            "description": "Pick a text shadow style to enable text shadow for this element. Once enabled, you will be able to customize your text shadow style further. To disable custom text shadow style, choose the None option.",
+            "type": "presets_shadow",
+            "option_category": "configuration",
+            "default": "none",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "text",
+            "affects": [
+                "text_shadow_horizontal_length",
+                "text_shadow_vertical_length",
+                "text_shadow_blur_strength",
+                "text_shadow_color"
+            ]
+        },
+        "text_shadow_horizontal_length": {
+            "label": "Text Shadow Horizontal Length",
+            "description": "Shadow&#039;s horizontal distance from the text. A negative value places the shadow to the left of the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "text",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "text_shadow_vertical_length": {
+            "label": "Text Shadow Vertical Length",
+            "description": "Shadow&#039;s vertical distance from the text. A negative value places the shadow above the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0.08em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "text",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "text_shadow_blur_strength": {
+            "label": "Text Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": 0,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0.3em",
+                    "preset4": "0em",
+                    "preset5": "0em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "text",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "text_shadow_color": {
+            "label": "Text Shadow Color",
+            "description": "The color of the shadow.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "default": "rgba(0,0,0,0.4)",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "text",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "text_shadow_horizontal_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_horizontal_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_horizontal_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_vertical_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_vertical_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_vertical_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_blur_strength_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_blur_strength_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_blur_strength_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
+        "text_shadow_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "text"
+        },
         "link_option_url": {
             "label": "Module Link URL",
             "description": "When clicked the module will link to this URL.",
@@ -4460,6 +7897,180 @@
                 }
             }
         },
+        "scroll_vertical_motion_enable": {
+            "label": "Enable Vertical Motion",
+            "description": "Give this element vertical motion so that is moves faster or slower than the elements around it as the viewer scrolls through the page.",
+            "type": "yes_no_button",
+            "option_category": "configuration",
+            "options": {
+                "off": "No",
+                "on": "Yes"
+            },
+            "default": "off",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_vertical_motion"
+        },
+        "scroll_vertical_motion": {
+            "label": "Set Vertical Motion",
+            "description": "Give this element vertical motion so that is moves faster or slower than the elements around it as the viewer scrolls through the page.",
+            "type": "motion",
+            "default": "0|50|50|100|4|0|-4",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "mobile_options": true,
+            "show_if": {
+                "scroll_vertical_motion_enable": "on"
+            },
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_vertical_motion"
+        },
+        "scroll_horizontal_motion_enable": {
+            "label": "Enable Horizontal Motion",
+            "description": "Give this element horizontal motion so that it slides left or right as the viewer scrolls through the page.",
+            "type": "yes_no_button",
+            "option_category": "configuration",
+            "options": {
+                "off": "No",
+                "on": "Yes"
+            },
+            "default": "off",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_horizontal_motion"
+        },
+        "scroll_horizontal_motion": {
+            "label": "Set Horizontal Motion",
+            "description": "Give this element horizontal motion so that it slides left or right as the viewer scrolls through the page.",
+            "type": "motion",
+            "default": "0|50|50|100|4|0|-4",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "mobile_options": true,
+            "show_if": {
+                "scroll_horizontal_motion_enable": "on"
+            },
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_horizontal_motion"
+        },
+        "scroll_fade_enable": {
+            "label": "Enable Fading In and Out",
+            "description": "Give this element an opacity effect so that it fades in and out as the viewer scrolls through the page.",
+            "type": "yes_no_button",
+            "option_category": "configuration",
+            "options": {
+                "off": "No",
+                "on": "Yes"
+            },
+            "default": "off",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_fade"
+        },
+        "scroll_fade": {
+            "label": "Set Fading In and Out",
+            "description": "Give this element an opacity effect so that it fades in and out as the viewer scrolls through the page.",
+            "type": "motion",
+            "default": "0|50|50|100|0|100|100",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "mobile_options": true,
+            "show_if": {
+                "scroll_fade_enable": "on"
+            },
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_fade"
+        },
+        "scroll_scaling_enable": {
+            "label": "Enable Scaling Up and Down",
+            "description": "Give this element a scale effect so that it grows and shrinks as the viewer scrolls through the page.",
+            "type": "yes_no_button",
+            "option_category": "configuration",
+            "options": {
+                "off": "No",
+                "on": "Yes"
+            },
+            "default": "off",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_scaling"
+        },
+        "scroll_scaling": {
+            "label": "Set Scaling Up and Down",
+            "description": "Give this element a scale effect so that it grows and shrinks as the viewer scrolls through the page.",
+            "type": "motion",
+            "default": "0|50|50|100|70|100|100",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "mobile_options": true,
+            "show_if": {
+                "scroll_scaling_enable": "on"
+            },
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_scaling"
+        },
+        "scroll_rotating_enable": {
+            "label": "Enable Rotating",
+            "description": "Give this element rotating motion so that it spins as the viewer scrolls through the page.",
+            "type": "yes_no_button",
+            "option_category": "configuration",
+            "options": {
+                "off": "No",
+                "on": "Yes"
+            },
+            "default": "off",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_rotating"
+        },
+        "scroll_rotating": {
+            "label": "Set Rotating",
+            "description": "Give this element rotating motion so that it spins as the viewer scrolls through the page.",
+            "type": "motion",
+            "default": "0|50|50|100|90|0|0",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "mobile_options": true,
+            "show_if": {
+                "scroll_rotating_enable": "on"
+            },
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_rotating"
+        },
+        "scroll_blur_enable": {
+            "label": "Enable Blur",
+            "description": "Give this element a blur effect so that it moves in and out of focus as the viewer scrolls through the page.",
+            "type": "yes_no_button",
+            "option_category": "configuration",
+            "options": {
+                "off": "No",
+                "on": "Yes"
+            },
+            "default": "off",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_blur"
+        },
+        "scroll_blur": {
+            "label": "Set Blur",
+            "description": "Give this element a blur effect so that it moves in and out of focus as the viewer scrolls through the page.",
+            "type": "motion",
+            "default": "0|40|60|100|10|0|0",
+            "tab_slug": "custom_css",
+            "toggle_slug": "scroll_effects",
+            "mobile_options": true,
+            "show_if": {
+                "scroll_blur_enable": "on"
+            },
+            "composite_of": "scroll_effects",
+            "composite_tab": "scroll_blur"
+        },
         "motion_trigger_start": {
             "label": "Motion Effect Trigger",
             "description": "Here you can choose when motion effects are triggered: When the top of the element enters into view, when the middle of the element enters into view, or when the bottom of the element enters into view.",
@@ -4473,10 +8084,6 @@
             "default": "middle",
             "tab_slug": "custom_css",
             "toggle_slug": "scroll_effects"
-        },
-        "hover_enabled": {
-            "type": "skip",
-            "default": 0
         },
         "title_font_tablet": {
             "type": "skip",

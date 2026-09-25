@@ -281,7 +281,7 @@
                 }
             }
         },
-        "field_count": 521
+        "field_count": 658
     },
     "fields": {
         "title": {
@@ -485,6 +485,237 @@
             "hover": "tabs",
             "default": "1.7em",
             "default_on_child": true
+        },
+        "body_text_shadow_style": {
+            "label": "Body Text Shadow",
+            "description": "Pick a text shadow style to enable text shadow for this element. Once enabled, you will be able to customize your text shadow style further. To disable custom text shadow style, choose the None option.",
+            "type": "presets_shadow",
+            "option_category": "configuration",
+            "default": "none",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "affects": [
+                "body_text_shadow_horizontal_length",
+                "body_text_shadow_vertical_length",
+                "body_text_shadow_blur_strength",
+                "body_text_shadow_color"
+            ],
+            "sub_toggle": "p"
+        },
+        "body_text_shadow_horizontal_length": {
+            "label": "Body Text Shadow Horizontal Length",
+            "description": "Shadow&#039;s horizontal distance from the text. A negative value places the shadow to the left of the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "p"
+        },
+        "body_text_shadow_vertical_length": {
+            "label": "Body Text Shadow Vertical Length",
+            "description": "Shadow&#039;s vertical distance from the text. A negative value places the shadow above the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0.08em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "p"
+        },
+        "body_text_shadow_blur_strength": {
+            "label": "Body Text Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": 0,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0.3em",
+                    "preset4": "0em",
+                    "preset5": "0em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "p"
+        },
+        "body_text_shadow_color": {
+            "label": "Body Text Shadow Color",
+            "description": "The color of the shadow.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "default": "rgba(0,0,0,0.4)",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "p"
+        },
+        "hover_enabled": {
+            "type": "skip",
+            "default": 0
+        },
+        "body_text_shadow_horizontal_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_horizontal_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_horizontal_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_vertical_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_vertical_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_vertical_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_blur_strength_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_blur_strength_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_blur_strength_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_text_shadow_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
         },
         "body_ul_type": {
             "label": "Unordered List Style Type",
@@ -806,6 +1037,228 @@
             },
             "hover": "tabs"
         },
+        "tab_text_shadow_style": {
+            "label": "Tab Text Shadow",
+            "description": "Pick a text shadow style to enable text shadow for this element. Once enabled, you will be able to customize your text shadow style further. To disable custom text shadow style, choose the None option.",
+            "type": "presets_shadow",
+            "option_category": "configuration",
+            "default": "none",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "tab",
+            "affects": [
+                "tab_text_shadow_horizontal_length",
+                "tab_text_shadow_vertical_length",
+                "tab_text_shadow_blur_strength",
+                "tab_text_shadow_color"
+            ]
+        },
+        "tab_text_shadow_horizontal_length": {
+            "label": "Tab Text Shadow Horizontal Length",
+            "description": "Shadow&#039;s horizontal distance from the text. A negative value places the shadow to the left of the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "tab_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "tab_text_shadow_vertical_length": {
+            "label": "Tab Text Shadow Vertical Length",
+            "description": "Shadow&#039;s vertical distance from the text. A negative value places the shadow above the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "tab_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0.08em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "tab_text_shadow_blur_strength": {
+            "label": "Tab Text Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": 0,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "tab_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0.3em",
+                    "preset4": "0em",
+                    "preset5": "0em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "tab_text_shadow_color": {
+            "label": "Tab Text Shadow Color",
+            "description": "The color of the shadow.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "default": "rgba(0,0,0,0.4)",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "tab",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true
+        },
+        "tab_text_shadow_horizontal_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_horizontal_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_horizontal_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_vertical_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_vertical_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_vertical_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_blur_strength_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_blur_strength_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_blur_strength_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
+        "tab_text_shadow_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "tab"
+        },
         "body_link_font": {
             "label": "Link Font",
             "description": "Choose a custom font to use for the Link. All Google web fonts are available, or you can upload your own custom font files.",
@@ -948,6 +1401,233 @@
             "hover": "tabs",
             "default": "1em",
             "default_on_child": true
+        },
+        "body_link_text_shadow_style": {
+            "label": "Link Text Shadow",
+            "description": "Pick a text shadow style to enable text shadow for this element. Once enabled, you will be able to customize your text shadow style further. To disable custom text shadow style, choose the None option.",
+            "type": "presets_shadow",
+            "option_category": "configuration",
+            "default": "none",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "affects": [
+                "body_link_text_shadow_horizontal_length",
+                "body_link_text_shadow_vertical_length",
+                "body_link_text_shadow_blur_strength",
+                "body_link_text_shadow_color"
+            ],
+            "sub_toggle": "a"
+        },
+        "body_link_text_shadow_horizontal_length": {
+            "label": "Link Text Shadow Horizontal Length",
+            "description": "Shadow&#039;s horizontal distance from the text. A negative value places the shadow to the left of the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_link_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "a"
+        },
+        "body_link_text_shadow_vertical_length": {
+            "label": "Link Text Shadow Vertical Length",
+            "description": "Shadow&#039;s vertical distance from the text. A negative value places the shadow above the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_link_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0.08em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "a"
+        },
+        "body_link_text_shadow_blur_strength": {
+            "label": "Link Text Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": 0,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_link_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0.3em",
+                    "preset4": "0em",
+                    "preset5": "0em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "a"
+        },
+        "body_link_text_shadow_color": {
+            "label": "Link Text Shadow Color",
+            "description": "The color of the shadow.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "default": "rgba(0,0,0,0.4)",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "a"
+        },
+        "body_link_text_shadow_horizontal_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_horizontal_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_horizontal_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_vertical_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_vertical_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_vertical_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_blur_strength_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_blur_strength_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_blur_strength_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_link_text_shadow_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
         },
         "body_ul_font": {
             "label": "Unordered List Font",
@@ -1092,6 +1772,233 @@
             "default": "1em",
             "default_on_child": true
         },
+        "body_ul_text_shadow_style": {
+            "label": "Unordered List Text Shadow",
+            "description": "Pick a text shadow style to enable text shadow for this element. Once enabled, you will be able to customize your text shadow style further. To disable custom text shadow style, choose the None option.",
+            "type": "presets_shadow",
+            "option_category": "configuration",
+            "default": "none",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "affects": [
+                "body_ul_text_shadow_horizontal_length",
+                "body_ul_text_shadow_vertical_length",
+                "body_ul_text_shadow_blur_strength",
+                "body_ul_text_shadow_color"
+            ],
+            "sub_toggle": "ul"
+        },
+        "body_ul_text_shadow_horizontal_length": {
+            "label": "Unordered List Text Shadow Horizontal Length",
+            "description": "Shadow&#039;s horizontal distance from the text. A negative value places the shadow to the left of the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_ul_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "ul"
+        },
+        "body_ul_text_shadow_vertical_length": {
+            "label": "Unordered List Text Shadow Vertical Length",
+            "description": "Shadow&#039;s vertical distance from the text. A negative value places the shadow above the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_ul_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0.08em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "ul"
+        },
+        "body_ul_text_shadow_blur_strength": {
+            "label": "Unordered List Text Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": 0,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_ul_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0.3em",
+                    "preset4": "0em",
+                    "preset5": "0em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "ul"
+        },
+        "body_ul_text_shadow_color": {
+            "label": "Unordered List Text Shadow Color",
+            "description": "The color of the shadow.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "default": "rgba(0,0,0,0.4)",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "ul"
+        },
+        "body_ul_text_shadow_horizontal_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_horizontal_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_horizontal_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_vertical_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_vertical_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_vertical_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_blur_strength_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_blur_strength_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_blur_strength_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ul_text_shadow_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
         "body_ol_font": {
             "label": "Ordered List Font",
             "description": "Choose a custom font to use for the Ordered List. All Google web fonts are available, or you can upload your own custom font files.",
@@ -1235,6 +2142,233 @@
             "default": "1em",
             "default_on_child": true
         },
+        "body_ol_text_shadow_style": {
+            "label": "Ordered List Text Shadow",
+            "description": "Pick a text shadow style to enable text shadow for this element. Once enabled, you will be able to customize your text shadow style further. To disable custom text shadow style, choose the None option.",
+            "type": "presets_shadow",
+            "option_category": "configuration",
+            "default": "none",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "affects": [
+                "body_ol_text_shadow_horizontal_length",
+                "body_ol_text_shadow_vertical_length",
+                "body_ol_text_shadow_blur_strength",
+                "body_ol_text_shadow_color"
+            ],
+            "sub_toggle": "ol"
+        },
+        "body_ol_text_shadow_horizontal_length": {
+            "label": "Ordered List Text Shadow Horizontal Length",
+            "description": "Shadow&#039;s horizontal distance from the text. A negative value places the shadow to the left of the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_ol_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "ol"
+        },
+        "body_ol_text_shadow_vertical_length": {
+            "label": "Ordered List Text Shadow Vertical Length",
+            "description": "Shadow&#039;s vertical distance from the text. A negative value places the shadow above the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_ol_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0.08em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "ol"
+        },
+        "body_ol_text_shadow_blur_strength": {
+            "label": "Ordered List Text Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": 0,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_ol_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0.3em",
+                    "preset4": "0em",
+                    "preset5": "0em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "ol"
+        },
+        "body_ol_text_shadow_color": {
+            "label": "Ordered List Text Shadow Color",
+            "description": "The color of the shadow.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "default": "rgba(0,0,0,0.4)",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "ol"
+        },
+        "body_ol_text_shadow_horizontal_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_horizontal_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_horizontal_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_vertical_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_vertical_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_vertical_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_blur_strength_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_blur_strength_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_blur_strength_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_ol_text_shadow_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
         "body_quote_font": {
             "label": "Blockquote Font",
             "description": "Choose a custom font to use for the Blockquote. All Google web fonts are available, or you can upload your own custom font files.",
@@ -1377,6 +2511,233 @@
             "hover": "tabs",
             "default": "1em",
             "default_on_child": true
+        },
+        "body_quote_text_shadow_style": {
+            "label": "Blockquote Text Shadow",
+            "description": "Pick a text shadow style to enable text shadow for this element. Once enabled, you will be able to customize your text shadow style further. To disable custom text shadow style, choose the None option.",
+            "type": "presets_shadow",
+            "option_category": "configuration",
+            "default": "none",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "affects": [
+                "body_quote_text_shadow_horizontal_length",
+                "body_quote_text_shadow_vertical_length",
+                "body_quote_text_shadow_blur_strength",
+                "body_quote_text_shadow_color"
+            ],
+            "sub_toggle": "quote"
+        },
+        "body_quote_text_shadow_horizontal_length": {
+            "label": "Blockquote Text Shadow Horizontal Length",
+            "description": "Shadow&#039;s horizontal distance from the text. A negative value places the shadow to the left of the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_quote_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "quote"
+        },
+        "body_quote_text_shadow_vertical_length": {
+            "label": "Blockquote Text Shadow Vertical Length",
+            "description": "Shadow&#039;s vertical distance from the text. A negative value places the shadow above the text.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": -2,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_quote_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0em",
+                    "preset4": "0.08em",
+                    "preset5": "0.08em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "quote"
+        },
+        "body_quote_text_shadow_blur_strength": {
+            "label": "Blockquote Text Shadow Blur Strength",
+            "description": "The higher the value, the bigger the blur, the shadow becomes wider and lighter.",
+            "type": "range",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "range_settings": {
+                "min": 0,
+                "max": 2,
+                "step": 0.01
+            },
+            "default": [
+                "body_quote_text_shadow_style",
+                {
+                    "none": "0em",
+                    "preset1": "0.1em",
+                    "preset2": "0.08em",
+                    "preset3": "0.3em",
+                    "preset4": "0em",
+                    "preset5": "0em"
+                }
+            ],
+            "default_on_child": true,
+            "validate_unit": true,
+            "allowed_units": [
+                "em",
+                "rem",
+                "px",
+                "cm",
+                "mm",
+                "in",
+                "pt",
+                "pc",
+                "ex",
+                "vh",
+                "vw"
+            ],
+            "default_unit": "em",
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "quote"
+        },
+        "body_quote_text_shadow_color": {
+            "label": "Blockquote Text Shadow Color",
+            "description": "The color of the shadow.",
+            "type": "color-alpha",
+            "hover": "tabs",
+            "option_category": "configuration",
+            "default": "rgba(0,0,0,0.4)",
+            "default_on_child": true,
+            "tab_slug": "advanced",
+            "toggle_slug": "body",
+            "depends_show_if_not": "none",
+            "mobile_options": true,
+            "sticky": true,
+            "sub_toggle": "quote"
+        },
+        "body_quote_text_shadow_horizontal_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_horizontal_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_horizontal_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_vertical_length_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_vertical_length_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_vertical_length_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_blur_strength_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_blur_strength_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_blur_strength_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_color_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_color_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
+        },
+        "body_quote_text_shadow_color_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "body"
         },
         "background_color": {
             "type": "color-alpha",
@@ -3294,6 +4655,323 @@
                 }
             }
         },
+        "transform_scale": {
+            "type": "transform",
+            "label": "Transform Scale",
+            "default": "100%|100%",
+            "default_unit": "%",
+            "range_settings": {
+                "min": -100,
+                "max": 300,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "scale",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_scale_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked__hover": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_scale_linked__sticky": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "scale"
+        },
+        "transform_translate": {
+            "type": "transform",
+            "label": "Transform Translate",
+            "default": "0px|0px",
+            "default_unit": "px",
+            "range_settings": {
+                "min": -300,
+                "max": 300,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "translate",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_translate_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked__hover": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_translate_linked__sticky": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "translate"
+        },
+        "transform_rotate": {
+            "type": "transform",
+            "label": "Transform Rotate",
+            "default": "0deg|0deg|0deg",
+            "default_unit": "deg",
+            "range_settings": {
+                "min": 0,
+                "max": 360,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_rotate_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate"
+        },
+        "transform_rotate_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate"
+        },
+        "transform_rotate_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "rotate"
+        },
+        "transform_skew": {
+            "type": "transform",
+            "label": "Transform Skew",
+            "default": "0deg|0deg",
+            "default_unit": "deg",
+            "range_settings": {
+                "min": -180,
+                "max": 180,
+                "min_limit": -180,
+                "max_limit": 180,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "skew",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_skew_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked__hover": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_skew_linked__sticky": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "default": "on",
+            "composite_of": "transform_styles",
+            "composite_tab": "skew"
+        },
+        "transform_origin": {
+            "type": "transform",
+            "label": "Transform Origin",
+            "default": "50%|50%",
+            "default_unit": "%",
+            "range_settings": {
+                "min": -50,
+                "max": 150,
+                "step": 1
+            },
+            "context": "transform_styles",
+            "mobile_options": true,
+            "sticky": true,
+            "composite_of": "transform_styles",
+            "composite_tab": "origin",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform"
+        },
+        "transform_origin_tablet": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "origin"
+        },
+        "transform_origin_phone": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "origin"
+        },
+        "transform_origin_last_edited": {
+            "type": "skip",
+            "tab_slug": "advanced",
+            "toggle_slug": "transform",
+            "composite_of": "transform_styles",
+            "composite_tab": "origin"
+        },
         "transform_styles_last_edited": {
             "type": "skip",
             "tab_slug": "advanced",
@@ -3882,10 +5560,6 @@
             },
             "toggle_slug": "link_options",
             "default_on_front": "off"
-        },
-        "hover_enabled": {
-            "type": "skip",
-            "default": 0
         },
         "body_font_tablet": {
             "type": "skip",

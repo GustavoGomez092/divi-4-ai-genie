@@ -1,6 +1,6 @@
 {
     "divi_version": "4.27.9",
-    "generated": "2026-09-24T22:35:41+00:00",
+    "generated": "2026-09-24T23:57:51+00:00",
     "modules": {
         "et_pb_accordion": {
             "name": "Accordion",
@@ -8,7 +8,7 @@
             "child_slug": "et_pb_accordion_item",
             "fullwidth": false,
             "structure": false,
-            "field_count": 706
+            "field_count": 979
         },
         "et_pb_accordion_item": {
             "name": "Accordion",
@@ -16,7 +16,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 636
+            "field_count": 909
         },
         "et_pb_audio": {
             "name": "Audio",
@@ -24,7 +24,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 589
+            "field_count": 867
         },
         "et_pb_blog": {
             "name": "Blog",
@@ -32,7 +32,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 826
+            "field_count": 1288
         },
         "et_pb_blurb": {
             "name": "Blurb",
@@ -40,7 +40,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 754
+            "field_count": 1100
         },
         "et_pb_button": {
             "name": "Button",
@@ -48,7 +48,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 407
+            "field_count": 496
         },
         "et_pb_circle_counter": {
             "name": "Circle Counter",
@@ -56,7 +56,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 550
+            "field_count": 738
         },
         "et_pb_code": {
             "name": "Code",
@@ -64,7 +64,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 478
+            "field_count": 615
         },
         "et_pb_column": {
             "name": "Column",
@@ -72,7 +72,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": true,
-            "field_count": 441
+            "field_count": 578
         },
         "et_pb_comments": {
             "name": "Comments",
@@ -80,7 +80,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 891
+            "field_count": 1417
         },
         "et_pb_contact_field": {
             "name": "Field",
@@ -88,7 +88,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 452
+            "field_count": 606
         },
         "et_pb_contact_form": {
             "name": "Contact Form",
@@ -96,7 +96,7 @@
             "child_slug": "et_pb_contact_field",
             "fullwidth": false,
             "structure": false,
-            "field_count": 790
+            "field_count": 1037
         },
         "et_pb_countdown_timer": {
             "name": "Countdown Timer",
@@ -104,7 +104,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 583
+            "field_count": 805
         },
         "et_pb_counter": {
             "name": "Bar Counter",
@@ -112,7 +112,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 460
+            "field_count": 648
         },
         "et_pb_counters": {
             "name": "Bar Counters",
@@ -120,7 +120,7 @@
             "child_slug": "et_pb_counter",
             "fullwidth": false,
             "structure": false,
-            "field_count": 538
+            "field_count": 726
         },
         "et_pb_cta": {
             "name": "Call To Action",
@@ -128,7 +128,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 879
+            "field_count": 1177
         },
         "et_pb_divider": {
             "name": "Divider",
@@ -136,7 +136,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 490
+            "field_count": 627
         },
         "et_pb_filterable_portfolio": {
             "name": "Filterable Portfolio",
@@ -144,7 +144,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 637
+            "field_count": 949
         },
         "et_pb_fullwidth_code": {
             "name": "Fullwidth Code",
@@ -152,7 +152,7 @@
             "child_slug": null,
             "fullwidth": true,
             "structure": false,
-            "field_count": 478
+            "field_count": 615
         },
         "et_pb_fullwidth_header": {
             "name": "Fullwidth Header",
@@ -160,7 +160,7 @@
             "child_slug": null,
             "fullwidth": true,
             "structure": false,
-            "field_count": 1180
+            "field_count": 1627
         },
         "et_pb_fullwidth_image": {
             "name": "Fullwidth Image",
@@ -168,7 +168,7 @@
             "child_slug": null,
             "fullwidth": true,
             "structure": false,
-            "field_count": 490
+            "field_count": 627
         },
         "et_pb_fullwidth_map": {
             "name": "Fullwidth Map",
@@ -176,7 +176,7 @@
             "child_slug": "et_pb_map_pin",
             "fullwidth": true,
             "structure": false,
-            "field_count": 517
+            "field_count": 654
         },
         "et_pb_fullwidth_menu": {
             "name": "Fullwidth Menu",
@@ -184,7 +184,7 @@
             "child_slug": null,
             "fullwidth": true,
             "structure": false,
-            "field_count": 625
+            "field_count": 886
         },
         "et_pb_fullwidth_portfolio": {
             "name": "Fullwidth Portfolio",
@@ -192,7 +192,7 @@
             "child_slug": null,
             "fullwidth": true,
             "structure": false,
-            "field_count": 625
+            "field_count": 920
         },
         "et_pb_fullwidth_post_content": {
             "name": "Fullwidth Post Content",
@@ -200,7 +200,7 @@
             "child_slug": null,
             "fullwidth": true,
             "structure": false,
-            "field_count": 748
+            "field_count": 1232
         },
         "et_pb_fullwidth_post_slider": {
             "name": "Fullwidth Post Slider",
@@ -208,7 +208,7 @@
             "child_slug": null,
             "fullwidth": true,
             "structure": false,
-            "field_count": 999
+            "field_count": 1404
         },
         "et_pb_fullwidth_post_title": {
             "name": "Fullwidth Post Title",
@@ -216,7 +216,7 @@
             "child_slug": null,
             "fullwidth": true,
             "structure": false,
-            "field_count": 584
+            "field_count": 772
         },
         "et_pb_fullwidth_slider": {
             "name": "Fullwidth Slider",
@@ -224,7 +224,7 @@
             "child_slug": "et_pb_slide",
             "fullwidth": true,
             "structure": false,
-            "field_count": 905
+            "field_count": 1293
         },
         "et_pb_gallery": {
             "name": "Gallery",
@@ -232,7 +232,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 625
+            "field_count": 920
         },
         "et_pb_heading": {
             "name": "Heading",
@@ -240,7 +240,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 464
+            "field_count": 635
         },
         "et_pb_icon": {
             "name": "Icon",
@@ -248,7 +248,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 419
+            "field_count": 556
         },
         "et_pb_image": {
             "name": "Image",
@@ -256,7 +256,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 499
+            "field_count": 636
         },
         "et_pb_login": {
             "name": "Login",
@@ -264,7 +264,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 920
+            "field_count": 1390
         },
         "et_pb_map": {
             "name": "Map",
@@ -272,7 +272,7 @@
             "child_slug": "et_pb_map_pin",
             "fullwidth": false,
             "structure": false,
-            "field_count": 520
+            "field_count": 657
         },
         "et_pb_map_pin": {
             "name": "Pin",
@@ -288,7 +288,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 624
+            "field_count": 885
         },
         "et_pb_number_counter": {
             "name": "Number Counter",
@@ -296,7 +296,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 542
+            "field_count": 730
         },
         "et_pb_portfolio": {
             "name": "Portfolio",
@@ -304,7 +304,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 619
+            "field_count": 914
         },
         "et_pb_post_content": {
             "name": "Post Content",
@@ -312,7 +312,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 748
+            "field_count": 1232
         },
         "et_pb_post_nav": {
             "name": "Post Navigation",
@@ -320,7 +320,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 512
+            "field_count": 666
         },
         "et_pb_post_slider": {
             "name": "Post Slider",
@@ -328,7 +328,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 999
+            "field_count": 1404
         },
         "et_pb_post_title": {
             "name": "Post Title",
@@ -336,7 +336,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 584
+            "field_count": 772
         },
         "et_pb_pricing_table": {
             "name": "Pricing Table",
@@ -344,7 +344,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 891
+            "field_count": 1322
         },
         "et_pb_pricing_tables": {
             "name": "Pricing Tables",
@@ -352,7 +352,7 @@
             "child_slug": "et_pb_pricing_table",
             "fullwidth": false,
             "structure": false,
-            "field_count": 1018
+            "field_count": 1449
         },
         "et_pb_row": {
             "name": "Row",
@@ -360,7 +360,7 @@
             "child_slug": "et_pb_column",
             "fullwidth": false,
             "structure": true,
-            "field_count": 886
+            "field_count": 1023
         },
         "et_pb_row_inner": {
             "name": "Row",
@@ -368,7 +368,7 @@
             "child_slug": "et_pb_column_inner",
             "fullwidth": false,
             "structure": true,
-            "field_count": 748
+            "field_count": 885
         },
         "et_pb_search": {
             "name": "Search",
@@ -376,7 +376,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 553
+            "field_count": 741
         },
         "et_pb_section": {
             "name": "Section",
@@ -384,7 +384,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": true,
-            "field_count": 735
+            "field_count": 884
         },
         "et_pb_sidebar": {
             "name": "Sidebar",
@@ -392,7 +392,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 532
+            "field_count": 720
         },
         "et_pb_signup": {
             "name": "Email Optin",
@@ -400,7 +400,7 @@
             "child_slug": "et_pb_signup_custom_field",
             "fullwidth": false,
             "structure": false,
-            "field_count": 1006
+            "field_count": 1493
         },
         "et_pb_signup_custom_field": {
             "name": "Custom Field",
@@ -408,7 +408,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 451
+            "field_count": 670
         },
         "et_pb_slide": {
             "name": "Slide",
@@ -416,7 +416,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 802
+            "field_count": 1088
         },
         "et_pb_slider": {
             "name": "Slider",
@@ -424,7 +424,7 @@
             "child_slug": "et_pb_slide",
             "fullwidth": false,
             "structure": false,
-            "field_count": 905
+            "field_count": 1293
         },
         "et_pb_social_media_follow": {
             "name": "Social Media Follow",
@@ -432,7 +432,7 @@
             "child_slug": "et_pb_social_media_follow_network",
             "fullwidth": false,
             "structure": false,
-            "field_count": 674
+            "field_count": 870
         },
         "et_pb_social_media_follow_network": {
             "name": "Social Network",
@@ -440,7 +440,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 564
+            "field_count": 743
         },
         "et_pb_tab": {
             "name": "Tab",
@@ -448,7 +448,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 521
+            "field_count": 658
         },
         "et_pb_tabs": {
             "name": "Tabs",
@@ -456,7 +456,7 @@
             "child_slug": "et_pb_tab",
             "fullwidth": false,
             "structure": false,
-            "field_count": 658
+            "field_count": 897
         },
         "et_pb_team_member": {
             "name": "Person",
@@ -464,7 +464,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 749
+            "field_count": 1112
         },
         "et_pb_testimonial": {
             "name": "Testimonial",
@@ -472,7 +472,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 789
+            "field_count": 1152
         },
         "et_pb_text": {
             "name": "Text",
@@ -480,7 +480,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 774
+            "field_count": 1098
         },
         "et_pb_toggle": {
             "name": "Toggle",
@@ -488,7 +488,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 726
+            "field_count": 999
         },
         "et_pb_video": {
             "name": "Video",
@@ -496,7 +496,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 500
+            "field_count": 637
         },
         "et_pb_video_slider": {
             "name": "Video Slider",
@@ -504,7 +504,7 @@
             "child_slug": "et_pb_video_slider_item",
             "fullwidth": false,
             "structure": false,
-            "field_count": 501
+            "field_count": 638
         },
         "et_pb_video_slider_item": {
             "name": "Video",
@@ -512,7 +512,7 @@
             "child_slug": null,
             "fullwidth": false,
             "structure": false,
-            "field_count": 154
+            "field_count": 189
         }
     }
 }

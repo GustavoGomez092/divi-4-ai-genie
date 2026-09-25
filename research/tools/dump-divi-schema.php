@@ -67,12 +67,44 @@ foreach ( $modules as $m ) {
 		$fields = array();
 	}
 
-	$clean_fields = array();
+	// Divi compresses shared groups (border, text_shadow, ...) into option-template
+	// placeholders (`%t<hash>` => 'border'); expand them into real fields.
+	$expanded = array();
 	foreach ( $fields as $name => $def ) {
+		if ( ! is_array( $def ) && ET_Builder_Element::$option_template && ET_Builder_Element::$option_template->is_option_template_field( $name ) ) {
+			foreach ( ET_Builder_Element::$option_template->rebuild_field_template( $name ) as $rebuilt_name => $rebuilt_def ) {
+				$expanded[ $rebuilt_name ] = $rebuilt_def;
+			}
+			continue;
+		}
+		$expanded[ $name ] = $def;
+	}
+
+	$clean_fields = array();
+	foreach ( $expanded as $name => $def ) {
 		if ( ! is_array( $def ) ) {
+			WP_CLI::warning( "$slug: unexpanded non-array field $name" );
 			continue;
 		}
 		$clean_fields[ $name ] = pp_clean( array_intersect_key( $def, array_flip( $keep_keys ) ) );
+
+		// Composite fields (transforms, scroll effects) store their real attributes as
+		// sub-controls; list each one so nothing is hidden from the docs or the validator.
+		if ( 'composite' === ( $def['type'] ?? '' ) && ! empty( $def['composite_structure'] ) ) {
+			foreach ( $def['composite_structure'] as $group => $group_def ) {
+				foreach ( (array) ( $group_def['controls'] ?? array() ) as $control_name => $control_def ) {
+					if ( isset( $clean_fields[ $control_name ] ) || ! is_array( $control_def ) ) {
+						continue;
+					}
+					$control                  = pp_clean( array_intersect_key( $control_def, array_flip( $keep_keys ) ) );
+					$control['composite_of']  = $name;
+					$control['composite_tab'] = $group;
+					$control['tab_slug']      = $def['tab_slug'] ?? '';
+					$control['toggle_slug']   = $def['toggle_slug'] ?? '';
+					$clean_fields[ $control_name ] = $control;
+				}
+			}
+		}
 	}
 
 	$meta = array(

@@ -1,8 +1,8 @@
 # Divi Page Builder Skill: Design Spec
 
 - **Date:** 2026-09-24
-- **Status:** Draft, awaiting review
-- **Related research:** `research/divi-ai-findings.md`, `research/divi-schema/`, `research/divi-render-engine.md` (in progress)
+- **Status:** Approved; Addendum A added 2026-09-24
+- **Related research:** `research/divi-ai-findings.md`, `research/divi-schema/`, `research/divi-render-engine.md`
 
 ## 1. Goal
 
@@ -232,7 +232,7 @@ Both scripts use it.
 3. **Plan:** outline sections by mapping the brief to recipes, and confirm the outline with the user.
 4. **Compose:** write the shortcode section by section, using module references, recipes and tokens.
 5. **Validate:** `validate.py --tokens tokens.json`, repeating until there are 0 errors and every warning has been reviewed.
-6. **Preview:** local render. This step is optional until the render-engine investigation concludes (see Addendum A).
+6. **Preview (optional):** render on the local mirror when available (see Addendum A). The WordPress draft is the authoritative visual check.
 7. **Publish:** draft, then preview URL, then publish on approval, following `publishing.md` (tooling in the connection phase).
 
 ## 6. Testing and verification
@@ -252,5 +252,28 @@ Both scripts use it.
 - **Divi updates change fields.** Regeneration commands, plus the coverage check.
 - **Customizer and global-color extraction depends on how Divi outputs CSS.** Verified live on the local site and on one client site before the extractor is finalized; if global colors aren't exposed as CSS variables, fall back to the hex values found in `global_colors_info`.
 
-## Addendum A: Local preview (pending)
-A background investigation is studying Divi's render engine and whether pages can be rendered locally before pushing (options being evaluated: a local mirror site with the client's Divi settings imported, a headless WP-CLI render to standalone HTML, or a re-implementation). Findings will be in `research/divi-render-engine.md`. Once they arrive, this addendum will record the chosen approach, and workflow step 6 and the tests will be updated to match. Nothing else in this spec depends on the outcome.
+## Addendum A: Local preview (decided 2026-09-24)
+
+Full findings are in `research/divi-render-engine.md`. The prototype is in `research/render-prototype/`.
+
+- **Approach:** a headless render script (`render.php`, run via WP-CLI `eval-file`) on a local **mirror** WordPress running the same Divi version as the target site (LocalWP). It simulates a front-end request for a fake page held in memory, so it writes nothing to the database and nothing to `et-cache`. It outputs one standalone HTML file with CSS and JS inlined.
+- **Verified fidelity on page 11:**
+  - builder markup byte-identical to the live page;
+  - 2,099 of 2,099 CSS declarations identical;
+  - all 302 elements identical in geometry and computed style;
+  - pixel diff 0.044% on desktop, all of it animations caught mid-motion.
+- **Rejected alternatives:**
+  - A JS/Python re-implementation: the render engine is about 185k lines of PHP.
+  - `wp eval` + `the_content`: no modules get registered.
+  - Divi's preview endpoint: no header or footer, and it needs a login.
+  - VB AJAX: renders one module at a time.
+- **Client settings: not used (decision).** The preview renders with the mirror's stock Divi settings plus everything inline on the page. There is no settings bundle and no companion plugin; client theme options, presets and global colors are not read.
+  - **Consequence:** layout, structure and module-level styling are faithful. Styling that comes from the client's Customizer values or global presets looks generic in the preview. **The WordPress draft preview stays the authoritative visual check.** The skill must say this explicitly.
+  - Tokens (§4.10) are unchanged: preset UUIDs are reused without knowing their contents, and Customizer and global colors come from public CSS.
+- **Shipped as:**
+  - `scripts/preview/render.php` and `scripts/preview/run.sh`, adapted from the prototype with the settings-bundle path removed;
+  - `reference/preview.md`, covering mirror setup (a LocalWP site with the matching Divi version), running a render, opening the output, and the fidelity limits above.
+- **Workflow step 6** becomes: if a mirror is available, render the page and review the HTML (optionally screenshot it); otherwise skip to the draft push.
+- **Tests:**
+  - render the validator's valid fixtures on the local mirror; every one must produce HTML containing `.et-l` with one `.et_pb_section` per section in the source;
+  - render page 11's shortcode and compare builder CSS declarations with the live page (must be identical).
