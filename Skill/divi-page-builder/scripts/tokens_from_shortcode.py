@@ -7,7 +7,7 @@ import re
 from collections import Counter, defaultdict
 from typing import List
 
-from divi_checks_values import COLOR_TYPES, normalize_color
+from divi_checks_values import COLOR_RE, is_color_field, normalize_color
 from divi_shortcode import Node
 
 STRUCTURAL_ATTRS = {"column_structure", "type", "fullwidth", "specialty", "specialty_columns",
@@ -23,10 +23,22 @@ def is_design_attr(mod, name: str) -> bool:
     res = mod.resolve(name)
     if res is None or res.kind in ("global", "extra"):
         return False
+    if (res.field or {}).get("type") == "upload":
+        return False
     if res.kind in ("state_toggle", "bg_enable"):
         return True
     field = res.field or {}
     return field.get("tab") == "advanced" or field.get("toggle") == "background"
+
+
+def _is_upload_attr(mod, name: str) -> bool:
+    res = mod.resolve(name)
+    return bool(res and (res.field or {}).get("type") == "upload")
+
+
+def _media_attrs(mod, node: Node) -> List[str]:
+    """Attribute names (never values/URLs) of any upload fields the module actually uses."""
+    return sorted(k for k in node.attrs if node.value(k) and _is_upload_attr(mod, k))
 
 
 def _luminance(color: str):
@@ -55,7 +67,8 @@ def _skeleton(node: Node, schema):
     mod = schema.module(node.tag)
     attrs = {k: node.value(k) for k in node.attrs
              if k in STRUCTURAL_ATTRS or (mod is not None and is_design_attr(mod, k))}
-    return {"tag": node.tag, "attrs": attrs, "children": [_skeleton(c, schema) for c in node.modules]}
+    media = _media_attrs(mod, node) if mod is not None else []
+    return {"tag": node.tag, "attrs": attrs, "media": media, "children": [_skeleton(c, schema) for c in node.modules]}
 
 
 def tokens_from_documents(docs: List, schema) -> dict:
@@ -91,7 +104,10 @@ def tokens_from_documents(docs: List, schema) -> dict:
             preset = node.value("_module_preset") or "default"
             if preset != "default":
                 presets[node.tag][preset] += 1
-            key = json.dumps([sorted(design.items()), preset, node.value("module_class")])
+            module_id = node.value("module_id")
+            custom_css = {k: node.value(k) for k in node.attrs if k.startswith("custom_css_")}
+            key = json.dumps([sorted(design.items()), preset, node.value("module_class"), module_id,
+                               sorted(custom_css.items())])
             section, column, cur = None, None, parent
             while cur is not None:
                 if cur.tag in ("et_pb_column", "et_pb_column_inner") and column is None:
@@ -103,14 +119,20 @@ def tokens_from_documents(docs: List, schema) -> dict:
             ctx["column_type"] = column.value("type") if column is not None else ""
             entry = styles[node.tag].setdefault(key, {
                 "uses": 0, "attrs": dict(sorted(design.items())), "preset": preset,
-                "module_class": node.value("module_class"), "module_id": node.value("module_id"),
-                "custom_css": {k: node.value(k) for k in node.attrs if k.startswith("custom_css_")}, "contexts": []})
+                "module_class": node.value("module_class"), "module_id": module_id,
+                "custom_css": custom_css, "media": [], "contexts": []})
             entry["uses"] += 1
             entry["contexts"].append(ctx)
+            node_media = _media_attrs(mod, node)
+            if node_media:
+                entry["media"] = sorted(set(entry["media"]) | set(node_media))
             for name, value in design.items():
                 res = mod.resolve(name)
-                ftype = (res.field or {}).get("type") if res else None
-                if ftype in COLOR_TYPES and value and not value.startswith("gcid-"):
+                if (res is not None and res.kind in ("field", "hover", "sticky", "responsive")
+                        and not name.endswith("_last_edited")
+                        and is_color_field(res.base, res.field)
+                        and value and not value.startswith("gcid-")
+                        and COLOR_RE.match(value.strip())):
                     p = palette[normalize_color(value)]
                     p["uses"] += 1
                     p["roles"].add(name)

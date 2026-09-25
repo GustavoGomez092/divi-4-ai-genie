@@ -1,6 +1,8 @@
+import json
 import unittest
 
 from _paths import FIXTURES
+from divi_checks_values import COLOR_RE
 from divi_schema import load_schema
 from divi_shortcode import parse
 from tokens_from_shortcode import is_design_attr, tokens_from_documents
@@ -71,6 +73,39 @@ class TokensFromShortcodeTest(unittest.TestCase):
         src = '[et_pb_button button_text="Click" button_url="#" _module_preset="x" _module_preset="y"][/et_pb_button]'
         t = tokens_from_documents([parse(src)], SCHEMA)
         self.assertEqual(t["presets"]["et_pb_button"], [{"uuid": "y", "uses": 1}])
+
+    def test_state_toggle_and_last_edited_are_not_colors(self):
+        # button_bg_color is used nowhere else in SRC, so any leaked non-hex "color" would be
+        # obvious; also assert the __hover_enabled / _last_edited style-carrier values never
+        # land in the palette even though they resolve through a color field.
+        hexes = {p["hex"] for p in self.t["colors"]["palette"]}
+        self.assertNotIn("on|hover", hexes)
+        self.assertNotIn("on|phone", hexes)
+        for h in hexes:
+            self.assertTrue(COLOR_RE.match(h), h)
+
+    def test_background_field_color_captured_in_palette(self):
+        src = ('[et_pb_section][et_pb_row][et_pb_column type="4_4"]'
+               '[et_pb_button button_text="Buy" button_url="#" button_bg_color="#123abc"][/et_pb_button]'
+               '[/et_pb_column][/et_pb_row][/et_pb_section]')
+        t = tokens_from_documents([parse(src)], SCHEMA)
+        hexes = {p["hex"]: p for p in t["colors"]["palette"]}
+        self.assertIn("#123abc", hexes)
+        self.assertIn("button_bg_color", hexes["#123abc"]["roles"])
+
+    def test_media_urls_excluded_from_tokens(self):
+        src = ('[et_pb_section background_image="https://x/secret.jpg"][et_pb_row]'
+               '[et_pb_column type="4_4"][et_pb_text]<p>hi</p>[/et_pb_text]'
+               '[/et_pb_column][/et_pb_row][/et_pb_section]')
+        t = tokens_from_documents([parse(src)], SCHEMA)
+        self.assertNotIn("secret.jpg", json.dumps(t))
+        self.assertEqual(t["section_exemplars"][0]["media"], ["background_image"])
+
+    def test_palette_hexes_are_valid_on_real_layout(self):
+        doc = parse((FIXTURES / "valid" / "divi-ai-layout.txt").read_text())
+        t = tokens_from_documents([doc], SCHEMA)
+        for p in t["colors"]["palette"]:
+            self.assertTrue(COLOR_RE.match(p["hex"]), p["hex"])
 
 
 if __name__ == "__main__":

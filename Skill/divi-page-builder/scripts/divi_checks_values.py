@@ -32,6 +32,17 @@ def normalize_color(value: str) -> str:
     return v
 
 
+def is_color_field(name: str, field: Optional[dict]) -> bool:
+    """True for a plain color field, or a "background-field" composite whose base attribute
+    (e.g. button_bg_color) is itself the hex/rgba color, as opposed to its image/gradient/video
+    siblings."""
+    field = field or {}
+    ftype = field.get("type")
+    if ftype in COLOR_TYPES:
+        return True
+    return ftype == "background-field" and name.endswith("_color")
+
+
 def _length_ok(part: str, units) -> bool:
     if part == "" or part.lower() in CSS_KEYWORDS or part.startswith(("calc(", "var(", "clamp(", "min(", "max(")):
         return True
@@ -77,7 +88,7 @@ def value_problems(res, attr: str, value: str) -> List[Problem]:
         code = "E_BAD_UNIT" if m else "E_VALUE_FORMAT"
         return [("error", code, f"'{value}' is not a valid length for {attr}",
                  "Allowed units: " + ", ".join(field.get("units", sorted(GENERIC_UNITS - {''}))))]
-    if ftype in COLOR_TYPES:
+    if is_color_field(res.base, field):
         return [] if COLOR_RE.match(value.strip()) else [(
             "error", "E_VALUE_FORMAT", f"'{value}' is not a color", "Use #hex, rgba(), or a gcid- global color id.")]
     if ftype == "font":

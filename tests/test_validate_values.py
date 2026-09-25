@@ -60,6 +60,10 @@ class AttributeTest(unittest.TestCase):
             self.assertEqual(found(f'[et_pb_blurb icon_color="{ok}"][/et_pb_blurb]', "error"), [], ok)
         self.assertIn(("error", "E_VALUE_FORMAT", "icon_color"), found('[et_pb_blurb icon_color="blue-ish"][/et_pb_blurb]'))
 
+    def test_background_field_color_format(self):
+        self.assertEqual(found('[et_pb_button button_bg_color="#f97316"][/et_pb_button]', "error"), [])
+        self.assertIn(("error", "E_VALUE_FORMAT", "button_bg_color"), found('[et_pb_button button_bg_color="not-a-color"][/et_pb_button]'))
+
     def test_font_string(self):
         self.assertEqual(found('[et_pb_heading title_font="Montserrat|700|||||||"][/et_pb_heading]', "error"), [])
         self.assertIn(("error", "E_VALUE_FORMAT", "title_font"), found('[et_pb_heading title_font="A|700|||||||||||"][/et_pb_heading]'))
