@@ -38,10 +38,10 @@
    "default_on_front": "",
    "label": "ActiveCampaign List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -195,10 +195,10 @@
    "default_on_front": "",
    "label": "Aweber List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -4450,10 +4450,10 @@
    "default_on_front": "",
    "label": "CampaignMonitor List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -4464,10 +4464,10 @@
    "default_on_front": "",
    "label": "ConstantContact List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -4478,10 +4478,10 @@
    "default_on_front": "",
    "label": "ConvertKit List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -4641,10 +4641,10 @@
    "default_on_front": "",
    "label": "Emma List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -4655,10 +4655,10 @@
    "default_on_front": "",
    "label": "Feedblitz List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -4792,10 +4792,10 @@
    "default_on_front": "",
    "label": "FluentCRM List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5068,10 +5068,10 @@
    "default_on_front": "",
    "label": "GetResponse List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5345,10 +5345,10 @@
    "default_on_front": "",
    "label": "HubSpot List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5359,10 +5359,10 @@
    "default_on_front": "",
    "label": "iContact List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5373,10 +5373,10 @@
    "default_on_front": "",
    "label": "Infusionsoft List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5451,10 +5451,10 @@
    "default_on_front": "",
    "label": "MadMimi List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5465,10 +5465,10 @@
    "default_on_front": "",
    "label": "MailChimp List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5479,10 +5479,10 @@
    "default_on_front": "",
    "label": "MailerLite List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5493,10 +5493,10 @@
    "default_on_front": "",
    "label": "MailPoet List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5507,10 +5507,10 @@
    "default_on_front": "",
    "label": "Mailster List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5650,10 +5650,10 @@
    "default_on_front": "",
    "label": "Ontraport List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -5849,10 +5849,10 @@
    "default": "0|none",
    "label": "reCAPTCHA v3 Account",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "spam",
@@ -6059,10 +6059,10 @@
    "default_on_front": "",
    "label": "SalesForce List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",
@@ -6205,10 +6205,10 @@
    "default_on_front": "",
    "label": "SendinBlue List",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "provider",

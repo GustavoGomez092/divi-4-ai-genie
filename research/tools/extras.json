@@ -3,7 +3,7 @@
     "global_colors_info": {"type": "global_colors_info", "why": "Global color bookkeeping; JSON escaped with %22/%91/%93 (seen on every module in Divi AI output)"},
     "locked": {"type": "yes_no_button", "options": ["on", "off"], "why": "Builder lock state (Divi AI output)"},
     "collapsed": {"type": "yes_no_button", "options": ["on", "off"], "why": "Builder collapsed state (Divi AI output)"},
-    "fb_built": {"type": "text", "why": "Added to sections saved by the Visual Builder (functions.php:2093)"},
+    "fb_built": {"type": "text", "why": "Added to sections saved by the Visual Builder (includes/builder/functions.php:2093)"},
     "template_type": {"type": "text", "why": "Divi Library template marker (Divi AI output)"}
   },
   "modules": {

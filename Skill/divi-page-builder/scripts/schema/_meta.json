@@ -44,7 +44,7 @@
   },
   "fb_built": {
    "type": "text",
-   "why": "Added to sections saved by the Visual Builder (functions.php:2093)"
+   "why": "Added to sections saved by the Visual Builder (includes/builder/functions.php:2093)"
   },
   "global_colors_info": {
    "type": "global_colors_info",

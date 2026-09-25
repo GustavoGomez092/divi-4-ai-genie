@@ -3566,10 +3566,10 @@
    "default": "0|none",
    "label": "reCAPTCHA v3 Account",
    "options": [
-    "none",
-    "add_new_account",
-    "remove_account",
-    "fetch_lists"
+    "0|none",
+    "manage|add_new_account",
+    "manage|remove_account",
+    "manage|fetch_lists"
    ],
    "tab": "general",
    "toggle": "spam",

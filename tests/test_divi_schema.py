@@ -60,6 +60,11 @@ class SchemaTest(unittest.TestCase):
         self.assertEqual(self.schema.module("et_pb_button").resolve("button_bg_enable_color").kind, "bg_enable")
         self.assertEqual(self.schema.module("et_pb_accordion_item").resolve("open").kind, "extra")
 
+    def test_grouped_select_options_keep_group_prefix(self):
+        options = self.schema.module("et_pb_contact_form").fields["recaptcha_list"]["options"]
+        self.assertIn("0|none", options)
+        self.assertNotIn("none", options)
+
     def test_calibration_against_real_pages(self):
         unresolved = set()
         for path in (FIXTURES / "valid").glob("divi-ai-*.txt"):

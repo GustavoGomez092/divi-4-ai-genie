@@ -18,7 +18,7 @@ def option_values(field: dict):
     if not isinstance(opts, dict) or not opts:
         return None
     if field.get("type") == "select_with_option_groups":
-        return [str(k) for group in opts.values() if isinstance(group, dict) for k in group]
+        return [f"{group_key}|{k}" for group_key, group in opts.items() if isinstance(group, dict) for k in group]
     return [str(k) for k in opts]
 
 
