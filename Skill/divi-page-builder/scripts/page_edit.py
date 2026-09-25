@@ -7,6 +7,11 @@ Usage: page_edit.py PAGE outline
        page_edit.py PAGE set-attr PATH NAME VALUE      (VALUE is plain text; it is escaped for you)
        page_edit.py PAGE delete PATH
 Options: --out FILE (default: stdout). PATH looks like: et_pb_section[1] > et_pb_row[0] > et_pb_column[2] > et_pb_blurb[0]
+
+Note: the page (and any snippet FILE for replace/insert-after/insert-before) is read and written
+with no newline translation, so CRLF/LF line endings outside the target span are never rewritten;
+a snippet file's own line endings are kept as provided (only leading/trailing whitespace is
+stripped).
 """
 from __future__ import annotations
 
@@ -18,6 +23,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from divi_shortcode import build_open_tag, escape_attr_value, parse, replace_span  # noqa: E402
 
 
+def _read_raw(path) -> str:
+    # newline="" disables universal-newline translation: \r\n, \r and \n all come through exactly
+    # as stored on disk, so byte offsets computed against this string match the file's real bytes.
+    with open(path, encoding="utf-8", newline="") as f:
+        return f.read()
+
+
+def _write_raw(path, data: str) -> None:
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        f.write(data)
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("page")
@@ -25,7 +42,7 @@ def main(argv=None) -> int:
     ap.add_argument("args", nargs="*")
     ap.add_argument("--out")
     a = ap.parse_args(argv)
-    src = Path(a.page).read_text(encoding="utf-8")
+    src = _read_raw(a.page)
     doc = parse(src)
     if a.command == "outline":
         lines = [f"{path}  admin_label={n.value('admin_label')}  ({n.end - n.start} chars)" for n, path, _ in doc.walk()]
@@ -49,7 +66,7 @@ def main(argv=None) -> int:
         else:
             if len(a.args) != 2:
                 ap.error(f"{a.command} needs PATH FILE")
-            snippet = Path(a.args[1]).read_text(encoding="utf-8").strip()
+            snippet = _read_raw(a.args[1]).strip()
             if a.command == "replace":
                 result = replace_span(src, node.start, node.end, snippet)
             elif a.command == "insert-after":
@@ -57,8 +74,9 @@ def main(argv=None) -> int:
             else:
                 result = replace_span(src, node.start, node.start, snippet)
     if a.out:
-        Path(a.out).write_text(result, encoding="utf-8")
+        _write_raw(a.out, result)
     else:
+        sys.stdout.reconfigure(newline="")  # no translation: write result's bytes exactly as-is
         sys.stdout.write(result)
     return 0
 

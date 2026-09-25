@@ -53,6 +53,58 @@ class PageEditTest(unittest.TestCase):
         self.assertEqual(proc.returncode, 2)
         self.assertIn("no node at", proc.stderr)
 
+    def test_set_attr_preserves_crlf_outside_target_span(self):
+        # Introduce CRLFs between every section, none of them inside the node we're about to edit.
+        crlf_src = SRC.replace("[/et_pb_section]", "[/et_pb_section]\r\n")
+        with tempfile.NamedTemporaryFile("wb", suffix=".txt", delete=False) as f:
+            f.write(crlf_src.encode("utf-8"))
+        page_path = Path(f.name)
+        out_path = page_path.with_suffix(".out.txt")
+        try:
+            proc = subprocess.run(
+                [sys.executable, str(SCRIPTS / "page_edit.py"), str(page_path), "set-attr",
+                 "et_pb_section[3] > et_pb_fullwidth_header[0]", "title", "Need help now?",
+                 "--out", str(out_path)],
+                capture_output=True, text=True)
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            result = out_path.read_bytes().decode("utf-8")
+        finally:
+            page_path.unlink()
+            if out_path.exists():
+                out_path.unlink()
+
+        # Full-string comparison (not fixed byte offsets, since the new attribute value is a
+        # different length than the old one): if any CRLF anywhere else in the document had been
+        # rewritten, this equality would fail.
+        expected = crlf_src.replace('title="Need a plumber now?"', 'title="Need help now?"', 1)
+        self.assertEqual(result, expected)
+        self.assertEqual(crlf_src.count("\r\n"), result.count("\r\n"))
+        self.assertNotIn("\r\n\r\n", result)  # sanity: no accidental doubling from translation
+
+    def test_insert_after_keeps_snippet_crlf(self):
+        snippet = ('[et_pb_section admin_label="New"]\r\n'
+                   '[et_pb_row]\r\n'
+                   '[et_pb_column type="4_4"][/et_pb_column]\r\n'
+                   '[/et_pb_row]\r\n'
+                   '[/et_pb_section]')
+        with tempfile.NamedTemporaryFile("wb", suffix=".txt", delete=False) as f:
+            f.write(snippet.encode("utf-8"))
+        snippet_path = Path(f.name)
+        out_path = snippet_path.with_suffix(".out.txt")
+        try:
+            proc = subprocess.run(
+                [sys.executable, str(SCRIPTS / "page_edit.py"), str(PAGE), "insert-after",
+                 "et_pb_section[1]", str(snippet_path), "--out", str(out_path)],
+                capture_output=True, text=True)
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            result = out_path.read_bytes().decode("utf-8")
+        finally:
+            snippet_path.unlink()
+            if out_path.exists():
+                out_path.unlink()
+
+        self.assertIn(snippet, result)
+
 
 if __name__ == "__main__":
     unittest.main()
