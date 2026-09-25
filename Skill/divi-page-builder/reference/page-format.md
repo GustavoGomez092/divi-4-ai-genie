@@ -139,7 +139,7 @@ Required/relevant post meta (set with `wp post meta update <id> <key> <value>`, 
 | meta key | required? | value | purpose |
 |---|---|---|---|
 | `_et_pb_use_builder` | **required** | `on` | tells WordPress's `the_content` filter chain to run the Divi Builder's rendering instead of the classic editor's (`wpautop`-only) path. Without it, `post_content` is treated as plain text/HTML and shortcode is not recognized as Divi module output. |
-| `_et_pb_page_layout` | optional | `et_full_width_page`, `et_right_sidebar`, `et_left_sidebar`, `et_no_sidebar` | the theme's outer page template. Pages built entirely from fullwidth/specialty sections almost always want `et_full_width_page` so the theme doesn't reserve sidebar space next to full-bleed sections. |
+| `_et_pb_page_layout` | **do not set — has no effect once `_et_pb_use_builder` is `on`** | `et_full_width_page`, `et_right_sidebar`, `et_left_sidebar`, `et_no_sidebar` | on a *non*-builder page this selects the theme's sidebar layout. On a builder-active `page` (i.e. every page this skill produces, since `_et_pb_use_builder=on` is required above), Divi's `et_divi_sidebar_class()` forces the rendered layout to `et_no_sidebar` regardless of this meta's value — confirmed live (`research/tools/notes/rest-experiments.md`, experiment 3). It's also not a REST-exposed meta field: a REST update targeting it is silently ignored. To also strip the site header/nav/footer (full-bleed), set the page's `template` field to `page-template-blank.php` instead — see `publishing.md` §3. |
 | `_et_pb_old_content` | optional | the page's pre-builder HTML | Divi's own "restore previous content" safety net when a human first enables the builder on an existing page in the WP admin. Not something a hand-authored page needs to set. |
 | `_et_pb_built_for_post_type` | optional (Divi defaults it to `page`) | the post type (`page`, `post`, ...) | used by Divi's own admin UI to remember which post type this builder content was made for; harmless to leave unset for a `page`. |
 
@@ -156,3 +156,13 @@ Required/relevant post meta (set with `wp post meta update <id> <key> <value>`, 
 - **`<!-- wp:… -->` Gutenberg block comments.** Divi 4 pages are shortcode, not blocks; mixing in
   block comments doesn't extend a Divi page, it just becomes inert (or actively broken, if it
   wraps content that was meant to be inside a section) text sitting next to the shortcode tree.
+
+## Transport
+
+Publishing over the WordPress REST API (`publishing.md`) was verified live to be
+byte-transparent for `post_content`: a `POST`ed shortcode string comes back identical from
+`GET ?context=edit`'s `content.raw`, including unicode (curly quotes, an em dash, an emoji)
+and already-percent-encoded escape sequences inside `custom_css_*` attributes
+(`research/tools/notes/rest-experiments.md`, experiment 4). No character in this page's
+escaping table is altered by the REST transport itself — everything above applies exactly the
+same whether the page is created with `wp post create`/`wp post update` or over REST.
