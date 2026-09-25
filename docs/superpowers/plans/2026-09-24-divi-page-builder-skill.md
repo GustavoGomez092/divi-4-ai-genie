@@ -23,7 +23,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-24-divi-page-builder-skill-design.md`. Read it first; this plan argues from it.
 
-**Execution order (amended 2026-09-24):** Tasks 1–14, then **Task 22**, then Tasks 15–21. Task 14 was rewritten for the WordPress Playground preview, and Task 22 (`publish.py`) was added, after the user widened the scope to end-to-end (spec Addendum B).
+**Execution order (amended 2026-09-24):** Tasks 1–14, then **Task 22**, then **Tasks 23–28** (Python renderer as the default preview, with Playground as `--exact`: spec Addendum C), then Tasks 15–21. Task 14 was rewritten for the WordPress Playground preview, and Task 22 (`publish.py`) was added, after the user widened the scope to end-to-end (spec Addendum B).
 
 ## Global Constraints
 
@@ -84,6 +84,8 @@ Skill/divi-page-builder/
   scripts/page_edit.py                      Task 19  CLI for surgical edits
   scripts/preview/preview.mjs, fetch-divi.mjs, mu-plugin/, blueprint.json   Task 14 (Playground)
   scripts/publish.py                        Task 22  fetch/media/draft/publish over REST
+  scripts/fetch_divi.py                     Task 23  Elegant Themes download + shared cache (stdlib)
+  scripts/divi_render/, scripts/preview.py  Tasks 24–27  Python renderer (default preview) + CLI
 research/tools/
   wp-local.sh                               Task 1   WP-CLI wrapper for LocalWP
   force-all-modules.php, dump-divi-schema.php   (exist)
@@ -4070,7 +4072,7 @@ class SkillIndexTest(unittest.TestCase):
         self.assertEqual(missing, [])
 
     def test_scripts_are_documented(self):
-        for script in ("scripts/validate.py", "scripts/extract_tokens.py", "scripts/page_edit.py", "scripts/preview/preview.mjs", "scripts/publish.py"):
+        for script in ("scripts/validate.py", "scripts/extract_tokens.py", "scripts/page_edit.py", "scripts/preview.py", "scripts/preview/preview.mjs", "scripts/publish.py"):
             self.assertIn(script, self.text)
 
     def test_short_enough(self):
@@ -4104,7 +4106,7 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 3. **Plan:** map the brief to recipes (`recipes/README.md`, `recipes/pages/`). Show the user the section outline and get a yes before writing.
 4. **Compose:** for each section, follow its recipe. Look up every module in `reference/modules/<slug>.md`, and take every color, font, spacing and button style from `tokens.json`.
 5. **Validate:** `python3 scripts/validate.py page.txt --tokens tokens.json` (add `--baseline original.txt` for edits). Repeat until there are 0 errors; read every warning.
-6. **Preview:** `node scripts/preview/preview.mjs render page.txt --tokens tokens.json --out preview.html` (or `serve` for live reload), then open it (`reference/preview.md`). Client Customizer and preset styling looks generic there.
+6. **Preview:** `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` (or `serve` for live reload), then open it. If the coverage report lists unsupported modules, or something looks off, re-run with `--exact` (real Divi in Playground; needs Node). See `reference/preview.md`. Client Customizer and preset styling looks generic in both.
 7. **Publish:** `python3 scripts/publish.py draft page.txt --site URL --user USER --title "…"` uploads local images and saves a **draft** (it validates first). Share the printed `preview_url`; after the user approves, run `publish.py publish --page-id ID --yes` (`reference/publishing.md`). The WordPress draft is the authoritative visual check.
 
 ## Hard rules
@@ -4123,7 +4125,8 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 | `scripts/validate.py` | structure, attributes, value formats, tokens; `--baseline` for edits; `--json` |
 | `scripts/extract_tokens.py` | site design tokens via REST (Application Password) + public CSS |
 | `scripts/page_edit.py` | outline / extract / replace / insert / set-attr / delete, surgically |
-| `scripts/preview/preview.mjs` | real-Divi preview in WordPress Playground: `serve`, `render`, `fetch-divi`, `doctor` |
+| `scripts/preview.py` | default preview, Python only: `render`, `serve` (live reload), `doctor`, `fetch-divi`; `--exact` hands off to Playground |
+| `scripts/preview/preview.mjs` | exact real-Divi preview in WordPress Playground (Node), used by `--exact` |
 | `scripts/publish.py` | `fetch` / `media` / `draft` / `publish` over REST with an Application Password |
 
 ## Reference index
@@ -4199,7 +4202,7 @@ Record in `results.md`:
 
 - [ ] **Step 4: Run with the skill**
 
-Dispatch a fresh subagent with the brief and the instruction "Use the skill at Skill/divi-page-builder/SKILL.md", with file access to the skill. It should render the page with `scripts/preview/preview.mjs` and save a draft on `divi-test.local` with `scripts/publish.py` (give it a temporary Application Password via env, created as in Task 10 and deleted afterwards). Validate the same way, then screenshot the draft at 1440 and 390. Record the same metrics, plus:
+Dispatch a fresh subagent with the brief and the instruction "Use the skill at Skill/divi-page-builder/SKILL.md", with file access to the skill. It should render the page with `scripts/preview.py` (and `--exact` when the coverage report asks for it) and save a draft on `divi-test.local` with `scripts/publish.py` (give it a temporary Application Password via env, created as in Task 10 and deleted afterwards). Validate the same way, then screenshot the draft at 1440 and 390. Record the same metrics, plus:
 - every point where the agent hesitated, guessed, or read the wrong file (from its transcript);
 - visual problems seen in the screenshots.
 
@@ -4677,4 +4680,191 @@ Keep the raw `curl` flow below it as the reference for how it works.
 git add Skill/divi-page-builder/scripts/publish.py Skill/divi-page-builder/reference/publishing.md tests/test_publish.py
 git commit -m "publish: fetch/media/draft/publish over REST with validation-first drafts"
 ```
+
+---
+
+### Task 23: Fidelity harness, ground-truth generator, Python Divi fetcher (added 2026-09-24)
+
+> Added after the user chose **Python renderer as the default preview + Playground as the exact check** (spec Addendum C). The execution order is Tasks 1–14 → 22 → **23–28** → 15–21. The Python renderer (Tasks 24–27) is measured against real Divi output produced by the Playground preview (Task 14), and this task builds that measuring stick.
+
+**Files:**
+- Create: `Skill/divi-page-builder/scripts/fetch_divi.py`, a stdlib port of `scripts/preview/fetch-divi.mjs` that shares the same cache layout.
+- Create: `research/tools/fidelity.py`, adapted from `research/python-renderer-spike/evaluate.py`.
+- Create: `research/tools/ground_truth.py`
+- Test: `tests/test_fetch_divi.py`, `tests/test_fidelity.py`
+
+**Interfaces:**
+- Consumes: Task 14's `node scripts/preview/preview.mjs render <page> --out <html> --divi VER` (real Divi), and its cache layout `PP_CACHE_DIR/divi/Divi-<VER>/Divi/…` (default `~/.cache/divi-page-builder`).
+- Produces:
+  - `fetch_divi.cache_root() -> Path` (honours `PP_CACHE_DIR`).
+  - `fetch_divi.theme_dir(version) -> Path|None` returns the unpacked theme directory if it's cached.
+  - `fetch_divi.newest_cached() -> str|None`
+  - `fetch_divi.ensure_divi(version: str) -> Path` downloads only when the version isn't cached, using `ET_USERNAME`/`ET_API_KEY`. It raises `FetchError` with a redacted message and never prints credentials.
+  - CLI: `python3 fetch_divi.py <VER|latest>`.
+  - `fidelity.compare(truth_html: str, candidate_html: str) -> dict` returns the keys `markup.truth_elements`, `markup.candidate_elements`, `markup.tag_class_sequence_equal` (bool), `markup.tag_class_seq_ratio` (float), `css.truth_decls`, `css.common`, `css.missing`, `css.extra`, `css.ratio` (float), plus `missing_examples`/`extra_examples` (up to 10 each).
+  - `ground_truth.truth_path(fixture: Path, divi_version: str) -> Path` points to `PP_CACHE_DIR/truth/<ver>/<fixture-stem>.html`. It's cached outside the repo because it contains Divi's licensed CSS.
+  - `ground_truth.ensure_truth(fixture, divi_version) -> Path|None` renders with Playground when the cached file is missing or older than the fixture, and returns None when Node or Playground is unavailable.
+
+- [ ] **Step 1: Port `fetch_divi.py`**
+
+Port `scripts/preview/fetch-divi.mjs` to stdlib Python:
+- `urllib.request` for the Elegant Themes endpoint (spike §1: `https://www.elegantthemes.com/api/api_downloads.php?api_update=1&theme=Divi&version=V&username=…&api_key=…`, with `version` omitted for latest);
+- `zipfile` to unpack;
+- detect a text error body (bad credentials return HTTP 200 with a text error), 403 (unknown version) and 429 (rate limited), and raise `FetchError` messages with the credentials redacted;
+- use the identical cache layout, so both Node and Python share one download.
+
+- [ ] **Step 2: Write the failing tests for fetch_divi**
+
+The tests use a fake HTTP server, so they need no network access and no credentials.
+
+`tests/test_fetch_divi.py` must cover:
+- a cached version returns without any HTTP call (and `ET_*` is unset);
+- an uncached version downloads the zip, unpacks it and returns the theme dir;
+- a text error body raises `FetchError` whose message has no username or key in it;
+- 403 and 429 raise distinct messages;
+- `newest_cached` orders versions numerically (4.27.10 > 4.27.9).
+
+Point `fetch_divi` at the fake server through an env override, `PP_ET_ENDPOINT` (document it as test-only).
+
+- [ ] **Step 3: Port the fidelity comparison and ground-truth generator, with tests**
+
+`research/tools/fidelity.py` is `evaluate.py`'s logic as the `compare()` function above, stdlib only. `tests/test_fidelity.py` must cover:
+- identical HTML → sequence equal, ratio 1.0, 0 missing and 0 extra;
+- one changed class → sequence not equal, with the ratio < 1;
+- one CSS declaration dropped → `css.missing == 1` and it appears in `missing_examples`.
+
+`research/tools/ground_truth.py` shells out to `node Skill/divi-page-builder/scripts/preview/preview.mjs render …`. Test it live with `ensure_truth(tests/fixtures/valid/handwritten-landing.txt, "4.27.9")`, skipped when Node or the cache is unavailable, and assert that the file exists and contains `class="et-l`.
+
+- [ ] **Step 4: Run and commit**
+
+Run `python3 -m unittest discover -s tests -p 'test_f*.py' -v`, then the full suite.
+```bash
+git add Skill/divi-page-builder/scripts/fetch_divi.py research/tools/fidelity.py research/tools/ground_truth.py tests/test_fetch_divi.py tests/test_fidelity.py
+git commit -m "render: fidelity harness, Playground ground truth, stdlib Divi fetcher"
+```
+
+---
+
+### Task 24: Python renderer core, the prototype's modules, `preview.py` CLI (added 2026-09-24)
+
+**Files:**
+- Create the package `Skill/divi-page-builder/scripts/divi_render/`, porting `research/python-renderer-spike/divi_render.py`, split by responsibility:
+  - `__init__.py`: `render_page(source, divi_version=None, title="Preview", with_js=True, embed_assets=False, asset_base=None) -> RenderResult(html, coverage)`;
+  - `data.py`: field defaults and options from the **compact schema** (`scripts/schema/`), not the raw research dump;
+  - `values.py`: value parsing (ranges, colors, fonts, spacing, icons, responsive/hover/sticky access);
+  - `css.py`: the style engine (selectors, media queries, hover, declaration ordering);
+  - `structure.py`: Section, Row, RowInner, Column, and per-type module numbering;
+  - `modules/`: one file per module family, with `basic.py` (heading, text, button, image, divider), `content.py` (blurb, cta, number counter, fullwidth header), `interactive.py` (accordion, item, toggle, slider, slide) and `fallback.py` (Unsupported);
+  - `page.py`: document shell (head, header/footer stub, Divi static CSS/JS from the cached theme, Google Fonts, JS globals) and the coverage report;
+  - `assets.py`: resolving theme assets from the cache (`fetch_divi.theme_dir`), a `/__divi/` URL mapping for serve mode, and data-URI embedding of fonts and images for standalone files.
+- Create: `Skill/divi-page-builder/scripts/preview.py`, the CLI.
+- Create: `tests/fixtures/render/manifest.json` and `tests/fixtures/render/*.txt`. Copy `research/python-renderer-spike/pages/heldout-*.txt` as held-out fixtures, and reference `tests/fixtures/valid/divi-ai-layout.txt` and `handwritten-landing.txt`.
+- Test: `tests/test_render_fidelity.py`, `tests/test_preview_cli.py`
+
+**Interfaces:**
+- Consumes:
+  - Task 23: `fetch_divi.ensure_divi`, `theme_dir` and `newest_cached`; `fidelity.compare`; `ground_truth.ensure_truth`.
+  - Task 2's `parse`.
+  - Task 3's `load_schema`.
+  - Task 14's `preview.mjs` (for `--exact`).
+- Produces the CLI:
+  - `python3 scripts/preview.py render PAGE [--out FILE] [--tokens tokens.json | --divi VER] [--exact] [--no-js]` writes a standalone file with fonts and images embedded, and prints the coverage summary (unsupported modules and ignored attributes).
+  - `python3 scripts/preview.py serve [--pages DIR] [--port 8765] [--tokens … | --divi …]` re-renders on each request, serves theme assets at `/__divi/…`, polls for changes and auto-reloads, and shows a visible banner when the page has unsupported modules ("exact preview: add --exact").
+  - `--exact` delegates to `node scripts/preview/preview.mjs` with the same arguments. It exits 2 with guidance if Node is missing.
+  - `python3 scripts/preview.py doctor` reports Python and cached Divi versions, and whether Node is present (only for `--exact`).
+  - `python3 scripts/preview.py fetch-divi VER`
+- Divi version resolution is the same as Task 14: `--divi`, then `--tokens`, then the newest cached version, then `latest`. It never calls Elegant Themes when the version is cached.
+- The manifest format is `{"fixtures": [{"file": "…", "modules": ["et_pb_blurb", …], "tuned": true|false}]}`.
+  - `tuned` fixtures must match real Divi exactly: tag/class sequence equal, and builder CSS declaration sets equal.
+  - Held-out fixtures (`tuned: false`) record their metrics but only assert no crash and a tag/class sequence ratio ≥ 0.9.
+
+- [ ] **Step 1: Write the fidelity test**
+
+`tests/test_render_fidelity.py` iterates the manifest:
+- for each fixture, get real Divi via `ground_truth.ensure_truth` (skipping the whole test class if unavailable) and the Python render via `divi_render.render_page`;
+- for `tuned` fixtures, assert `markup.tag_class_sequence_equal` and `css.missing == css.extra == 0`, with the failure message showing `missing_examples`/`extra_examples`;
+- for held-out fixtures, assert the ratio ≥ 0.9, and append a metrics row to `research/render-fidelity.md` (a table: fixture, modules, tuned, markup ratio, CSS ratio, date) so progress is visible across tasks.
+
+Manifest entries for this task:
+- `divi-ai-layout.txt` (tuned);
+- `handwritten-landing.txt` (tuned);
+- `heldout-inscope.txt` and `heldout2-inscope.txt` (tuned: the spike already fitted them);
+- `heldout-outofscope.txt` (`tuned: false`, modules not yet supported).
+
+- [ ] **Step 2: Port the renderer into the package**
+
+Move the prototype's code into the files above with no behaviour change, first making the test pass on the four tuned fixtures. Then switch `data.py` to the compact schema and re-run: any regression means the compact schema lacks something the prototype read from the raw dump, and the fix is to add it to `build_schema.py` output (with a test), never to read the research dump from shipped code.
+
+- [ ] **Step 3: Write `preview.py` and its CLI tests**
+
+`tests/test_preview_cli.py`:
+- `render` produces a file with no `file://` references, containing `@font-face` data URIs for the icon fonts;
+- `serve` on a random port returns 200 for a page and for `/__divi/core/admin/fonts/modules/all/modules.woff`, and 404 for `/__divi/../../etc/passwd`;
+- `--exact` without Node (PATH stripped) exits 2 with a message naming Node;
+- `doctor` exits 0.
+
+The user found in the spike that icons break when a page served over HTTP references `file://` assets, and these tests pin that fix.
+
+- [ ] **Step 4: Run and commit**
+
+Run `python3 -m unittest discover -s tests -p 'test_render_fidelity.py' -v` and `-p 'test_preview_cli.py'`, then the full suite.
+```bash
+git add Skill/divi-page-builder/scripts/divi_render Skill/divi-page-builder/scripts/preview.py tests/fixtures/render tests/test_render_fidelity.py tests/test_preview_cli.py research/render-fidelity.md
+git commit -m "render: stdlib Divi renderer package + preview.py (render/serve/--exact)"
+```
+
+---
+
+### Tasks 25–27: Module coverage batches (added 2026-09-24)
+
+These three tasks share one procedure and differ only in their module lists. Each is its own task with its own review.
+
+| Task | Modules |
+|---|---|
+| **25: content modules** | `et_pb_icon`, `et_pb_code`, `et_pb_fullwidth_code`, `et_pb_fullwidth_image`, `et_pb_video`, `et_pb_audio`, `et_pb_gallery` (static grid), `et_pb_testimonial`, `et_pb_team_member`, `et_pb_social_media_follow` + `et_pb_social_media_follow_network` |
+| **26: interactive and data modules** | `et_pb_tabs` + `et_pb_tab`, `et_pb_circle_counter`, `et_pb_counters` + `et_pb_counter`, `et_pb_countdown_timer`, `et_pb_pricing_tables` + `et_pb_pricing_table`, `et_pb_video_slider` + `et_pb_video_slider_item`, `et_pb_fullwidth_slider` (shares Slide) |
+| **27: forms, maps and fallbacks** | `et_pb_contact_form` + `et_pb_contact_field`, `et_pb_signup` + `et_pb_signup_custom_field` (static markup, no provider calls), `et_pb_map` / `et_pb_fullwidth_map` + `et_pb_map_pin` (markup and data attributes; the map canvas needs a key and JS). It also sets clear fallbacks for WordPress-data modules (blog, portfolio, filterable portfolio, fullwidth portfolio, post slider, fullwidth post slider, post title, fullwidth post title, post content, fullwidth post content, post nav, comments, sidebar, menu, fullwidth menu, search, login): render the fallback block with a message to use `--exact`, list them in the coverage report, and document them. |
+
+**Files (per batch):**
+- Modify or create `Skill/divi-page-builder/scripts/divi_render/modules/<family>.py`.
+- Create `tests/fixtures/render/<batch>-tuned-*.txt` and `<batch>-heldout.txt`.
+- Update `tests/fixtures/render/manifest.json` and `research/render-fidelity.md`.
+
+**Procedure (per batch):**
+- [ ] **Step 1: Write fixtures first.** For each module, write one tuned fixture page that exercises:
+  - its content fields;
+  - two design families (fonts, plus background or spacing or border);
+  - one responsive value (`_tablet`/`_phone` + `_last_edited`);
+  - one hover value (`__hover` + `__hover_enabled`);
+  - any child-module variations.
+
+  Every fixture must pass `validate.py` with 0 errors.
+
+  Separately, write **one held-out page** mixing the batch's modules in new combinations, and don't look at its real render until Step 4.
+- [ ] **Step 2: Add the fixtures to the manifest** (tuned ones `tuned: true`, the held-out page `tuned: false`), generate ground truth, and run `test_render_fidelity.py`. The new tuned fixtures fail, which is the RED step.
+- [ ] **Step 3: Implement each module** by reading its PHP `render()` and `set_style` calls in `~/Local Sites/divi-test/app/public/wp-content/themes/Divi/includes/builder/module/<Module>.php` and its helpers. Iterate until the tuned fixtures match exactly, which is the GREEN step.
+- [ ] **Step 4: Measure the held-out page before any fix, and record** its metrics row (`tuned: false`) in `research/render-fidelity.md`. Only then fix the differences it reveals, add it as `tuned: true`, and record the post-fix row. The pre-fix row is the honest generalization number.
+- [ ] **Step 5: Run and commit.** Run the full suite, then commit with the message `render: <batch> modules (<list>)`.
+
+---
+
+### Task 28: Preview docs and wiring (added 2026-09-24)
+
+**Files:**
+- Modify: `Skill/divi-page-builder/reference/preview.md` (Task 14 wrote the Playground version)
+- Modify: `Skill/divi-page-builder/SKILL.md` preview step (if Task 20 already ran, otherwise Task 20 uses the text below)
+
+- [ ] **Step 1: Rewrite `reference/preview.md`**
+
+Required sections:
+1. **Two previews:**
+   - `python3 scripts/preview.py`: the default. It's portable and instant, needs Python only, and uses Divi's CSS, fonts and JS from the cached theme.
+   - `--exact`: real Divi in WordPress Playground, which needs Node.
+2. **When to use `--exact`:** when a page uses a module the coverage report lists as unsupported; before sharing a draft for important pages; and whenever the Python preview looks wrong.
+3. **The supported-module table**, generated from `divi_render`'s registry.
+4. **Fidelity:** the latest numbers from `research/render-fidelity.md`, with tuned and held-out rows side by side, and an honest statement that unseen combinations can differ slightly.
+5. **Limits:** it uses stock Divi settings (no client Customizer, presets or global colors); the header and footer are stubs; the Elegant Themes download is still required once per Divi version.
+6. **Commands, caching and troubleshooting,** including the file:// icon issue and its fix.
+
+- [ ] **Step 2: Commit.** Commit with the message `docs: preview.md for the Python default + Playground --exact`.
 

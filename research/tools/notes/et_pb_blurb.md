@@ -1,0 +1,3 @@
+- `use_icon="on"` shows `font_icon`; `use_icon="off"` shows `image`. Set only the one you use.
+- The title's heading level is `header_level` (default `h4`); in a services grid use `h3` under an `h2` section heading.
+- `icon_placement="top"|"left"` changes the layout; `left` suits compact feature lists.

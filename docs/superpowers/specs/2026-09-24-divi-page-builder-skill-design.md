@@ -312,3 +312,26 @@ Full findings are in `research/divi-render-engine.md`. The prototype is in `rese
   8. Publish on approval (`publish.py publish --yes`).
 - **Language note:** the Python-stdlib-only rule applies to `.py` scripts. The preview is Node because the Playground runtime is a Node package.
 
+## Addendum C: Python renderer as the default preview (decided 2026-09-24)
+
+**Evidence:** `research/python-renderer-spike.md`, measured against real Divi output.
+- **Pages it was tuned on** (page 11 and the landing fixture): identical builder markup and CSS, and a 0.000% builder-area pixel diff.
+- **Pages it hadn't seen**, before any fixes: 89.9% and 96.0% of builder CSS declarations matched. One unseen page had a 90 px vertical shift (17% pixel diff) caused by two missed Divi special cases.
+- **Speed:** about 34 ms per render.
+- **Requirements:** Python only, plus Divi's static CSS, fonts and JS from the cached theme.
+
+**Decision (user):** ship the **pure-Python renderer as the default portable preview**, and keep the WordPress Playground preview (Addendum B) as `--exact`.
+
+**Scope added:**
+- **Task 23: harness.** `fetch_divi.py`, a stdlib Elegant Themes fetcher sharing Playground's cache; `research/tools/fidelity.py`; and `ground_truth.py`, which produces real-Divi renders through Playground, cached outside the repo because it contains Divi's licensed CSS.
+- **Task 24: the package.** The renderer as a package (`scripts/divi_render/`) plus the `scripts/preview.py` CLI (`render`, `serve`, `doctor`, `fetch-divi`, `--exact`).
+- **Tasks 25–27: coverage.** Batches toward the roughly 30 landing-page modules. WordPress-data modules (blog, portfolio, post_*, menus, comments, search, login, sidebar) render a fallback block that points to `--exact`.
+- **Task 28: docs.**
+
+**Acceptance:** every module has a tuned fixture that must match real Divi exactly (the same tag/class sequence and builder CSS declaration set). Each batch also has a held-out page whose pre-fix numbers are recorded in `research/render-fidelity.md`, as the honest generalization measure.
+
+**Unchanged:**
+- Stock Divi settings only.
+- The WordPress draft remains the authoritative visual check.
+- Divi assets are never committed.
+
