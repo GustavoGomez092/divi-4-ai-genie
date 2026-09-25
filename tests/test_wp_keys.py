@@ -128,6 +128,16 @@ class LoadKeysTest(TempKeysMixin, unittest.TestCase):
             load_keys(path)
         self.assertEqual(buf.getvalue(), "")
 
+    @unittest.skipUnless(os.name == "posix", "POSIX file mode only")
+    @unittest.skipIf(hasattr(os, "geteuid") and os.geteuid() == 0, "root ignores file permissions")
+    def test_unreadable_file_is_keys_error(self):
+        path = self.write_keys([KEY_A])
+        path.chmod(0o000)
+        self.addCleanup(path.chmod, 0o600)
+        with self.assertRaises(KeysError) as ctx:
+            load_keys(path)
+        self.assert_no_secret_leak(ctx.exception)
+
 
 class ListKeysTest(TempKeysMixin, unittest.TestCase):
     def test_never_includes_key_field(self):

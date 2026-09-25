@@ -300,7 +300,11 @@ def main(argv=None) -> int:
                                   "~/.config/divi-page-builder/keys.json)")
     a = ap.parse_args(argv)
     if a.command == "keys":
-        return cmd_keys(a)
+        try:
+            return cmd_keys(a)
+        except KeysError as exc:
+            print(f"publish.py: {exc}", file=sys.stderr)
+            return 2
     try:
         site, user, password = resolve_credentials(key_name=a.key, site=a.site, user=a.user, keys_path=a.keys)
     except KeysError as exc:

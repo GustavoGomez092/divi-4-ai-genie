@@ -461,6 +461,28 @@ class PublishFakeServerTest(unittest.TestCase):
         for stream in (proc.stdout, proc.stderr):
             self.assertNotIn(secret, stream)
 
+    def test_key_with_conflicting_user_is_keys_error(self):
+        secret = "aaaa BBBB cccc DDDD eeee FFFF"
+        keys_file = self._write_keys([{"name": "Client A", "site": "https://client-a.com", "user": "seo-bot", "key": secret}])
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(GOOD)
+        proc = self.run_cli("draft", f.name, "--key", "Client A", "--user", "someone-else",
+                             "--keys", keys_file, "--title", "T", password=None)
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 2)
+        self.assertNotIn("Traceback", proc.stderr)
+        self.assertEqual(FakeWP.calls, [])
+        for stream in (proc.stdout, proc.stderr):
+            self.assertNotIn(secret, stream)
+
+    def test_keys_command_explicit_missing_path_exits_2(self):
+        missing = str(Path(tempfile.mkdtemp()) / "nonexistent.json")
+        proc = self.run_cli("keys", "--keys", missing, password=None)
+        self.assertEqual(proc.returncode, 2)
+        self.assertNotIn("Traceback", proc.stderr)
+        self.assertIn(missing, proc.stderr)
+        self.assertIn("publish.py:", proc.stderr)
+
 
 @live_only
 class PublishLiveTest(unittest.TestCase):
