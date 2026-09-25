@@ -300,10 +300,13 @@ class DesignOptions:
         if decls:
             self.css(sel, " ".join(decls))
         hc = hover_value(p, f"{prefix}_color")
-        if use_color is True and hc:
-            # process_advanced_background_options(): css.hover, else add_hover_to_selectors(main)
-            self.css(css.get("hover") or add_hover_to_selectors(sel),
-                     f"background-image: initial{imp}; background-color: {hc}{imp};")
+        if hc and (use_color is True or bg.get("use_background_color_gradient", True) != "fields_only"):
+            # process_advanced_background_options(): css.hover, else add_hover_to_selectors(main);
+            # a 'fields_only' colour (Bar Counters) still resets the image but prints no colour
+            decl = f"background-image: initial{imp};"
+            if use_color is True:
+                decl += f" background-color: {hc}{imp};"
+            self.css(css.get("hover") or add_hover_to_selectors(sel), decl)
         if p.get(f"{prefix}_enable_mask_style", "") == "on" and bg.get("use_background_mask"):
             self._background_mask(prefix, sel)
         if p.get(f"{prefix}_enable_pattern_style", "") == "on":
@@ -532,8 +535,9 @@ class DesignOptions:
     def process_transitions(self):
         """process_hover_transitions(): one transition rule over the selectors of hover-enabled props."""
         p = self.props
-        hovered = [k[:-len("__hover_enabled")] for k in self.attrs if k.endswith("__hover_enabled")
-                   and self.attrs[k].startswith("on")]
+        # attrs plus values a child inherited from its parent (e.g. a slide's background hover)
+        src = {**self.attrs, **getattr(self, "inherited_attrs", {})}
+        hovered = [k[:-len("__hover_enabled")] for k in src if k.endswith("__hover_enabled") and src[k].startswith("on")]
         fonts = self.af.get("fonts") if isinstance(self.af.get("fonts"), dict) else {}
         btns = self.af.get("button") if isinstance(self.af.get("button"), dict) else {}
         bg_main = ((self.af.get("background") or {}).get("css") or {}).get("main") or self.main \

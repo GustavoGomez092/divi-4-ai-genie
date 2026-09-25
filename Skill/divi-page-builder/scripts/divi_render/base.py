@@ -59,6 +59,10 @@ class Ctx:
         self.slide_num = 0
         self.accordion = None
         self.social_follow = None
+        self.bar_counters = None
+        self.tabs = None
+        self.pricing = None
+        self.video_slider = None
 
     def next_index(self, slug: str) -> int:
         n = self.counters.get(slug, 0)
@@ -151,8 +155,9 @@ class Module(DesignOptions, ButtonOptions):
         return f"et_pb_bg_layout_{self.props.get('background_layout')}"
 
     def generate_styles(self, base, selector, prop, important=False, typ="", hover=True, responsive=True,
-                        hover_loc="order_class", skip_default=False):
-        """ET_Builder_Element::generate_styles(): responsive values plus the hover value."""
+                        hover_loc="order_class", skip_default=False, hover_sel=None):
+        """ET_Builder_Element::generate_styles(): responsive values plus the hover value (on
+        `hover_sel` when given, i.e. the PHP `hover_selector` argument)."""
         p = self.props
         imp = " !important" if important else ""
         if responsive:
@@ -168,7 +173,8 @@ class Module(DesignOptions, ButtonOptions):
         if hover:
             hv = hover_value(p, base)
             if hv:
-                hs = add_hover_to_order_class(selector) if hover_loc == "order_class" else add_hover_to_selectors(selector)
+                hs = hover_sel or (add_hover_to_order_class(selector) if hover_loc == "order_class"
+                                   else add_hover_to_selectors(selector))
                 self.css(hs, f"{prop}:{hv}{imp}")
 
     def responsive_css(self, values: dict, selector: str):

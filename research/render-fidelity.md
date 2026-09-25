@@ -76,6 +76,31 @@ generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
   stage they were measured at, and `heldout-outofscope.txt` got a "T25 re-measure" row next to
   its T24 row, now that icon, testimonial and social follow render (the remaining unsupported
   modules still keep it below 0.9).
+- Task 26 (interactive and data modules: tabs + tab, circle counter, bar counters + counter,
+  countdown timer, pricing tables + table, video slider + video, fullwidth slider sharing the
+  Slide) added one tuned fixture per family (`interactive-tuned-*.txt`) and the held-out page
+  `interactive-heldout.txt`. Its pre-fix row (measured before its real render was looked at) was
+  already exact, 184/184 elements and 86/86 declarations, so there was nothing to fix; it became
+  tuned with an identical post-fix row. Engine changes made while tuning (the older tuned
+  fixtures still match exactly): a slide now inherits the slider's settings the way
+  `SliderItem::maybe_inherit_values()` does (empty-or-default slide values take the slider's
+  non-default value, including `background__hover_enabled` and `header_level`; the enable-colour
+  toggles are never inherited), so an inherited background hover prints its rule and transition;
+  the slide's image markup, `alignment` class and the constant `.et_pb_slider[data-active-slide]`
+  prefix follow SliderItem.php; `generate_styles()` takes an explicit hover selector (the PHP
+  `hover_selector` argument, used by Tabs and Pricing Tables); a background hover on a module
+  whose colour option is `fields_only` (Bar Counters, and the bar counter that inherits it)
+  still prints `background-image: initial` but no colour (Background.php hover mode); a child's
+  inherited `__hover_enabled` values count for its hover transitions. Bar Counters and the
+  fullwidth slider never call `video_background()`, so they don't get
+  `et_pb_section_video_on_hover` (the bar counter items do).
+- Countdown timer determinism: the server-side output depends only on `date_time` and the site's
+  `gmt_offset` (0 on a fresh Playground site); `data-end-timestamp` is the date read as UTC and
+  the digits are left empty for the JS. The fixtures still use fixed past dates (2019–2022) so
+  the page never shows a live countdown.
+- `heldout-outofscope.txt` "T26 re-measure": markup 0.9015, CSS 0.7674. What is left is Task 27's
+  contact form and engine features no batch covers yet: section dividers, transforms and
+  filters.
 
 ## Metrics
 
@@ -87,3 +112,6 @@ generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
 | content-heldout.txt | T25 held-out pre-fix | audio, code, fullwidth_code, fullwidth_image, gallery, icon, social_media_follow, social_media_follow_network, team_member, testimonial, video | no | 1.0000 | 0.9550 | 2026-09-24 |
 | content-heldout.txt | T25 held-out post-fix | audio, code, fullwidth_code, fullwidth_image, gallery, icon, social_media_follow, social_media_follow_network, team_member, testimonial, video | yes | 1.0000 | 1.0000 | 2026-09-24 |
 | heldout-outofscope.txt | T25 re-measure | circle_counter, contact_field, contact_form, countdown_timer, counter, counters, heading, icon, pricing_table, pricing_tables, social_media_follow, social_media_follow_network, tab, tabs, testimonial, text | no | 0.3938 | 0.4884 | 2026-09-24 |
+| interactive-heldout.txt | T26 held-out pre-fix | circle_counter, countdown_timer, counter, counters, fullwidth_slider, pricing_table, pricing_tables, slide, tab, tabs, video_slider, video_slider_item | no | 1.0000 | 1.0000 | 2026-09-25 |
+| interactive-heldout.txt | T26 held-out post-fix | circle_counter, countdown_timer, counter, counters, fullwidth_slider, pricing_table, pricing_tables, slide, tab, tabs, video_slider, video_slider_item | yes | 1.0000 | 1.0000 | 2026-09-25 |
+| heldout-outofscope.txt | T26 re-measure | circle_counter, contact_field, contact_form, countdown_timer, counter, counters, heading, icon, pricing_table, pricing_tables, social_media_follow, social_media_follow_network, tab, tabs, testimonial, text | no | 0.9015 | 0.7674 | 2026-09-25 |

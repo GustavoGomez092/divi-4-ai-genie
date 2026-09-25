@@ -55,3 +55,22 @@ class GlobalDefaultsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DataModuleHelpersTest(unittest.TestCase):
+    """Task 26: server-side values of the countdown timer and pricing table items."""
+
+    def test_countdown_end_timestamp_reads_the_date_as_utc(self):
+        from divi_render.modules.counters import end_timestamp
+        # the value real Divi printed on Playground for date_time="2020-03-31 23:59"
+        # (interactive-tuned-countdown.txt); it depends only on the date, never on "now"
+        self.assertEqual(end_timestamp("2020-03-31 23:59"), 1585699140)
+        self.assertEqual(end_timestamp("2019-12-31 00:00"), 1577750400)
+        self.assertEqual(end_timestamp("not a date"), 0)
+
+    def test_pricing_items_mark_minus_and_en_dash_lines_unavailable(self):
+        from divi_render.modules.pricing import pricing_items
+        self.assertEqual(
+            pricing_items("+Design\n-Renderings\n&#8211;Weekends\n\nPermits"),
+            '<li><span>Design</span></li><li class="et_pb_not_available"><span>Renderings</span></li>'
+            '<li class="et_pb_not_available"><span>Weekends</span></li><li><span>Permits</span></li>')

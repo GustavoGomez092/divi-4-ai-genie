@@ -1,4 +1,5 @@
-"""Media modules: Fullwidth Image, Video, Audio and Gallery (templates from each module's render()).
+"""Media modules: Fullwidth Image, Video, Video Slider + Video, Audio and Gallery (templates from each
+module's render()).
 
 Remote media is never fetched: Divi's markup is reproduced with the given URLs (the browser loads
 them) and runtime behaviour (MediaElement players, lightboxes, sliders) is left to Divi's JS.
@@ -87,18 +88,20 @@ class Video(Module):
         return media_wrap(self, f"{box}\n\t\t\t\t{overlay}")
 
     def video_html(self) -> str:
-        """Video.php get_video(): YouTube/Vimeo URLs go through WordPress oEmbed, which needs the
-        network; here they become the iframe oEmbed would return (listed in the coverage report as
-        video_oembed). Anything else is a native <video> with its mp4/webm sources."""
-        p = self.props
-        src, webm = p.get("src", ""), p.get("src_webm", "")
-        embed = oembed_iframe(src)
-        if embed:
-            self.ctx.count_unsupported("video_oembed")
-            return embed
-        return ("\n\t\t\t\t<video controls>\n\t\t\t\t\t"
-                + (f'<source type="video/mp4" src="{esc_url(src)}" />' if src else "") + "\n\t\t\t\t\t"
-                + (f'<source type="video/webm" src="{esc_url(webm)}" />' if webm else "") + "\n\t\t\t\t</video>")
+        return video_html(self, self.props.get("src", ""), self.props.get("src_webm", ""))
+
+
+def video_html(m: Module, src: str, webm: str) -> str:
+    """Video.php / VideoSliderItem.php get_video(): YouTube/Vimeo URLs go through WordPress oEmbed,
+    which needs the network; here they become the iframe oEmbed would return (listed in the
+    coverage report as video_oembed). Anything else is a native <video> with its mp4/webm sources."""
+    embed = oembed_iframe(src)
+    if embed:
+        m.ctx.count_unsupported("video_oembed")
+        return embed
+    return ("\n\t\t\t\t<video controls>\n\t\t\t\t\t"
+            + (f'<source type="video/mp4" src="{esc_url(src)}" />' if src else "") + "\n\t\t\t\t\t"
+            + (f'<source type="video/webm" src="{esc_url(webm)}" />' if webm else "") + "\n\t\t\t\t</video>")
 
 
 YOUTUBE = re.compile(r"(?:youtube\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/)|youtu\.be/)([\w-]{6,})")
@@ -224,3 +227,74 @@ class Gallery(Module):
         return (f'<div class="{self.classname()}">{self.mask_markup}\n'
                 f'\t\t\t\t<div class="et_pb_gallery_items et_post_gallery clearfix" data-per_page="{per_page}">'
                 f'{items}</div>{pagination}</div>')
+
+
+@register("et_pb_video_slider")
+class VideoSlider(Module):
+    slug = "et_pb_video_slider"
+    PLAY = "%%order_class%% .et_pb_video_play, %%order_class%% .et_pb_carousel .et_pb_video_play"
+    TRANSITIONS = {"play_icon_color": {"color": PLAY},
+                   "icon_font_size": {"font-size": PLAY, "margin-left": PLAY, "margin-top": PLAY, "line-height": PLAY}}
+
+    def render(self):
+        p = self.props
+        self.process_additional()
+        self.generate_styles("play_icon_color", self.PLAY, "color", important=True, hover_loc="suffix")
+        self.icon_style("font_icon", "%%order_class%% .et_pb_video_play:before, "
+                                     "%%order_class%% .et_pb_carousel .et_pb_video_play:before", content=True)
+        if p.get("use_icon_font_size", "") != "off":
+            self.overlay_icon_size("%%order_class%% .et_pb_video_wrap .et_pb_video_play, "
+                                   "%%order_class%% .et_pb_video_wrap .et_pb_carousel .et_pb_video_play",
+                                   "font-size:{0}; line-height:{0}; margin-top:-{1}; margin-left:-{1};")
+        self.generate_styles("thumbnail_overlay_color",
+                             "%%order_class%% .et_pb_carousel_item .et_pb_video_overlay_hover:hover, "
+                             "%%order_class%%.et_pb_video_slider .et_pb_slider:hover .et_pb_video_overlay_hover, "
+                             "%%order_class%% .et_pb_carousel_item.et-pb-active-control .et_pb_video_overlay_hover",
+                             "background-color", hover=False)
+        thumbs = p.get("show_thumbnails", "")
+        slider_cls = (" et_pb_slider_no_arrows" if p.get("show_arrows", "") == "off" else "") + (
+            " et_pb_slider_carousel et_pb_slider_no_pagination" if thumbs == "on" else "") + (
+            " et_pb_slider_dots" if thumbs == "off" else "") + f" et_pb_controls_{p.get('controls_color', '')}"
+        # before_render(): the videos read the parent's image-overlay setting
+        prev, self.ctx.video_slider = self.ctx.video_slider, self
+        inner = self.content_html()
+        self.ctx.video_slider = prev
+        base_classes(self)
+        return (f'<div class="{self.classname()}">\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t{self.mask_markup}\n'
+                f'\t\t\t\t<div class="et_pb_slider et_pb_preload{slider_cls}">\n\t\t\t\t\t<div class="et_pb_slides">\n'
+                f'\t\t\t\t\t\t{inner}\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t')
+
+
+@register("et_pb_video_slider_item")
+class VideoSliderItem(Module):
+    slug = "et_pb_video_slider_item"
+    PLAY = "%%order_class%%.et_pb_slide .et_pb_video_play"
+    TRANSITIONS = {"background_layout": {"color": "%%order_class%% .et-pb-arrow-prev, %%order_class%% .et-pb-arrow-next"},
+                   "play_icon_color": {"color": PLAY},
+                   "icon_font_size": {"font-size": PLAY, "margin-left": PLAY, "margin-top": PLAY, "line-height": PLAY}}
+
+    def render(self):
+        p = self.props
+        parent = self.ctx.video_slider
+        self.process_additional()
+        self.generate_styles("play_icon_color", self.PLAY, "color", important=True, hover_loc="suffix")
+        self.icon_style("font_icon", f"{self.PLAY}:before", content=True)
+        if p.get("use_icon_font_size", "") != "off":
+            self.overlay_icon_size(".et_pb_video_slider %%order_class%%.et_pb_slide .et_pb_video_wrap .et_pb_video_overlay "
+                                   ".et_pb_video_play", "font-size:{0}; line-height:{0}; margin-top:-{1}; margin-left:-{1};")
+        src, webm, image = p.get("src", ""), p.get("src_webm", ""), p.get("image_src", "")
+        # get_oembed_thumbnail(): the overlay image, else the oEmbed thumbnail (network; not fetched)
+        thumb = image
+        out = ""
+        if src or webm:
+            show = parent is not None and parent.props.get("show_image_overlay", "") == "on"
+            hidden = "" if show else " et_multi_view_hidden"
+            overlay = (f'<div style="background-image:url({esc(thumb)})" class="et_pb_video_overlay{hidden}">'
+                       f'<div class="et_pb_video_overlay_hover"><a href="#" class="et_pb_video_play"></a></div></div>')
+            out = (f'<div class="et_pb_video_wrap"><div class="et_pb_video_box">{video_html(self, src, webm)}</div>'
+                   f'{overlay}</div>')
+        base_classes(self)
+        self.classes = [c for c in self.classes if c not in ("et_pb_module", self.render_slug)]
+        self.add_class("et_pb_slide", *bg_layout_classes(self))
+        data = f' data-image="{esc(thumb)}"' if thumb else ""
+        return f'<div class="{self.classname()}"{data}>\n\t\t\t\t{out}\n\t\t\t</div>\n\t\t\t'
