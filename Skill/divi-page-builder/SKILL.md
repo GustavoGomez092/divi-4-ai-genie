@@ -1,6 +1,6 @@
 ---
 name: divi-page-builder
-description: Use when creating a new Divi 4 page or section, editing an existing Divi page's copy, sections or styling, or matching new content to a Divi site's existing design. Authors Divi's native shortcode (post_content) directly, validates it, previews it, and prepares it for publishing.
+description: Use when creating a new Divi 4 page, landing page or section, editing an existing Divi page's copy, sections or styling, matching new content to a Divi site's existing design, or when Divi et_pb_ shortcode or post_content must be written, checked, previewed or pushed to WordPress.
 ---
 
 # Divi Page Builder
