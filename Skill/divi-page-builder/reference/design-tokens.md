@@ -50,16 +50,16 @@ outside:
 never a regular account password):
 
 ```bash
-export WP_APP_PASSWORD='xxxx xxxx xxxx xxxx xxxx xxxx'   # never pass it as a flag or commit it
-python3 scripts/extract_tokens.py \
-  --site https://client.example --user editor --page 12 --page 34 \
-  --out tokens.json
+python3 scripts/extract_tokens.py --key "Client A" --page 12 --page 34 --out tokens.json
 ```
 
+- `--key "NAME"` resolves the site/user/password from `keys.json` (`publish.py keys` lists what's
+  configured; see `reference/publishing.md` → "Credentials: keys.json"). Without a `keys.json`
+  entry, `--site URL --user USER` plus env `WP_APP_PASSWORD` still work exactly as before.
 - `--page` may repeat; pass every page you want the extractor to learn module styles from (a
   homepage plus a couple of representative interior pages is usually enough).
-- The password is read **only** from the `WP_APP_PASSWORD` environment variable and is never
-  written to argv, logs, or `tokens.json`.
+- A key value is read only from `keys.json` or the `WP_APP_PASSWORD` environment variable and is
+  never written to argv, logs, or `tokens.json`.
 - Each page's *public* URL (from the REST response) is fetched too, unauthenticated, purely to read
   its rendered CSS/HTML for the Customizer/global-color/font/version side of the tokens. If that
   fetch fails, extraction still proceeds with a warning on stderr — you just don't get the

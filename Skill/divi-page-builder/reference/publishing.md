@@ -1,40 +1,81 @@
 # Publishing over REST
 
+## Credentials: keys.json
+
+`publish.py` and `extract_tokens.py` (online mode) can read credentials for any number of sites
+from a `keys.json` file instead of separate `--site`/`--user`/`WP_APP_PASSWORD` per site:
+
+```json
+{
+  "keys": [
+    {"name": "Test Key Local site", "site": "http://divi-test.local", "user": "user",
+     "key": "xxxx xxxx xxxx xxxx xxxx xxxx"},
+    {"name": "Client A", "site": "https://client-a.com", "user": "seo-bot",
+     "key": "xxxx xxxx xxxx xxxx xxxx xxxx"}
+  ]
+}
+```
+
+Every entry needs `name`, `site`, `user` and `key` (each a non-empty string; `key` is the
+Application Password). **Location**, in order of precedence: the `--keys PATH` flag, the env var
+`DIVI_KEYS_FILE`, then the default `~/.config/divi-page-builder/keys.json`. Whichever path is
+used, `chmod 600` it and **never commit it, and never put it inside this skill or any repo** —
+it lives only in that one file on disk, outside version control.
+
+**Selecting a key:**
+- `--key "Client A"` picks that entry by name (case-insensitive).
+- Without `--key`, passing `--site` alone matches it (normalized: scheme+host lowercased, a
+  trailing slash stripped) against every entry's `site`; add `--user` to disambiguate when more
+  than one entry matches the same site (a client and a local test copy, say).
+- **Env fallback (backward compatible):** with no `--key` and no site match, `--site`/`--user`
+  plus env `WP_APP_PASSWORD` still work exactly as before — no `keys.json` required.
+- `python3 scripts/publish.py keys [--keys PATH]` lists every entry's `name`/`site`/`user` (never
+  the key) — use it to see what's already configured before asking the user for a new one.
+
+When you're done with a key, revoke it on the site's own profile screen: **Users → Profile →
+Application Passwords**.
+
 ## Using publish.py
 
-`scripts/publish.py` wraps the REST flow below into four commands. The password always comes
-from env `WP_APP_PASSWORD` (never a flag, never printed); set `WP_USER`/`SITE` however you
-like, but pass them explicitly as `--user`/`--site`.
+`scripts/publish.py` wraps the REST flow below into five commands. Credentials come from either
+a `keys.json` file (`--key NAME`) or, for backward compatibility, `--site`/`--user` plus env
+`WP_APP_PASSWORD` — see "Credentials: keys.json" below. Never a flag, never printed.
 
 ```bash
 export WP_APP_PASSWORD="xxxx xxxx xxxx xxxx xxxx xxxx"
 
+# 0. List the sites this skill has credentials for (never prints a key value)
+python3 scripts/publish.py keys
+
 # 1. Fetch the current content.raw before editing an existing page
-python3 scripts/publish.py fetch --site "$SITE" --user "$WP_USER" --page-id 15 --out original.txt
+python3 scripts/publish.py fetch --key "Client A" --page-id 15 --out original.txt
 
 # 2. Upload one image directly (rarely needed — draft uploads local images automatically)
-python3 scripts/publish.py media --site "$SITE" --user "$WP_USER" hero.jpg --alt "Plumber repairing a burst pipe"
+python3 scripts/publish.py media --key "Client A" hero.jpg --alt "Plumber repairing a burst pipe"
 
 # 3. Draft-first: validates the page, uploads any local images, and creates/updates a draft
-python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "Emergency Plumber in Miami"
+python3 scripts/publish.py draft page.txt --key "Client A" --title "Emergency Plumber in Miami"
 
 # updating an existing page keeps it a draft (does not publish)
-python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "..." --page-id 15
+python3 scripts/publish.py draft page.txt --key "Client A" --title "..." --page-id 15
 
 # full-bleed landing page: strip header/nav/footer via the one REST-settable layout field
-python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "..." \
+python3 scripts/publish.py draft page.txt --key "Client A" --title "..." \
   --page-fields '{"template":"page-template-blank.php"}'
 
 # 4. Publish only after the user has reviewed the draft's preview_url and approved it
-python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 --yes
+python3 scripts/publish.py publish --key "Client A" --page-id 15 --yes
 
 # 5. Editing a page that is ALREADY published/scheduled/private: see "Editing a live page" below —
 #    draft --page-id refuses this case, so review a copy first, then apply with publish --content
 #    (keeps the page's visibility: private stays private, scheduled stays scheduled)
-python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 --content page.txt --yes
+python3 scripts/publish.py publish --key "Client A" --page-id 15 --content page.txt --yes
 
 # 6. Only when the user explicitly wants a private/scheduled page's status changed to publish
-python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 --status publish --yes
+python3 scripts/publish.py publish --key "Client A" --page-id 15 --status publish --yes
+
+# Without a keys.json entry, --site/--user plus WP_APP_PASSWORD still work exactly as before:
+python3 scripts/publish.py fetch --site "$SITE" --user "$WP_USER" --page-id 15 --out original.txt
 ```
 
 **Draft-first, always.** `draft` never publishes — the page is created or updated with

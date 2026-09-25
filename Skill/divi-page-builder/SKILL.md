@@ -11,12 +11,12 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 
 ## Workflow
 1. **Intake:** get the content brief, the site URL, and whether this is a new page or an edit. For an edit, fetch the current page (`reference/publishing.md` → "6. Edit an existing page") and save it as `original.txt`.
-2. **Tokens:** reuse the site's `tokens.json` if you have one; otherwise run `python3 scripts/extract_tokens.py --site URL --user USER --page ID --out tokens.json` with the password in `WP_APP_PASSWORD`. See `reference/design-tokens.md`.
+2. **Tokens:** reuse the site's `tokens.json` if you have one; otherwise run `python3 scripts/extract_tokens.py --key "NAME" --page ID --out tokens.json` (`publish.py keys` lists the available sites; or `--site URL --user USER` with the password in `WP_APP_PASSWORD`). See `reference/design-tokens.md`.
 3. **Plan:** map the brief to recipes (`recipes/README.md`, `recipes/pages/`). Show the user the section outline and get a yes before writing.
 4. **Compose:** for each section, follow its recipe. Look up every module in `reference/modules/<slug>.md`, and take every color, font, spacing and button style from `tokens.json`.
 5. **Validate:** `python3 scripts/validate.py page.txt --tokens tokens.json` (add `--baseline original.txt` for edits). Repeat until there are 0 errors; read every warning, including the heading-outline ones. For a single section, add `--fragment`.
 6. **Preview:** `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` (or `serve` for live reload), then open it. If the coverage report lists unsupported modules, or something looks off, re-run with `--exact` (real Divi in Playground; needs Node 20+). See `reference/preview.md`. Client Customizer and preset styling looks generic in both.
-7. **Publish:** `python3 scripts/publish.py draft page.txt --site URL --user USER --title "…"` uploads local images and saves a **draft** (it validates first). Share the printed `preview_url`; after the user approves, run `publish.py publish --page-id ID --yes` (`reference/publishing.md`). The WordPress draft is the authoritative visual check.
+7. **Publish:** `python3 scripts/publish.py draft page.txt --key "NAME" --title "…"` (or `--site URL --user USER` with `WP_APP_PASSWORD`; `publish.py keys` lists the available sites) uploads local images and saves a **draft** (it validates first). Share the printed `preview_url`; after the user approves, run `publish.py publish --page-id ID --yes` (`reference/publishing.md`). The WordPress draft is the authoritative visual check.
 
 ## Hard rules
 - **Never invent attributes.** An attribute not on the module's page (or in its linked design families) does not exist; `validate.py` reports it as `E_UNKNOWN_ATTR`.
@@ -27,7 +27,7 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 - **Edits:** use `scripts/page_edit.py`. Everything you weren't asked to change stays byte-identical.
 - **Testimonials, reviews, prices and stats:** only as provided in the brief. Never invent them.
 - **Always push as a draft first.**
-- **Never print or write credentials.** Commands read `WP_APP_PASSWORD` / `ET_USERNAME` / `ET_API_KEY` from the environment only.
+- **Never print or write credentials.** They come from `keys.json` (outside the repo, `chmod 600`) or env `WP_APP_PASSWORD`; `ET_USERNAME` / `ET_API_KEY` still come from the environment only.
 
 ## Scripts
 | script | purpose |
@@ -37,7 +37,7 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 | `scripts/page_edit.py` | outline / extract / replace / insert-after / insert-before / set-attr / delete, surgically |
 | `scripts/preview.py` | default preview, Python only: `render`, `serve` (live reload), `doctor`, `fetch-divi`; `--exact` hands off to Playground |
 | `scripts/preview/preview.mjs` | exact real-Divi preview in WordPress Playground (Node 20+), used by `--exact` |
-| `scripts/publish.py` | `fetch` / `media` / `draft` / `publish` over REST with an Application Password |
+| `scripts/publish.py` | `fetch` / `media` / `draft` / `publish` / `keys` over REST with an Application Password |
 
 ## Reference index
 | file | read it when |
