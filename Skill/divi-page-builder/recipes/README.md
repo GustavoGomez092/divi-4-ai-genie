@@ -76,7 +76,14 @@ copying for a three-up feature row: a full-width heading row (`et_pb_row` with n
 | [Hero centered](sections/hero-centered.md) | section | simpler centered hero with no photo, for a page that doesn't need hero art |
 | [Hero background image](sections/hero-background-image.md) | section | atmospheric full-bleed photo hero with a dark gradient overlay |
 | [Hero fullwidth header](sections/hero-fullwidth-header.md) | section | fast, copy-first hero built from `et_pb_fullwidth_header`, no row/column layer |
-| _more to come_ | — | Tasks 17-19 populate `sections/`, `pages/` and `edits/` below; this table grows as each recipe lands. |
+| [Trust bar](sections/trust-bar.md) | section | compact row of partner/certification logos, grayscale until hovered |
+| [Services grid](sections/services-grid.md) | section | `h2` + three/four-up icon blurbs linking into each service's own page |
+| [Alternating features](sections/alternating-features.md) | section | zigzagging image/text feature rows, image-first on phone via a `disabled_on` row pair |
+| [Stats counters](sections/stats-counters.md) | section | 3-4 large "by the numbers" counters — numbers always come from the client's brief |
+| [Process steps](sections/process-steps.md) | section | numbered "how it works" walkthrough with a styled numeral eyebrow per step |
+| [Tabs](sections/tabs.md) | section | `et_pb_tabs`-based grouping of related content (service categories, plan tiers) behind clickable tabs |
+| [Service area list](sections/service-area-list.md) | section | `h2` + multi-column `<ul>` of served cities, linked to their own location pages when they exist |
+| _more to come_ | — | Tasks 18-19 populate `sections/`, `pages/` and `edits/` below; this table grows as each recipe lands. |
 
 - `sections/` — single-section patterns (hero, feature row, CTA band, …).
 - `pages/` — full-page compositions built from more than one section recipe.
