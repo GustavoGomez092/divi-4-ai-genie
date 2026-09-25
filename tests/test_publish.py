@@ -19,6 +19,8 @@ class FakeWP(BaseHTTPRequestHandler):
     calls = []
     page_status = "draft"
     page_raw = GOOD
+    auth_user = "editor"
+    auth_password = PASSWORD
 
     def log_message(self, *args):
         pass
@@ -35,7 +37,7 @@ class FakeWP(BaseHTTPRequestHandler):
         length = int(self.headers.get("Content-Length") or 0)
         body = self.rfile.read(length) if length else b""
         FakeWP.calls.append({"method": self.command, "path": self.path, "headers": dict(self.headers), "body": body})
-        expected = "Basic " + base64.b64encode(f"editor:{PASSWORD}".encode()).decode()
+        expected = "Basic " + base64.b64encode(f"{FakeWP.auth_user}:{FakeWP.auth_password}".encode()).decode()
         return self.headers.get("Authorization") == expected, body
 
     def do_GET(self):
@@ -70,19 +72,43 @@ class PublishFakeServerTest(unittest.TestCase):
         cls.server = HTTPServer(("127.0.0.1", 0), FakeWP)
         cls.site = f"http://127.0.0.1:{cls.server.server_address[1]}"
         threading.Thread(target=cls.server.serve_forever, daemon=True).start()
+        # An always-present, empty keys file, used as the default DIVI_KEYS_FILE for every run_cli()
+        # call below so tests never fall through to the real ~/.config/divi-page-builder/keys.json
+        # (an *explicit* --keys always overrides this, and an explicit env value beats it too).
+        fd, cls.empty_keys_path = tempfile.mkstemp(suffix=".json")
+        os.close(fd)
+        Path(cls.empty_keys_path).write_text(json.dumps({"keys": []}))
 
     @classmethod
     def tearDownClass(cls):
         cls.server.shutdown()
+        os.unlink(cls.empty_keys_path)
 
     def setUp(self):
         FakeWP.calls.clear()
         FakeWP.page_status = "draft"
         FakeWP.page_raw = GOOD
+        FakeWP.auth_user = "editor"
+        FakeWP.auth_password = PASSWORD
 
-    def run_cli(self, *args, password=PASSWORD):
-        env = dict(os.environ, WP_APP_PASSWORD=password)
+    def run_cli(self, *args, password=PASSWORD, keys_file=None):
+        env = dict(os.environ)
+        if password is None:
+            env.pop("WP_APP_PASSWORD", None)
+        else:
+            env["WP_APP_PASSWORD"] = password
+        # Explicit --keys (a CLI arg in *args) always wins over this env default, so tests that pass
+        # their own --keys are unaffected; this only keeps the *implicit* default path isolated from
+        # the real ~/.config/divi-page-builder/keys.json for every other test.
+        env["DIVI_KEYS_FILE"] = keys_file or self.empty_keys_path
         return subprocess.run([sys.executable, str(SCRIPTS / "publish.py"), *args], capture_output=True, text=True, env=env)
+
+    def _write_keys(self, entries):
+        f = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
+        json.dump({"keys": entries}, f)
+        f.close()
+        self.addCleanup(os.unlink, f.name)
+        return f.name
 
     def test_draft_uploads_local_images_and_creates_draft(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -379,6 +405,61 @@ class PublishFakeServerTest(unittest.TestCase):
                             password="")
         self.assertEqual(proc.returncode, 2)
         self.assertIn("WP_APP_PASSWORD", proc.stderr)
+
+    # --- keys.json multi-site credentials ---------------------------------------------------
+    def test_draft_with_key_uses_keys_file_credentials(self):
+        key_user, key_password = "keyuser", "aaaa BBBB cccc DDDD eeee FFFF"
+        keys_file = self._write_keys([{"name": "Test Site", "site": self.site, "user": key_user, "key": key_password}])
+        FakeWP.auth_user, FakeWP.auth_password = key_user, key_password
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(GOOD)
+        proc = self.run_cli("draft", f.name, "--key", "Test Site", "--keys", keys_file, "--title", "T",
+                             password=None)
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertTrue(any(c["method"] == "POST" for c in FakeWP.calls))
+        for stream in (proc.stdout, proc.stderr):
+            self.assertNotIn(key_password, stream)
+
+    def test_keys_command_lists_without_secrets(self):
+        secret_a, secret_b = "aaaa BBBB cccc DDDD eeee FFFF", "zzzz YYYY xxxx WWWW vvvv UUUU"
+        keys_file = self._write_keys([
+            {"name": "Test Key Local site", "site": "http://divi-test.local", "user": "user", "key": secret_a},
+            {"name": "Client A", "site": "https://client-a.com", "user": "seo-bot", "key": secret_b},
+        ])
+        proc = self.run_cli("keys", "--keys", keys_file, password=None)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(json.loads(proc.stdout), {"keys": [
+            {"name": "Test Key Local site", "site": "http://divi-test.local", "user": "user"},
+            {"name": "Client A", "site": "https://client-a.com", "user": "seo-bot"},
+        ]})
+        for stream in (proc.stdout, proc.stderr):
+            self.assertNotIn(secret_a, stream)
+            self.assertNotIn(secret_b, stream)
+
+    def test_keys_command_default_missing_file_hint(self):
+        with tempfile.TemporaryDirectory() as home:
+            env = dict(os.environ, HOME=home)
+            env.pop("DIVI_KEYS_FILE", None)
+            proc = subprocess.run([sys.executable, str(SCRIPTS / "publish.py"), "keys"],
+                                  capture_output=True, text=True, env=env)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(json.loads(proc.stdout), {"keys": []})
+        self.assertIn(".config/divi-page-builder/keys.json", proc.stderr)
+
+    def test_key_not_found_exits_2_without_leaking(self):
+        secret = "supersecretkeyvalue"
+        keys_file = self._write_keys([{"name": "Client A", "site": "https://client-a.com", "user": "seo-bot", "key": secret}])
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(GOOD)
+        proc = self.run_cli("draft", f.name, "--key", "Nonexistent", "--keys", keys_file, "--title", "T",
+                             password=None)
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn("Client A", proc.stderr)
+        self.assertEqual(FakeWP.calls, [])
+        for stream in (proc.stdout, proc.stderr):
+            self.assertNotIn(secret, stream)
 
 
 @live_only

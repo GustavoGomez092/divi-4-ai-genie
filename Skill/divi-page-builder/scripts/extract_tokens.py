@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Extract a Divi site's design tokens into tokens.json.
 
-Online:  extract_tokens.py --site https://client.com --user USER --page 12 [--page 34] --out tokens.json
-         (password from env WP_APP_PASSWORD, an Application Password)
+Online:  extract_tokens.py --key NAME --page 12 [--page 34] --out tokens.json
+         extract_tokens.py --site https://client.com --user USER --page 12 [--page 34] --out tokens.json
+         (credentials from keys.json via --key, or --site/--user with the password in env
+         WP_APP_PASSWORD; --keys PATH overrides the keys file location -- see wp_keys.py)
 Offline: extract_tokens.py --shortcode-file page.txt --url https://client.com/page/ --out tokens.json
 """
 from __future__ import annotations
@@ -11,7 +13,6 @@ import argparse
 import base64
 import datetime
 import json
-import os
 import sys
 import urllib.request
 from pathlib import Path
@@ -21,6 +22,7 @@ from divi_schema import load_schema  # noqa: E402
 from divi_shortcode import parse  # noqa: E402
 from tokens_from_html import tokens_from_html  # noqa: E402
 from tokens_from_shortcode import tokens_from_documents  # noqa: E402
+from wp_keys import KeysError, resolve_credentials  # noqa: E402
 
 
 def _get(url: str, auth: str = "") -> bytes:
@@ -60,8 +62,11 @@ def build_tokens(sources, html_by_url, site_url, schema) -> dict:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--site")
-    ap.add_argument("--user")
+    ap.add_argument("--site", help="required unless --key resolves it, or a keys.json entry matches --user")
+    ap.add_argument("--user", help="required unless --key resolves it, or a keys.json entry matches --site")
+    ap.add_argument("--key", help="name of an entry in keys.json to use for credentials")
+    ap.add_argument("--keys", help="keys.json path (default: env DIVI_KEYS_FILE, then "
+                                   "~/.config/divi-page-builder/keys.json)")
     ap.add_argument("--page", type=int, action="append", default=[])
     ap.add_argument("--shortcode-file")
     ap.add_argument("--url")
@@ -72,11 +77,10 @@ def main(argv=None) -> int:
             sources = [{"id": 0, "url": a.url or "", "raw": Path(a.shortcode_file).read_text(encoding="utf-8")}]
             site = a.url or ""
         else:
-            password = os.environ.get("WP_APP_PASSWORD", "")
-            if not (a.site and a.user and a.page and password):
-                ap.error("online mode needs --site, --user, --page and env WP_APP_PASSWORD")
-            sources = [fetch_page(a.site, a.user, password, pid) for pid in a.page]
-            site = a.site
+            if not a.page:
+                ap.error("online mode needs --page")
+            site, user, password = resolve_credentials(key_name=a.key, site=a.site, user=a.user, keys_path=a.keys)
+            sources = [fetch_page(site, user, password, pid) for pid in a.page]
         html = {}
         for s in sources:
             if s["url"]:
@@ -86,6 +90,9 @@ def main(argv=None) -> int:
                     print(f"warning: could not fetch {s['url']}: {exc}", file=sys.stderr)
         tokens = build_tokens(sources, html, site, load_schema())
         Path(a.out).write_text(json.dumps(tokens, indent=1, ensure_ascii=False))
+    except KeysError as exc:
+        print(f"extract_tokens.py: {exc}", file=sys.stderr)
+        return 2
     except (OSError, ValueError, KeyError) as exc:
         # Never include the password or an Authorization header here: `exc` only ever carries
         # things like a filesystem error, a JSON-decode error, or a missing REST response key

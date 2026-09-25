@@ -1,8 +1,10 @@
 import io
 import json
 import os
+import tempfile
 import unittest
 from contextlib import redirect_stderr
+from pathlib import Path
 from unittest import mock
 
 from _paths import FIXTURES
@@ -105,6 +107,46 @@ class TokensFromHtmlTest(unittest.TestCase):
         self.assertEqual(rc, 2)
         self.assertNotIn("super-secret-password", stderr.getvalue())
         self.assertNotIn("Authorization", stderr.getvalue())
+
+    def test_online_mode_resolves_credentials_from_keys_file(self):
+        secret = "aaaa BBBB cccc DDDD eeee FFFF"
+        raw = (FIXTURES / "valid" / "handwritten-landing.txt").read_text()
+        calls = []
+
+        def fake_get(url, auth=""):
+            calls.append((url, auth))
+            if "wp-json" in url:
+                return json.dumps({"id": 1, "link": "https://client.example/p/",
+                                   "content": {"raw": raw}}).encode()
+            return b""
+
+        with tempfile.TemporaryDirectory() as tmp:
+            keys_path = Path(tmp) / "keys.json"
+            keys_path.write_text(json.dumps({"keys": [
+                {"name": "Test Site", "site": "https://client.example", "user": "keyuser", "key": secret},
+            ]}))
+            out = Path(tmp) / "tokens.json"
+            with mock.patch("extract_tokens._get", side_effect=fake_get), \
+                    mock.patch.dict(os.environ, {"WP_APP_PASSWORD": ""}, clear=False):
+                rc = main(["--key", "Test Site", "--keys", str(keys_path), "--page", "1", "--out", str(out)])
+        self.assertEqual(rc, 0)
+        self.assertEqual(calls[0], ("https://client.example/wp-json/wp/v2/pages/1?context=edit",
+                                    f"keyuser:{secret}"))
+
+    def test_online_mode_unknown_key_exits_2_without_leaking(self):
+        secret = "aaaa BBBB cccc DDDD eeee FFFF"
+        with tempfile.TemporaryDirectory() as tmp:
+            keys_path = Path(tmp) / "keys.json"
+            keys_path.write_text(json.dumps({"keys": [
+                {"name": "Test Site", "site": "https://client.example", "user": "keyuser", "key": secret},
+            ]}))
+            stderr = io.StringIO()
+            with redirect_stderr(stderr), mock.patch.dict(os.environ, {"WP_APP_PASSWORD": ""}, clear=False):
+                rc = main(["--key", "Nope", "--keys", str(keys_path), "--page", "1",
+                          "--out", str(Path(tmp) / "tokens.json")])
+        self.assertEqual(rc, 2)
+        self.assertIn("Test Site", stderr.getvalue())
+        self.assertNotIn(secret, stderr.getvalue())
 
 
 if __name__ == "__main__":

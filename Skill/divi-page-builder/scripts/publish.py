@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 """Send Divi pages to WordPress over the REST API, authenticated with an Application Password.
 
-  publish.py fetch   --site URL --user USER --page-id ID --out FILE
-  publish.py media   --site URL --user USER FILE --alt TEXT
-  publish.py draft   PAGE --site URL --user USER --title TITLE [--slug S] [--page-id ID] [--baseline FILE]
-                     [--tokens tokens.json] [--page-fields JSON]
-  publish.py publish --site URL --user USER --page-id ID --yes [--content PAGE] [--baseline FILE] [--status publish]
+  publish.py fetch   [--key NAME | --site URL --user USER] [--keys PATH] --page-id ID --out FILE
+  publish.py media   [--key NAME | --site URL --user USER] [--keys PATH] FILE --alt TEXT
+  publish.py draft   PAGE [--key NAME | --site URL --user USER] [--keys PATH] --title TITLE [--slug S]
+                     [--page-id ID] [--baseline FILE] [--tokens tokens.json] [--page-fields JSON]
+  publish.py publish [--key NAME | --site URL --user USER] [--keys PATH] --page-id ID --yes
+                     [--content PAGE] [--baseline FILE] [--status publish]
+  publish.py keys    [--keys PATH]
 
-The password is read from env WP_APP_PASSWORD and never printed. `draft` validates the page first and
+Credentials come from a keys.json file (`--key NAME` picks an entry, or `--site`/`--user` are
+matched against it) or, for backward compatibility, `--site`/`--user` plus env WP_APP_PASSWORD.
+`--keys PATH` overrides the keys file location (otherwise env DIVI_KEYS_FILE, then
+~/.config/divi-page-builder/keys.json); see wp_keys.py and reference/publishing.md. `keys` lists
+the available `name`/`site`/`user` entries; a key value is never printed. `draft` validates the page first and
 refuses on errors; image attributes pointing at local files (file://, ./, ../) are uploaded to the
 Media Library and rewritten. Pages are saved as drafts; `publish` requires --yes (after user approval).
 Validation baseline: with --baseline FILE, or (with --page-id) the page's current content.raw, findings
@@ -26,7 +32,6 @@ import argparse
 import base64
 import json
 import mimetypes
-import os
 import sys
 import urllib.error
 import urllib.request
@@ -38,6 +43,7 @@ from divi_checks_values import IMAGE_ATTRS  # noqa: E402
 from divi_schema import load_schema  # noqa: E402
 from divi_shortcode import escape_attr_value, parse, serialize  # noqa: E402
 from validate import validate_source  # noqa: E402
+from wp_keys import KeysError, list_keys, resolve_credentials, resolve_keys_path  # noqa: E402
 
 LOCAL_PREFIXES = ("file://", "./", "../")
 
@@ -247,12 +253,25 @@ def cmd_publish(wp, a):
     return 0
 
 
+def cmd_keys(a) -> int:
+    keys = list_keys(a.keys)
+    if not keys:
+        path, explicit = resolve_keys_path(a.keys)
+        if not explicit and not path.exists():
+            print(f"no keys file found; the default location is {path}", file=sys.stderr)
+    _print({"keys": keys})
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="command", required=True)
     common = argparse.ArgumentParser(add_help=False)
-    common.add_argument("--site", required=True)
-    common.add_argument("--user", required=True)
+    common.add_argument("--site", help="required unless --key resolves it, or a keys.json entry matches --user")
+    common.add_argument("--user", help="required unless --key resolves it, or a keys.json entry matches --site")
+    common.add_argument("--key", help="name of an entry in keys.json to use for credentials")
+    common.add_argument("--keys", help="keys.json path (default: env DIVI_KEYS_FILE, then "
+                                       "~/.config/divi-page-builder/keys.json)")
     p = sub.add_parser("fetch", parents=[common])
     p.add_argument("--page-id", type=int, required=True)
     p.add_argument("--out", required=True)
@@ -276,12 +295,18 @@ def main(argv=None) -> int:
                                       "(default: the page's current content)")
     p.add_argument("--status", choices=["publish"],
                    help="explicitly make a private/scheduled page public now (otherwise its visibility is kept)")
+    p = sub.add_parser("keys")
+    p.add_argument("--keys", help="keys.json path (default: env DIVI_KEYS_FILE, then "
+                                  "~/.config/divi-page-builder/keys.json)")
     a = ap.parse_args(argv)
-    password = os.environ.get("WP_APP_PASSWORD", "")
-    if not password:
-        print("publish.py: set WP_APP_PASSWORD to a WordPress Application Password", file=sys.stderr)
+    if a.command == "keys":
+        return cmd_keys(a)
+    try:
+        site, user, password = resolve_credentials(key_name=a.key, site=a.site, user=a.user, keys_path=a.keys)
+    except KeysError as exc:
+        print(f"publish.py: {exc}", file=sys.stderr)
         return 2
-    wp = WordPress(a.site, a.user, password)
+    wp = WordPress(site, user, password)
     try:
         return {"fetch": cmd_fetch, "media": cmd_media, "draft": cmd_draft, "publish": cmd_publish}[a.command](wp, a)
     except (PublishError, OSError, ValueError, KeyError) as exc:
