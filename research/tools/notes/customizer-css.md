@@ -96,6 +96,31 @@ palette on purpose, since they're not resolvable without the site's private
 `global_colors["gcid-planprobe"] == "#123456"`) was dropped per this finding; see the comment in
 that test file citing this note.
 
+**Why the shortcode's `global_colors_info` attribute isn't a usable fallback either.** Every module
+that uses a color also carries a `global_colors_info` bookkeeping attribute
+(`research/tools/notes/doc-experiments.md:105-133`, itself sourced from Divi's
+`_prepare_global_colors_info()`, `includes/builder/class-et-builder-element.php:13391-13431`,
+verified against the local Divi 4.27.9 install), and it turns out to come in exactly two shapes,
+neither of which yields a gcid→hex mapping:
+
+- **True global-color entries** are keyed by the `gcid-<uuid>` id and map to a *list of attribute
+  names* that use it (e.g. `{"gcid-36fd78a7-...": ["button_text_color", "button_text_color"]}`) —
+  never to a hex value. The attribute's own value (e.g. `button_text_color`) is the literal
+  `"gcid-<uuid>"` string, which Task 11's `tokens_from_shortcode.py` already excludes from
+  `colors.palette` on purpose (it isn't a resolvable color on its own).
+- **Inline/"smart"-color entries** are keyed by the literal hex value itself (e.g.
+  `{"#F97316": ["background_color"]}`), not by a `gcid-`. That hex is already the module
+  attribute's own plain value, so it's already captured by `colors.palette` via the normal
+  shortcode color-extraction path — `global_colors_info` adds nothing new here either.
+
+So there is no reading of `global_colors_info`, in either shape, that produces a `gcid → hex`
+pair that isn't already available some other way (and in the true-global-color case, isn't
+available *at all* without the site's private `et_global_data` option). `colors.global` therefore
+stays `{}` unless a Divi build actually emits `--gcid-*` CSS custom properties on the public page.
+Anyone composing a new page who wants to reuse a color a client's site already uses should pull it
+from `colors.palette` (which is populated from real, resolved hex values) rather than expecting a
+gcid to resolve to anything.
+
 ## Fonts / Google Fonts
 
 `<link rel='stylesheet' id='et-builder-googlefonts-cached-css'

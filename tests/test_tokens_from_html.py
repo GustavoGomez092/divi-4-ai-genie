@@ -1,12 +1,17 @@
+import io
 import json
+import os
 import unittest
+from contextlib import redirect_stderr
+from unittest import mock
 
 from _paths import FIXTURES
 from divi_schema import load_schema
-from extract_tokens import build_tokens
+from extract_tokens import build_tokens, main
 from tokens_from_html import tokens_from_html
 
 HTML = (FIXTURES / "html" / "customized-page.html").read_text()
+SHORTCODE_FILE = str(FIXTURES / "valid" / "handwritten-landing.txt")
 
 
 class TokensFromHtmlTest(unittest.TestCase):
@@ -50,6 +55,56 @@ class TokensFromHtmlTest(unittest.TestCase):
         self.assertEqual(t["colors"]["customizer"]["accent"], "#ff00aa")
         self.assertIn("et_pb_button", t["module_styles"])
         json.dumps(t)  # must be JSON-serializable
+
+    def test_build_tokens_merges_two_html_sources(self):
+        # Fix round 1, item 4: customizer merge is first-non-empty-wins per key, and fonts are a
+        # union in first-seen order across sources.
+        raw = (FIXTURES / "valid" / "handwritten-landing.txt").read_text()
+        html_a = ('<style>body{color:#333344}a{color:#0055ff}</style>'
+                  '<link rel="stylesheet" id="et-builder-googlefonts-cached-css" '
+                  'href="https://fonts.googleapis.com/css?family=Montserrat:400&#038;display=swap" />')
+        html_b = ('<style>body{color:#000000}h1,h2{color:#112233}'
+                  '.et_pb_counter_amount{background-color:#ff00aa}</style>'
+                  '<link rel="stylesheet" id="et-builder-googlefonts-cached-css" '
+                  'href="https://fonts.googleapis.com/css?family=Lato:400&#038;display=swap" />')
+        t = build_tokens(
+            [{"id": 1, "url": "https://client.example/a/", "raw": raw},
+             {"id": 2, "url": "https://client.example/b/", "raw": raw}],
+            {"https://client.example/a/": html_a, "https://client.example/b/": html_b},
+            "https://client.example", load_schema())
+        c = t["colors"]["customizer"]
+        # body_text/link only appear in A -> A's values win even though B also sets body_text.
+        self.assertEqual(c["body_text"], "#333344")
+        self.assertEqual(c["link"], "#0055ff")
+        # heading/accent only appear in B.
+        self.assertEqual(c["heading"], "#112233")
+        self.assertEqual(c["accent"], "#ff00aa")
+        self.assertEqual(t["typography"]["loaded_fonts"], ["Montserrat", "Lato"])
+
+    def test_media_query_color_is_ignored_for_customizer_lookup(self):
+        # Fix round 1, item 3: a breakpoint override inside @media must not win over the top-level
+        # (desktop) rule just because it appears later in source order.
+        html = "<style>body{color:#111111}\n@media (max-width:767px){body{color:#222222}}</style>"
+        self.assertEqual(tokens_from_html(html)["customizer"].get("body_text"), "#111111")
+
+    def test_media_query_before_desktop_rule_is_still_ignored(self):
+        html = "<style>@media (max-width:767px){body{color:#222222}}\nbody{color:#111111}</style>"
+        self.assertEqual(tokens_from_html(html)["customizer"].get("body_text"), "#111111")
+
+    def test_main_returns_2_for_unwritable_out_path(self):
+        rc = main(["--shortcode-file", SHORTCODE_FILE, "--out", "/nonexistent-dir-xyz/x.json"])
+        self.assertEqual(rc, 2)
+
+    def test_main_returns_2_for_malformed_rest_response(self):
+        with mock.patch("extract_tokens._get", return_value=b"{}"), \
+                mock.patch.dict(os.environ, {"WP_APP_PASSWORD": "super-secret-password"}):
+            stderr = io.StringIO()
+            with redirect_stderr(stderr):
+                rc = main(["--site", "https://client.example", "--user", "editor", "--page", "1",
+                           "--out", "/tmp/task12-malformed-rest.json"])
+        self.assertEqual(rc, 2)
+        self.assertNotIn("super-secret-password", stderr.getvalue())
+        self.assertNotIn("Authorization", stderr.getvalue())
 
 
 if __name__ == "__main__":

@@ -209,6 +209,14 @@ actually match the rest of the site.
 - **Global Colors are effectively invisible from public HTML** (§1, and
   `research/tools/notes/customizer-css.md`): an unused Global Color leaves zero trace, and a used
   one is indistinguishable from a hardcoded hex value once rendered. `colors.global` should be
-  expected to be `{}` in the common case.
+  expected to be `{}` in the common case. The shortcode's own `global_colors_info` bookkeeping
+  attribute isn't a usable fallback either
+  (`research/tools/notes/doc-experiments.md:105-133`; Divi's `_prepare_global_colors_info()`,
+  `includes/builder/class-et-builder-element.php:13391-13431`): a true global-color entry maps a
+  `gcid-<uuid>` to a list of *attribute names* that use it, never to a hex, and an inline/"smart"
+  color entry is keyed by the hex itself — a value already captured plainly in `colors.palette`.
+  Neither shape ever yields a new gcid→hex pair, so `colors.global` only fills in if a Divi build
+  actually emits `--gcid-*` CSS custom properties; until then, reuse colors from `colors.palette`
+  instead of expecting a gcid to resolve to anything.
 - **Child-theme/plugin CSS is not captured at all** (§1). If a client's site relies on such CSS for
   part of its look, `tokens.json` will not reflect it.

@@ -84,11 +84,15 @@ def main(argv=None) -> int:
                     html[s["url"]] = _get(s["url"]).decode("utf-8", "replace")
                 except OSError as exc:
                     print(f"warning: could not fetch {s['url']}: {exc}", file=sys.stderr)
-    except OSError as exc:
+        tokens = build_tokens(sources, html, site, load_schema())
+        Path(a.out).write_text(json.dumps(tokens, indent=1, ensure_ascii=False))
+    except (OSError, ValueError, KeyError) as exc:
+        # Never include the password or an Authorization header here: `exc` only ever carries
+        # things like a filesystem error, a JSON-decode error, or a missing REST response key
+        # (e.g. "link"/"content"/"raw") -- none of which include the credentials, which only ever
+        # travel inside the base64-encoded Authorization header built in `_get`.
         print(f"extract_tokens.py: {exc}", file=sys.stderr)
         return 2
-    tokens = build_tokens(sources, html, site, load_schema())
-    Path(a.out).write_text(json.dumps(tokens, indent=1, ensure_ascii=False))
     ms = tokens["module_styles"]
     print(f"wrote {a.out}: {sum(len(v) for v in ms.values())} style bundles across {len(ms)} modules, "
           f"{len(tokens['colors']['palette'])} palette colors, {len(tokens['section_exemplars'])} section exemplars, "
