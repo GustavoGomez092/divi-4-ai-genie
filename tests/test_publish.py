@@ -17,6 +17,7 @@ GOOD = (FIXTURES / "valid" / "handwritten-landing.txt").read_text()
 
 class FakeWP(BaseHTTPRequestHandler):
     calls = []
+    page_status = "draft"
 
     def log_message(self, *args):
         pass
@@ -41,7 +42,8 @@ class FakeWP(BaseHTTPRequestHandler):
         if not ok:
             return self._reply(401, {"code": "rest_not_logged_in", "message": "You are not currently logged in."})
         if self.path.startswith("/wp-json/wp/v2/pages/101"):
-            return self._reply(200, {"id": 101, "link": "http://fake/?page_id=101", "content": {"raw": GOOD}})
+            return self._reply(200, {"id": 101, "status": FakeWP.page_status,
+                                     "link": "http://fake/?page_id=101", "content": {"raw": GOOD}})
         self._reply(404, {"code": "rest_no_route", "message": "No route"})
 
     def do_POST(self):
@@ -74,6 +76,7 @@ class PublishFakeServerTest(unittest.TestCase):
 
     def setUp(self):
         FakeWP.calls.clear()
+        FakeWP.page_status = "draft"
 
     def run_cli(self, *args, password=PASSWORD):
         env = dict(os.environ, WP_APP_PASSWORD=password)
@@ -107,9 +110,111 @@ class PublishFakeServerTest(unittest.TestCase):
         proc = self.run_cli("draft", f.name, "--site", self.site, "--user", "editor", "--title", "T", "--page-id", "101")
         os.unlink(f.name)
         self.assertEqual(proc.returncode, 0, proc.stderr)
+        get_call, post_call = FakeWP.calls
+        self.assertEqual(get_call["method"], "GET")
+        self.assertEqual(post_call["path"], "/wp-json/wp/v2/pages/101")
+        self.assertEqual(json.loads(post_call["body"])["status"], "draft")
+
+    def test_draft_refuses_to_unpublish_a_live_page(self):
+        FakeWP.page_status = "publish"
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(GOOD)
+        proc = self.run_cli("draft", f.name, "--site", self.site, "--user", "editor", "--title", "T", "--page-id", "101")
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 1)
+        self.assertFalse(any(c["method"] == "POST" for c in FakeWP.calls))
+        self.assertIn("101", proc.stderr)
+        self.assertIn("offline", proc.stderr)
+        self.assertIn("publish.py publish --page-id 101 --content", proc.stderr)
+
+    def test_draft_allows_updating_a_pending_page(self):
+        FakeWP.page_status = "pending"
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(GOOD)
+        proc = self.run_cli("draft", f.name, "--site", self.site, "--user", "editor", "--title", "T", "--page-id", "101")
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertTrue(any(c["method"] == "POST" for c in FakeWP.calls))
+
+    def test_page_fields_cannot_set_status(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(GOOD)
+        proc = self.run_cli("draft", f.name, "--site", self.site, "--user", "editor", "--title", "T",
+                             "--page-fields", '{"status":"publish"}')
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn("--page-fields", proc.stderr)
+        self.assertIn("status", proc.stderr)
+        self.assertEqual(FakeWP.calls, [])
+
+    def test_page_fields_cannot_set_content_or_meta(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(GOOD)
+        for bad in ('{"content":"x"}', '{"meta":{"_et_pb_use_builder":"off"}}'):
+            proc = self.run_cli("draft", f.name, "--site", self.site, "--user", "editor", "--title", "T",
+                                 "--page-fields", bad)
+            self.assertEqual(proc.returncode, 2, proc.stderr)
+            self.assertEqual(FakeWP.calls, [])
+        os.unlink(f.name)
+
+    def test_page_fields_template_still_works(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(GOOD)
+        proc = self.run_cli("draft", f.name, "--site", self.site, "--user", "editor", "--title", "T",
+                             "--page-fields", '{"template":"page-template-blank.php"}')
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        (create,) = FakeWP.calls
+        sent = json.loads(create["body"])
+        self.assertEqual(sent["template"], "page-template-blank.php")
+
+    def test_page_fields_must_be_a_json_object(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(GOOD)
+        proc = self.run_cli("draft", f.name, "--site", self.site, "--user", "editor", "--title", "T",
+                             "--page-fields", "[1,2]")
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 2)
+        self.assertNotIn("Traceback", proc.stderr)
+        self.assertEqual(FakeWP.calls, [])
+
+    def test_draft_checks_all_local_images_before_uploading_any(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "hero.jpg").write_bytes(b"\xff\xd8\xff fake jpeg")
+            page = Path(tmp) / "page.txt"
+            source = GOOD.replace("https://client.example/wp-content/uploads/2026/09/plumber.jpg", "./hero.jpg")
+            source = source.replace('admin_label="Hero" _builder_version',
+                                    'admin_label="Hero" background_image="./missing.jpg" _builder_version')
+            page.write_text(source)
+            proc = self.run_cli("draft", str(page), "--site", self.site, "--user", "editor", "--title", "Test Page")
+        self.assertEqual(proc.returncode, 2)
+        self.assertEqual([c for c in FakeWP.calls if c["path"] == "/wp-json/wp/v2/media"], [])
+
+    def test_publish_with_content_requires_yes(self):
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
+                             "--content", str(FIXTURES / "valid" / "handwritten-landing.txt"))
+        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(FakeWP.calls, [])
+
+    def test_publish_with_content_sends_content_and_status_in_one_request(self):
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
+                             "--content", str(FIXTURES / "valid" / "handwritten-landing.txt"), "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
         (call,) = FakeWP.calls
         self.assertEqual(call["path"], "/wp-json/wp/v2/pages/101")
-        self.assertEqual(json.loads(call["body"])["status"], "draft")
+        body = json.loads(call["body"])
+        self.assertEqual(body["status"], "publish")
+        self.assertEqual(body["content"], GOOD)
+        self.assertEqual(body["meta"], {"_et_pb_use_builder": "on"})
+
+    def test_publish_with_content_refuses_invalid_page(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write('[et_pb_section][et_pb_row][et_pb_column type="4_4"][et_pb_text colour="red"]x[/et_pb_text][/et_pb_column][/et_pb_row][/et_pb_section]')
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
+                             "--content", f.name, "--yes")
+        os.unlink(f.name)
+        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(FakeWP.calls, [])
 
     def test_draft_refuses_invalid_page(self):
         with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:

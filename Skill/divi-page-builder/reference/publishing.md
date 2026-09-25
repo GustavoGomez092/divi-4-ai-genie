@@ -27,6 +27,10 @@ python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --tit
 
 # 4. Publish only after the user has reviewed the draft's preview_url and approved it
 python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 --yes
+
+# 5. Editing a page that is ALREADY published/scheduled/private: see "Editing a live page" below —
+#    draft --page-id refuses this case, so review a copy first, then apply with publish --content
+python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 --content page.txt --yes
 ```
 
 **Draft-first, always.** `draft` never publishes — the page is created or updated with
@@ -35,6 +39,25 @@ explicit step that flips `status` to `publish`, and it refuses (exit 1, no HTTP 
 `--yes` is given. Only pass `--yes` after the user has looked at the draft's `preview_url`
 (from `draft`'s JSON output) and approved it — never as a default or automatic follow-up to
 `draft`.
+
+**Editing a live page.** `draft --page-id ID` first fetches the page's current `status`
+(`GET /pages/ID?context=edit`) and refuses (exit 1, no update) if it is `publish`, `future`,
+or `private` — forcing a live page back to `draft` would take it offline for site visitors
+while it's being reviewed. It proceeds normally for a page whose status is `draft` or
+`pending`. To edit a page that's already live:
+
+1. Create a **review copy** as a new draft (no `--page-id`), and share its `preview_url` for
+   approval: `publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "..."`
+2. Once approved, apply the edit to the live page **and** publish it in one request with
+   `publish`'s optional `--content`:
+   ```bash
+   python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 \
+     --content page.txt --yes
+   ```
+   This validates `page.txt` first (refusing on errors, exit 1, no HTTP calls), uploads any
+   local images the same way `draft` does, then sends `content`, `status: "publish"`, and
+   `meta._et_pb_use_builder: "on"` to `/pages/15` in a single `POST` — the page is never left
+   in a `draft` state in between. `--yes` is still required.
 
 **Local images.** Reference images in the page source as `./images/hero.jpg`, `../hero.jpg`,
 or `file:///abs/path.jpg` (paths resolved relative to the page file's own folder, or absolute
@@ -50,16 +73,22 @@ the standard flags — most commonly the layout template found in Task 10's REST
 `--page-fields '{"template":"page-template-blank.php"}'` removes the site's header, primary
 nav, and footer chrome for a true full-bleed landing page. No sidebar is Divi's own default
 for any builder-active page (`meta._et_pb_use_builder: "on"`) — nothing needs to be set for
-that.
+that. `--page-fields` must be a JSON object and may not set `status`, `content`, or `meta` —
+those are owned by `draft`/`publish` themselves (setting `status` there, for example, would
+silently bypass the `--yes` approval gate); such a value is a usage error (exit 2, no HTTP
+calls), not a validation error.
 
-**Validation.** `draft` runs `validate_source` before doing anything else and refuses (exit 1,
-no HTTP calls at all — no uploads, no draft) if there are any blocking errors, printing each
-finding to stderr the same way `validate.py` does.
+**Validation.** `draft` (and `publish --content`) run `validate_source` before doing anything
+else and refuse (exit 1, no HTTP calls at all — no uploads, no draft/publish) if there are any
+blocking errors, printing each finding to stderr the same way `validate.py` does. Local image
+paths are all resolved and checked for existence up front, before any is uploaded, so one
+missing image never leaves an earlier one uploaded as an orphan (exit 2, zero media uploads).
 
-**Exit codes:** `0` success · `1` validation errors, or `publish` without `--yes` · `2` usage
-error (including a missing `WP_APP_PASSWORD`), HTTP error, or I/O error. HTTP error messages
-include only the method/path and WordPress's own `code`/`message` — never the password or a
-full URL with credentials.
+**Exit codes:** `0` success · `1` validation errors, `publish` without `--yes`, or `draft
+--page-id` refusing to unpublish a live page · `2` usage error (including a missing
+`WP_APP_PASSWORD`, a malformed `--page-fields`, or a missing local image), HTTP error, or I/O
+error. HTTP error messages include only the method/path and WordPress's own `code`/`message`
+— never the password or a full URL with credentials.
 
 ## Raw REST reference
 
@@ -253,6 +282,16 @@ introduced by this edit) does not block. Concretely:
 
 You only need to send the fields you're changing — a `POST` update with just `{"content":
 ...}` leaves title, status, template, and everything else untouched.
+
+**Editing a page that's already published/scheduled/private.** Note that the raw `update.json`
+above only sends `content`, so it never touches `status` — a live page stays live. This is
+*not* what `publish.py draft --page-id` does: `draft` always sends `status: "draft"`, so
+running it against a currently `publish`/`future`/`private` page would take that page offline.
+`publish.py` guards against this itself (see "Editing a live page" in the "Using publish.py"
+section above): `draft --page-id` checks the page's current status first and refuses if it's
+live, and the fix is `publish.py publish --page-id ID --content edited.txt --yes`, which sends
+`content` and `status: "publish"` together in one request — the same shape as this section's
+raw `curl` example, but staying published throughout instead of round-tripping through draft.
 
 ## 7. CSS cache behavior
 

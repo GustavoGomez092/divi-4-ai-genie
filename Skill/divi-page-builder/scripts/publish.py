@@ -4,11 +4,15 @@
   publish.py fetch   --site URL --user USER --page-id ID --out FILE
   publish.py media   --site URL --user USER FILE --alt TEXT
   publish.py draft   PAGE --site URL --user USER --title TITLE [--slug S] [--page-id ID] [--tokens tokens.json] [--page-fields JSON]
-  publish.py publish --site URL --user USER --page-id ID --yes
+  publish.py publish --site URL --user USER --page-id ID --yes [--content PAGE]
 
 The password is read from env WP_APP_PASSWORD and never printed. `draft` validates the page first and
 refuses on errors; image attributes pointing at local files (file://, ./, ../) are uploaded to the
 Media Library and rewritten. Pages are saved as drafts; `publish` requires --yes (after user approval).
+`--page-fields` may not set status/content/meta (those are managed by the command itself) and must be
+a JSON object. `draft --page-id` refuses to touch a page that is currently publish/future/private,
+since forcing it back to draft would take a client's live page offline — use `publish --page-id ID
+--content PAGE --yes` instead, after reviewing a separate draft copy.
 Exit status: 0 ok, 1 validation errors or refused, 2 usage/HTTP/I-O error.
 """
 from __future__ import annotations
@@ -81,9 +85,9 @@ def _local_path(value: str, base_dir: Path):
     return None
 
 
-def upload_local_images(wp: WordPress, source: str, base_dir: Path):
-    doc = parse(source)
-    uploaded, cache = [], {}
+def _find_local_images(doc, base_dir: Path):
+    """Resolve every local image reference and verify it exists before any upload starts."""
+    tasks = []
     for node, _path, _parent in doc.walk():
         for attr in list(node.attrs):
             if attr not in IMAGE_ATTRS and not attr.endswith("_image"):
@@ -93,12 +97,38 @@ def upload_local_images(wp: WordPress, source: str, base_dir: Path):
                 continue
             if not local.is_file():
                 raise PublishError(f"{node.tag} {attr}: local image not found: {local}")
-            if local not in cache:
-                alt = node.value("alt") or node.value("title_text") or local.stem.replace("-", " ")
-                cache[local] = upload_media(wp, local, alt)
-                uploaded.append(cache[local])
-            node.attrs[attr] = escape_attr_value(cache[local]["url"], attr)
+            tasks.append((node, attr, local))
+    return tasks
+
+
+def upload_local_images(wp: WordPress, source: str, base_dir: Path):
+    doc = parse(source)
+    tasks = _find_local_images(doc, base_dir)  # preflight: all paths must exist before any upload
+    uploaded, cache = [], {}
+    for node, attr, local in tasks:
+        if local not in cache:
+            alt = node.value("alt") or node.value("title_text") or local.stem.replace("-", " ")
+            cache[local] = upload_media(wp, local, alt)
+            uploaded.append(cache[local])
+        node.attrs[attr] = escape_attr_value(cache[local]["url"], attr)
     return serialize(doc), uploaded
+
+
+FORBIDDEN_PAGE_FIELDS = {"status", "content", "meta"}
+
+
+def parse_page_fields(raw):
+    if not raw:
+        return {}
+    try:
+        obj = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise PublishError(f"--page-fields is not valid JSON: {exc}") from None
+    if not isinstance(obj, dict):
+        raise PublishError("--page-fields must be a JSON object, e.g. '{\"template\": \"page-template-blank.php\"}'")
+    if set(obj) & FORBIDDEN_PAGE_FIELDS:
+        raise PublishError("--page-fields may not set status/content/meta")
+    return obj
 
 
 def _preview_url(link: str) -> str:
@@ -121,7 +151,11 @@ def cmd_media(wp, a):
     return 0
 
 
+LIVE_STATUSES = ("publish", "future", "private")
+
+
 def cmd_draft(wp, a):
+    page_fields = parse_page_fields(a.page_fields)
     page_path = Path(a.page)
     source = page_path.read_text(encoding="utf-8")
     tokens = json.loads(Path(a.tokens).read_text()) if a.tokens else None
@@ -131,11 +165,20 @@ def cmd_draft(wp, a):
             print(f"{a.page}:{f.line}:{f.col} {f.code} {f.path}: {f.message}", file=sys.stderr)
         print(f"refusing to save: {len(errors)} validation error(s); run scripts/validate.py for details", file=sys.stderr)
         return 1
+    if a.page_id:
+        current = wp.request("GET", f"/pages/{a.page_id}?context=edit")
+        status = current.get("status")
+        if status in LIVE_STATUSES:
+            print(f"page {a.page_id} is {status}; saving it as a draft would take it offline. "
+                  f"Create a review copy instead: publish.py draft PAGE --title … (no --page-id), "
+                  f"share its preview_url, and after approval apply it with: "
+                  f"publish.py publish --page-id {a.page_id} --content PAGE --yes", file=sys.stderr)
+            return 1
     content, uploaded = upload_local_images(wp, source, page_path.resolve().parent)
     body = {"title": a.title, "content": content, "status": "draft", "meta": {"_et_pb_use_builder": "on"}}
     if a.slug:
         body["slug"] = a.slug
-    body.update(json.loads(a.page_fields) if a.page_fields else {})
+    body.update(page_fields)
     page = wp.request("POST", f"/pages/{a.page_id}" if a.page_id else "/pages", json_body=body)
     _print({"id": page["id"], "status": page.get("status", "draft"), "link": page.get("link", ""),
             "preview_url": _preview_url(page.get("link", "")),
@@ -147,7 +190,20 @@ def cmd_publish(wp, a):
     if not a.yes:
         print("refusing to publish without --yes (publish only after the user approves the draft)", file=sys.stderr)
         return 1
-    page = wp.request("POST", f"/pages/{a.page_id}", json_body={"status": "publish"})
+    if a.content:
+        page_path = Path(a.content)
+        source = page_path.read_text(encoding="utf-8")
+        errors = [f for f in validate_source(source, load_schema()) if f.level == "error"]
+        if errors:
+            for f in errors:
+                print(f"{a.content}:{f.line}:{f.col} {f.code} {f.path}: {f.message}", file=sys.stderr)
+            print(f"refusing to publish: {len(errors)} validation error(s); run scripts/validate.py for details", file=sys.stderr)
+            return 1
+        content, _uploaded = upload_local_images(wp, source, page_path.resolve().parent)
+        body = {"content": content, "status": "publish", "meta": {"_et_pb_use_builder": "on"}}
+    else:
+        body = {"status": "publish"}
+    page = wp.request("POST", f"/pages/{a.page_id}", json_body=body)
     _print({"id": page["id"], "status": page.get("status", ""), "link": page.get("link", "")})
     return 0
 
@@ -174,6 +230,7 @@ def main(argv=None) -> int:
     p = sub.add_parser("publish", parents=[common])
     p.add_argument("--page-id", type=int, required=True)
     p.add_argument("--yes", action="store_true")
+    p.add_argument("--content", help="also update content from this page file in the same publish request")
     a = ap.parse_args(argv)
     password = os.environ.get("WP_APP_PASSWORD", "")
     if not password:
