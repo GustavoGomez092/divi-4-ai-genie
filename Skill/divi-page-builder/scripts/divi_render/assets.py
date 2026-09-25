@@ -141,6 +141,9 @@ class Theme:
             src = self.read_text("includes/builder/class-et-global-settings.php")
             helpers = {name: dict(re.findall(r"'(\w+)'\s*=>\s*'([^']*)'", body))
                        for name, body in re.findall(r"\$(\w+)\s*=\s*array\((.*?)\);", src, re.S)}
+            # Anything the regexes don't parse (other expressions, a missing file) is simply
+            # absent or "", which _clear_global_defaults() treats as "no global default": it
+            # degrades to a no-op, never to a wrong value being cleared.
             self._globals = {}
             for key, lit, var, sub in re.findall(
                     r"'(et_pb_\w+-\w+)'\s*=>\s*(?:'([^']*)'|\$(\w+)\['(\w+)'\])", src):

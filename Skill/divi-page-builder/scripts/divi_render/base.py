@@ -23,6 +23,13 @@ META_ATTRS = {"_builder_version", "_module_preset", "hover_enabled", "locked", "
               "fb_built", "admin_label", "collapsed", "template_type", "sticky_enabled",
               "_dynamic_attributes", "theme_builder_area", "saved_specialty_column_type",
               "column_structure", "specialty_columns"}
+# Modules whose ET_Global_Settings keys use another module's namespace ($this->global_settings_slug;
+# class-et-builder-element.php uses it instead of $this->slug). These are every override in Divi
+# 4.27.9 (grep of the whole theme): FullwidthPortfolio.php:12, FullwidthPostSlider.php:17,
+# PostSlider.php:23.
+GLOBAL_SETTINGS_SLUG = {"et_pb_fullwidth_portfolio": "et_pb_portfolio",
+                        "et_pb_fullwidth_post_slider": "et_pb_fullwidth_slider",
+                        "et_pb_post_slider": "et_pb_slider"}
 HANDLERS: dict = {}
 FALLBACK: list = []   # [Unsupported], set by modules/fallback.py
 
@@ -90,9 +97,11 @@ class Module(DesignOptions, ButtonOptions):
     def _clear_global_defaults(self, globals_: dict):
         """ET_Builder_Element::_maybe_remove_global_default_values_from_props(): on the front end a
         prop equal to its ET_Global_Settings default (e.g. the gallery's overlay colour) is emptied,
-        so it prints no CSS; text_orientation is always printed."""
+        so it prints no CSS; text_orientation is always printed. Keys are namespaced by the
+        module's global settings slug (GLOBAL_SETTINGS_SLUG), as in PHP."""
+        slug = GLOBAL_SETTINGS_SLUG.get(self.node.tag, self.node.tag)
         for k in list(self.props):
-            g = globals_.get(f"{self.node.tag}-{k}")
+            g = globals_.get(f"{slug}-{k}")
             if g and k != "text_orientation" and dict.get(self.props, k) == g:
                 dict.__setitem__(self.props, k, "")
 

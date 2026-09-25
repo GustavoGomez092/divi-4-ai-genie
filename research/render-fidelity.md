@@ -11,13 +11,15 @@ preview. `tests/test_render_fidelity.py` compares it with real Divi, rendered th
   triples. 1.0 means no missing or extra declarations.
 
 Recording is opt-in: run
-`RENDER_FIDELITY_RECORD=1 python3 -m unittest discover -s tests -p 'test_render_fidelity.py'` to
-upsert the held-out rows below. Without the variable the test only checks and never writes this
-file.
+`RENDER_FIDELITY_RECORD=1 RENDER_FIDELITY_STAGE='T26 held-out pre-fix' python3 -m unittest discover -s tests -p 'test_render_fidelity.py'`
+to upsert the held-out rows below. The stage label is required (the test fails without it). Rows
+are keyed by fixture and stage: a new stage always adds a row, so no task overwrites another's
+history, while recording the same stage again updates its row. Without `RENDER_FIDELITY_RECORD`
+the test only checks and never writes this file.
 
 Tuned fixtures (`tuned: true`) must match exactly: the sequences are equal and 0 declarations are
 missing or extra. With recording on, the test upserts a row below for each held-out fixture
-(`tuned: false`), one row per fixture per day. Following the procedure for Tasks 25–27, a held-out page is
+(`tuned: false`) under the given stage. Following the procedure for Tasks 25–27, a held-out page is
 measured **before** any fix. That pre-fix row is the honest number for how well the renderer
 generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
 
@@ -70,13 +72,18 @@ generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
   renderer prints the iframe oEmbed would return and counts it as `video_oembed`. Self-hosted
   video and audio use Divi's own `<video>` and `wp_audio_shortcode()` markup, and the fixtures
   use those.
+- Metrics rows gained a Stage column (Task 25 fix round): the earlier rows were labelled with the
+  stage they were measured at, and `heldout-outofscope.txt` got a "T25 re-measure" row next to
+  its T24 row, now that icon, testimonial and social follow render (the remaining unsupported
+  modules still keep it below 0.9).
 
 ## Metrics
 
-| Fixture | Modules | Tuned | Markup ratio | CSS ratio | Date |
-|---|---|---|---|---|---|
-| heldout2-inscope.txt | accordion, accordion_item, blurb, button, cta, divider, fullwidth_header, heading, image, number_counter, slide, slider, text | no | 0.9574 | 0.9469 | 2026-09-24 |
-| heldout2-inscope.txt | accordion, accordion_item, blurb, button, cta, divider, fullwidth_header, heading, image, number_counter, slide, slider, text | yes | 1.0000 | 1.0000 | 2026-09-24 |
-| heldout-outofscope.txt | circle_counter, contact_field, contact_form, countdown_timer, counter, counters, heading, icon, pricing_table, pricing_tables, social_media_follow, social_media_follow_network, tab, tabs, testimonial, text | no | 0.2022 | 0.1860 | 2026-09-24 |
-| content-heldout.txt | audio, code, fullwidth_code, fullwidth_image, gallery, icon, social_media_follow, social_media_follow_network, team_member, testimonial, video | no | 1.0000 | 0.9550 | 2026-09-24 |
-| content-heldout.txt | audio, code, fullwidth_code, fullwidth_image, gallery, icon, social_media_follow, social_media_follow_network, team_member, testimonial, video | yes | 1.0000 | 1.0000 | 2026-09-24 |
+| Fixture | Stage | Modules | Tuned | Markup ratio | CSS ratio | Date |
+|---|---|---|---|---|---|---|
+| heldout2-inscope.txt | T24 held-out pre-fix | accordion, accordion_item, blurb, button, cta, divider, fullwidth_header, heading, image, number_counter, slide, slider, text | no | 0.9574 | 0.9469 | 2026-09-24 |
+| heldout2-inscope.txt | T24 held-out post-fix | accordion, accordion_item, blurb, button, cta, divider, fullwidth_header, heading, image, number_counter, slide, slider, text | yes | 1.0000 | 1.0000 | 2026-09-24 |
+| heldout-outofscope.txt | T24 held-out | circle_counter, contact_field, contact_form, countdown_timer, counter, counters, heading, icon, pricing_table, pricing_tables, social_media_follow, social_media_follow_network, tab, tabs, testimonial, text | no | 0.2022 | 0.1860 | 2026-09-24 |
+| content-heldout.txt | T25 held-out pre-fix | audio, code, fullwidth_code, fullwidth_image, gallery, icon, social_media_follow, social_media_follow_network, team_member, testimonial, video | no | 1.0000 | 0.9550 | 2026-09-24 |
+| content-heldout.txt | T25 held-out post-fix | audio, code, fullwidth_code, fullwidth_image, gallery, icon, social_media_follow, social_media_follow_network, team_member, testimonial, video | yes | 1.0000 | 1.0000 | 2026-09-24 |
+| heldout-outofscope.txt | T25 re-measure | circle_counter, contact_field, contact_form, countdown_timer, counter, counters, heading, icon, pricing_table, pricing_tables, social_media_follow, social_media_follow_network, tab, tabs, testimonial, text | no | 0.3938 | 0.4884 | 2026-09-24 |
