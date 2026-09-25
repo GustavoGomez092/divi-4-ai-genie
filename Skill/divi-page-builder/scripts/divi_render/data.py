@@ -1,6 +1,6 @@
 """Module definitions for the renderer, from the skill's compact schema (scripts/schema/):
 field defaults (default_on_front wins over default, as in PHP get_default_props()), and the
-`render` block research/tools/build_schema.py adds for this package: the module's main CSS
+`render` block research/tools/build_schema.py (repo only) adds for this package: the module's main CSS
 element and its advanced_fields (selectors, important flags and option defaults per design
 family). Most of Divi's CSS output is driven by that configuration, not hand-written code.
 """

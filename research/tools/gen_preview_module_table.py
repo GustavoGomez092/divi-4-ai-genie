@@ -22,7 +22,7 @@ if str(SCRIPTS) not in sys.path:
 import divi_render as dr  # noqa: E402
 from divi_schema import load_schema  # noqa: E402
 
-BEGIN = "<!-- BEGIN GENERATED MODULES: research/tools/gen_preview_module_table.py -->"
+BEGIN = "<!-- BEGIN GENERATED MODULES (repo only: research/tools/gen_preview_module_table.py) -->"
 END = "<!-- END GENERATED MODULES -->"
 
 

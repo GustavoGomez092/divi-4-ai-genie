@@ -45,9 +45,9 @@ and `[`/`]`, and only one applies here:
   so this only matters if it were mistakenly put in an attribute).
 
 Both `python3 scripts/validate.py` (which only scans *attribute* values for `E_RAW_QUOTE`/
-`E_RAW_BRACKET`, never module content) and the Divi judge (`tests/test_divi_judge.py`, which parses
-the page with this skill's own parser and compares it against what the real Divi site's PHP parser
-produces) confirm this is correct — see the Checklist below.
+`E_RAW_BRACKET`, never module content) and the project's Divi judge (repo only: `tests/test_divi_judge.py`,
+which parses the page with this skill's own parser and compares it against what the real Divi
+site's PHP parser produces) confirmed this is correct.
 
 ## Structure
 ```text
@@ -115,12 +115,9 @@ is invisible on the page regardless of viewport.
 ```
 
 ## Checklist
-- [ ] `python3 Skill/divi-page-builder/scripts/validate.py <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — 0 errors
-- [ ] `python3 Skill/divi-page-builder/scripts/preview.py render <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — fast visual check
-- [ ] added as `tests/fixtures/valid/faq-jsonld.txt` and to `DiviJudgeTest.FILES` in `tests/test_divi_judge.py`; `python3 -m unittest discover -s tests -p 'test_divi_judge.py' -v` passes against the local Divi site
-- [ ] `research/tools/push_local.sh <file> "FAQ"` — push to divi-test.local, note the printed id/url
-- [ ] `curl` the pushed page and parse the `<script type="application/ld+json">` block with Python's `json` module — must load without error and its 3 questions must match the accordion's 3 titles word for word
-- [ ] `node research/python-renderer-spike/shoot.mjs <outdir> faq <url> --width 1440,390` — screenshot at desktop (1440) and phone (390)
-- [ ] `research/tools/wp-local.sh post delete <id> --force` — delete the test page once the screenshots look right
+- [ ] `python3 scripts/validate.py page.txt --tokens tokens.json` — 0 errors; to check this section on its own, `section.txt --fragment` (`tokens.json` is the target site's own, from `scripts/extract_tokens.py`; `recipes/sample-tokens.json` is only the worked example's fictional brand)
+- [ ] `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` — fast visual check (open `preview.html`; see [preview](../../reference/preview.md))
+- [ ] `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"` — saves a **draft** (validates first) and prints its `preview_url`; share it and publish only after the user approves ([publishing](../../reference/publishing.md))
+- [ ] in `preview.html` (or the draft's page source), the `<script type="application/ld+json">` block parses as JSON (e.g. paste it into `python3 -m json.tool`) and its 3 questions match the accordion's 3 titles word for word
 - [ ] exactly one `h2` — no `h1` on this section; every accordion item title is below `h2` (default `h5`)
 - [ ] only the first accordion item has `open="on"`; the JSON-LD's questions/answers match the accordion's, word for word, with none invented

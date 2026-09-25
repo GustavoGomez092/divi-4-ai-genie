@@ -64,10 +64,8 @@ every column to full width on phone regardless of the desktop split.
 ```
 
 ## Checklist
-- [ ] `python3 Skill/divi-page-builder/scripts/validate.py <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — 0 errors
-- [ ] `python3 Skill/divi-page-builder/scripts/preview.py render <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — fast visual check
-- [ ] `research/tools/push_local.sh <file> "Trust bar"` — push to divi-test.local, note the printed id/url
-- [ ] `node research/python-renderer-spike/shoot.mjs <outdir> trust-bar <url> --width 1440,390` — screenshot at desktop (1440) and phone (390)
-- [ ] `research/tools/wp-local.sh post delete <id> --force` — delete the test page once the screenshots look right
+- [ ] `python3 scripts/validate.py page.txt --tokens tokens.json` — 0 errors; to check this section on its own, `section.txt --fragment` (`tokens.json` is the target site's own, from `scripts/extract_tokens.py`; `recipes/sample-tokens.json` is only the worked example's fictional brand)
+- [ ] `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` — fast visual check (open `preview.html`; see [preview](../../reference/preview.md))
+- [ ] `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"` — saves a **draft** (validates first) and prints its `preview_url`; share it and publish only after the user approves ([publishing](../../reference/publishing.md))
 - [ ] no heading module on this page (a trust bar carries no `h1`/`h2`/`h3`)
 - [ ] every image has alt text naming the organization, and a Media Library URL

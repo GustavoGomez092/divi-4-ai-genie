@@ -41,11 +41,9 @@ Which values need `_tablet`/`_phone`, and why.
 ```
 
 ## Checklist
-- [ ] `python3 Skill/divi-page-builder/scripts/validate.py <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — 0 errors
-- [ ] `python3 Skill/divi-page-builder/scripts/preview.py render <file>` — fast visual check
-- [ ] `research/tools/push_local.sh <file> "<title>"` — push to divi-test.local, note the printed id/url
-- [ ] `node research/python-renderer-spike/shoot.mjs <outdir> <name> <url> --width 1440,390` — screenshot at desktop (1440) and phone (390)
-- [ ] `research/tools/wp-local.sh post delete <id> --force` — delete the test page once the screenshots look right
+- [ ] `python3 scripts/validate.py page.txt --tokens tokens.json` — 0 errors; to check this section on its own, `section.txt --fragment` (`tokens.json` is the target site's own, from `scripts/extract_tokens.py`; `recipes/sample-tokens.json` is only the worked example's fictional brand)
+- [ ] `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` — fast visual check (open `preview.html`; see [preview](../../reference/preview.md))
+- [ ] `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"` — saves a **draft** (validates first) and prints its `preview_url`; share it and publish only after the user approves ([publishing](../../reference/publishing.md))
 - [ ] exactly one H1 on the page
 - [ ] every image has alt text and a Media Library URL
 ````
@@ -82,8 +80,31 @@ Which values need `_tablet`/`_phone`, and why.
   tagged ` ```divi ` so `research/tools/check_doc_examples.py` validates it — it must pass with 0
   errors. This is the example a reader can copy, run through the verification loop below, and see
   exactly what the recipe produces.
-- **Checklist.** The exact verification loop every recipe in Tasks 16-19 was run through before
-  being written down (see `recipes/README.md` §5): validate against the sample tokens, render a
-  fast Python preview, push to the local WordPress test site, and screenshot it at desktop and
-  phone widths with the headless-Chrome helper — not with browser automation tools, since the
-  helper is faster and scriptable. Delete the test page once you've looked at the screenshots.
+- **Checklist.** What the *agent using the skill* runs on a real page: only the skill's own tools,
+  relative to the skill directory, against the target site's `tokens.json` (validate → preview →
+  `publish.py draft`, see `recipes/README.md` §5). Never point it at `sample-tokens.json`, at repo
+  paths (`Skill/divi-page-builder/…`, `research/…`) or at the local test site: an installed skill
+  has none of them. Recipe-specific checks (heading levels, alt text, invented content) follow.
+
+## Developer verification loop (repo only, not part of the skill)
+
+Before a recipe is written down, its worked example goes through this loop in the repo. None of
+it belongs in a recipe's Checklist.
+
+1. **Validate** against the fictional sample brand:
+   `python3 Skill/divi-page-builder/scripts/validate.py <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json`
+   (add `--fragment` for a section on its own) — 0 errors.
+2. **Check every doc example:** `python3 research/tools/check_doc_examples.py Skill/divi-page-builder`
+   — 0 failing (errors, heading skips, and a missing H1 in page recipes all fail).
+3. **Preview:** `python3 Skill/divi-page-builder/scripts/preview.py render <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json`.
+4. **Push to the local site:** `research/tools/push_local.sh <file> "<title>"` publishes a
+   `Plan Test: <title>` page on `divi-test.local` and prints `<id> <url>`. For page recipes, swap
+   image URLs for a local placeholder first (`research/tools/wp-local.sh media import ... --porcelain`).
+5. **Screenshot:** `node research/python-renderer-spike/shoot.mjs <outdir> <name> <url> --width 1440,390`
+   (Node 22+, headless; not browser automation) at desktop (1440) and phone (390).
+6. **Inspect the real output where the recipe depends on it**, e.g. `curl` the pushed page: the FAQ
+   recipe's JSON-LD must parse and match the accordion; pricing feature lines must render as
+   single `<li>`s with the `-` line as `et_pb_not_available`. Recipes with tricky content also go
+   into `tests/fixtures/valid/` and `tests/test_divi_judge.py` `DiviJudgeTest.FILES`
+   (`PP_LIVE_TESTS=1`, compares our parser with Divi's own).
+7. **Clean up:** `research/tools/wp-local.sh post delete <id> --force`.

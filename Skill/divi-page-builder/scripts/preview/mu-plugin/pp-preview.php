@@ -4,7 +4,7 @@
  * Description: GET /?pp_preview=<name> renders <PP_PAGES_DIR>/<name>.txt (a Divi 4 shortcode layout)
  *              as a full front-end page through the real Divi theme, without creating a post.
  *
- * Same technique as research/render-prototype/render.php, but inside a real HTTP request
+ * Same technique as research/render-prototype/render.php (repo only), but inside a real HTTP request
  * (WordPress Playground has no WP-CLI eval-file loop we want to pay for on every render):
  *   - a fake WP_Post + its meta are primed into the (per-request) object cache;
  *   - the `request` filter points the main query at page_id=FAKE and posts_pre_query returns the

@@ -70,10 +70,8 @@ no extra attributes.
 ```
 
 ## Checklist
-- [ ] `python3 Skill/divi-page-builder/scripts/validate.py <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — 0 errors; exactly one expected `W_EXTERNAL_IMAGE` warning on `et_pb_video`'s `src` (see the Validator note above) and no other warnings
-- [ ] `python3 Skill/divi-page-builder/scripts/preview.py render <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — fast visual check; the actual YouTube/Vimeo oEmbed fetch needs network — the Python preview shows what the oEmbed iframe would look like and counts it in the coverage report, `--exact` shows the real embed when it has network access
-- [ ] `research/tools/push_local.sh <file> "Video"` — push to divi-test.local, note the printed id/url
-- [ ] `node research/python-renderer-spike/shoot.mjs <outdir> video <url> --width 1440,390` — screenshot at desktop (1440) and phone (390)
-- [ ] `research/tools/wp-local.sh post delete <id> --force` — delete the test page once the screenshots look right
+- [ ] `python3 scripts/validate.py page.txt --tokens tokens.json` — 0 errors and no warnings (a YouTube/Vimeo `src` is not an image field, so no `W_EXTERNAL_IMAGE`; the `image_src` poster must be a Media Library URL); to check this section on its own, `section.txt --fragment` (`tokens.json` is the target site's own, from `scripts/extract_tokens.py`; `recipes/sample-tokens.json` is only the worked example's fictional brand)
+- [ ] `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` — fast visual check; the actual YouTube/Vimeo oEmbed fetch needs network — the Python preview shows what the oEmbed iframe would look like and counts it in the coverage report, `--exact` shows the real embed when it has network access (open `preview.html`; see [preview](../../reference/preview.md))
+- [ ] `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"` — saves a **draft** (validates first) and prints its `preview_url`; share it and publish only after the user approves ([publishing](../../reference/publishing.md))
 - [ ] no `h1` introduced by this section; the optional heading is `h2`
 - [ ] `image_src` is a real poster frame, not a generic stock/placeholder image passed off as the video's own thumbnail

@@ -10,26 +10,26 @@ The new section should be composed the same way any new page is: from a
 
 ```bash
 # 1. Find the anchor section's path — the existing section the new one goes after (or before).
-python3 Skill/divi-page-builder/scripts/page_edit.py page.txt outline
+python3 scripts/page_edit.py page.txt outline
 
 # 2. Compose the new section in its own file, following the chosen recipe's Token mapping table
 #    against the real site's tokens.json (not sample-tokens.json, once this isn't a worked example).
 
 # 3. Insert it — insert-after appends right after the anchor's closing tag; insert-before prepends
 #    right before its opening tag. Both leave every other byte in the file untouched.
-python3 Skill/divi-page-builder/scripts/page_edit.py page.txt insert-after \
+python3 scripts/page_edit.py page.txt insert-after \
   "et_pb_section[0]" new-section.txt --out page.txt
 
 # 4. Validate against a baseline of the page before the insert, with --tokens so the new section's
 #    own colors/fonts/spacing are checked against the site's palette too.
-python3 Skill/divi-page-builder/scripts/validate.py page.txt --baseline original.txt \
+python3 scripts/validate.py page.txt --baseline original.txt \
   --tokens tokens.json
 ```
 
 ## Fetching a live page first
 
 ```bash
-python3 Skill/divi-page-builder/scripts/publish.py fetch --site "$SITE" --user "$WP_USER" \
+python3 scripts/publish.py fetch --site "$SITE" --user "$WP_USER" \
   --page-id <ID> --out original.txt
 cp original.txt page.txt
 # ...compose new-section.txt from a recipe, then insert-after/insert-before against page.txt...
@@ -39,11 +39,11 @@ cp original.txt page.txt
 
 ```bash
 # 1. Draft a review copy (a NEW draft — no --page-id — the live page stays untouched for now).
-python3 Skill/divi-page-builder/scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" \
+python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" \
   --title "Review: <page title> + <new section>"
 # 2. Share that draft's preview_url; only proceed once a human approves it.
 # 3. Apply the approved content to the live page and publish it in the same request.
-python3 Skill/divi-page-builder/scripts/publish.py publish --site "$SITE" --user "$WP_USER" \
+python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" \
   --page-id <ID> --content page.txt --yes
 ```
 
@@ -52,18 +52,18 @@ python3 Skill/divi-page-builder/scripts/publish.py publish --site "$SITE" --user
 Add a [Trust bar](../sections/trust-bar.md) right after the Hero section:
 
 ```bash
-python3 Skill/divi-page-builder/scripts/page_edit.py handwritten-landing.txt outline
+python3 scripts/page_edit.py handwritten-landing.txt outline
 #   et_pb_section[0]  admin_label=Hero  (1642 chars)
-#   et_pb_section[1]  admin_label=Services  (1751 chars)
+#   et_pb_section[1]  admin_label=Services  (1769 chars)
 #   ...
 
 # new-section.txt is Trust bar's own worked example, copied verbatim (sample-tokens.json values).
-python3 Skill/divi-page-builder/scripts/page_edit.py handwritten-landing.txt insert-after \
+python3 scripts/page_edit.py handwritten-landing.txt insert-after \
   "et_pb_section[0]" new-section.txt --out inserted.txt
 
-python3 Skill/divi-page-builder/scripts/validate.py inserted.txt \
+python3 scripts/validate.py inserted.txt \
   --baseline handwritten-landing.txt \
-  --tokens Skill/divi-page-builder/recipes/sample-tokens.json
+  --tokens recipes/sample-tokens.json
 #   1 pre-existing finding(s) also present in the baseline (not blocking):
 #     ...W_EXTERNAL_IMAGE et_pb_section[0] > et_pb_row[0] > et_pb_column[1] > et_pb_image[0]
 #        src points to client.example, not the site

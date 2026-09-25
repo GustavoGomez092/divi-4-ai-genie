@@ -4,12 +4,11 @@ A recipe is a **pattern expressed as fields, not a template to fill in**. It nev
 the hero background `#0b2a3c`" — it says "the hero section's `background_color` comes from the
 `et_pb_section` bundle whose `contexts[].section_tone` is `dark`." Point the same recipe at a
 different client's `tokens.json` and it produces a section that looks like *that* client's site,
-because every design value is a lookup, not a literal. `research/tools/notes/recipe-template.md`
-defines the exact section-by-section shape every recipe below follows; read that first if you're
-writing one. This README explains how to read what a recipe's Token mapping table is asking you to
-do, using the real values in [`sample-tokens.json`](sample-tokens.json) — the fictional "Miami
-Rapid Plumbing" brand (navy `#0b2a3c`, orange `#f97316`, Montserrat/Lato) extracted from
-`tests/fixtures/valid/brand-kit.txt`.
+because every design value is a lookup, not a literal. This README explains how to read what a
+recipe's Token mapping table is asking you to do, using the values in
+[`sample-tokens.json`](sample-tokens.json): the worked examples' fictional "Miami Rapid Plumbing"
+brand (navy `#0b2a3c`, orange `#f97316`, Montserrat/Lato). It is **only** for the examples; a real
+page always uses the target site's own `tokens.json` (§5).
 
 ## 1. What a recipe is
 
@@ -110,17 +109,19 @@ copying for a three-up feature row: a full-width heading row (`et_pb_row` with n
 
 ## 5. The verification loop
 
-Every recipe in this directory was checked with the same four-step loop before being written down,
-and the worked example in each recipe's own Checklist section names the same steps:
+Every recipe's Checklist runs the same loop with the skill's own tools, from the skill directory,
+against the **target site's** `tokens.json` (from `scripts/extract_tokens.py`, see
+`reference/design-tokens.md`):
 
-1. **Validate** — `python3 Skill/divi-page-builder/scripts/validate.py <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json`
-   must report 0 errors.
-2. **Preview** — `python3 Skill/divi-page-builder/scripts/preview.py render <file>` for a fast
-   visual check (no Node/PHP/WordPress needed; see `reference/preview.md`).
-3. **Push to the local site** — `research/tools/push_local.sh <file> "<title>"` publishes it as a
-   `Plan Test: <title>` page on `divi-test.local` and prints `<id> <url>`.
-4. **Screenshot** — `node research/python-renderer-spike/shoot.mjs <outdir> <name> <url> --width
-   1440,390` (needs Node 22+) captures the real, real-Divi-rendered page at desktop (1440px) and
-   phone (390px) widths — not a browser-automation tool, since the helper is scriptable and
-   headless. Delete the test page afterwards with
-   `research/tools/wp-local.sh post delete <id> --force`.
+1. **Validate** — `python3 scripts/validate.py page.txt --tokens tokens.json` must report 0 errors;
+   read every warning (heading outline, off-token values, external images). To check one section
+   on its own, validate it with `--fragment` (a lone section has no H1).
+2. **Preview** — `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html`,
+   then open `preview.html` (no Node/PHP/WordPress needed; see `reference/preview.md`).
+3. **Draft** — `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"`
+   saves a WordPress draft and prints its `preview_url`; the user reviews it there, and only then
+   is it published (`reference/publishing.md`).
+
+**`sample-tokens.json` is not a site's tokens.** It is the worked examples' fictional "Miami Rapid
+Plumbing" brand, used only so every example is concrete and validates. Never validate, preview or
+style a real page against it: always use the target site's own `tokens.json`.

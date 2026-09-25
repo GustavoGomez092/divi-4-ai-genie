@@ -64,10 +64,8 @@ thumbnail grid to fewer columns automatically as the viewport narrows, down to o
 ```
 
 ## Checklist
-- [ ] `python3 Skill/divi-page-builder/scripts/validate.py <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — 0 errors
-- [ ] `python3 Skill/divi-page-builder/scripts/preview.py render <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — fast visual check; the gallery images themselves only show up once real attachments exist — the preview's coverage summary reports gallery attachments as needing the live site's data
-- [ ] `research/tools/push_local.sh <file> "Gallery"` — push to divi-test.local, note the printed id/url
-- [ ] `node research/python-renderer-spike/shoot.mjs <outdir> gallery <url> --width 1440,390` — screenshot at desktop (1440) and phone (390)
-- [ ] `research/tools/wp-local.sh post delete <id> --force` — delete the test page once the screenshots look right
+- [ ] `python3 scripts/validate.py page.txt --tokens tokens.json` — 0 errors; to check this section on its own, `section.txt --fragment` (`tokens.json` is the target site's own, from `scripts/extract_tokens.py`; `recipes/sample-tokens.json` is only the worked example's fictional brand)
+- [ ] `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` — fast visual check; the gallery images themselves only show up once real attachments exist — the preview's coverage summary reports gallery attachments as needing the live site's data (open `preview.html`; see [preview](../../reference/preview.md))
+- [ ] `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"` — saves a **draft** (validates first) and prints its `preview_url`; share it and publish only after the user approves ([publishing](../../reference/publishing.md))
 - [ ] exactly one `h2` — no `h1` on this section
 - [ ] every real `gallery_ids` entry is an attachment that actually exists on the target site, and every uploaded photo has its Media Library "Alt Text" filled in

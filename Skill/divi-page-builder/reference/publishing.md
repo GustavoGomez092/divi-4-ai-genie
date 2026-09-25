@@ -119,9 +119,9 @@ error. HTTP error messages include only the method/path and WordPress's own `cod
 ## Raw REST reference
 
 Everything below was verified live against a real WordPress + Divi 4.27.9 install
-(`http://divi-test.local`, a LocalWP site) using the WordPress REST API and Application
-Passwords. See `research/tools/notes/rest-experiments.md` for the exact commands and raw
-results this page is built from.
+(a LocalWP test site) using the WordPress REST API and Application
+Passwords. (The exact commands and raw results are in the repo only:
+`research/tools/notes/rest-experiments.md`; nothing here depends on them.)
 
 ## 1. Auth
 
@@ -170,7 +170,7 @@ curl -s -u "$WP_USER:$WP_APP_PASSWORD" \
 Response includes `id` and `source_url`:
 
 ```json
-{"id": 26, "source_url": "http://divi-test.local/wp-content/uploads/2026/09/hero.jpg", "mime_type": "image/jpeg", ...}
+{"id": 26, "source_url": "https://client-site.example/wp-content/uploads/2026/09/hero.jpg", "mime_type": "image/jpeg", ...}
 ```
 
 Then set alt text as a second call:
@@ -185,7 +185,7 @@ Use the returned `source_url` verbatim as the module's `src`/`background_image` 
 value in the shortcode:
 
 ```
-[et_pb_image src="http://divi-test.local/wp-content/uploads/2026/09/hero.jpg" alt="Plumber repairing a burst pipe" ...][/et_pb_image]
+[et_pb_image src="https://client-site.example/wp-content/uploads/2026/09/hero.jpg" alt="Plumber repairing a burst pipe" ...][/et_pb_image]
 ```
 
 ## 3. Create a draft
@@ -249,7 +249,7 @@ needs a browser session cookie — `curl` alone can't view it without also authe
 cookie-based session, which Application Passwords don't provide).
 
 ```
-http://divi-test.local/?page_id=15&preview=true
+https://client-site.example/?page_id=15&preview=true
 ```
 
 **The WordPress draft, opened in a real logged-in browser tab, is the authoritative visual
@@ -268,7 +268,7 @@ curl -s -X POST -u "$WP_USER:$WP_APP_PASSWORD" -H 'Content-Type: application/jso
 ```
 
 The response's `link` field becomes the page's real permalink
-(`http://divi-test.local/plan-test-rest-create/` in testing, rather than the `?page_id=`
+(`https://client-site.example/plan-test-rest-create/` in testing, rather than the `?page_id=`
 form used for unpublished content). Loading that permalink the first time after publish
 triggers Divi to generate its `et-cache` CSS for the page (see the cache section below) —
 there is no separate "build" or "compile" step to call.
@@ -284,7 +284,7 @@ curl -s -u "$WP_USER:$WP_APP_PASSWORD" "$SITE/wp-json/wp/v2/pages/15?context=edi
   > original.txt
 
 # edit a copy, then validate the edit against the original as a baseline
-python3 Skill/divi-page-builder/scripts/validate.py edited.txt --baseline original.txt
+python3 scripts/validate.py edited.txt --baseline original.txt
 
 # push the update
 python3 -c 'import json; print(json.dumps({"content": open("edited.txt").read()}))' > update.json
@@ -375,7 +375,7 @@ Create (`POST /wp/v2/pages`):
 
 Read for editing (`GET /wp/v2/pages/<id>?context=edit`) — relevant fields:
 ```json
-{"id": 15, "status": "draft", "content": {"raw": "<shortcode text>", "rendered": "<... do_shortcode output ...>"}, "meta": {"_et_pb_use_builder": "on", ...}, "link": "http://divi-test.local/?page_id=15"}
+{"id": 15, "status": "draft", "content": {"raw": "<shortcode text>", "rendered": "<... do_shortcode output ...>"}, "meta": {"_et_pb_use_builder": "on", ...}, "link": "https://client-site.example/?page_id=15"}
 ```
 
 Update (`POST /wp/v2/pages/<id>`), any subset of fields:

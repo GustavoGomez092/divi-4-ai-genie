@@ -376,7 +376,7 @@ matching `__hover_enabled` attribute is set to `"on|hover"` (`W_HOVER_DISABLED` 
 specifically, the enable attribute's name is not `background_color__hover_enabled` /
 `background_image__hover_enabled` — both share one shared key, `background__hover_enabled`,
 because the Background family treats color/image/gradient/video/pattern/mask as one group for
-hover purposes (`Skill/divi-page-builder/scripts/divi_checks_values.py`: `key = "background" if
+hover purposes (`scripts/divi_checks_values.py`: `key = "background" if
 base in ("background_color", "background_image") else base`). Every other hover-capable field uses
 its own name as the key.
 

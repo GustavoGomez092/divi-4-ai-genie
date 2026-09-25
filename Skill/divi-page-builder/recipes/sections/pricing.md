@@ -113,10 +113,9 @@ Priority emergency dispatch
 ```
 
 ## Checklist
-- [ ] `python3 Skill/divi-page-builder/scripts/validate.py <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — 0 errors
-- [ ] `python3 Skill/divi-page-builder/scripts/preview.py render <file> --tokens Skill/divi-page-builder/recipes/sample-tokens.json` — fast visual check
-- [ ] `research/tools/push_local.sh <file> "Pricing"` — push to divi-test.local, note the printed id/url; `curl` the URL and confirm each feature line rendered as a single, non-nested `<li><span>...</span></li>` (not a doubled/broken one), and that the `-`-prefixed line rendered `<li class="et_pb_not_available">` with no leading `-` left in its visible text
-- [ ] `node research/python-renderer-spike/shoot.mjs <outdir> pricing <url> --width 1440,390` — screenshot at desktop (1440) and phone (390)
-- [ ] `research/tools/wp-local.sh post delete <id> --force` — delete the test page once the screenshots look right
+- [ ] `python3 scripts/validate.py page.txt --tokens tokens.json` — 0 errors; to check this section on its own, `section.txt --fragment` (`tokens.json` is the target site's own, from `scripts/extract_tokens.py`; `recipes/sample-tokens.json` is only the worked example's fictional brand)
+- [ ] `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` — fast visual check (open `preview.html`; see [preview](../../reference/preview.md))
+- [ ] `python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "…"` — saves a **draft** (validates first) and prints its `preview_url`; share it and publish only after the user approves ([publishing](../../reference/publishing.md))
+- [ ] in `preview.html` and the draft preview, each feature line renders as a single, non-nested `<li><span>...</span></li>` (not a doubled/broken one), and the `-`-prefixed line renders as `<li class="et_pb_not_available">` with no leading `-` left in its visible text
 - [ ] exactly one `h2` — no `h1` on this section; every table title is `h3`
 - [ ] the featured tier is visually distinct and legible; every price/frequency on a real page traces back to the client's brief — none invented

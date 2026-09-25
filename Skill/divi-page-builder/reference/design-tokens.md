@@ -28,9 +28,8 @@ outside:
   color, body/heading fonts, body font size, site content width, and any Global Colors the client
   defined) that apply to *every* page, not just ones a module attribute overrides. These aren't in
   the page content at all; they only show up in the **public page's rendered CSS**
-  (`tokens_from_html.py`, this task). See §5.2 of
-  [`research/tools/notes/customizer-css.md`](../../../research/tools/notes/customizer-css.md) for
-  exactly which selectors carry which value, and why Global Colors in particular are **not**
+  (`tokens_from_html.py`, this task). The selectors `tokens_from_html.py` reads for each value are listed in its own docstring (the
+  discovery notes behind them are repo only: `research/tools/notes/customizer-css.md`), including and why Global Colors in particular are **not**
   recoverable this way in general (Divi 4.27.9 resolves a Global Color to a plain hex value before
   emitting CSS — there's no `--gcid-*` variable and no signal left behind once resolved, and an
   *unused* Global Color leaves no trace at all).
@@ -51,7 +50,7 @@ never a regular account password):
 
 ```bash
 export WP_APP_PASSWORD='xxxx xxxx xxxx xxxx xxxx xxxx'   # never pass it as a flag or commit it
-python3 Skill/divi-page-builder/scripts/extract_tokens.py \
+python3 scripts/extract_tokens.py \
   --site https://client.example --user editor --page 12 --page 34 \
   --out tokens.json
 ```
@@ -69,7 +68,7 @@ python3 Skill/divi-page-builder/scripts/extract_tokens.py \
 when you only have an export of the page content and no live site to fetch CSS from):
 
 ```bash
-python3 Skill/divi-page-builder/scripts/extract_tokens.py \
+python3 scripts/extract_tokens.py \
   --shortcode-file page.txt --url https://client.example/page/ --out tokens.json
 ```
 
@@ -205,12 +204,23 @@ actually match the rest of the site.
   — that is not the same as "the accent color is Divi's default `#2ea3f2`", it means *this
   extraction found no override*, and code that consumes `tokens.json` should not assume a missing
   key means any particular color.
-- **Global Colors are effectively invisible from public HTML** (§1, and
-  `research/tools/notes/customizer-css.md`): an unused Global Color leaves zero trace, and a used
+- **Customizer CSS is read from inline `<style>` blocks only.** `tokens_from_html.py` never follows
+  `<link rel="stylesheet">` files. If a cache/optimization plugin (WP Rocket, Autoptimize, LiteSpeed,
+  …) or Divi's own static CSS file generation (Theme Options → Builder → Advanced → Static CSS File
+  Generation) moves the Customizer CSS into an external stylesheet, `colors.customizer` (and the
+  Customizer fonts/sizes) can come back empty or partial. Then either re-run in offline mode against
+  a copy of the page served *without* that optimization (most cache plugins skip logged-in users or
+  have a bypass query string; ask the site owner which): `publish.py fetch --page-id ID --out page.txt`,
+  then `extract_tokens.py --shortcode-file page.txt --url <that unoptimized URL> --out customizer.json`
+  and copy its `colors.customizer` (plus `typography.heading_font`/`body_font`) into your
+  `tokens.json` (online mode ignores `--url` and fetches each page's own public link); or fill
+  `colors.customizer` in by hand from the site's Divi Theme Customizer values (keys: `accent`, `body_text`, `heading`,
+  `link`, `body_font`, `heading_font`, `body_size`, `content_width`).
+- **Global Colors are effectively invisible from public HTML** (§1): an unused Global Color leaves zero trace, and a used
   one is indistinguishable from a hardcoded hex value once rendered. `colors.global` should be
   expected to be `{}` in the common case. The shortcode's own `global_colors_info` bookkeeping
   attribute isn't a usable fallback either
-  (`research/tools/notes/doc-experiments.md:105-133`; Divi's `_prepare_global_colors_info()`,
+  (Divi's `_prepare_global_colors_info()`,
   `includes/builder/class-et-builder-element.php:13391-13431`): a true global-color entry maps a
   `gcid-<uuid>` to a list of *attribute names* that use it, never to a hex, and an inline/"smart"
   color entry is keyed by the hex itself — a value already captured plainly in `colors.palette`.

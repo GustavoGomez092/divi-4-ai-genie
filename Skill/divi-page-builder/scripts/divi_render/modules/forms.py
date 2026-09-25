@@ -5,7 +5,7 @@ Static markup only: nothing is submitted and no email provider is called. What r
 request is reproduced in shape, not value: the captcha digits (rand(1, 15) per render) are fixed at
 1 + 1 here and the nonce is a placeholder. The fidelity harness compares tag/class sequences and
 builder CSS, never attribute values or text, so neither affects the comparison
-(research/tools/fidelity.py).
+(research/tools/fidelity.py, repo only).
 """
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 """Read site-wide Divi styling from a public page's HTML: Customizer CSS, global colors, fonts, Divi version.
 
-Selectors below are the exact ones recorded in research/tools/notes/customizer-css.md (Task 12
+Selectors below are the exact ones recorded in research/tools/notes/customizer-css.md (repo only; Task 12
 Step 1, captured against Divi 4.27.9). Two things that discovery found necessary, beyond picking
 the right selector:
 

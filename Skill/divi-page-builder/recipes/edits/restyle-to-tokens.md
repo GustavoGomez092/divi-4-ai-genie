@@ -14,7 +14,7 @@ accordion/toggle title's font (`toggle_font`/`closed_toggle_font`) restyles to
 
 ```bash
 # 1. List every off-brand/off-palette finding.
-python3 Skill/divi-page-builder/scripts/validate.py page.txt --tokens tokens.json
+python3 scripts/validate.py page.txt --tokens tokens.json
 #   W_OFF_PALETTE_COLOR  <attr>=<value> is not in the site's palette
 #   W_OFF_BRAND_FONT     <attr> uses '<family>', which the site does not use
 #   W_OFF_SCALE_SPACING  Section padding <value> is not one the site uses
@@ -24,15 +24,15 @@ python3 Skill/divi-page-builder/scripts/validate.py page.txt --tokens tokens.jso
 #    typography.*, spacing.section_padding — never a value that merely looks close). A button's own
 #    font is never in a module_styles bundle (see recipes/README.md §2 item 5) — it comes from
 #    colors.customizer.body_font (fall back to typography.body_font).
-python3 Skill/divi-page-builder/scripts/page_edit.py page.txt set-attr \
+python3 scripts/page_edit.py page.txt set-attr \
   "et_pb_section[0] > ... > et_pb_button[0]" button_bg_color "#f97316" --out page.txt
-python3 Skill/divi-page-builder/scripts/page_edit.py page.txt set-attr \
+python3 scripts/page_edit.py page.txt set-attr \
   "et_pb_section[0] > ... > et_pb_button[0]" button_font "Lato||||||||" --out page.txt
 
 # 3. Re-run validate to confirm every off-brand warning is gone, with --baseline so any warning
 #    that existed before this restyle (e.g. an unrelated off-site image) still reports as
 #    pre-existing rather than blocking.
-python3 Skill/divi-page-builder/scripts/validate.py page.txt --tokens tokens.json \
+python3 scripts/validate.py page.txt --tokens tokens.json \
   --baseline original.txt
 ```
 
@@ -43,7 +43,7 @@ resetting a font, and the finding list shrinking confirms each fix landed before
 ## Fetching a live page first
 
 ```bash
-python3 Skill/divi-page-builder/scripts/publish.py fetch --site "$SITE" --user "$WP_USER" \
+python3 scripts/publish.py fetch --site "$SITE" --user "$WP_USER" \
   --page-id <ID> --out original.txt
 cp original.txt page.txt
 # ...run validate.py --tokens, then set-attr each finding against page.txt...
@@ -53,11 +53,11 @@ cp original.txt page.txt
 
 ```bash
 # 1. Draft a review copy (a NEW draft — no --page-id — the live page stays untouched for now).
-python3 Skill/divi-page-builder/scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" \
+python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" \
   --title "Review: <page title> restyle to tokens"
 # 2. Share that draft's preview_url; only proceed once a human approves it.
 # 3. Apply the approved content to the live page and publish it in the same request.
-python3 Skill/divi-page-builder/scripts/publish.py publish --site "$SITE" --user "$WP_USER" \
+python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" \
   --page-id <ID> --content page.txt --yes
 ```
 
@@ -71,13 +71,13 @@ off-brand edit (a blue picked outside the palette, a font the site doesn't use) 
 BTN='et_pb_section[0] > et_pb_row[0] > et_pb_column[0] > et_pb_button[0]'
 
 # Simulate the drift: an eyedropper blue and a pasted-in Arial.
-python3 Skill/divi-page-builder/scripts/page_edit.py handwritten-landing.txt set-attr \
+python3 scripts/page_edit.py handwritten-landing.txt set-attr \
   "$BTN" button_bg_color "#2563eb" --out step1.txt
-python3 Skill/divi-page-builder/scripts/page_edit.py step1.txt set-attr \
+python3 scripts/page_edit.py step1.txt set-attr \
   "$BTN" button_font "Arial|700|||||||" --out offbrand.txt
 
-python3 Skill/divi-page-builder/scripts/validate.py offbrand.txt \
-  --tokens Skill/divi-page-builder/recipes/sample-tokens.json
+python3 scripts/validate.py offbrand.txt \
+  --tokens recipes/sample-tokens.json
 #   warning W_OFF_PALETTE_COLOR  button_bg_color=#2563eb is not in the site's palette
 #     hint: Use a color from tokens.json colors.
 #   warning W_OFF_BRAND_FONT     button_font uses 'Arial', which the site does not use
@@ -89,13 +89,13 @@ python3 Skill/divi-page-builder/scripts/validate.py offbrand.txt \
 # module_styles.et_pb_button bundle — that bundle's own button_font is null in sample-tokens.json,
 # because Divi lets a button inherit the Customizer's body font unless one is set explicitly (see
 # recipes/README.md §2 item 5) — so button_font always comes from the Customizer, not a bundle.
-python3 Skill/divi-page-builder/scripts/page_edit.py offbrand.txt set-attr \
+python3 scripts/page_edit.py offbrand.txt set-attr \
   "$BTN" button_bg_color "#f97316" --out restyle1.txt
-python3 Skill/divi-page-builder/scripts/page_edit.py restyle1.txt set-attr \
+python3 scripts/page_edit.py restyle1.txt set-attr \
   "$BTN" button_font "Lato||||||||" --out restyled.txt
 
-python3 Skill/divi-page-builder/scripts/validate.py restyled.txt \
-  --tokens Skill/divi-page-builder/recipes/sample-tokens.json \
+python3 scripts/validate.py restyled.txt \
+  --tokens recipes/sample-tokens.json \
   --baseline handwritten-landing.txt
 #   1 pre-existing finding(s) also present in the baseline (not blocking):
 #     ...W_EXTERNAL_IMAGE et_pb_section[0] > et_pb_row[0] > et_pb_column[1] > et_pb_image[0]

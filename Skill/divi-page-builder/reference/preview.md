@@ -3,8 +3,8 @@
 There are two previews. **`scripts/preview.py` is the default**: a pure-Python (stdlib only)
 re-implementation of Divi's front-end rendering, no Node/PHP/WordPress required. **`--exact`**
 hands the same command to `scripts/preview/preview.mjs`, which runs the *real* Divi theme inside
-WordPress Playground (WebAssembly PHP + SQLite) — the tool Task 14 shipped and
-`research/playground-spike.md` verified byte-for-byte against a live page.
+WordPress Playground (WebAssembly PHP + SQLite) — verified byte-for-byte against a
+live page (repo only: `research/playground-spike.md`).
 
 ## 1. The two previews
 
@@ -35,7 +35,7 @@ Both commands accept the same page, `--out`/`--pages`, `--divi`/`--tokens` and `
 
 ## 3. Supported modules
 
-<!-- BEGIN GENERATED MODULES: research/tools/gen_preview_module_table.py -->
+<!-- BEGIN GENERATED MODULES (repo only: research/tools/gen_preview_module_table.py) -->
 | Module | Tag |
 |---|---|
 | Accordion | `et_pb_accordion` |
@@ -111,8 +111,8 @@ it drifts from the registry.
 
 ## 4. Fidelity
 
-`research/render-fidelity.md` measures the Python renderer against real Divi (Playground truth)
-with `research/tools/fidelity.py`: the **markup ratio** (a difflib ratio over `(tag, class list)`
+The project's fidelity harness (repo only: `research/render-fidelity.md`, `research/tools/fidelity.py`)
+measures the Python renderer against real Divi (Playground truth): the **markup ratio** (a difflib ratio over `(tag, class list)`
 in the `.et-l` block; 1.0 = identical) and the **CSS ratio** (Jaccard similarity of builder CSS
 `(media, selector, declaration)` triples; 1.0 = no missing/extra declarations). **Tuned**
 fixtures must be exact (both ratios 1.0). **Held-out** fixtures are measured *before* any fix, as
@@ -140,7 +140,7 @@ doesn't compare tuned vs. held-out for a single feature set.
   strong evidence the renderer generalizes well within the module families it's tuned on — but it
   is not a guarantee. An unseen *combination* of options (a module family paired with an option
   combination no fixture exercises) can still render slightly differently than real Divi.
-- `research/tools/fidelity.py` only counts selectors that carry an order class as a plain CSS
+- The fidelity harness only counts selectors that carry an order class as a plain CSS
   class (e.g. `.x_0`). Rules scoped by an *attribute selector*, such as the slider's
   `.et_pb_slider[data-active-slide="et_pb_slide_0"] .et-pb-slider-arrows …`, have their order
   class inside quotes and are never counted — a CSS ratio of 1.0 does not verify them. They were

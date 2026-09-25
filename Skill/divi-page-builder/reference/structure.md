@@ -23,7 +23,7 @@ level — nothing else is legal outside a section (`E_TOP_LEVEL`, `E_TEXT_OUTSID
 
 ## Regular, fullwidth and specialty sections
 
-Confirmed on the real site (`research/tools/notes/doc-experiments.md`, experiment 4): every
+Confirmed on the real site (repo only: `research/tools/notes/doc-experiments.md`, experiment 4): every
 rendered section carries the CSS class `et_section_regular` **or** `et_section_specialty` —
 never both — and `fullwidth="on"` adds an *additional* `et_pb_fullwidth_section` class on top of
 `et_section_regular`. A fullwidth section is a regular section whose child isn't `et_pb_row`, not
@@ -119,7 +119,7 @@ Ten modules have exactly one child slug they may contain (structural section/row
 their own rules above, not this table). Generated with:
 
 ```
-PYTHONPATH=Skill/divi-page-builder/scripts python3 -c "from divi_schema import load_schema; s=load_schema(); print([(x, s.module(x).child) for x in s.slugs if s.module(x).child])"
+PYTHONPATH=scripts python3 -c "from divi_schema import load_schema; s=load_schema(); print([(x, s.module(x).child) for x in s.slugs if s.module(x).child])"
 ```
 
 | parent | child |

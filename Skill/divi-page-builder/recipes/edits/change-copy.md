@@ -22,25 +22,25 @@ or [replace-section](replace-section.md) instead.
 
 ```bash
 # 1. Find the exact path of the module you want to change.
-python3 Skill/divi-page-builder/scripts/page_edit.py page.txt outline
+python3 scripts/page_edit.py page.txt outline
 
 # 2a. Attribute copy: set-attr writes straight to --out (or stdout).
-python3 Skill/divi-page-builder/scripts/page_edit.py page.txt set-attr \
+python3 scripts/page_edit.py page.txt set-attr \
   "et_pb_section[0] > et_pb_row[0] > et_pb_column[0] > et_pb_button[0]" \
   button_text "New Button Text" --out page.txt
 
 # 2b. Body copy: extract, edit, replace.
-python3 Skill/divi-page-builder/scripts/page_edit.py page.txt extract \
+python3 scripts/page_edit.py page.txt extract \
   "et_pb_section[0] > et_pb_row[0] > et_pb_column[0] > et_pb_text[0]" > /tmp/node.txt
 #   ...edit /tmp/node.txt's inner HTML in place, keeping its opening/closing tags as-is...
-python3 Skill/divi-page-builder/scripts/page_edit.py page.txt replace \
+python3 scripts/page_edit.py page.txt replace \
   "et_pb_section[0] > et_pb_row[0] > et_pb_column[0] > et_pb_text[0]" /tmp/node.txt --out page.txt
 
 # 3. Validate against a baseline of the page *before* this edit, so any finding that already
 #    existed (e.g. an off-site image the copy change didn't touch) is reported as pre-existing,
 #    not blocking — only genuinely new problems fail the check.
-python3 Skill/divi-page-builder/scripts/validate.py page.txt --baseline original.txt \
-  --tokens Skill/divi-page-builder/recipes/sample-tokens.json
+python3 scripts/validate.py page.txt --baseline original.txt \
+  --tokens tokens.json
 ```
 
 ## Fetching a live page first
@@ -48,7 +48,7 @@ python3 Skill/divi-page-builder/scripts/validate.py page.txt --baseline original
 If the page being edited is live, fetch its current content before editing anything:
 
 ```bash
-python3 Skill/divi-page-builder/scripts/publish.py fetch --site "$SITE" --user "$WP_USER" \
+python3 scripts/publish.py fetch --site "$SITE" --user "$WP_USER" \
   --page-id <ID> --out original.txt
 cp original.txt page.txt
 # ...run the set-attr / extract+replace sequence above against page.txt...
@@ -65,11 +65,11 @@ it approved, then apply the edit and publish the live page in one request:
 
 ```bash
 # 1. Draft a review copy (a NEW draft — no --page-id — so the live page is never touched yet).
-python3 Skill/divi-page-builder/scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" \
+python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" \
   --title "Review: <page title> copy update"
 # 2. Share that draft's preview_url; only proceed once a human approves it.
 # 3. Apply the approved content to the live page and publish it in the same request.
-python3 Skill/divi-page-builder/scripts/publish.py publish --site "$SITE" --user "$WP_USER" \
+python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" \
   --page-id <ID> --content page.txt --yes
 ```
 
@@ -79,21 +79,21 @@ Change the hero's button label from "Call (305) 555-0100" to something less numb
 extend the hero body copy to mention after-hours availability:
 
 ```bash
-python3 Skill/divi-page-builder/scripts/page_edit.py handwritten-landing.txt set-attr \
+python3 scripts/page_edit.py handwritten-landing.txt set-attr \
   "et_pb_section[0] > et_pb_row[0] > et_pb_column[0] > et_pb_button[0]" \
   button_text "Call Now — We Answer 24/7" --out step1.txt
 
 # extract shows the current node so the replacement's opening/closing tags can be copied exactly:
-python3 Skill/divi-page-builder/scripts/page_edit.py step1.txt extract \
+python3 scripts/page_edit.py step1.txt extract \
   "et_pb_section[0] > et_pb_row[0] > et_pb_column[0] > et_pb_text[0]"
 #   -> [et_pb_text _builder_version="4.27.9" _module_preset="default" text_font="Lato||||||||"
 #       text_text_color="#cbd5e1" text_font_size="18px"]<p>Licensed, insured plumbers at your door
 #       in 60 minutes.</p>[/et_pb_text]
 
-python3 Skill/divi-page-builder/scripts/page_edit.py step1.txt replace \
+python3 scripts/page_edit.py step1.txt replace \
   "et_pb_section[0] > et_pb_row[0] > et_pb_column[0] > et_pb_text[0]" new-body.txt --out step2.txt
 
-python3 Skill/divi-page-builder/scripts/validate.py step2.txt --baseline handwritten-landing.txt
+python3 scripts/validate.py step2.txt --baseline handwritten-landing.txt
 #   Summary: 0 error(s), 0 warning(s), 0 pre-existing
 ```
 
