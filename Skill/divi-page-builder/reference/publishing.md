@@ -1,6 +1,69 @@
 # Publishing over REST
 
-Everything on this page was verified live against a real WordPress + Divi 4.27.9 install
+## Using publish.py
+
+`scripts/publish.py` wraps the REST flow below into four commands. The password always comes
+from env `WP_APP_PASSWORD` (never a flag, never printed); set `WP_USER`/`SITE` however you
+like, but pass them explicitly as `--user`/`--site`.
+
+```bash
+export WP_APP_PASSWORD="xxxx xxxx xxxx xxxx xxxx xxxx"
+
+# 1. Fetch the current content.raw before editing an existing page
+python3 scripts/publish.py fetch --site "$SITE" --user "$WP_USER" --page-id 15 --out original.txt
+
+# 2. Upload one image directly (rarely needed — draft uploads local images automatically)
+python3 scripts/publish.py media --site "$SITE" --user "$WP_USER" hero.jpg --alt "Plumber repairing a burst pipe"
+
+# 3. Draft-first: validates the page, uploads any local images, and creates/updates a draft
+python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "Emergency Plumber in Miami"
+
+# updating an existing page keeps it a draft (does not publish)
+python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "..." --page-id 15
+
+# full-bleed landing page: strip header/nav/footer via the one REST-settable layout field
+python3 scripts/publish.py draft page.txt --site "$SITE" --user "$WP_USER" --title "..." \
+  --page-fields '{"template":"page-template-blank.php"}'
+
+# 4. Publish only after the user has reviewed the draft's preview_url and approved it
+python3 scripts/publish.py publish --site "$SITE" --user "$WP_USER" --page-id 15 --yes
+```
+
+**Draft-first, always.** `draft` never publishes — the page is created or updated with
+`status: draft` regardless of whether it's new or existing. `publish` is a separate,
+explicit step that flips `status` to `publish`, and it refuses (exit 1, no HTTP call) unless
+`--yes` is given. Only pass `--yes` after the user has looked at the draft's `preview_url`
+(from `draft`'s JSON output) and approved it — never as a default or automatic follow-up to
+`draft`.
+
+**Local images.** Reference images in the page source as `./images/hero.jpg`, `../hero.jpg`,
+or `file:///abs/path.jpg` (paths resolved relative to the page file's own folder, or absolute
+for `file://`) instead of a live URL. `draft` finds every image attribute
+(`divi_checks_values.IMAGE_ATTRS`, plus anything ending `_image`) with such a value, uploads
+the file to the Media Library, sets `alt_text` from the module's `alt`/`title_text` attribute,
+and rewrites the attribute to the returned `source_url` before creating/updating the page.
+Each distinct local file is uploaded once even if referenced by multiple modules; the JSON
+output's `uploaded` array lists every file that was uploaded (`id`, `url`, `file`).
+
+**`--page-fields`** takes a JSON object merged into the page body, for fields not covered by
+the standard flags — most commonly the layout template found in Task 10's REST experiments:
+`--page-fields '{"template":"page-template-blank.php"}'` removes the site's header, primary
+nav, and footer chrome for a true full-bleed landing page. No sidebar is Divi's own default
+for any builder-active page (`meta._et_pb_use_builder: "on"`) — nothing needs to be set for
+that.
+
+**Validation.** `draft` runs `validate_source` before doing anything else and refuses (exit 1,
+no HTTP calls at all — no uploads, no draft) if there are any blocking errors, printing each
+finding to stderr the same way `validate.py` does.
+
+**Exit codes:** `0` success · `1` validation errors, or `publish` without `--yes` · `2` usage
+error (including a missing `WP_APP_PASSWORD`), HTTP error, or I/O error. HTTP error messages
+include only the method/path and WordPress's own `code`/`message` — never the password or a
+full URL with credentials.
+
+## Raw REST reference
+
+Everything below was verified live against a real WordPress + Divi 4.27.9 install
 (`http://divi-test.local`, a LocalWP site) using the WordPress REST API and Application
 Passwords. See `research/tools/notes/rest-experiments.md` for the exact commands and raw
 results this page is built from.
