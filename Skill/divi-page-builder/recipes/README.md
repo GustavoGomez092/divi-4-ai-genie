@@ -54,6 +54,10 @@ read it from, and a fallback for a thinner `tokens.json`. The path always resolv
    `presets.et_pb_button[0].uuid` is the same
    `11111111-2222-3333-4444-555555555555` seen above — confirming it's a real, reused preset and
    not a one-off.
+5. **Fonts on buttons, tabs, and toggle/accordion titles never come from a module bundle** — set
+   them explicitly. Unset font groups fall back to the Customizer, which the preview doesn't apply:
+   always set button/tab fonts to the body font and toggle/accordion title fonts to the heading
+   font from `colors.customizer` (else `typography`).
 
 ## 3. Using `section_exemplars`
 

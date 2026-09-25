@@ -21,6 +21,7 @@ section (Free Quote CTA, dark tone, full-width colored band)
 | cta `header_font`, `header_text_color`, `header_font_size` | `module_styles.et_pb_heading[section_tone=dark,column_type=4_4].attrs` (`title_font`/`title_text_color`/`title_font_size` on the h4 bundle, applied here via the CTA's own `header_` prefix) | `typography.scale.h4.font` / `.color` / `.size` |
 | cta `body_font`, `body_text_color`, `body_font_size` | `module_styles.et_pb_text[section_tone=dark,column_type=4_4].attrs` (the "Free Quote CTA" text bundle's `text_font`/`text_text_color`/`text_font_size`, applied via the CTA's `body_` prefix) | `typography.body_font` + `colors.customizer.body_text` + `colors.customizer.body_size` |
 | cta button (`custom_button`, `button_bg_color`, `button_text_color`, `button_bg_color__hover`, `button_bg_color__hover_enabled`, `button_border_radius`) | `module_styles.et_pb_button[section_tone=dark,column_type=4_4,section_label="Free Quote CTA"].attrs` — a **contrasting** button (dark navy text on the brand's orange) picked specifically for a dark section, not the hero's own dark-section button bundle (see `recipes/README.md` §2 for why there are two dark-tone button bundles) | `colors.customizer.accent` for `button_bg_color`, `colors.palette[0].hex` for `button_text_color` |
+| cta button `button_font` | `colors.customizer.body_font` | `typography.body_font` (`Lato||||||||`) |
 | cta `_module_preset` | `presets.et_pb_button[0].uuid` (the same preset this button bundle is keyed to — see the README's worked walkthrough) | `"default"` |
 | cta `use_background_color` | this pattern's own choice, not a token — `"off"`, so the CTA sits flush against the section's own color instead of drawing a second background box on top of it | `"off"` |
 | title/body copy, phone number/button link | the client's own brief (the offer, the phone number or booking link) — never a token | — |
@@ -30,7 +31,7 @@ section (Free Quote CTA, dark tone, full-width colored band)
 Required: [`et_pb_section`](../../reference/modules/et_pb_section.md) `background_color`,
 `custom_padding` (+responsive); [`et_pb_cta`](../../reference/modules/et_pb_cta.md) `title`,
 `content`, `button_text`, `button_url`, `header_font`, `header_text_color`, `body_font`,
-`body_text_color`, `custom_button`, `button_bg_color`, `button_text_color`, `button_border_radius`.
+`body_text_color`, `button_font`, `custom_button`, `button_bg_color`, `button_text_color`, `button_border_radius`.
 
 Optional: `header_level` (defaults to `h2` — override to `h4`/`h5` on a mid-page band so it doesn't
 outrank the page's real section headings); `use_background_color="off"` (see the token mapping row
@@ -60,7 +61,7 @@ every width.
 
 ## Worked example (sample-tokens.json)
 ```divi
-[et_pb_section admin_label="Free Quote CTA" _builder_version="4.27.9" _module_preset="default" background_color="#0b2a3c" custom_padding="70px||70px||true|false" custom_padding_tablet="50px||50px||true|false" custom_padding_phone="40px||40px||true|false" custom_padding_last_edited="on|phone"][et_pb_row _builder_version="4.27.9" _module_preset="default"][et_pb_column type="4_4" _builder_version="4.27.9" _module_preset="default"][et_pb_cta title="Ready To Fix That Leak?" header_level="h4" button_text="Get My Free Quote" button_url="tel:+13055550100" use_background_color="off" _builder_version="4.27.9" _module_preset="11111111-2222-3333-4444-555555555555" header_font="Montserrat|700|||||||" header_text_color="#ffffff" header_font_size="30px" body_font="Lato||||||||" body_text_color="#f1f5f9" body_font_size="18px" custom_button="on" button_bg_color="#f97316" button_bg_color__hover="#ea580c" button_bg_color__hover_enabled="on|hover" button_border_radius="6px" button_text_color="#0b2a3c"]<p>No obligation, no hidden fees, just an honest number.</p>[/et_pb_cta][/et_pb_column][/et_pb_row][/et_pb_section]
+[et_pb_section admin_label="Free Quote CTA" _builder_version="4.27.9" _module_preset="default" background_color="#0b2a3c" custom_padding="70px||70px||true|false" custom_padding_tablet="50px||50px||true|false" custom_padding_phone="40px||40px||true|false" custom_padding_last_edited="on|phone"][et_pb_row _builder_version="4.27.9" _module_preset="default"][et_pb_column type="4_4" _builder_version="4.27.9" _module_preset="default"][et_pb_cta title="Ready To Fix That Leak?" header_level="h4" button_text="Get My Free Quote" button_url="tel:+13055550100" use_background_color="off" _builder_version="4.27.9" _module_preset="11111111-2222-3333-4444-555555555555" header_font="Montserrat|700|||||||" header_text_color="#ffffff" header_font_size="30px" body_font="Lato||||||||" body_text_color="#f1f5f9" body_font_size="18px" button_font="Lato||||||||" custom_button="on" button_bg_color="#f97316" button_bg_color__hover="#ea580c" button_bg_color__hover_enabled="on|hover" button_border_radius="6px" button_text_color="#0b2a3c"]<p>No obligation, no hidden fees, just an honest number.</p>[/et_pb_cta][/et_pb_column][/et_pb_row][/et_pb_section]
 ```
 
 ## Checklist
