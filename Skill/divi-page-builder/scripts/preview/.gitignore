@@ -1,0 +1,10 @@
+# Never commit Elegant Themes code or caches. They live outside the repo
+# (PP_CACHE_DIR, default ~/.cache/divi-page-builder); these guard against accidental local copies.
+*.zip
+Divi/
+Divi-*/
+cache/
+sites/
+wordpress/
+out/
+*.html
