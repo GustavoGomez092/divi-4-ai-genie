@@ -73,14 +73,16 @@ def main(argv=None) -> int:
         source = Path(args.page).read_text(encoding="utf-8")
         tokens = json.loads(Path(args.tokens).read_text()) if args.tokens else None
         baseline = Path(args.baseline).read_text(encoding="utf-8") if args.baseline else None
+        schema = load_schema()
     except (OSError, ValueError) as exc:
         print(f"validate.py: {exc}", file=sys.stderr)
         return 2
-    findings = validate_source(source, load_schema(), tokens=tokens, site_url=args.site_url, baseline=baseline)
+    findings = validate_source(source, schema, tokens=tokens, site_url=args.site_url, baseline=baseline)
     blocking = [f for f in findings if f.level == "error" and not f.preexisting]
+    warnings = sum(f.level == "warning" and not f.preexisting for f in findings)
     if args.json:
         print(json.dumps({"file": args.page, "errors": len(blocking),
-                          "warnings": sum(f.level == "warning" for f in findings),
+                          "warnings": warnings,
                           "findings": [asdict(f) for f in findings]}, indent=1))
     else:
         for f in findings:
@@ -91,7 +93,6 @@ def main(argv=None) -> int:
             print(f"\n{len(pre)} pre-existing finding(s) also present in the baseline (not blocking):")
             for f in pre:
                 print(_format(f, args.page))
-        warnings = sum(f.level == "warning" and not f.preexisting for f in findings)
         print(f"\nSummary: {len(blocking)} error(s), {warnings} warning(s), {len(pre)} pre-existing")
     return 1 if blocking else 0
 

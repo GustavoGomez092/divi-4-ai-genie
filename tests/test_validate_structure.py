@@ -40,6 +40,11 @@ class StructureTest(unittest.TestCase):
     def test_fullwidth_section_rejects_regular_modules(self):
         self.assertIn("E_FULLWIDTH_CHILD", codes('[et_pb_section fullwidth="on"][et_pb_text]<p>x</p>[/et_pb_text][/et_pb_section]'))
 
+    def test_fullwidth_child_path_is_the_childs_own_path(self):
+        src = '[et_pb_section fullwidth="on"][et_pb_text]<p>x</p>[/et_pb_text][/et_pb_section]'
+        (f,) = [f for f in validate_source(src, SCHEMA) if f.code == "E_FULLWIDTH_CHILD"]
+        self.assertEqual(f.path, "et_pb_section[0] > et_pb_text[0]")
+
     def test_fullwidth_module_in_column(self):
         self.assertIn("E_FULLWIDTH_IN_COLUMN", codes(page('[et_pb_fullwidth_header title="x"][/et_pb_fullwidth_header]')))
 
@@ -60,13 +65,22 @@ class StructureTest(unittest.TestCase):
 
     def test_bad_column_type(self):
         src = '[et_pb_section][et_pb_row][et_pb_column type="7_8"][/et_pb_column][/et_pb_row][/et_pb_section]'
-        self.assertIn("E_COLUMN_TYPE", codes(src))
+        errors = codes(src)
+        self.assertIn("E_COLUMN_TYPE", errors)
+        self.assertNotIn("E_COLUMN_SUM", errors)
 
     def test_child_outside_parent(self):
         self.assertIn("E_CHILD_PLACEMENT", codes(page('[et_pb_tab title="x"]<p>x</p>[/et_pb_tab]')))
 
     def test_parent_with_wrong_child(self):
-        self.assertIn("E_BAD_CHILD", codes(page('[et_pb_tabs][et_pb_slide][/et_pb_slide][/et_pb_tabs]')))
+        errors = codes(page('[et_pb_tabs][et_pb_slide][/et_pb_slide][/et_pb_tabs]'))
+        self.assertIn("E_BAD_CHILD", errors)
+        self.assertEqual(errors, ["E_BAD_CHILD"])
+
+    def test_top_level_child_module_is_not_also_child_placement(self):
+        errors = codes('[et_pb_tab title="x"]<p>x</p>[/et_pb_tab]')
+        self.assertIn("E_TOP_LEVEL", errors)
+        self.assertNotIn("E_CHILD_PLACEMENT", errors)
 
     def test_nested_leaf_modules(self):
         self.assertIn("E_NESTED_MODULE", codes(page('[et_pb_text][et_pb_button][/et_pb_button][/et_pb_text]')))

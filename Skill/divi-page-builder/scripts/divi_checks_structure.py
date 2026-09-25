@@ -16,6 +16,18 @@ def fraction(col_type: str) -> Optional[Fraction]:
     return Fraction(int(m.group(1)), int(m.group(2))) if m and int(m.group(2)) else None
 
 
+def _child_path(path: str, kids: list, c) -> str:
+    """Path for Node `c`, a member of `kids` (its parent's node.modules), following the same
+    counting convention as Document.walk(): index = number of preceding siblings with the same tag."""
+    idx = 0
+    for k in kids:
+        if k is c:
+            break
+        if k.tag == c.tag:
+            idx += 1
+    return f"{path} > {c.tag}[{idx}]" if path else f"{c.tag}[{idx}]"
+
+
 def _stray_text(node, path, report):
     for child in node.children:
         if isinstance(child, Text) and child.value.strip():
@@ -23,14 +35,16 @@ def _stray_text(node, path, report):
                    offset=child.start, path=path, hint="Put copy inside a text module.")
 
 
-def _check_columns(node, path, cols, expected, report, schema, structure_attr_present):
+def _check_columns(node, path, kids, cols, expected, report, schema, structure_attr_present):
     types = [c.attrs.get("type", "") for c in cols]
     for c, t in zip(cols, types):
         if t not in schema.column_types:
             report("error", "E_COLUMN_TYPE", f"Column type '{t}' is not a Divi column type", node=c,
-                   path=path, attr="type", value=t, hint="Use types such as 4_4, 1_2, 1_3, 2_3, 1_4, 3_4, 1_5, 2_5, 3_5, 1_6.")
+                   path=_child_path(path, kids, c), attr="type", value=t,
+                   hint="Use types such as 4_4, 1_2, 1_3, 2_3, 1_4, 3_4, 1_5, 2_5, 3_5, 1_6.")
+    legal = all(t in schema.column_types for t in types)
     fracs = [fraction(t) for t in types]
-    if cols and all(fracs) and sum(fracs) != 1:
+    if cols and legal and all(fracs) and sum(fracs) != 1:
         report("error", "E_COLUMN_SUM", f"Column widths {','.join(types)} do not add up to one full row",
                node=node, path=path, hint="Column fractions in a row must sum to 1.")
     if structure_attr_present and expected is not None and types != expected:
@@ -60,9 +74,11 @@ def check_structure(doc, schema, report) -> None:
         kids = node.modules
         tag = node.tag
 
-        if mod.kind == "child" and (parent is None or parent.tag not in mod.parents):
-            report("error", "E_CHILD_PLACEMENT", f"[{tag}] must be a direct child of {' or '.join(mod.parents)}",
-                   node=node, path=path)
+        if mod.kind == "child" and parent is not None and parent.tag not in mod.parents:
+            parent_mod = schema.module(parent.tag)
+            if parent_mod is None or parent_mod.child is None:
+                report("error", "E_CHILD_PLACEMENT", f"[{tag}] must be a direct child of {' or '.join(mod.parents)}",
+                       node=node, path=path)
 
         if tag == "et_pb_section":
             _stray_text(node, path, report)
@@ -71,41 +87,44 @@ def check_structure(doc, schema, report) -> None:
                     m = schema.module(c.tag)
                     if m is not None and not m.fullwidth:
                         report("error", "E_FULLWIDTH_CHILD", f"Fullwidth sections accept only fullwidth modules, not [{c.tag}]",
-                               node=c, path=path)
+                               node=c, path=_child_path(path, kids, c))
             elif node.value("specialty") == "on":
                 cols = [c for c in kids if c.tag == "et_pb_column"]
                 for c in kids:
                     if c.tag != "et_pb_column":
-                        report("error", "E_SECTION_CHILD", f"Specialty sections contain columns, not [{c.tag}]", node=c, path=path)
-                _check_columns(node, path, cols, None, report, schema, False)
+                        report("error", "E_SECTION_CHILD", f"Specialty sections contain columns, not [{c.tag}]",
+                               node=c, path=_child_path(path, kids, c))
+                _check_columns(node, path, kids, cols, None, report, schema, False)
                 special = [c for c in cols if c.value("specialty_columns")]
                 if len(special) != 1:
                     report("error", "E_SPECIALTY_COLUMN", "A specialty section needs exactly one column with specialty_columns",
                            node=node, path=path, hint='Set specialty_columns="2|3|4" on the column that holds inner rows.')
                 for c in cols:
+                    c_path = _child_path(path, kids, c)
                     for g in c.modules:
                         if any(c is s for s in special) and g.tag != "et_pb_row_inner":
                             report("error", "E_SPECIALTY_CONTENT", f"The specialty column holds only [et_pb_row_inner], not [{g.tag}]",
-                                   node=g, path=path)
+                                   node=g, path=_child_path(c_path, c.modules, g))
             else:
                 for c in kids:
                     if c.tag != "et_pb_row":
                         report("error", "E_SECTION_CHILD", f"Regular sections contain only [et_pb_row], not [{c.tag}]",
-                               node=c, path=path)
+                               node=c, path=_child_path(path, kids, c))
         elif tag in COLUMN_FOR_ROW:
             _stray_text(node, path, report)
             col_tag = COLUMN_FOR_ROW[tag]
             cols = [c for c in kids if c.tag == col_tag]
             for c in kids:
                 if c.tag != col_tag:
-                    report("error", "E_ROW_CHILD", f"[{tag}] contains only [{col_tag}], not [{c.tag}]", node=c, path=path)
+                    report("error", "E_ROW_CHILD", f"[{tag}] contains only [{col_tag}], not [{c.tag}]",
+                           node=c, path=_child_path(path, kids, c))
             present = "column_structure" in node.attrs
             structure = node.value("column_structure", "4_4")
             if present and structure not in schema.column_structures[tag]:
                 report("error", "E_COLUMN_STRUCTURE", f"'{structure}' is not a legal column_structure for [{tag}]",
                        node=node, path=path, attr="column_structure", value=structure,
                        hint="Legal values: " + ", ".join(schema.column_structures[tag]))
-            _check_columns(node, path, cols, structure.split(",") if present else None, report, schema, present)
+            _check_columns(node, path, kids, cols, structure.split(",") if present else None, report, schema, present)
         elif tag in ("et_pb_column", "et_pb_column_inner"):
             _stray_text(node, path, report)
             in_specialty = parent is not None and parent.tag == "et_pb_section" and parent.value("specialty") == "on"
@@ -114,19 +133,22 @@ def check_structure(doc, schema, report) -> None:
                 if c.tag == "et_pb_row_inner":
                     if not (in_specialty and node.value("specialty_columns")):
                         report("error", "E_INNER_ROW_PLACEMENT", "[et_pb_row_inner] is only allowed in a specialty section's specialty column",
-                               node=c, path=path)
+                               node=c, path=_child_path(path, kids, c))
                 elif m is None or m.kind == "child":
                     continue  # reported at the child itself
                 elif m.kind == "structure":
-                    report("error", "E_COLUMN_CHILD", f"[{c.tag}] cannot be inside a column", node=c, path=path)
+                    report("error", "E_COLUMN_CHILD", f"[{c.tag}] cannot be inside a column",
+                           node=c, path=_child_path(path, kids, c))
                 elif m.fullwidth:
                     report("error", "E_FULLWIDTH_IN_COLUMN", f"[{c.tag}] only works in a fullwidth section",
-                           node=c, path=path, hint='Put it in [et_pb_section fullwidth="on"].')
+                           node=c, path=_child_path(path, kids, c), hint='Put it in [et_pb_section fullwidth="on"].')
         elif mod.child:
             _stray_text(node, path, report)
             for c in kids:
                 if c.tag != mod.child:
-                    report("error", "E_BAD_CHILD", f"[{tag}] can only contain [{mod.child}], not [{c.tag}]", node=c, path=path)
+                    report("error", "E_BAD_CHILD", f"[{tag}] can only contain [{mod.child}], not [{c.tag}]",
+                           node=c, path=_child_path(path, kids, c))
         else:
             for c in kids:
-                report("error", "E_NESTED_MODULE", f"[{c.tag}] cannot be nested inside [{tag}]", node=c, path=path)
+                report("error", "E_NESTED_MODULE", f"[{c.tag}] cannot be nested inside [{tag}]",
+                       node=c, path=_child_path(path, kids, c))
