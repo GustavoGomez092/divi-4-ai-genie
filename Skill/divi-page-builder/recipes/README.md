@@ -72,7 +72,11 @@ copying for a three-up feature row: a full-width heading row (`et_pb_row` with n
 
 | Recipe | Type | Use case |
 |---|---|---|
-| _none yet_ | — | Tasks 16-19 populate `sections/`, `pages/` and `edits/` below; this table grows as each recipe lands. |
+| [Hero split](sections/hero-split.md) | section | primary above-the-fold hero with a headline/CTA next to a supporting photo |
+| [Hero centered](sections/hero-centered.md) | section | simpler centered hero with no photo, for a page that doesn't need hero art |
+| [Hero background image](sections/hero-background-image.md) | section | atmospheric full-bleed photo hero with a dark gradient overlay |
+| [Hero fullwidth header](sections/hero-fullwidth-header.md) | section | fast, copy-first hero built from `et_pb_fullwidth_header`, no row/column layer |
+| _more to come_ | — | Tasks 17-19 populate `sections/`, `pages/` and `edits/` below; this table grows as each recipe lands. |
 
 - `sections/` — single-section patterns (hero, feature row, CTA band, …).
 - `pages/` — full-page compositions built from more than one section recipe.
