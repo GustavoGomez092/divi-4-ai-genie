@@ -75,14 +75,14 @@
 | bottom_divider_flip | multiple_buttons | `horizontal`, `vertical` |  | R | Divider Flip |
 | bottom_divider_height | range | length: %, em, rem, px, cm, mm… | 100px | R H S | Divider Height |
 | bottom_divider_repeat | range |  | 1 | R | Divider Horizontal Repeat |
-| bottom_divider_style | divider | `none`, `slant`, `slant2`, `arrow`, `arrow2`, `arrow3`, `ramp`, `ramp2`, `curve`, `curve2`, `mountains`, `mountains2`, `wave`, `wave2`, `waves` … | none | R | Divider Style |
+| bottom_divider_style | divider | `none`, `slant`, `slant2`, `arrow`, `arrow2`, `arrow3`, `ramp`, `ramp2`, `curve`, `curve2`, `mountains`, `mountains2`, `wave`, `wave2`, `waves` … (27 options; full list in scripts/schema/et_pb_section.json) | none | R | Divider Style |
 | divider_settings | composite |  |  | · | Dividers |
 | top_divider_arrangement | select | `above_content`, `below_content` | below_content | R | Divider Arrangement |
 | top_divider_color | color-alpha | color |  | R | Divider Color |
 | top_divider_flip | multiple_buttons | `horizontal`, `vertical` |  | R | Divider Flip |
 | top_divider_height | range | length: %, em, rem, px, cm, mm… | 100px | R H S | Divider Height |
 | top_divider_repeat | range |  | 1 | R | Divider Horizontal Repeat |
-| top_divider_style | divider | `none`, `slant`, `slant2`, `arrow`, `arrow2`, `arrow3`, `ramp`, `ramp2`, `curve`, `curve2`, `mountains`, `mountains2`, `wave`, `wave2`, `waves` … | none | R | Divider Style |
+| top_divider_style | divider | `none`, `slant`, `slant2`, `arrow`, `arrow2`, `arrow3`, `ramp`, `ramp2`, `curve`, `curve2`, `mountains`, `mountains2`, `wave`, `wave2`, `waves` … (27 options; full list in scripts/schema/et_pb_section.json) | none | R | Divider Style |
 
 ## Advanced tab
 

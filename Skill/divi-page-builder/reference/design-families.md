@@ -46,8 +46,8 @@ Used by 62 module/prefix combinations. `{p}` = the prefix listed on each module 
 |---|---|---|---|---|---|
 | __video_background | computed |  |  | R H S |  |
 | allow_player_pause | yes_no_button | `off`, `on` | off | R H S | Pause Video When Another Video Plays |
-| background_blend | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … | normal | R H S | Background Image Blend |
-| background_color | color-alpha | color |  | R H S | Background Color |
+| background_blend | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … (16 options; full list in scripts/schema/<module>.json) | normal | R H S | Background Image Blend |
+| background_color | color-alpha | color | (varies) | R H S | Background Color |
 | background_color_gradient_direction | range |  | 180deg | R H S | Gradient Direction |
 | background_color_gradient_direction_radial | select | `center`, `top left`, `top`, `top right`, `right`, `bottom right`, `bottom`, `bottom left`, `left` | center | R H S | Gradient Position |
 | background_color_gradient_overlays_image | yes_no_button | `off`, `on` | off | R H S | Place Gradient Above Background Image |
@@ -60,24 +60,24 @@ Used by 62 module/prefix combinations. `{p}` = the prefix listed on each module 
 | background_image_height | range | length: %, em, rem, px, cm, mm… | auto | R H S | Background Image Height |
 | background_image_width | range | length: %, em, rem, px, cm, mm… | auto | R H S | Background Image Width |
 | background_mask_aspect_ratio | multiple_buttons | `landscape`, `square`, `portrait` | landscape | R H S | Mask Aspect Ratio |
-| background_mask_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … | normal | R H S | Mask Blend Mode |
+| background_mask_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … (16 options; full list in scripts/schema/<module>.json) | normal | R H S | Mask Blend Mode |
 | background_mask_color | color-alpha | color | #ffffff | R H S | Mask Color |
 | background_mask_height | range | length: %, em, rem, px, cm, mm… | auto | R H S | Mask Height |
 | background_mask_horizontal_offset | range | length: %, em, rem, px, cm, mm… | 0 | R H S | Mask Horizontal Offset |
 | background_mask_position | select | `top_left`, `top_center`, `top_right`, `center_left`, `center`, `center_right`, `bottom_left`, `bottom_center`, `bottom_right` | center | R H S | Mask Position |
 | background_mask_size | select | `stretch`, `cover`, `contain`, `custom` | stretch | R H S | Mask Size |
-| background_mask_style | select-mask | `layer-blob`, `arch`, `bean`, `blades`, `caret`, `chevrons`, `corner-blob`, `corner-lake`, `corner-paint`, `corner-pill`, `corner-square`, `diagonal-bars-2`, `diagonal-bars`, `diagonal-pills`, `diagonal` … | layer-blob | R H S | Mask Style |
+| background_mask_style | select-mask | `layer-blob`, `arch`, `bean`, `blades`, `caret`, `chevrons`, `corner-blob`, `corner-lake`, `corner-paint`, `corner-pill`, `corner-square`, `diagonal-bars-2`, `diagonal-bars`, `diagonal-pills`, `diagonal` … (23 options; full list in scripts/schema/<module>.json) | layer-blob | R H S | Mask Style |
 | background_mask_transform | multiple_buttons | `flip_horizontal`, `flip_vertical`, `rotate_90_degree`, `invert` |  | R H S | Mask Transform |
 | background_mask_vertical_offset | range | length: %, em, rem, px, cm, mm… | 0 | R H S | Mask Vertical Offset |
 | background_mask_width | range | length: %, em, rem, px, cm, mm… | auto | R H S | Mask Width |
-| background_pattern_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … | normal | R H S | Pattern Blend Mode |
+| background_pattern_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … (16 options; full list in scripts/schema/<module>.json) | normal | R H S | Pattern Blend Mode |
 | background_pattern_color | color-alpha | color | rgba(0,0,0,0.2) | R H S | Pattern Color |
 | background_pattern_height | range | length: %, em, rem, px, cm, mm… | auto | R H S | Pattern Height |
 | background_pattern_horizontal_offset | range | length: %, em, rem, px, cm, mm… | 0 | R H S | Pattern Horizontal Offset |
 | background_pattern_repeat | select | `repeat`, `repeat-x`, `repeat-y`, `space`, `round` | repeat | R H S | Pattern Repeat |
 | background_pattern_repeat_origin | select | `top_left`, `top_center`, `top_right`, `center_left`, `center`, `center_right`, `bottom_left`, `bottom_center`, `bottom_right` | top_left | R H S | Pattern Repeat Origin |
 | background_pattern_size | select | `initial`, `cover`, `contain`, `stretch`, `custom` | initial | R H S | Pattern Size |
-| background_pattern_style | select-pattern | `polka-dots`, `3d-diamonds`, `checkerboard`, `confetti`, `crosses`, `cubes`, `diagonal-stripes-2`, `diagonal-stripes`, `diamonds`, `honeycomb`, `inverted-chevrons-2`, `inverted-chevrons`, `ogees`, `pills`, `pinwheel` … | polka-dots | R H S | Pattern Style |
+| background_pattern_style | select-pattern | `polka-dots`, `3d-diamonds`, `checkerboard`, `confetti`, `crosses`, `cubes`, `diagonal-stripes-2`, `diagonal-stripes`, `diamonds`, `honeycomb`, `inverted-chevrons-2`, `inverted-chevrons`, `ogees`, `pills`, `pinwheel` … (24 options; full list in scripts/schema/<module>.json) | polka-dots | R H S | Pattern Style |
 | background_pattern_transform | multiple_buttons | `flip_horizontal`, `flip_vertical`, `rotate_90_degree`, `invert` |  | R H S | Pattern Transform |
 | background_pattern_vertical_offset | range | length: %, em, rem, px, cm, mm… | 0 | R H S | Pattern Vertical Offset |
 | background_pattern_width | range | length: %, em, rem, px, cm, mm… | auto | R H S | Pattern Width |
@@ -91,7 +91,7 @@ Used by 62 module/prefix combinations. `{p}` = the prefix listed on each module 
 | background_video_webm | upload | URL |  | R H S | Background Video Webm |
 | background_video_width | text |  |  | R H S | Background Video Width |
 | parallax | yes_no_button | `off`, `on` | off | R H S | Use Parallax Effect |
-| parallax_method | select | `on`, `off` | on | R H S | Parallax Method |
+| parallax_method | select | `on`, `off` | on (varies) | R H S | Parallax Method |
 | use_background_color_gradient | yes_no_button | `off`, `on` | off | R H S | Use Background Color Gradient |
 
 ## Border
@@ -141,14 +141,35 @@ Used by 17 module/prefix combinations. `{p}` = the prefix listed on each module 
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| box_shadow_blur_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` | R H S | Box Shadow Blur Strength |
+| box_shadow_blur_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` (varies) | R H S | Box Shadow Blur Strength |
 | box_shadow_color_{p} | color-alpha | color | rgba(0,0,0,0.3) | R H S | Shadow Color |
-| box_shadow_horizontal_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` | R H S | Box Shadow Horizontal Position |
-| box_shadow_position_{p} | select | `outer`, `inner` | depends on `box_shadow_style_button` | R | Box Shadow Position |
-| box_shadow_spread_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` | R H S | Box Shadow Spread Strength |
+| box_shadow_horizontal_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` (varies) | R H S | Box Shadow Horizontal Position |
+| box_shadow_position_{p} | select | `outer`, `inner` | depends on `box_shadow_style_button` (varies) | R | Box Shadow Position |
+| box_shadow_spread_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` (varies) | R H S | Box Shadow Spread Strength |
 | box_shadow_style_{p} | select_box_shadow |  | none | · | Button Box Shadow |
-| box_shadow_vertical_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` | R H S | Box Shadow Vertical Position |
+| box_shadow_vertical_{p} | range | length: em, rem, px, cm, mm, in… | depends on `box_shadow_style_button` (varies) | R H S | Box Shadow Vertical Position |
 | custom_{p} | yes_no_button | `off`, `on` | off | · | Use Custom Styles For Button  |
+| {p}_alignment | text_align | `left`, `center`, `right` |  | R | Button Alignment |
+| {p}_bg_color | background-field |  | False (varies) | R H S | Button Background |
+| {p}_border_color | color-alpha | color |  | R H S | Button Border Color |
+| {p}_border_radius | range | length: %, em, rem, px, cm, mm… | 3 (varies) | R H S | Button Border Radius |
+| {p}_border_width | range | length: em, rem, px, cm, mm, in… | 2 (varies) | R H S | Button Border Width |
+| {p}_custom_margin | custom_margin | spacing string |  | R H S | Button Margin |
+| {p}_custom_padding | custom_padding | spacing string |  | R H S | Button Padding |
+| {p}_font | font | font string |  | R | Button Font |
+| {p}_icon | select_icon | icon string |  | R | Button Icon |
+| {p}_icon_color | color-alpha | color |  | R H S | Button Icon Color |
+| {p}_icon_placement | select | `right`, `left` | right (varies) | R | Button Icon Placement |
+| {p}_letter_spacing | range |  | 0 (varies) | R H S | Button Letter Spacing |
+| {p}_on_hover | yes_no_button | `on`, `off` | on (varies) | R | Only Show Icon On Hover for Button |
+| {p}_text_color | color-alpha | color |  | R H S | Button Text Color |
+| {p}_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `button_text_shadow_style` (varies) | R H S | Button Text Shadow Blur Strength |
+| {p}_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Button Text Shadow Color |
+| {p}_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `button_text_shadow_style` (varies) | R H S | Button Text Shadow Horizontal Length |
+| {p}_text_shadow_style | presets_shadow |  | none | · | Button Text Shadow |
+| {p}_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `button_text_shadow_style` (varies) | R H S | Button Text Shadow Vertical Length |
+| {p}_text_size | range | length: %, em, rem, px, cm, mm… | 20 (varies) | R H S | Button Text Size |
+| {p}_use_icon | yes_no_button | `on`, `off` | on (varies) | · | Show Button Icon |
 
 ## CSS ID & classes
 <a id="css-id-and-classes"></a>
@@ -167,10 +188,10 @@ Used by 62 module/prefix combinations. `{p}` = the prefix listed on each module 
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| custom_css_after | custom_css |  |  | · | After:<span>.et_pb_post_content_<%= typeof( module_order ) !== 'undefined' ?  module_order : '<span class="et_pb_module_order_placeholder"></span>' %>:after</span> |
-| custom_css_before | custom_css |  |  | · | Before:<span>.et_pb_post_content_<%= typeof( module_order ) !== 'undefined' ?  module_order : '<span class="et_pb_module_order_placeholder"></span>' %>:before</span> |
-| custom_css_free_form | custom_css |  |  | · | CSS:<span>.et_pb_post_content_<%= typeof( module_order ) !== 'undefined' ?  module_order : '<span class="et_pb_module_order_placeholder"></span>' %></span> |
-| custom_css_main_element | custom_css |  |  | · | Main Element:<span>.et_pb_post_content_<%= typeof( module_order ) !== 'undefined' ?  module_order : '<span class="et_pb_module_order_placeholder"></span>' %></span> |
+| custom_css_after | custom_css |  |  | · | After:<span>.et_pb_accordion_<%= typeof( module_order ) !== 'undefined' ?  module_order : '<span class="et_pb_module_order_placeholder"></span>' %>.et_pb_accordion:after</span> |
+| custom_css_before | custom_css |  |  | · | Before:<span>.et_pb_accordion_<%= typeof( module_order ) !== 'undefined' ?  module_order : '<span class="et_pb_module_order_placeholder"></span>' %>.et_pb_accordion:before</span> |
+| custom_css_free_form | custom_css |  |  | · | CSS:<span>.et_pb_accordion_<%= typeof( module_order ) !== 'undefined' ?  module_order : '<span class="et_pb_module_order_placeholder"></span>' %>.et_pb_accordion</span> |
+| custom_css_main_element | custom_css |  |  | · | Main Element:<span>.et_pb_accordion_<%= typeof( module_order ) !== 'undefined' ?  module_order : '<span class="et_pb_module_order_placeholder"></span>' %>.et_pb_accordion</span> |
 
 ## Display conditions
 <a id="display-conditions"></a>
@@ -196,26 +217,26 @@ Used by 62 module/prefix combinations. `{p}` = the prefix listed on each module 
 | filter_opacity | range |  | 100% | R H S | Opacity |
 | filter_saturate | range |  | 100% | R H S | Saturation |
 | filter_sepia | range |  | 0% | R H S | Sepia |
-| mix_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … | normal | R | Blend Mode |
+| mix_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … (16 options; full list in scripts/schema/<module>.json) | normal | R | Blend Mode |
 
 ## Font
 <a id="font"></a>
 
-Used by 149 module/prefix combinations. `{p}` = the prefix listed on each module page.
+Used by 227 module/prefix combinations. `{p}` = the prefix listed on each module page.
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| {p}_font | font | font string |  | R | Text Font |
-| {p}_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Text Text Size |
-| {p}_letter_spacing | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Text Letter Spacing |
-| {p}_line_height | range | length: %, em, rem, px, cm, mm… | 1.7em | R H S | Text Line Height |
-| {p}_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Text Text Alignment |
-| {p}_text_color | color-alpha | color |  | R H S | Text Text Color |
-| {p}_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `text_text_shadow_style` | R H S | Text Shadow Blur Strength |
-| {p}_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Text Shadow Color |
-| {p}_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `text_text_shadow_style` | R H S | Text Shadow Horizontal Length |
-| {p}_text_shadow_style | presets_shadow |  | none | · | Text Shadow |
-| {p}_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `text_text_shadow_style` | R H S | Text Shadow Vertical Length |
+| {p}_font | font | font string | (varies) | R | Body Font |
+| {p}_font_size | range | length: %, em, rem, px, cm, mm… | 14px (varies) | R H S | Body Text Size |
+| {p}_letter_spacing | range | length: em, rem, px, cm, mm, in… | 0px (varies) | R H S | Body Letter Spacing |
+| {p}_line_height | range | length: %, em, rem, px, cm, mm… | 1.7em (varies) | R H S | Body Line Height |
+| {p}_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Link Text Alignment |
+| {p}_text_color | color-alpha | color | (varies) | R H S | Link Text Color |
+| {p}_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `body_link_text_shadow_style` (varies) | R H S | Link Text Shadow Blur Strength |
+| {p}_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Link Text Shadow Color |
+| {p}_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `body_link_text_shadow_style` (varies) | R H S | Link Text Shadow Horizontal Length |
+| {p}_text_shadow_style | presets_shadow |  | none | · | Link Text Shadow |
+| {p}_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `body_link_text_shadow_style` (varies) | R H S | Link Text Shadow Vertical Length |
 
 ## Position
 <a id="position"></a>
@@ -228,9 +249,9 @@ Used by 63 module/prefix combinations. `{p}` = the prefix listed on each module 
 | position_origin_a | position | `top_left`, `top_right`, `bottom_left`, `bottom_right`, `center_left`, `center_center`, `center_right`, `top_center`, `bottom_center` | top_left | R H S | Location |
 | position_origin_f | position | `top_left`, `top_right`, `bottom_left`, `bottom_right`, `center_left`, `center_center`, `center_right`, `top_center`, `bottom_center` | top_left | R H S | Location |
 | position_origin_r | position | `top_left`, `top_right`, `bottom_left`, `bottom_right` | top_left | R H S | Offset Origin  |
-| positioning | select | `none`, `relative`, `absolute`, `fixed` | none | R H S | Position |
+| positioning | select | `none`, `relative`, `absolute`, `fixed` | none (varies) | R H S | Position |
 | vertical_offset | range |  |  | R H S | Vertical Offset |
-| z_index | range |  |  | R H S | Z Index |
+| z_index | range |  | (varies) | R H S | Z Index |
 
 ## Scroll effects
 <a id="scroll-effects"></a>
@@ -239,7 +260,7 @@ Used by 61 module/prefix combinations. `{p}` = the prefix listed on each module 
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| motion_trigger_start | select | `middle`, `top`, `bottom` | middle | · | Motion Effect Trigger |
+| motion_trigger_start | select | `middle`, `top`, `bottom` | middle (varies) | · | Motion Effect Trigger |
 | scroll_blur | motion |  | 0\|40\|60\|100\|10\|0\|0 | R | Set Blur |
 | scroll_blur_enable | yes_no_button | `off`, `on` | off | · | Enable Blur |
 | scroll_effects | composite |  |  | · | Scroll Transform Effects |
@@ -253,13 +274,13 @@ Used by 61 module/prefix combinations. `{p}` = the prefix listed on each module 
 | scroll_scaling_enable | yes_no_button | `off`, `on` | off | · | Enable Scaling Up and Down |
 | scroll_vertical_motion | motion |  | 0\|50\|50\|100\|4\|0\|-4 | R | Set Vertical Motion |
 | scroll_vertical_motion_enable | yes_no_button | `off`, `on` | off | · | Enable Vertical Motion |
-| sticky_limit_bottom | select | `none`, `body`, `section`, `row`, `column` | none | R | Bottom Sticky Limit |
-| sticky_limit_top | select | `none`, `body`, `section`, `row`, `column` | none | R | Top Sticky Limit |
-| sticky_offset_bottom | range |  | 0px | R | Sticky Bottom Offset |
-| sticky_offset_surrounding | yes_no_button | `on`, `off` | on | R | Offset From Surrounding Sticky Elements |
-| sticky_offset_top | range |  | 0px | R | Sticky Top Offset |
-| sticky_position | select | `none`, `top`, `bottom`, `top_bottom` | none | R | Sticky Position |
-| sticky_transition | yes_no_button | `on`, `off` | on | R | Transition Default and Sticky Styles |
+| sticky_limit_bottom | select | `none`, `body`, `section`, `row`, `column` | none (varies) | R | Bottom Sticky Limit |
+| sticky_limit_top | select | `none`, `body`, `section`, `row`, `column` | none (varies) | R | Top Sticky Limit |
+| sticky_offset_bottom | range |  | 0px (varies) | R | Sticky Bottom Offset |
+| sticky_offset_surrounding | yes_no_button | `on`, `off` | on (varies) | R | Offset From Surrounding Sticky Elements |
+| sticky_offset_top | range |  | 0px (varies) | R | Sticky Top Offset |
+| sticky_position | select | `none`, `top`, `bottom`, `top_bottom` | none (varies) | R | Sticky Position |
+| sticky_transition | yes_no_button | `on`, `off` | on (varies) | R | Transition Default and Sticky Styles |
 
 ## Sizing
 <a id="sizing"></a>
@@ -268,12 +289,12 @@ Used by 56 module/prefix combinations. `{p}` = the prefix listed on each module 
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| height | range |  | auto | R H S | Height |
+| height | range |  | auto (varies) | R H S | Height |
 | max_height | range |  | none | R H S | Max Height |
-| max_width | range |  | none | R H S | Max Width |
+| max_width | range |  | none (varies) | R H S | Max Width |
 | min_height | range |  | auto | R H S | Min Height |
 | module_alignment | align | `left`, `center`, `right` |  | R | Module Alignment |
-| width | range |  | auto | R H S | Width |
+| width | range |  | auto (varies) | R H S | Width |
 
 ## Spacing
 <a id="spacing"></a>
@@ -282,18 +303,18 @@ Used by 62 module/prefix combinations. `{p}` = the prefix listed on each module 
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| custom_margin | custom_margin | length: %, em, rem, px, cm, mm… |  | R H S | Margin |
-| custom_padding | custom_padding | length: %, em, rem, px, cm, mm… |  | R H S | Padding |
+| custom_margin | custom_margin | length: %, em, rem, px, cm, mm… | (varies) | R H S | Margin |
+| custom_padding | custom_padding | length: %, em, rem, px, cm, mm… | (varies) | R H S | Padding |
 
 ## Text
 <a id="text"></a>
 
-Used by 42 module/prefix combinations. `{p}` = the prefix listed on each module page.
+Used by 44 module/prefix combinations. `{p}` = the prefix listed on each module page.
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| background_layout | select | `dark`, `light` | dark | R H S | Text Color |
-| text_orientation | text_align | `left`, `center`, `right`, `justified` |  | R | Text Alignment |
+| background_layout | select | `dark`, `light` | light (varies) | R H S | Text Color |
+| text_orientation | text_align | `left`, `center`, `right`, `justified` | (varies) | R | Text Alignment |
 | text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `text_shadow_style` | R H S | Text Shadow Blur Strength |
 | text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Text Shadow Color |
 | text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `text_shadow_style` | R H S | Text Shadow Horizontal Length |
@@ -333,7 +354,7 @@ Used by 63 module/prefix combinations. `{p}` = the prefix listed on each module 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
 | disabled_on | multiple_checkboxes | `phone`, `tablet`, `desktop` |  | · | Disable on |
-| overflow-x | select | ``, `visible`, `scroll`, `hidden`, `auto` |  | R H S | Horizontal Overflow |
-| overflow-y | select | ``, `visible`, `scroll`, `hidden`, `auto` |  | R H S | Vertical Overflow |
+| overflow-x | select | ``, `visible`, `scroll`, `hidden`, `auto` | (varies) | R H S | Horizontal Overflow |
+| overflow-y | select | ``, `visible`, `scroll`, `hidden`, `auto` | (varies) | R H S | Vertical Overflow |
 
 <!-- END GENERATED FAMILIES -->

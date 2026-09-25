@@ -134,7 +134,7 @@
 | child_filter_opacity | range |  | 100% | R H S | Image Opacity |
 | child_filter_saturate | range |  | 100% | R H S | Image Saturation |
 | child_filter_sepia | range |  | 0% | R H S | Image Sepia |
-| child_mix_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … | normal | R H | Image Blend Mode |
+| child_mix_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … (16 options; full list in scripts/schema/et_pb_fullwidth_header.json) | normal | R H | Image Blend Mode |
 | image_orientation | select | `center`, `bottom` | center | · | Image Alignment |
 
 ### Sizing — `width`
@@ -153,92 +153,14 @@
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| content_link_font | font | font string |  | R | Link Font |
-| content_link_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Link Text Size |
-| content_link_letter_spacing | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Link Letter Spacing |
-| content_link_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Link Line Height |
-| content_link_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Link Text Alignment |
-| content_link_text_color | color-alpha | color |  | R H S | Link Text Color |
-| content_link_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `content_link_text_shadow_style` | R H S | Link Text Shadow Blur Strength |
-| content_link_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Link Text Shadow Color |
-| content_link_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `content_link_text_shadow_style` | R H S | Link Text Shadow Horizontal Length |
-| content_link_text_shadow_style | presets_shadow |  | none | · | Link Text Shadow |
-| content_link_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `content_link_text_shadow_style` | R H S | Link Text Shadow Vertical Length |
-| content_ol_font | font | font string |  | R | Ordered List Font |
-| content_ol_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Ordered List Text Size |
 | content_ol_item_indent | range | length: %, em, rem, px, cm, mm… | 0px | R | Ordered List Item Indent |
-| content_ol_letter_spacing | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Ordered List Letter Spacing |
-| content_ol_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Ordered List Line Height |
 | content_ol_position | select | `inside`, `outside` | inside | R | Ordered List Style Position |
-| content_ol_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Ordered List Text Alignment |
-| content_ol_text_color | color-alpha | color |  | R H S | Ordered List Text Color |
-| content_ol_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `content_ol_text_shadow_style` | R H S | Ordered List Text Shadow Blur Strength |
-| content_ol_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Ordered List Text Shadow Color |
-| content_ol_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `content_ol_text_shadow_style` | R H S | Ordered List Text Shadow Horizontal Length |
-| content_ol_text_shadow_style | presets_shadow |  | none | · | Ordered List Text Shadow |
-| content_ol_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `content_ol_text_shadow_style` | R H S | Ordered List Text Shadow Vertical Length |
-| content_ol_type | select | `decimal`, `armenian`, `cjk-ideographic`, `decimal-leading-zero`, `georgian`, `hebrew`, `hiragana`, `hiragana-iroha`, `katakana`, `katakana-iroha`, `lower-alpha`, `lower-greek`, `lower-latin`, `lower-roman`, `upper-alpha` … | decimal | R | Ordered List Style Type |
+| content_ol_type | select | `decimal`, `armenian`, `cjk-ideographic`, `decimal-leading-zero`, `georgian`, `hebrew`, `hiragana`, `hiragana-iroha`, `katakana`, `katakana-iroha`, `lower-alpha`, `lower-greek`, `lower-latin`, `lower-roman`, `upper-alpha` … (19 options; full list in scripts/schema/et_pb_fullwidth_header.json) | decimal | R | Ordered List Style Type |
 | content_quote_border_color | color-alpha | color |  | R H S | Blockquote Border Color |
 | content_quote_border_weight | range | length: em, rem, px, cm, mm, in… | 5px | R H S | Blockquote Border Weight |
-| content_quote_font | font | font string |  | R | Blockquote Font |
-| content_quote_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Blockquote Text Size |
-| content_quote_letter_spacing | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Blockquote Letter Spacing |
-| content_quote_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Blockquote Line Height |
-| content_quote_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Blockquote Text Alignment |
-| content_quote_text_color | color-alpha | color |  | R H S | Blockquote Text Color |
-| content_quote_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `content_quote_text_shadow_style` | R H S | Blockquote Text Shadow Blur Strength |
-| content_quote_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Blockquote Text Shadow Color |
-| content_quote_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `content_quote_text_shadow_style` | R H S | Blockquote Text Shadow Horizontal Length |
-| content_quote_text_shadow_style | presets_shadow |  | none | · | Blockquote Text Shadow |
-| content_quote_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `content_quote_text_shadow_style` | R H S | Blockquote Text Shadow Vertical Length |
-| content_ul_font | font | font string |  | R | Unordered List Font |
-| content_ul_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Unordered List Text Size |
 | content_ul_item_indent | range | length: %, em, rem, px, cm, mm… | 0px | R | Unordered List Item Indent |
-| content_ul_letter_spacing | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Unordered List Letter Spacing |
-| content_ul_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Unordered List Line Height |
 | content_ul_position | select | `outside`, `inside` | outside | R | Unordered List Style Position |
-| content_ul_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Unordered List Text Alignment |
-| content_ul_text_color | color-alpha | color |  | R H S | Unordered List Text Color |
-| content_ul_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `content_ul_text_shadow_style` | R H S | Unordered List Text Shadow Blur Strength |
-| content_ul_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Unordered List Text Shadow Color |
-| content_ul_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `content_ul_text_shadow_style` | R H S | Unordered List Text Shadow Horizontal Length |
-| content_ul_text_shadow_style | presets_shadow |  | none | · | Unordered List Text Shadow |
-| content_ul_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `content_ul_text_shadow_style` | R H S | Unordered List Text Shadow Vertical Length |
 | content_ul_type | select | `disc`, `circle`, `square`, `none` | disc | R | Unordered List Style Type |
-
-### Button One — `button_one`
-
-| attribute | type | values | default | R H S | label |
-|---|---|---|---|---|---|
-| button_one_bg_color | background-field |  | False | R H S | Button One Background |
-| button_one_border_color | color-alpha | color |  | R H S | Button One Border Color |
-| button_one_border_radius | range | length: %, em, rem, px, cm, mm… | 3 | R H S | Button One Border Radius |
-| button_one_border_width | range | length: em, rem, px, cm, mm, in… | 2 | R H S | Button One Border Width |
-| button_one_custom_margin | custom_margin | spacing string |  | R H S | Button One Margin |
-| button_one_custom_padding | custom_padding | spacing string |  | R H S | Button One Padding |
-| button_one_icon | select_icon | icon string |  | R | Button One Icon |
-| button_one_icon_color | color-alpha | color |  | R H S | Button One Icon Color |
-| button_one_icon_placement | select | `right`, `left` | right | R | Button One Icon Placement |
-| button_one_on_hover | yes_no_button | `on`, `off` | on | R | Only Show Icon On Hover for Button One |
-| button_one_text_size | range | length: %, em, rem, px, cm, mm… | 20 | R H S | Button One Text Size |
-| button_one_use_icon | yes_no_button | `on`, `off` | on | · | Show Button One Icon |
-
-### Button Two — `button_two`
-
-| attribute | type | values | default | R H S | label |
-|---|---|---|---|---|---|
-| button_two_bg_color | background-field |  | False | R H S | Button Two Background |
-| button_two_border_color | color-alpha | color |  | R H S | Button Two Border Color |
-| button_two_border_radius | range | length: %, em, rem, px, cm, mm… | 3 | R H S | Button Two Border Radius |
-| button_two_border_width | range | length: em, rem, px, cm, mm, in… | 2 | R H S | Button Two Border Width |
-| button_two_custom_margin | custom_margin | spacing string |  | R H S | Button Two Margin |
-| button_two_custom_padding | custom_padding | spacing string |  | R H S | Button Two Padding |
-| button_two_icon | select_icon | icon string |  | R | Button Two Icon |
-| button_two_icon_color | color-alpha | color |  | R H S | Button Two Icon Color |
-| button_two_icon_placement | select | `right`, `left` | right | R | Button Two Icon Placement |
-| button_two_on_hover | yes_no_button | `on`, `off` | on | R | Only Show Icon On Hover for Button Two |
-| button_two_text_size | range | length: %, em, rem, px, cm, mm… | 20 | R H S | Button Two Text Size |
-| button_two_use_icon | yes_no_button | `on`, `off` | on | · | Show Button Two Icon |
 
 ## Advanced tab
 
@@ -280,7 +202,7 @@
 | Custom CSS | (none) | [design-families.md#custom-css](../design-families.md#custom-css) |
 | Display conditions | (none) | [design-families.md#display-conditions](../design-families.md#display-conditions) |
 | Filters | (none) | [design-families.md#filters](../design-families.md#filters) |
-| Font | `button_one_`, `button_two_`, `content_`, `subhead_`, `title_` | [design-families.md#font](../design-families.md#font) |
+| Font | `content_`, `content_link_`, `content_ol_`, `content_quote_`, `content_ul_`, `subhead_`, `title_` | [design-families.md#font](../design-families.md#font) |
 | Position | (none) | [design-families.md#position](../design-families.md#position) |
 | Scroll effects | (none) | [design-families.md#scroll-effects](../design-families.md#scroll-effects) |
 | Sizing | (none) | [design-families.md#sizing](../design-families.md#sizing) |

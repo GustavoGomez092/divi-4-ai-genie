@@ -114,75 +114,14 @@
 
 | attribute | type | values | default | R H S | label |
 |---|---|---|---|---|---|
-| body_link_font | font | font string |  | R | Link Font |
-| body_link_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Link Text Size |
-| body_link_letter_spacing | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Link Letter Spacing |
-| body_link_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Link Line Height |
-| body_link_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Link Text Alignment |
-| body_link_text_color | color-alpha | color |  | R H S | Link Text Color |
-| body_link_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `body_link_text_shadow_style` | R H S | Link Text Shadow Blur Strength |
-| body_link_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Link Text Shadow Color |
-| body_link_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `body_link_text_shadow_style` | R H S | Link Text Shadow Horizontal Length |
-| body_link_text_shadow_style | presets_shadow |  | none | · | Link Text Shadow |
-| body_link_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `body_link_text_shadow_style` | R H S | Link Text Shadow Vertical Length |
-| body_ol_font | font | font string |  | R | Ordered List Font |
-| body_ol_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Ordered List Text Size |
 | body_ol_item_indent | range | length: %, em, rem, px, cm, mm… | 0px | R | Ordered List Item Indent |
-| body_ol_letter_spacing | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Ordered List Letter Spacing |
-| body_ol_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Ordered List Line Height |
 | body_ol_position | select | `inside`, `outside` | inside | R | Ordered List Style Position |
-| body_ol_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Ordered List Text Alignment |
-| body_ol_text_color | color-alpha | color |  | R H S | Ordered List Text Color |
-| body_ol_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `body_ol_text_shadow_style` | R H S | Ordered List Text Shadow Blur Strength |
-| body_ol_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Ordered List Text Shadow Color |
-| body_ol_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `body_ol_text_shadow_style` | R H S | Ordered List Text Shadow Horizontal Length |
-| body_ol_text_shadow_style | presets_shadow |  | none | · | Ordered List Text Shadow |
-| body_ol_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `body_ol_text_shadow_style` | R H S | Ordered List Text Shadow Vertical Length |
-| body_ol_type | select | `decimal`, `armenian`, `cjk-ideographic`, `decimal-leading-zero`, `georgian`, `hebrew`, `hiragana`, `hiragana-iroha`, `katakana`, `katakana-iroha`, `lower-alpha`, `lower-greek`, `lower-latin`, `lower-roman`, `upper-alpha` … | decimal | R | Ordered List Style Type |
+| body_ol_type | select | `decimal`, `armenian`, `cjk-ideographic`, `decimal-leading-zero`, `georgian`, `hebrew`, `hiragana`, `hiragana-iroha`, `katakana`, `katakana-iroha`, `lower-alpha`, `lower-greek`, `lower-latin`, `lower-roman`, `upper-alpha` … (19 options; full list in scripts/schema/et_pb_login.json) | decimal | R | Ordered List Style Type |
 | body_quote_border_color | color-alpha | color |  | R H S | Blockquote Border Color |
 | body_quote_border_weight | range | length: em, rem, px, cm, mm, in… | 5px | R H S | Blockquote Border Weight |
-| body_quote_font | font | font string |  | R | Blockquote Font |
-| body_quote_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Blockquote Text Size |
-| body_quote_letter_spacing | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Blockquote Letter Spacing |
-| body_quote_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Blockquote Line Height |
-| body_quote_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Blockquote Text Alignment |
-| body_quote_text_color | color-alpha | color |  | R H S | Blockquote Text Color |
-| body_quote_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `body_quote_text_shadow_style` | R H S | Blockquote Text Shadow Blur Strength |
-| body_quote_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Blockquote Text Shadow Color |
-| body_quote_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `body_quote_text_shadow_style` | R H S | Blockquote Text Shadow Horizontal Length |
-| body_quote_text_shadow_style | presets_shadow |  | none | · | Blockquote Text Shadow |
-| body_quote_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `body_quote_text_shadow_style` | R H S | Blockquote Text Shadow Vertical Length |
-| body_ul_font | font | font string |  | R | Unordered List Font |
-| body_ul_font_size | range | length: %, em, rem, px, cm, mm… | 14px | R H S | Unordered List Text Size |
 | body_ul_item_indent | range | length: %, em, rem, px, cm, mm… | 0px | R | Unordered List Item Indent |
-| body_ul_letter_spacing | range | length: em, rem, px, cm, mm, in… | 0px | R H S | Unordered List Letter Spacing |
-| body_ul_line_height | range | length: %, em, rem, px, cm, mm… | 1em | R H S | Unordered List Line Height |
 | body_ul_position | select | `outside`, `inside` | outside | R | Unordered List Style Position |
-| body_ul_text_align | text_align | `left`, `center`, `right`, `justify` |  | R | Unordered List Text Alignment |
-| body_ul_text_color | color-alpha | color |  | R H S | Unordered List Text Color |
-| body_ul_text_shadow_blur_strength | range | length: em, rem, px, cm, mm, in… | depends on `body_ul_text_shadow_style` | R H S | Unordered List Text Shadow Blur Strength |
-| body_ul_text_shadow_color | color-alpha | color | rgba(0,0,0,0.4) | R H S | Unordered List Text Shadow Color |
-| body_ul_text_shadow_horizontal_length | range | length: em, rem, px, cm, mm, in… | depends on `body_ul_text_shadow_style` | R H S | Unordered List Text Shadow Horizontal Length |
-| body_ul_text_shadow_style | presets_shadow |  | none | · | Unordered List Text Shadow |
-| body_ul_text_shadow_vertical_length | range | length: em, rem, px, cm, mm, in… | depends on `body_ul_text_shadow_style` | R H S | Unordered List Text Shadow Vertical Length |
 | body_ul_type | select | `disc`, `circle`, `square`, `none` | disc | R | Unordered List Style Type |
-
-### Button — `button`
-
-| attribute | type | values | default | R H S | label |
-|---|---|---|---|---|---|
-| button_bg_color | background-field |  | False | R H S | Button Background |
-| button_border_color | color-alpha | color |  | R H S | Button Border Color |
-| button_border_radius | range | length: %, em, rem, px, cm, mm… | 3 | R H S | Button Border Radius |
-| button_border_width | range | length: em, rem, px, cm, mm, in… | 2 | R H S | Button Border Width |
-| button_custom_margin | custom_margin | spacing string |  | R H S | Button Margin |
-| button_custom_padding | custom_padding | spacing string |  | R H S | Button Padding |
-| button_icon | select_icon | icon string |  | R | Button Icon |
-| button_icon_color | color-alpha | color |  | R H S | Button Icon Color |
-| button_icon_placement | select | `right`, `left` | right | R | Button Icon Placement |
-| button_on_hover | yes_no_button | `on`, `off` | on | R | Only Show Icon On Hover for Button |
-| button_text_size | range | length: %, em, rem, px, cm, mm… | 20 | R H S | Button Text Size |
-| button_use_icon | yes_no_button | `on`, `off` | on | · | Show Button Icon |
 
 ## Advanced tab
 
@@ -209,7 +148,7 @@
 | Custom CSS | (none) | [design-families.md#custom-css](../design-families.md#custom-css) |
 | Display conditions | (none) | [design-families.md#display-conditions](../design-families.md#display-conditions) |
 | Filters | (none) | [design-families.md#filters](../design-families.md#filters) |
-| Font | `body_`, `button_`, `form_field_`, `header_` | [design-families.md#font](../design-families.md#font) |
+| Font | `body_`, `body_link_`, `body_ol_`, `body_quote_`, `body_ul_`, `form_field_`, `header_` | [design-families.md#font](../design-families.md#font) |
 | Position | (none) | [design-families.md#position](../design-families.md#position) |
 | Scroll effects | (none) | [design-families.md#scroll-effects](../design-families.md#scroll-effects) |
 | Sizing | (none) | [design-families.md#sizing](../design-families.md#sizing) |

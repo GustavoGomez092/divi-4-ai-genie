@@ -64,7 +64,7 @@
 | child_filter_opacity | range |  | 100% | R H S | Map Opacity |
 | child_filter_saturate | range |  | 100% | R H S | Map Saturation |
 | child_filter_sepia | range |  | 0% | R H S | Map Sepia |
-| child_mix_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … | normal | R H | Map Blend Mode |
+| child_mix_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … (16 options; full list in scripts/schema/et_pb_fullwidth_map.json) | normal | R H | Map Blend Mode |
 | grayscale_filter_amount | hidden |  | 0 | · | Grayscale Filter Amount (%) |
 | use_grayscale_filter | hidden | `off`, `on` | off | · | Use Grayscale Filter |
 

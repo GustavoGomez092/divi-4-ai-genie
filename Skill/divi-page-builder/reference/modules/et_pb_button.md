@@ -50,21 +50,6 @@
 |---|---|---|---|---|---|
 | button_alignment | text_align | `left`, `center`, `right` |  | R | Button Alignment |
 
-### Button — `button`
-
-| attribute | type | values | default | R H S | label |
-|---|---|---|---|---|---|
-| button_bg_color | background-field |  | False | R H S | Button Background |
-| button_border_color | color-alpha | color |  | R H S | Button Border Color |
-| button_border_radius | range | length: %, em, rem, px, cm, mm… | 3 | R H S | Button Border Radius |
-| button_border_width | range | length: em, rem, px, cm, mm, in… | 2 | R H S | Button Border Width |
-| button_icon | select_icon | icon string |  | R | Button Icon |
-| button_icon_color | color-alpha | color |  | R H S | Button Icon Color |
-| button_icon_placement | select | `right`, `left` | right | R | Button Icon Placement |
-| button_on_hover | yes_no_button | `on`, `off` | on | R | Only Show Icon On Hover for Button |
-| button_text_size | range | length: %, em, rem, px, cm, mm… | 20 | R H S | Button Text Size |
-| button_use_icon | yes_no_button | `on`, `off` | on | · | Show Button Icon |
-
 ## Shared design families
 
 | family | prefix(es) | reference |
@@ -77,7 +62,6 @@
 | Custom CSS | (none) | [design-families.md#custom-css](../design-families.md#custom-css) |
 | Display conditions | (none) | [design-families.md#display-conditions](../design-families.md#display-conditions) |
 | Filters | (none) | [design-families.md#filters](../design-families.md#filters) |
-| Font | `button_` | [design-families.md#font](../design-families.md#font) |
 | Position | (none) | [design-families.md#position](../design-families.md#position) |
 | Scroll effects | (none) | [design-families.md#scroll-effects](../design-families.md#scroll-effects) |
 | Spacing | (none) | [design-families.md#spacing](../design-families.md#spacing) |

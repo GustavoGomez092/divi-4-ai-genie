@@ -20,7 +20,7 @@
 | content | hidden |  |  | · | Body |
 | skype_action | select | `call`, `chat` | call | · | Skype Button Action |
 | skype_url | text |  |  | · | Account Name |
-| social_network | select | ``, `amazon`, `bandcamp`, `behance`, `bitbucket`, `buffer`, `codepen`, `deviantart`, `dribbble`, `facebook`, `flikr`, `flipboard`, `foursquare`, `github`, `goodreads` … |  | · | Social Network |
+| social_network | select | ``, `amazon`, `bandcamp`, `behance`, `bitbucket`, `buffer`, `codepen`, `deviantart`, `dribbble`, `facebook`, `flikr`, `flipboard`, `foursquare`, `github`, `goodreads` … (51 options; full list in scripts/schema/et_pb_social_media_follow_network.json) |  | · | Social Network |
 
 ### Link — `link`
 
@@ -48,18 +48,6 @@
 | icon_font_size | range | length: %, em, rem, px, cm, mm… | 16px | R H S | Icon Font Size |
 | use_icon_font_size | yes_no_button | `off`, `on` | off | · | Use Custom Icon Size |
 
-### Follow Button — `button`
-
-| attribute | type | values | default | R H S | label |
-|---|---|---|---|---|---|
-| button_bg_color | background-field |  |  | R H S | Follow Button Background |
-| button_border_color | color-alpha | color |  | R H S | Follow Button Border Color |
-| button_border_radius | range | length: %, em, rem, px, cm, mm… |  | R H S | Follow Button Border Radius |
-| button_border_width | range | length: em, rem, px, cm, mm, in… |  | R H S | Follow Button Border Width |
-| button_custom_margin | custom_margin | spacing string |  | R H S | Follow Button Margin |
-| button_custom_padding | custom_padding | spacing string |  | R H S | Follow Button Padding |
-| button_text_size | range | length: %, em, rem, px, cm, mm… |  | R H S | Follow Button Text Size |
-
 ## Advanced tab
 
 ### Custom CSS — `custom_css`
@@ -80,7 +68,6 @@
 | Custom CSS | (none) | [design-families.md#custom-css](../design-families.md#custom-css) |
 | Display conditions | (none) | [design-families.md#display-conditions](../design-families.md#display-conditions) |
 | Filters | (none) | [design-families.md#filters](../design-families.md#filters) |
-| Font | `button_` | [design-families.md#font](../design-families.md#font) |
 | Position | (none) | [design-families.md#position](../design-families.md#position) |
 | Scroll effects | (none) | [design-families.md#scroll-effects](../design-families.md#scroll-effects) |
 | Spacing | (none) | [design-families.md#spacing](../design-families.md#spacing) |

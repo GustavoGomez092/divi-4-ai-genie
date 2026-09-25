@@ -147,25 +147,7 @@
 | child_filter_opacity | range |  | 100% | R H S | Image Opacity |
 | child_filter_saturate | range |  | 100% | R H S | Image Saturation |
 | child_filter_sepia | range |  | 0% | R H S | Image Sepia |
-| child_mix_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … | normal | R H | Image Blend Mode |
-
-### Button — `button`
-
-| attribute | type | values | default | R H S | label |
-|---|---|---|---|---|---|
-| button_alignment | text_align | `left`, `center`, `right` |  | R | Button Alignment |
-| button_bg_color | background-field |  | False | R H S | Button Background |
-| button_border_color | color-alpha | color |  | R H S | Button Border Color |
-| button_border_radius | range | length: %, em, rem, px, cm, mm… | 3 | R H S | Button Border Radius |
-| button_border_width | range | length: em, rem, px, cm, mm, in… | 2 | R H S | Button Border Width |
-| button_custom_margin | custom_margin | spacing string |  | R H S | Button Margin |
-| button_custom_padding | custom_padding | spacing string |  | R H S | Button Padding |
-| button_icon | select_icon | icon string |  | R | Button Icon |
-| button_icon_color | color-alpha | color |  | R H S | Button Icon Color |
-| button_icon_placement | select | `right`, `left` | right | R | Button Icon Placement |
-| button_on_hover | yes_no_button | `on`, `off` | on | R | Only Show Icon On Hover for Button |
-| button_text_size | range | length: %, em, rem, px, cm, mm… | 20 | R H S | Button Text Size |
-| button_use_icon | yes_no_button | `on`, `off` | on | · | Show Button Icon |
+| child_mix_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … (16 options; full list in scripts/schema/et_pb_comments.json) | normal | R H | Image Blend Mode |
 
 ## Advanced tab
 
@@ -199,7 +181,7 @@
 | Custom CSS | (none) | [design-families.md#custom-css](../design-families.md#custom-css) |
 | Display conditions | (none) | [design-families.md#display-conditions](../design-families.md#display-conditions) |
 | Filters | (none) | [design-families.md#filters](../design-families.md#filters) |
-| Font | `body_`, `button_`, `form_field_`, `header_`, `meta_`, `title_` | [design-families.md#font](../design-families.md#font) |
+| Font | `body_`, `form_field_`, `header_`, `meta_`, `title_` | [design-families.md#font](../design-families.md#font) |
 | Position | (none) | [design-families.md#position](../design-families.md#position) |
 | Scroll effects | (none) | [design-families.md#scroll-effects](../design-families.md#scroll-effects) |
 | Sizing | (none) | [design-families.md#sizing](../design-families.md#sizing) |

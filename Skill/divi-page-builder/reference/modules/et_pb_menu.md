@@ -138,7 +138,7 @@
 | child_filter_opacity | range |  | 100% | R H S | Image Opacity |
 | child_filter_saturate | range |  | 100% | R H S | Image Saturation |
 | child_filter_sepia | range |  | 0% | R H S | Image Sepia |
-| child_mix_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … | normal | R H | Image Blend Mode |
+| child_mix_blend_mode | select | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color` … (16 options; full list in scripts/schema/et_pb_menu.json) | normal | R H | Image Blend Mode |
 
 ### Animation — `animation`
 
