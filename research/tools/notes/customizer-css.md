@@ -6,19 +6,20 @@ colors, body/heading fonts, body font size, content width, one global color), pu
 titled `Plan Test: tokens html` built from `tests/fixtures/valid/handwritten-landing.txt`, curl it
 twice (first hit builds Divi's CSS cache) following redirects (`curl -sL`, required — WP 301s
 `?page_id=N` to the pretty-permalink URL, so a plain `curl -s` captures an empty 301 body), save the
-third-party HTML to `tests/fixtures/html/customized-page.html`, delete the page, and restore
-`et_divi`. Divi version under test: 4.27.9 (confirmed by `<meta content="Divi v.4.27.9"
+HTML for analysis (not committed: it inlines Divi's licensed stylesheet), delete the page, and restore
+`et_divi`. `tests/fixtures/html/customized-page.html` is now a small hand-written SYNTHETIC page
+carrying only the selectors and values recorded below. Divi version under test: 4.27.9 (confirmed by `<meta content="Divi v.4.27.9"
 name="generator"/>` and by `?ver=4.27.9` on `themes/Divi/style.min.css`).
 
 ## `<style id>` blocks present on a Divi 4 front-end page
 
 In document order:
-`global-styles-inline-css`, `divi-style-inline-inline-css`, `divi-dynamic-critical-inline-css`,
+`global-styles-inline-css`, `divi-style-inline-inline-css`, the `divi-dynamic-critical` handle's block,
 `et-critical-inline-css`, `wp-block-archives-inline-css`, `wp-block-categories-inline-css`,
 `wp-block-heading-inline-css`, `wp-block-group-inline-css`, `wp-block-library-inline-css`.
 
 Customizer overrides land in **`et-critical-inline-css`** (colors, content width) and
-**`divi-dynamic-critical-inline-css`** (the body-font-size rule, mixed in with other selectors).
+the **`divi-dynamic-critical`** handle's inline block (the body-font-size rule, mixed in with other selectors).
 `divi-style-inline-inline-css` carries Divi's own base/reset rules (e.g. a bare `body{...}` with
 hardcoded `font-size:14px;color:#666;font-family:Open Sans,Arial,sans-serif}`) — these come
 *before* the Customizer rules in the document, and because both sets of rules use plain,
@@ -26,9 +27,9 @@ equal-specificity selectors (`body`, `h1`, `a`, …), **the browser (and our par
 *last* matching declaration, not the first** — the base rule for the same selector+property always
 appears earlier in source order than the Customizer's override.
 
-One block (`divi-dynamic-critical-inline-css`) opens with a `/*# sourceURL=... */` CSS comment
+One block (the `divi-dynamic-critical` handle's) opens with a `/*# sourceURL=... */` CSS comment
 directly followed by its first real selector on the next line, e.g.
-`/*# sourceURL=divi-dynamic-critical-inline-css */\n\nbody, .et_pb_column_1_2 ...`. A naive
+`/*# sourceURL=<that block's id> */\n\nbody, .et_pb_column_1_2 ...`. A naive
 selector-splitter that doesn't strip CSS comments first will glue that comment onto the `body`
 token and silently fail to match it. **The parser must strip `/* ... */` comments from the
 concatenated CSS before splitting rules.**

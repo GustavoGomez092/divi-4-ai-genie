@@ -4,3 +4,5 @@ __pycache__/
 .env
 .superpowers/
 .worktrees/
+# rendered pages inline Divi's licensed CSS: never commit them
+research/render-prototype/out/*.html

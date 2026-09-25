@@ -167,7 +167,7 @@ WP=/path/to/wp.sh ./run.sh sample-layout.shortcode out/preview.html
 Success: Wrote …/out/preview.html (1,848.7 KB). sections=8 modules=45 builder-css=48662 B, css inlined=1 remote=2, js inlined=12 remote=0
 ```
 
-The file is ~1.8 MB, mostly the 825 KB static CSS and inlined jQuery and Divi JS. Google Fonts stay as remote links, and images remain URLs unless `embed-images` is passed.
+The file is ~1.8 MB, mostly the 825 KB static CSS and inlined jQuery and Divi JS. It (and the `settings-*.html` outputs) is not committed, because it inlines Divi's licensed stylesheet; regenerate it locally. The PNG screenshots in `out/` are kept. Google Fonts stay as remote links, and images remain URLs unless `embed-images` is passed.
 
 ### Fidelity checks (all run, not inferred)
 

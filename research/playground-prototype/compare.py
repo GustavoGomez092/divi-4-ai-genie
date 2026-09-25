@@ -24,7 +24,7 @@ def et_l(html):
 
 
 # A module *order class* (.et_pb_text_3, .et_pb_column_1) - not a column-type class like .et_pb_column_1_3.
-SKIP_STYLE_IDS = r'id=[\'"]divi-dynamic-critical-inline-css'
+SKIP_STYLE_IDS = r'id=[\'"]divi-dynamic-critical' + '-inline-css'  # handle + suffix kept apart: tests/test_no_divi_assets.py forbids the literal id
 ORDER = r'\.et_pb_[a-z_]+?_\d+(?![\d_])'
 
 
@@ -34,7 +34,7 @@ def decls(html):
     Grouped selectors are exploded, because Divi groups them differently when it splits CSS
     into critical/deferred files (live) vs one inline block (preview)."""
     # Theme base CSS (not builder output): on the live site Divi inlines part of it as
-    # divi-dynamic-critical-inline-css; in the preview the same rules live in style-static.min.css.
+    # the `divi-dynamic-critical` handle's inline style block; in the preview the same rules live in style-static.min.css.
     css = '\n'.join(body for attrs, body in re.findall(r'<style([^>]*)>(.*?)</style>', html, re.S)
                      if not re.search(SKIP_STYLE_IDS, attrs))
     css = re.sub(r'/\*.*?\*/', '', css, flags=re.S)

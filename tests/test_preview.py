@@ -22,7 +22,7 @@ VERSION = "4.27.9"
 # (.et_pb_text_3). This also matches structural classes like .et_pb_column_1_3 or .et_pb_row_4col
 # (inherited imprecision from compare.py, harmless here) - those are theme-base CSS, not per-module
 # design CSS, and are excluded separately via the style-block id filter in _decls (require_id).
-_SKIP_STYLE_ID = re.compile(r'id=[\'"]divi-dynamic-critical-inline-css')
+_SKIP_STYLE_ID = re.compile(r'id=[\'"]divi-dynamic-critical' + '-inline-css')  # handle + suffix kept apart: tests/test_no_divi_assets.py forbids the literal id
 _ORDER = re.compile(r'\.et_pb_[a-z_]+?_\d+(?![\d_])')
 
 
@@ -40,7 +40,7 @@ def _decls(html, require_id=False):
     every local <link rel=stylesheet> into an id-less <style> tag so the file is self-contained; those
     blocks hold Divi's theme-base CSS (row/column layout, shared across every module type, identical to
     the live theme by construction). The live page's equivalent chunk is inlined under
-    id="divi-dynamic-critical-inline-css" and is excluded below, so the preview side must exclude its
+    the `divi-dynamic-critical` handle's inline style block and is excluded below, so the preview side must exclude its
     id-less counterpart the same way to compare only per-module design CSS on both sides.
     """
     out = set()

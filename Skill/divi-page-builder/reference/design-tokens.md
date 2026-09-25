@@ -89,8 +89,7 @@ wrote tokens.json: 16 style bundles across 13 modules, 5 palette colors, 4 secti
 
 Top-level keys: `site`, `colors`, `typography`, `spacing`, `shapes`, `presets`, `module_styles`,
 `section_exemplars`. Excerpt below is from combining `tests/fixtures/valid/handwritten-landing.txt`
-(shortcode) with `tests/fixtures/html/customized-page.html` (the same page's rendered output, with
-non-default Customizer values set) — see `tests/test_tokens_from_html.py`.
+(shortcode) with a rendered page carrying non-default Customizer values.
 
 ```json
 {

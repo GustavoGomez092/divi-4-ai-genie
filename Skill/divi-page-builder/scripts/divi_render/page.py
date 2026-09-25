@@ -79,7 +79,7 @@ def document(ctx: Ctx, builder_html: str, builder_css: str, title: str, with_js:
 <title>{esc(title)}</title>
 <script type="text/javascript">document.documentElement.className = 'js';</script>
 <link rel='stylesheet' id='et-divi-open-sans-css' href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&#038;subset=latin,latin-ext&#038;display=swap' media='all' />
-<style id="divi-style-css-inlined" media="all">{theme.static_css()}</style>
+<style id="pp-divi-static-css" media="all">{theme.static_css()}</style>
 <style id="et-divi-customizer-global-cached-inline-styles">{STOCK_CUSTOMIZER_CSS}</style>
 {google_fonts_link(ctx)}
 <style id="et-builder-module-design-python-inline-styles">{builder_css}</style>

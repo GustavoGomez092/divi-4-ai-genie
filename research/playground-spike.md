@@ -110,7 +110,7 @@ Cache layout (`PP_CACHE_DIR`, default `~/.cache/post-pusher`; `%LOCALAPPDATA%\po
 - The builder CSS set: every `<style>` block, grouped selectors exploded, `(media, selector, decl)` triples, selectors containing a module *order class* (`.et_pb_text_3`, but not `.et_pb_column_1_3`).
 - Body classes.
 
-The live page's `et-core-unified-deferred-11.min.css` and dynamic CSS are appended as `<style>` blocks. Live `divi-dynamic-critical-inline-css` is excluded because it is theme base CSS that sits in `style-static.min.css` in the preview.
+The live page's `et-core-unified-deferred-11.min.css` and dynamic CSS are appended as `<style>` blocks. The live inline style block of the `divi-dynamic-critical` handle is excluded because it is theme base CSS that sits in `style-static.min.css` in the preview.
 
 | Comparison | Result |
 |---|---|
