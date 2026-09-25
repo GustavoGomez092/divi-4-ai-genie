@@ -308,6 +308,54 @@ class RenderTest(unittest.TestCase):
 
 
 @unittest.skipUnless(VERSION, "no Divi build cached")
+class RenderLocalImagesTest(unittest.TestCase):
+    """render must embed local images as data: URIs (Task: preview shows local images), using
+    exactly the same local-image rule as publish.py draft (local_media.py), so the output is
+    standalone even when --out lives in a different directory than the page."""
+
+    def _page(self, d, extra_section=""):
+        (Path(d) / "img").mkdir()
+        (Path(d) / "img" / "a.png").write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 20)
+        abs_jpg = Path(d) / "img" / "b.jpg"
+        abs_jpg.write_bytes(b"\xff\xd8\xff" + b"1" * 20)
+        source = ('[et_pb_section background_image="./img/bg.jpg"]' + extra_section +
+                  '[et_pb_row][et_pb_column type="4_4"]'
+                  '[et_pb_image src="./img/a.png"][/et_pb_image]'
+                  f'[et_pb_image src="file://{abs_jpg}"][/et_pb_image]'
+                  '[/et_pb_column][/et_pb_row][/et_pb_section]')
+        page = Path(d) / "page.txt"
+        page.write_text(source)
+        return page
+
+    def test_render_embeds_local_and_background_images_even_with_out_elsewhere(self):
+        with tempfile.TemporaryDirectory() as page_dir, tempfile.TemporaryDirectory() as out_dir:
+            page = self._page(page_dir)
+            (Path(page_dir) / "img" / "bg.jpg").write_bytes(b"\xff\xd8\xff" + b"2" * 20)
+            out = Path(out_dir) / "elsewhere.html"
+            r = run("render", page, "--out", out, "--divi", VERSION, "--no-js")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            html = out.read_text(encoding="utf-8")
+        self.assertIn("data:image/png;base64,", html)
+        self.assertIn("data:image/jpeg;base64,", html)
+        self.assertNotIn("./img/", html)
+        self.assertNotIn("file://", html)
+
+    def test_missing_local_image_warns_without_failing_render(self):
+        with tempfile.TemporaryDirectory() as d:
+            source = ('[et_pb_section][et_pb_row][et_pb_column type="4_4"]'
+                      '[et_pb_image src="./img/missing.png"][/et_pb_image]'
+                      '[/et_pb_column][/et_pb_row][/et_pb_section]')
+            page = Path(d) / "page.txt"
+            page.write_text(source)
+            out = Path(d) / "page.html"
+            r = run("render", page, "--out", out, "--divi", VERSION, "--no-js")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertTrue(out.exists())
+        self.assertIn("src", r.stderr)
+        self.assertIn("img/missing.png", r.stderr)
+
+
+@unittest.skipUnless(VERSION, "no Divi build cached")
 class ServeTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -317,6 +365,12 @@ class ServeTest(unittest.TestCase):
         (pages / "partial.txt").write_text(UNSUPPORTED_PAGE)
         (pages / "exactonly.txt").write_text(EXACT_ONLY_PAGE)
         (pages / "broken.txt").write_bytes(b"\xff\xfe[et_pb_section][/et_pb_section]")  # not UTF-8
+        (pages / "img").mkdir()
+        (pages / "img" / "local.png").write_bytes(b"\x89PNG\r\n\x1a\n" + b"3" * 40)
+        (pages / "withimage.txt").write_text(
+            '[et_pb_section][et_pb_row][et_pb_column type="4_4"]'
+            '[et_pb_image src="./img/local.png"][/et_pb_image]'
+            '[/et_pb_column][/et_pb_row][/et_pb_section]')
         cls.port = free_port()
         cls.proc = subprocess.Popen([sys.executable, str(PREVIEW), "serve", "--pages", str(pages),
                                      "--port", str(cls.port), "--divi", VERSION],
@@ -396,6 +450,36 @@ class ServeTest(unittest.TestCase):
         time.sleep(0.01)
         page.write_text(page.read_text() + "\n")
         self.assertNotEqual(get(self.port, "/__mtime/landing")[1], before)
+
+    # --- local images: served through a per-request /__local/<name>/<token> allowlist ----------
+    def test_local_image_is_routed_and_served(self):
+        status, body, _ = get(self.port, "/withimage")
+        self.assertEqual(status, 200)
+        html = body.decode("utf-8")
+        self.assertNotIn("./img/local.png", html)
+        self.assertNotIn("file://", html)
+        m = re.search(r'src="(/__local/withimage/[A-Za-z0-9_-]+)"', html)
+        self.assertIsNotNone(m, html)
+        status2, body2, headers2 = get(self.port, m.group(1))
+        self.assertEqual(status2, 200)
+        self.assertEqual(body2, (Path(self.tmp.name) / "img" / "local.png").read_bytes())
+        self.assertEqual(headers2.get("Content-Type"), "image/png")
+
+    def test_local_image_route_confinement(self):
+        get(self.port, "/withimage")  # populate the allowlist for this page
+        for path in ("/__local/withimage/" + "0" * 32,  # not an allowed token
+                     "/__local/withimage/../../../../etc/passwd",
+                     "/__local/withimage/%2e%2e/%2e%2e/etc/passwd",
+                     "/__local/../../../../etc/passwd/x",
+                     "/__local/otherpage/" + "0" * 32):  # a page that was never rendered
+            with self.subTest(path=path):
+                self.assertEqual(get(self.port, path)[0], 404)
+
+    def test_local_image_route_is_scoped_to_its_own_page(self):
+        status, body, _ = get(self.port, "/withimage")
+        token = re.search(r'/__local/withimage/([A-Za-z0-9_-]+)', body.decode("utf-8")).group(1)
+        get(self.port, "/landing")  # render a different page so its own (empty) allowlist exists
+        self.assertEqual(get(self.port, f"/__local/landing/{token}")[0], 404)
 
 
 if __name__ == "__main__":

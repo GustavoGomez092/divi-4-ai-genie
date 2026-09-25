@@ -45,9 +45,11 @@ if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 import fetch_divi  # noqa: E402
+import local_media  # noqa: E402
 
 PREVIEW_MJS = HERE / "preview" / "preview.mjs"
 DIVI_ROUTE = "/__divi/"
+LOCAL_ROUTE = "/__local/"
 NODE_MIN_MAJOR = 20
 NODE_GUIDANCE = ("--exact needs Node 20+ (it runs the real Divi theme on WordPress Playground via "
                  "scripts/preview/preview.mjs). Install Node from https://nodejs.org/ or drop --exact to "
@@ -204,7 +206,8 @@ def cmd_render(a) -> int:
         raise UsageError(f"no such page: {page}")
     version = resolve_divi_version(a.divi, a.tokens)
     dr = _renderer()
-    result = dr.render_page(page.read_text(encoding="utf-8"), divi_version=version, title=page.stem,
+    source = local_media.embed_local_images(page.read_text(encoding="utf-8"), page.resolve().parent)
+    result = dr.render_page(source, divi_version=version, title=page.stem,
                             with_js=not a.no_js, embed_assets=True)
     out = Path(a.out) if a.out else Path.cwd() / (page.stem + ".html")
     out.write_text(result.html, encoding="utf-8")
@@ -218,6 +221,11 @@ def make_handler(pages: Path, version: str, with_js: bool):
     dr = _renderer()
     from divi_render.assets import mime_type, resolve_asset
     theme = dr.theme_for(version, DIVI_ROUTE, False)
+    # Per-page allowlist of the local image files that page's own attributes reference, rebuilt
+    # on every render of that page: name -> {token: resolved Path}. /__local/<name>/<token> only
+    # ever serves a path that's in here -- never a path built from the request itself, which is
+    # what keeps this confined (no traversal is possible: a bad token is just a missing dict key).
+    local_allow: dict = {}
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, fmt, *args):
@@ -247,13 +255,26 @@ def make_handler(pages: Path, version: str, with_js: bool):
                 if f is None:
                     return self.send(404, b"not found", "text/plain")
                 return self.send(200, f.read_bytes(), mime_type(f), {"Cache-Control": "max-age=3600"})
+            if path.startswith(LOCAL_ROUTE):
+                # Confinement: never build a filesystem path from the request. A token only
+                # resolves through this page's own allowlist (populated the last time that page
+                # was rendered, below) -- an unknown page, an unknown token, or any ".." attempt
+                # is simply not a key in the dict, so it 404s exactly like an unrelated URL would.
+                page_name, _, token = path[len(LOCAL_ROUTE):].partition("/")
+                local = local_allow.get(page_name, {}).get(token)
+                mime = local_media.image_mime_type(local) if local else None
+                if local is None or mime is None or not local.is_file():
+                    return self.send(404, b"not found", "text/plain")
+                return self.send(200, local.read_bytes(), mime, {"Cache-Control": "no-store"})
             name = path.strip("/")
             f = pages / f"{name}.txt"
             if not name or "/" in name or not f.is_file():
                 return self.send(404, b"no such page", "text/plain")
             t0 = time.perf_counter()
             try:
-                result = dr.render_page(f.read_text(encoding="utf-8"), divi_version=version, title=name,
+                source, local_allow[name] = local_media.rewrite_for_serve(
+                    f.read_text(encoding="utf-8"), f.resolve().parent, f"{LOCAL_ROUTE}{name}/")
+                result = dr.render_page(source, divi_version=version, title=name,
                                         with_js=with_js, asset_base=DIVI_ROUTE)
             except Exception:  # a local dev server: show the error instead of dropping the connection
                 tb = traceback.format_exc()

@@ -36,16 +36,14 @@ import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
-from urllib.parse import quote, unquote, urlparse
+from urllib.parse import quote
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from divi_checks_values import IMAGE_ATTRS  # noqa: E402
 from divi_schema import load_schema  # noqa: E402
 from divi_shortcode import escape_attr_value, parse, serialize  # noqa: E402
+from local_media import LOCAL_PREFIXES, iter_local_images  # noqa: E402,F401  (LOCAL_PREFIXES: back-compat re-export)
 from validate import validate_source  # noqa: E402
 from wp_keys import KeysError, list_keys, resolve_credentials, resolve_keys_path  # noqa: E402
-
-LOCAL_PREFIXES = ("file://", "./", "../")
 
 
 class PublishError(Exception):
@@ -94,27 +92,14 @@ def upload_media(wp: WordPress, path: Path, alt: str) -> dict:
     return {"id": media["id"], "url": media["source_url"], "file": str(path)}
 
 
-def _local_path(value: str, base_dir: Path):
-    if value.startswith("file://"):
-        return Path(unquote(urlparse(value).path))
-    if value.startswith(("./", "../")):
-        return (base_dir / value).resolve()
-    return None
-
-
 def _find_local_images(doc, base_dir: Path):
-    """Resolve every local image reference and verify it exists before any upload starts."""
+    """Resolve every local image reference (local_media.iter_local_images) and verify it exists
+    before any upload starts."""
     tasks = []
-    for node, _path, _parent in doc.walk():
-        for attr in list(node.attrs):
-            if attr not in IMAGE_ATTRS and not attr.endswith("_image"):
-                continue
-            local = _local_path(node.value(attr), base_dir)
-            if local is None:
-                continue
-            if not local.is_file():
-                raise PublishError(f"{node.tag} {attr}: local image not found: {local}")
-            tasks.append((node, attr, local))
+    for node, attr, local in iter_local_images(doc, base_dir):
+        if not local.is_file():
+            raise PublishError(f"{node.tag} {attr}: local image not found: {local}")
+        tasks.append((node, attr, local))
     return tasks
 
 

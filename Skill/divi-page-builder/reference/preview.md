@@ -196,6 +196,20 @@ polls `/__mtime/<name>` and reloads itself). Divi's fonts/images/JS are served f
 instead of embedded. Pages with unsupported modules or site-data content show a banner naming
 which preview (or which check) can show them. `Ctrl-C` stops the server.
 
+### Local images
+
+Both commands recognize local image references the same way `publish.py draft` does: any image
+attribute (`src`, `background_image`, anything ending `_image`, etc. — `local_media.py`) whose
+value is `./relative`, `../relative` or `file:///abs/path`, resolved against the page file's own
+directory. `render` embeds each one it finds on disk as a `data:` URI, so the standalone HTML
+stays portable even when `--out` writes somewhere else; a reference whose file is missing gets a
+one-line warning on stderr (naming the attribute and path) and is left as-is — it never fails the
+render. `serve` instead rewrites each local reference to a `/__local/<page>/<token>` route and
+serves the file from there, confined to exactly the local files that page's own attributes
+reference (an unknown page, an unknown token, or a `..` attempt all just miss the allowlist and
+404 — nothing outside it is ever served). Either way, previewing a page never uploads anything or
+talks to WordPress; that only happens when you run `publish.py draft`.
+
 ### `doctor` — environment check
 
 ```bash

@@ -129,7 +129,9 @@ for `file://`) instead of a live URL. `draft` finds every image attribute
 the file to the Media Library, sets `alt_text` from the module's `alt`/`title_text` attribute,
 and rewrites the attribute to the returned `source_url` before creating/updating the page.
 Each distinct local file is uploaded once even if referenced by multiple modules; the JSON
-output's `uploaded` array lists every file that was uploaded (`id`, `url`, `file`).
+output's `uploaded` array lists every file that was uploaded (`id`, `url`, `file`). Preview these
+first with `preview.py` (render embeds them, serve routes them — see `reference/preview.md`'s
+"Local images") so you can check the page before anything is uploaded.
 
 **`--page-fields`** takes a JSON object merged into the page body, for fields not covered by
 the standard flags — most commonly the layout template found in Task 10's REST experiments:
