@@ -5,6 +5,8 @@ reads the site's fonts, colors and spacing, writes the page in native Divi short
 for errors and shows you a local preview. Only after you approve does it save a WordPress draft,
 and it never publishes without your OK.
 
+Ask for it by name ("use Divi Genie to…") or just describe a Divi page task; either way the agent picks it up.
+
 It's a skill, not a plugin: you install it into an AI coding agent (Claude Code, claude.ai, or any
 agent that can read a `SKILL.md` file), and the agent uses it to write, check and push Divi
 shortcode for you, in a terminal, next to your other tools.
