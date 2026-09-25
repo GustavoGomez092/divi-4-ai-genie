@@ -9,6 +9,29 @@ from pathlib import Path
 
 RESP_SUFFIXES = ("_tablet", "_phone", "_last_edited")
 STRUCTURE = {"et_pb_section", "et_pb_row", "et_pb_row_inner", "et_pb_column", "et_pb_column_inner"}
+# advanced_fields families the Python renderer (scripts/divi_render) reads, and UI-only keys it never needs.
+RENDER_FAMILIES = ("fonts", "text", "background", "borders", "box_shadow", "margin_padding", "max_width",
+                   "button", "overflow")
+UI_KEYS = {"label", "description", "label_prefix"}
+
+
+def _strip_ui(value):
+    if isinstance(value, dict):
+        return {k: _strip_ui(v) for k, v in value.items() if k not in UI_KEYS}
+    if isinstance(value, list):
+        return [_strip_ui(v) for v in value]
+    return value
+
+
+def render_config(module: dict) -> dict:
+    """The CSS configuration the Python renderer needs: main CSS element + advanced_fields
+    (selectors, important flags, option defaults) for the families it implements."""
+    af = module.get("advanced_fields") or {}
+    af = af if isinstance(af, dict) else {}
+    return {
+        "main_css": module.get("main_css_element") or "%%order_class%%",
+        "advanced_fields": {k: _strip_ui(af[k]) for k in RENDER_FAMILIES if k in af},
+    }
 
 
 def option_values(field: dict):
@@ -47,6 +70,14 @@ def compact_field(name: str, d: dict, raw: dict) -> dict:
     return out
 
 
+def dump_module(compact: dict, render: dict) -> str:
+    """Module JSON with sorted keys, plus a trailing "render" block that keeps Divi's key order:
+    the order of advanced_fields options is the order Divi prints their CSS rules in."""
+    head = json.dumps(compact, indent=1, sort_keys=True)
+    body = json.dumps(render, indent=1).replace("\n", "\n ")
+    return head[:-2] + ',\n "render": ' + body + "\n}"
+
+
 def is_derived(name: str, raw: dict) -> bool:
     """A skip entry that only exists as a responsive variant of another field."""
     return any(name.endswith(s) and name[: -len(s)] in raw for s in RESP_SUFFIXES) and raw[name].get("type") == "skip"
@@ -77,7 +108,7 @@ def main(raw_dir: str, extras_path: str, out_dir: str) -> None:
             "fields": {n: compact_field(n, d, fields) for n, d in fields.items() if not is_derived(n, fields)},
             "extras": extras["modules"].get(slug, {}),
         }
-        (out / f"{slug}.json").write_text(json.dumps(compact, indent=1, sort_keys=True))
+        (out / f"{slug}.json").write_text(dump_module(compact, render_config(data["module"])))
 
     meta = {
         "divi_version": index["divi_version"],

@@ -2573,5 +2573,72 @@
  "kind": "module",
  "name": "Video",
  "parents": [],
- "slug": "et_pb_video"
+ "slug": "et_pb_video",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": false,
+   "text": false,
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "options": {
+     "background_color": {
+      "depends_on": [
+       "custom_padding"
+      ],
+      "depends_on_responsive": [
+       "custom_padding"
+      ],
+      "depends_show_if_not": [
+       "",
+       "|||"
+      ],
+      "is_toggleable": true
+     }
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%, %%order_class%% iframe"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "overlay": "inset"
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": [
+      "custom_margin"
+     ]
+    },
+    "custom_padding": {
+     "responsive_affects": [
+      "background_color"
+     ]
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

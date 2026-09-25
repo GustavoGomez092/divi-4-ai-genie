@@ -3912,5 +3912,147 @@
  "kind": "module",
  "name": "Gallery",
  "parents": [],
- "slug": "et_pb_gallery"
+ "slug": "et_pb_gallery",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_gallery",
+  "advanced_fields": {
+   "fonts": {
+    "title": {
+     "css": {
+      "main": "%%order_class%%.et_pb_gallery .et_pb_gallery_title",
+      "hover": "%%order_class%%.et_pb_gallery .et_pb_gallery_title:hover"
+     },
+     "header_level": {
+      "default": "h3"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "caption": {
+     "use_all_caps": true,
+     "css": {
+      "main": "%%order_class%%.et_pb_gallery .mfp-title, %%order_class%%.et_pb_gallery .et_pb_gallery_caption",
+      "hover": "%%order_class%%.et_pb_gallery .mfp-title:hover, %%order_class%%.et_pb_gallery .et_pb_gallery_caption:hover"
+     },
+     "line_height": {
+      "range_settings": {
+       "min": "1",
+       "max": "100",
+       "step": "1"
+      }
+     },
+     "depends_show_if": "off",
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "pagination": {
+     "css": {
+      "main": "%%order_class%%.et_pb_gallery .et_pb_gallery_pagination a",
+      "hover": "%%order_class%%.et_pb_gallery .et_pb_gallery_pagination a:hover",
+      "text_align": "%%order_class%%.et_pb_gallery .et_pb_gallery_pagination ul"
+     },
+     "text_align": {
+      "options": {
+       "left": "Left",
+       "center": "Center",
+       "right": "Right"
+      }
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "css": {
+     "main": "%%order_class%%.et_pb_gallery .et_pb_gallery_title, %%order_class%%.et_pb_gallery .mfp-title, %%order_class%%.et_pb_gallery .et_pb_gallery_caption, %%order_class%%.et_pb_gallery .et_pb_gallery_pagination a",
+     "text_shadow": "%%order_class%%.et_pb_gallery.et_pb_gallery_grid"
+    },
+    "options": {
+     "background_layout": {
+      "default": "light",
+      "hover": "tabs"
+     }
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%.et_pb_gallery .et_pb_gallery_item",
+       "border_styles": "%%order_class%%.et_pb_gallery .et_pb_gallery_item"
+      }
+     }
+    },
+    "image": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%.et_pb_gallery .et_pb_gallery_image",
+       "border_styles": "%%order_class%%.et_pb_gallery .et_pb_gallery_image"
+      }
+     },
+     "tab_slug": "advanced",
+     "toggle_slug": "image",
+     "depends_on": [
+      "fullwidth"
+     ],
+     "depends_show_if": "off"
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "show_if": {
+      "fullwidth": "on"
+     }
+    },
+    "image": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "image",
+     "show_if": {
+      "fullwidth": "off"
+     },
+     "css": {
+      "main": "%%order_class%% .et_pb_gallery_image",
+      "overlay": "inset"
+     },
+     "default_on_fronts": {
+      "color": "",
+      "position": ""
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": {
+    "css": {
+     "module_alignment": "%%order_class%%.et_pb_gallery.et_pb_module"
+    }
+   },
+   "button": false
+  }
+ }
 }

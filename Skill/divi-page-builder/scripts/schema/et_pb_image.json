@@ -2588,5 +2588,63 @@
  "kind": "module",
  "name": "Image",
  "parents": [],
- "slug": "et_pb_image"
+ "slug": "et_pb_image",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": false,
+   "text": false,
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% .et_pb_image_wrap",
+       "border_styles": "%%order_class%% .et_pb_image_wrap"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "main": "%%order_class%% .et_pb_image_wrap",
+      "overlay": "inset"
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": {
+    "options": {
+     "width": {
+      "depends_show_if": "off"
+     },
+     "max_width": {
+      "depends_show_if": "off"
+     }
+    }
+   },
+   "button": false
+  }
+ }
 }

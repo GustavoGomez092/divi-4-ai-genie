@@ -4237,5 +4237,174 @@
  "kind": "module",
  "name": "Toggle",
  "parents": [],
- "slug": "et_pb_toggle"
+ "slug": "et_pb_toggle",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_toggle",
+  "advanced_fields": {
+   "fonts": {
+    "title": {
+     "css": {
+      "main": "%%order_class%%.et_pb_toggle h5, %%order_class%%.et_pb_toggle h1.et_pb_toggle_title, %%order_class%%.et_pb_toggle h2.et_pb_toggle_title, %%order_class%%.et_pb_toggle h3.et_pb_toggle_title, %%order_class%%.et_pb_toggle h4.et_pb_toggle_title, %%order_class%%.et_pb_toggle h6.et_pb_toggle_title",
+      "important": "plugin_only"
+     },
+     "header_level": {
+      "default": "h5"
+     },
+     "options_priority": {
+      "title_text_color": 9
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "closed_title": {
+     "css": {
+      "main": "%%order_class%%.et_pb_toggle.et_pb_toggle_close h5, %%order_class%%.et_pb_toggle.et_pb_toggle_close h1.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_close h2.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_close h3.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_close h4.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_close h6.et_pb_toggle_title",
+      "important": "plugin_only"
+     },
+     "hide_text_color": true,
+     "default_from": "title",
+     "line_height": {
+      "default": "1.7em"
+     },
+     "font_size": {
+      "default": "16px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body": {
+     "css": {
+      "main": "%%order_class%%.et_pb_toggle",
+      "limited_main": "%%order_class%%.et_pb_toggle, %%order_class%%.et_pb_toggle p, %%order_class%%.et_pb_toggle .et_pb_toggle_content",
+      "line_height": "%%order_class%%.et_pb_toggle p",
+      "text_shadow": "%%order_class%%.et_pb_toggle .et_pb_toggle_content"
+     },
+     "block_elements": {
+      "tabbed_subtoggles": true,
+      "bb_icons_support": true
+     },
+     "defaults": {
+      "all_caps": "off"
+     },
+     "line_height": {
+      "default": "1.7em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "sub_toggle": "p"
+    },
+    "body_link": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_toggle a"
+     },
+     "sub_toggle": "a"
+    },
+    "body_ul": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_toggle ul li",
+      "item_indent": "%%order_class%%.et_pb_toggle ul"
+     },
+     "sub_toggle": "ul"
+    },
+    "body_ol": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_toggle ol li",
+      "item_indent": "%%order_class%%.et_pb_toggle ol"
+     },
+     "sub_toggle": "ol"
+    },
+    "body_quote": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_toggle blockquote"
+     },
+     "sub_toggle": "quote"
+    }
+   },
+   "text": [],
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "settings": {
+     "color": "alpha"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": ".et_pb_module%%order_class%%.et_pb_toggle",
+       "border_styles": ".et_pb_module%%order_class%%.et_pb_toggle"
+      }
+     },
+     "defaults": {
+      "border_radii": "on||||",
+      "border_styles": {
+       "width": "1px",
+       "color": "#d9d9d9",
+       "style": "solid"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "important": true
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": "all"
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

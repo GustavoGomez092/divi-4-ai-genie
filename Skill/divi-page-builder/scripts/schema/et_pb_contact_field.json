@@ -2619,5 +2619,76 @@
  "parents": [
   "et_pb_contact_form"
  ],
- "slug": "et_pb_contact_field"
+ "slug": "et_pb_contact_field",
+ "render": {
+  "main_css": ".et_pb_contact_form_container %%order_class%%.et_pb_contact_field",
+  "advanced_fields": {
+   "fonts": {
+    "form_field": {
+     "tab_slug": "advanced",
+     "toggle_slug": "form_field",
+     "hide_text_color": true,
+     "css": {
+      "main": "%%order_class%%.et_pb_contact_field .et_pb_contact_field_options_title,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input::placeholder,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input::-webkit-input-placeholder,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input::-moz-placeholder,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input:-ms-input-placeholder,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input[type=checkbox] + label,.et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input[type=radio] + label",
+      "important": "plugin_only"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "css": {
+     "text_orientation": "%%order_class%% input, %%order_class%% textarea, %%order_class%% label"
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "main": "%%order_class%%"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": ".et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input, .et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"] + label i, .et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input[type=\"radio\"] + label i",
+       "border_styles": ".et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input, .et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input[type=\"checkbox\"] + label i, .et_pb_contact_form_container %%order_class%%.et_pb_contact_field .input[type=\"radio\"] + label i"
+      },
+      "important": "plugin_only"
+     }
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "main": "%%order_class%% input, %%order_class%% select, %%order_class%% textarea, %%order_class%% .et_pb_contact_field_options_list label > i",
+      "important": true
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "padding": "p%%order_class%%",
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

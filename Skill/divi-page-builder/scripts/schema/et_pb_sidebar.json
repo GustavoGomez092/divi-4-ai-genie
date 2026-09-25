@@ -3023,5 +3023,69 @@
  "kind": "module",
  "name": "Sidebar",
  "parents": [],
- "slug": "et_pb_sidebar"
+ "slug": "et_pb_sidebar",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_widget_area",
+  "advanced_fields": {
+   "fonts": {
+    "header": {
+     "css": {
+      "main": "%%order_class%%.et_pb_widget_area h3:first-of-type, %%order_class%%.et_pb_widget_area h4:first-of-type, %%order_class%%.et_pb_widget_area h5:first-of-type, %%order_class%%.et_pb_widget_area h6:first-of-type, %%order_class%%.et_pb_widget_area h2:first-of-type, %%order_class%%.et_pb_widget_area h1:first-of-type, %%order_class%%.et_pb_widget_area .widget-title, %%order_class%%.et_pb_widget_area .widgettitle"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body": {
+     "css": {
+      "main": "%%order_class%%.et_pb_widget_area, %%order_class%%.et_pb_widget_area li, %%order_class%%.et_pb_widget_area li:before, %%order_class%%.et_pb_widget_area a",
+      "line_height": "%%order_class%%.et_pb_widget_area p"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "options": {
+     "background_layout": {
+      "default": "light",
+      "hover": "tabs"
+     }
+    },
+    "css": {
+     "main": "%%order_class%%, %%order_class%% .widgettitle"
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true
+   },
+   "box_shadow": {
+    "default": []
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "main": "%%order_class%%",
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

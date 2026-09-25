@@ -2349,5 +2349,65 @@
  "kind": "module",
  "name": "Icon",
  "parents": [],
- "slug": "et_pb_icon"
+ "slug": "et_pb_icon",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": false,
+   "text": false,
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": false,
+    "use_background_video": false,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "main": "%%order_class%% .et_pb_icon_wrap",
+     "hover": "%%order_class%% .et_pb_icon_wrap:hover"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% .et_pb_icon_wrap",
+       "border_styles": "%%order_class%% .et_pb_icon_wrap",
+       "border_radii_hover": "%%order_class%% .et_pb_icon_wrap:hover",
+       "border_styles_hover": "%%order_class%% .et_pb_icon_wrap:hover"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "main": "%%order_class%% .et_pb_icon_wrap",
+      "overlay": "inset"
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "main": "%%order_class%%",
+     "padding": "%%order_class%% .et_pb_icon_wrap",
+     "margin": "%%order_class%%",
+     "important": "all"
+    }
+   },
+   "max_width": {
+    "use_max_width": false,
+    "use_width": false,
+    "use_module_alignment": false
+   },
+   "button": false
+  }
+ }
 }

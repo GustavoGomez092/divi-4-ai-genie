@@ -49,12 +49,14 @@ def _seq(html: str):
     return p.items
 
 
+_BUILDER_STYLE = re.compile(
+    r'<style id="et-builder-module-design-(?:deferred-)?(?:\d+-cached|python)-inline-styles">(.*?)</style>', re.S)
+
+
 def _builder_css(html: str) -> str:
-    for sid in ("et-builder-module-design-990000001-cached-inline-styles", "et-builder-module-design-python-inline-styles"):
-        m = re.search(r'<style id="%s">(.*?)</style>' % sid, html, re.S)
-        if m:
-            return m.group(1)
-    return ""
+    """All builder-authored CSS: real Divi prints it in the inline style, the *deferred* style
+    (Playground, no critical CSS), or split between both; the Python renderer uses its own id."""
+    return "\n".join(m.group(1) for m in _BUILDER_STYLE.finditer(html))
 
 
 def _decls(css: str) -> set:

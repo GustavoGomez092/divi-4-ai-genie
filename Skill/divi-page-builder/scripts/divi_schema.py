@@ -32,6 +32,8 @@ class ModuleSchema:
         self.parents: List[str] = data.get("parents", [])
         self.fields: Dict[str, dict] = data["fields"]
         self.extras: Dict[str, dict] = data.get("extras", {})
+        # CSS configuration for the Python renderer: {"main_css", "advanced_fields"}
+        self.render: dict = data.get("render") or {"main_css": "%%order_class%%", "advanced_fields": {}}
         self._global = global_attrs
         self._groups: Dict[tuple, bool] = {}
 

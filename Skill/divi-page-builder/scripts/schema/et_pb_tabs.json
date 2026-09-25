@@ -3811,5 +3811,157 @@
  "kind": "module",
  "name": "Tabs",
  "parents": [],
- "slug": "et_pb_tabs"
+ "slug": "et_pb_tabs",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_tabs",
+  "advanced_fields": {
+   "fonts": {
+    "body": {
+     "css": {
+      "main": "%%order_class%%.et_pb_tabs .et_pb_all_tabs .et_pb_tab",
+      "limited_main": "%%order_class%%.et_pb_tabs .et_pb_all_tabs .et_pb_tab, %%order_class%%.et_pb_tabs .et_pb_all_tabs .et_pb_tab p",
+      "line_height": "%%order_class%%.et_pb_tabs .et_pb_tab p"
+     },
+     "block_elements": {
+      "tabbed_subtoggles": true,
+      "bb_icons_support": true
+     },
+     "defaults": {
+      "all_caps": "off"
+     },
+     "line_height": {
+      "default": "1.7em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "sub_toggle": "p"
+    },
+    "tab": {
+     "css": {
+      "main": "%%order_class%%.et_pb_tabs .et_pb_tabs_controls li, %%order_class%%.et_pb_tabs .et_pb_tabs_controls li a",
+      "color": "%%order_class%%.et_pb_tabs .et_pb_tabs_controls li a",
+      "hover": "%%order_class%%.et_pb_tabs .et_pb_tabs_controls li:hover, %%order_class%%.et_pb_tabs .et_pb_tabs_controls li:hover a",
+      "color_hover": "%%order_class%%.et_pb_tabs .et_pb_tabs_controls li:hover a"
+     },
+     "hide_text_align": true,
+     "options_priority": {
+      "tab_text_color": 9
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body_link": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_tabs .et_pb_all_tabs .et_pb_tab a"
+     },
+     "sub_toggle": "a"
+    },
+    "body_ul": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_tabs .et_pb_all_tabs .et_pb_tab ul li",
+      "item_indent": "%%order_class%%.et_pb_tabs .et_pb_all_tabs .et_pb_tab ul"
+     },
+     "sub_toggle": "ul"
+    },
+    "body_ol": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_tabs .et_pb_all_tabs .et_pb_tab ol li",
+      "item_indent": "%%order_class%%.et_pb_tabs .et_pb_all_tabs .et_pb_tab ol"
+     },
+     "sub_toggle": "ol"
+    },
+    "body_quote": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_tabs .et_pb_all_tabs .et_pb_tab blockquote"
+     },
+     "sub_toggle": "quote"
+    }
+   },
+   "text": false,
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "main": "%%order_class%%.et_pb_tabs .et_pb_all_tabs",
+     "mask": "%%order_class%%.et_pb_tabs > .et_pb_background_mask",
+     "pattern": "%%order_class%%.et_pb_tabs > .et_pb_background_pattern"
+    },
+    "settings": {
+     "color": "alpha"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%.et_pb_tabs",
+       "border_styles": "%%order_class%%.et_pb_tabs"
+      }
+     },
+     "defaults": {
+      "border_radii": "on||||",
+      "border_styles": {
+       "width": "1px",
+       "color": "#d9d9d9",
+       "style": "solid"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": []
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "padding": "%%order_class%% .et_pb_tab",
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

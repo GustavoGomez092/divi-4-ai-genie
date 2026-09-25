@@ -4065,5 +4065,144 @@
  "kind": "module",
  "name": "Filterable Portfolio",
  "parents": [],
- "slug": "et_pb_filterable_portfolio"
+ "slug": "et_pb_filterable_portfolio",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_filterable_portfolio",
+  "advanced_fields": {
+   "fonts": {
+    "title": {
+     "css": {
+      "main": "%%order_class%%.et_pb_filterable_portfolio h2, %%order_class%%.et_pb_filterable_portfolio .et_pb_module_header",
+      "limited_main": "%%order_class%%.et_pb_filterable_portfolio h2, %%order_class%%.et_pb_filterable_portfolio h2 a, %%order_class%%.et_pb_filterable_portfolio h1.et_pb_module_header, %%order_class%%.et_pb_filterable_portfolio h1.et_pb_module_header a, %%order_class%%.et_pb_filterable_portfolio h3.et_pb_module_header, %%order_class%%.et_pb_filterable_portfolio h3.et_pb_module_header a, %%order_class%%.et_pb_filterable_portfolio h4.et_pb_module_header, %%order_class%%.et_pb_filterable_portfolio h4.et_pb_module_header a, %%order_class%%.et_pb_filterable_portfolio h5.et_pb_module_header, %%order_class%%.et_pb_filterable_portfolio h5.et_pb_module_header a, %%order_class%%.et_pb_filterable_portfolio h6.et_pb_module_header, %%order_class%%.et_pb_filterable_portfolio h6.et_pb_module_header a",
+      "hover": "%%order_class%%.et_pb_filterable_portfolio h2:hover, %%order_class%%.et_pb_filterable_portfolio h2:hover a, %%order_class%%.et_pb_filterable_portfolio h1.et_pb_module_header:hover, %%order_class%%.et_pb_filterable_portfolio h1.et_pb_module_header:hover a, %%order_class%%.et_pb_filterable_portfolio h3.et_pb_module_header:hover, %%order_class%%.et_pb_filterable_portfolio h3.et_pb_module_header:hover a, %%order_class%%.et_pb_filterable_portfolio h4.et_pb_module_header:hover, %%order_class%%.et_pb_filterable_portfolio h4.et_pb_module_header:hover a, %%order_class%%.et_pb_filterable_portfolio h5.et_pb_module_header:hover, %%order_class%%.et_pb_filterable_portfolio h5.et_pb_module_header:hover a, %%order_class%%.et_pb_filterable_portfolio h6.et_pb_module_header:hover, %%order_class%%.et_pb_filterable_portfolio h6.et_pb_module_header:hover a",
+      "important": "all"
+     },
+     "header_level": {
+      "default": "h2"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "filter": {
+     "hide_text_align": true,
+     "css": {
+      "main": "%%order_class%%.et_pb_filterable_portfolio .et_pb_portfolio_filter",
+      "limited_main": "%%order_class%%.et_pb_filterable_portfolio .et_pb_portfolio_filter, %%order_class%%.et_pb_filterable_portfolio .et_pb_portfolio_filter a",
+      "hover": "%%order_class%%.et_pb_filterable_portfolio .et_pb_portfolio_filter:hover, %%order_class%%.et_pb_filterable_portfolio .et_pb_portfolio_filter:hover a",
+      "color_hover": "%%order_class%%.et_pb_filterable_portfolio .et_pb_portfolio_filter:hover a",
+      "color": "%%order_class%%.et_pb_filterable_portfolio .et_pb_portfolio_filter a"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "caption": {
+     "css": {
+      "main": "%%order_class%%.et_pb_filterable_portfolio .post-meta, %%order_class%%.et_pb_filterable_portfolio .post-meta a",
+      "hover": "%%order_class%%.et_pb_filterable_portfolio .post-meta a:hover"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "pagination": {
+     "css": {
+      "main": "%%order_class%%.et_pb_filterable_portfolio .et_pb_portofolio_pagination a",
+      "text_align": "%%order_class%%.et_pb_filterable_portfolio .et_pb_portofolio_pagination ul",
+      "hover": "%%order_class%%.et_pb_filterable_portfolio .et_pb_portofolio_pagination a:hover"
+     },
+     "text_align": {
+      "options": {
+       "left": "Left",
+       "center": "Center",
+       "right": "Right"
+      }
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "options": {
+     "background_layout": {
+      "default": "light",
+      "hover": "tabs"
+     }
+    },
+    "css": {
+     "main": "%%order_class%% .et_pb_module_header, %%order_class%% .post-meta"
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "settings": {
+     "color": "alpha"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%.et_pb_filterable_portfolio .et_pb_portfolio_item",
+       "border_styles": "%%order_class%%.et_pb_filterable_portfolio .et_pb_portfolio_item"
+      }
+     }
+    },
+    "image": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%.et_pb_filterable_portfolio .et_portfolio_image",
+       "border_styles": "%%order_class%%.et_pb_filterable_portfolio .et_portfolio_image"
+      }
+     },
+     "tab_slug": "advanced",
+     "toggle_slug": "image"
+    }
+   },
+   "box_shadow": {
+    "default": [],
+    "image": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "image",
+     "css": {
+      "main": "%%order_class%% .et_pb_portfolio_item .et_portfolio_image",
+      "overlay": "inset"
+     },
+     "default_on_fronts": {
+      "color": "",
+      "position": ""
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": {
+    "css": {
+     "module_alignment": "%%order_class%%.et_pb_filterable_portfolio.et_pb_module"
+    }
+   },
+   "button": false
+  }
+ }
 }

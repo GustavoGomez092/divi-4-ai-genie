@@ -49,6 +49,23 @@ class CompareTest(unittest.TestCase):
         self.assertEqual(result["css"]["missing"], 1)
         self.assertTrue(any("font-size:14px" in ex for ex in result["missing_examples"]))
 
+    def test_deferred_builder_css_is_read(self):
+        # Playground/real Divi pages without critical CSS print all builder CSS in the *deferred* style.
+        truth = _html().replace("module-design-990000001", "module-design-deferred-990000001")
+        result = fidelity.compare(truth, _html())
+        self.assertEqual(result["css"]["truth_decls"], 1)
+        self.assertEqual(result["css"]["missing"], 0)
+        self.assertEqual(result["css"]["extra"], 0)
+
+    def test_split_builder_css_is_combined(self):
+        # Critical-CSS pages split builder CSS between the inline and the deferred style.
+        truth = _html(extra_css="") + (
+            '<style id="et-builder-module-design-deferred-990000001-cached-inline-styles">'
+            '.et_pb_text_0{font-size:14px;}</style>')
+        result = fidelity.compare(truth, _html(extra_css=".et_pb_text_0{font-size:14px;}"))
+        self.assertEqual(result["css"]["truth_decls"], 2)
+        self.assertEqual(result["css"]["missing"], 0)
+
 
 @unittest.skipUnless(shutil.which("node"), "node not installed")
 class GroundTruthTest(unittest.TestCase):

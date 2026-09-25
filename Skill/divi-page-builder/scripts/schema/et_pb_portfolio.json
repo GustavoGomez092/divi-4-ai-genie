@@ -3862,5 +3862,133 @@
  "kind": "module",
  "name": "Portfolio",
  "parents": [],
- "slug": "et_pb_portfolio"
+ "slug": "et_pb_portfolio",
+ "render": {
+  "main_css": "%%order_class%% .et_pb_portfolio_item",
+  "advanced_fields": {
+   "fonts": {
+    "title": {
+     "css": {
+      "main": "%%order_class%% .et_pb_portfolio_item h2, %%order_class%% .et_pb_portfolio_item h2 a, %%order_class%% .et_pb_portfolio_item h1.et_pb_module_header, %%order_class%% .et_pb_portfolio_item h1.et_pb_module_header a, %%order_class%% .et_pb_portfolio_item h3.et_pb_module_header, %%order_class%% .et_pb_portfolio_item h3.et_pb_module_header a, %%order_class%% .et_pb_portfolio_item h4.et_pb_module_header, %%order_class%% .et_pb_portfolio_item h4.et_pb_module_header a, %%order_class%% .et_pb_portfolio_item h5.et_pb_module_header, %%order_class%% .et_pb_portfolio_item h5.et_pb_module_header a, %%order_class%% .et_pb_portfolio_item h6.et_pb_module_header, %%order_class%% .et_pb_portfolio_item h6.et_pb_module_header a",
+      "important": "all",
+      "hover": "%%order_class%% .et_pb_portfolio_item h2:hover, %%order_class%% .et_pb_portfolio_item h2:hover a, %%order_class%% .et_pb_portfolio_item h1.et_pb_module_header:hover, %%order_class%% .et_pb_portfolio_item h1.et_pb_module_header:hover a, %%order_class%% .et_pb_portfolio_item h3.et_pb_module_header:hover, %%order_class%% .et_pb_portfolio_item h3.et_pb_module_header:hover a, %%order_class%% .et_pb_portfolio_item h4.et_pb_module_header:hover, %%order_class%% .et_pb_portfolio_item h4.et_pb_module_header:hover a, %%order_class%% .et_pb_portfolio_item h5.et_pb_module_header:hover, %%order_class%% .et_pb_portfolio_item h5.et_pb_module_header:hover a, %%order_class%% .et_pb_portfolio_item h6.et_pb_module_header:hover, %%order_class%% .et_pb_portfolio_item h6.et_pb_module_header:hover a"
+     },
+     "header_level": {
+      "default": "h2"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "caption": {
+     "css": {
+      "main": "%%order_class%% .et_pb_portfolio_item .post-meta, %%order_class%% .et_pb_portfolio_item .post-meta a",
+      "hover": "%%order_class%% .et_pb_portfolio_item .post-meta a:hover"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "pagination": {
+     "css": {
+      "main": "%%order_class%% .pagination a",
+      "important": [],
+      "text_align": "%%order_class%% .wp-pagenavi",
+      "hover": "%%order_class%% .pagination a:hover"
+     },
+     "hide_text_align": true,
+     "text_align": {
+      "options": {
+       "left": "Left",
+       "center": "Center",
+       "right": "Right"
+      }
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "options": {
+     "background_layout": {
+      "default": "light",
+      "hover": "tabs"
+     }
+    },
+    "css": {
+     "main": "%%order_class%% .et_pb_module_header, %%order_class%% .post-meta"
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "settings": {
+     "color": "alpha"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% .et_pb_portfolio_item",
+       "border_styles": "%%order_class%% .et_pb_portfolio_item"
+      }
+     }
+    },
+    "image": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% .et_pb_portfolio_item .et_portfolio_image",
+       "border_styles": "%%order_class%% .et_pb_portfolio_item .et_portfolio_image"
+      }
+     },
+     "tab_slug": "advanced",
+     "toggle_slug": "image"
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "overlay": false
+     }
+    },
+    "image": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "image",
+     "css": {
+      "main": "%%order_class%% .et_pb_portfolio_item .et_portfolio_image",
+      "overlay": "inset"
+     },
+     "default_on_fronts": {
+      "color": "",
+      "position": ""
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "main": "%%order_class%%",
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

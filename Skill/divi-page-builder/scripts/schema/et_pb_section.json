@@ -3851,5 +3851,91 @@
  "kind": "structure",
  "name": "Section",
  "parents": [],
- "slug": "et_pb_section"
+ "slug": "et_pb_section",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": false,
+   "text": false,
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": "fields_only",
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": "fields_only",
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "important": "all",
+     "main": "div.et_pb_section%%order_class%%"
+    },
+    "options": {
+     "background_color": {
+      "default": "",
+      "hover": "tabs"
+     },
+     "allow_player_pause": {
+      "default_on_front": "off"
+     },
+     "background_video_pause_outside_viewport": {
+      "default_on_front": "on"
+     },
+     "parallax": {
+      "default_on_front": "off"
+     },
+     "parallax_method": {
+      "default_on_front": "on"
+     }
+    }
+   },
+   "box_shadow": {
+    "default": []
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "main": "%%order_class%%.et_pb_section"
+    }
+   },
+   "max_width": {
+    "css": {
+     "module_alignment": "%%order_class%%"
+    },
+    "options": {
+     "module_alignment": {}
+    },
+    "extra": {
+     "inner": {
+      "css": {
+       "main": [
+        "%%order_class%% > .et_pb_row",
+        "%%order_class%%.et_section_specialty > .et_pb_row"
+       ]
+      },
+      "options": {
+       "width": {
+        "depends_show_if": "on",
+        "specialty_only": "yes"
+       },
+       "max_width": {
+        "depends_show_if": "on",
+        "specialty_only": "yes",
+        "default": "1080px"
+       },
+       "module_alignment": {
+        "depends_show_if": "on",
+        "specialty_only": "yes"
+       }
+      }
+     }
+    }
+   },
+   "button": false
+  }
+ }
 }

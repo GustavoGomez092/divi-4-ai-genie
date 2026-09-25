@@ -69,5 +69,9 @@
   "et_pb_fullwidth_map",
   "et_pb_map"
  ],
- "slug": "et_pb_map_pin"
+ "slug": "et_pb_map_pin",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {}
+ }
 }

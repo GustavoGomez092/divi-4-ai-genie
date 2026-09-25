@@ -3241,5 +3241,102 @@
  "parents": [
   "et_pb_social_media_follow"
  ],
- "slug": "et_pb_social_media_follow_network"
+ "slug": "et_pb_social_media_follow_network",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": false,
+   "text": false,
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "main": "%%order_class%% a.icon",
+     "important": "all"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%.et_pb_social_icon a.icon",
+       "border_styles": "%%order_class%%.et_pb_social_icon a.icon"
+      }
+     },
+     "defaults": {
+      "border_radii": "on|3px|3px|3px|3px",
+      "border_styles": {
+       "width": "0px",
+       "color": "#333333",
+       "style": "solid"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "main": "%%order_class%% a",
+      "important": true
+     }
+    },
+    "button": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "button",
+     "show_if": {
+      "custom_button": "on"
+     },
+     "css": {
+      "main": ".et_pb_social_media_follow li%%order_class%% .follow_button",
+      "show_if": {
+       "custom_button": "on"
+      }
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "padding": ".et_pb_social_media_follow li%%order_class%% a",
+     "main": "%%order_class%%",
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": false,
+   "button": {
+    "button": {
+     "css": {
+      "main": ".et_pb_social_media_follow li%%order_class%% .follow_button"
+     },
+     "hide_icon": true,
+     "hide_custom_padding": true,
+     "no_rel_attr": true,
+     "text_size": {
+      "default": "14px"
+     },
+     "border_width": {
+      "default": "0px"
+     },
+     "box_shadow": {
+      "css": {
+       "main": ".et_pb_social_media_follow li%%order_class%% .follow_button"
+      }
+     }
+    }
+   }
+  }
+ }
 }

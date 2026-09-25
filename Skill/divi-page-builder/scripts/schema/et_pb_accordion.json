@@ -4186,5 +4186,173 @@
  "kind": "module",
  "name": "Accordion",
  "parents": [],
- "slug": "et_pb_accordion"
+ "slug": "et_pb_accordion",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_accordion",
+  "advanced_fields": {
+   "fonts": {
+    "toggle": {
+     "css": {
+      "main": "%%order_class%%.et_pb_accordion h5.et_pb_toggle_title, %%order_class%%.et_pb_accordion h1.et_pb_toggle_title, %%order_class%%.et_pb_accordion h2.et_pb_toggle_title, %%order_class%%.et_pb_accordion h3.et_pb_toggle_title, %%order_class%%.et_pb_accordion h4.et_pb_toggle_title, %%order_class%%.et_pb_accordion h6.et_pb_toggle_title",
+      "important": "plugin_only"
+     },
+     "header_level": {
+      "default": "h5"
+     },
+     "options_priority": {
+      "toggle_text_color": 9
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "closed_toggle": {
+     "css": {
+      "main": "%%order_class%%.et_pb_accordion .et_pb_toggle_close h5.et_pb_toggle_title, %%order_class%%.et_pb_accordion .et_pb_toggle_close h1.et_pb_toggle_title, %%order_class%%.et_pb_accordion .et_pb_toggle_close h2.et_pb_toggle_title, %%order_class%%.et_pb_accordion .et_pb_toggle_close h3.et_pb_toggle_title, %%order_class%%.et_pb_accordion .et_pb_toggle_close h4.et_pb_toggle_title, %%order_class%%.et_pb_accordion .et_pb_toggle_close h6.et_pb_toggle_title",
+      "important": "plugin_only"
+     },
+     "hide_text_color": true,
+     "line_height": {
+      "default": "1.7em"
+     },
+     "font_size": {
+      "default": "16px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body": {
+     "css": {
+      "main": "%%order_class%%.et_pb_accordion .et_pb_toggle_content",
+      "limited_main": "%%order_class%%.et_pb_accordion .et_pb_toggle_content, %%order_class%%.et_pb_accordion .et_pb_toggle_content p",
+      "line_height": "%%order_class%%.et_pb_accordion .et_pb_toggle_content p"
+     },
+     "block_elements": {
+      "tabbed_subtoggles": true,
+      "bb_icons_support": true
+     },
+     "defaults": {
+      "all_caps": "off"
+     },
+     "line_height": {
+      "default": "1.7em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "sub_toggle": "p"
+    },
+    "body_link": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_accordion .et_pb_toggle_content a"
+     },
+     "sub_toggle": "a"
+    },
+    "body_ul": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_accordion .et_pb_toggle_content ul li",
+      "item_indent": "%%order_class%%.et_pb_accordion .et_pb_toggle_content ul"
+     },
+     "sub_toggle": "ul"
+    },
+    "body_ol": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_accordion .et_pb_toggle_content ol li",
+      "item_indent": "%%order_class%%.et_pb_accordion .et_pb_toggle_content ol"
+     },
+     "sub_toggle": "ol"
+    },
+    "body_quote": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_accordion .et_pb_toggle_content blockquote"
+     },
+     "sub_toggle": "quote"
+    }
+   },
+   "text": [],
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%.et_pb_accordion .et_pb_accordion_item",
+       "border_styles": "%%order_class%%.et_pb_accordion .et_pb_accordion_item"
+      }
+     },
+     "defaults": {
+      "border_radii": "on||||",
+      "border_styles": {
+       "width": "1px",
+       "color": "#d9d9d9",
+       "style": "solid"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "main": "%%order_class%% .et_pb_toggle"
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": false,
+    "css": {
+     "padding": "%%order_class%%.et_pb_accordion .et_pb_toggle_content",
+     "margin": "%%order_class%%.et_pb_accordion",
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

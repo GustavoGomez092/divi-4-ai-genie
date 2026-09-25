@@ -4780,5 +4780,184 @@
  "kind": "module",
  "name": "Person",
  "parents": [],
- "slug": "et_pb_team_member"
+ "slug": "et_pb_team_member",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_team_member",
+  "advanced_fields": {
+   "fonts": {
+    "header": {
+     "css": {
+      "main": "%%order_class%%.et_pb_team_member h4, %%order_class%%.et_pb_team_member h1.et_pb_module_header, %%order_class%%.et_pb_team_member h2.et_pb_module_header, %%order_class%%.et_pb_team_member h3.et_pb_module_header, %%order_class%%.et_pb_team_member h5.et_pb_module_header, %%order_class%%.et_pb_team_member h6.et_pb_module_header",
+      "important": "plugin_only"
+     },
+     "header_level": {
+      "default": "h4"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body": {
+     "css": {
+      "main": "%%order_class%%.et_pb_team_member"
+     },
+     "block_elements": {
+      "tabbed_subtoggles": true,
+      "bb_icons_support": true
+     },
+     "defaults": {
+      "all_caps": "off"
+     },
+     "line_height": {
+      "default": "1.7em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "sub_toggle": "p"
+    },
+    "position": {
+     "css": {
+      "main": "%%order_class%%.et_pb_team_member .et_pb_member_position"
+     },
+     "line_height": {
+      "default": "1.7em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body_link": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_team_member a"
+     },
+     "sub_toggle": "a"
+    },
+    "body_ul": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_team_member ul li",
+      "item_indent": "%%order_class%%.et_pb_team_member ul"
+     },
+     "sub_toggle": "ul"
+    },
+    "body_ol": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_team_member ol li",
+      "item_indent": "%%order_class%%.et_pb_team_member ol"
+     },
+     "sub_toggle": "ol"
+    },
+    "body_quote": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_team_member blockquote"
+     },
+     "sub_toggle": "quote"
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "options": {
+     "background_layout": {
+      "default": "light",
+      "hover": "tabs"
+     }
+    },
+    "css": {
+     "main": "%%order_class%% .et_pb_module_header, %%order_class%% .et_pb_member_position, %%order_class%% .et_pb_team_member_description p"
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "settings": {
+     "color": "alpha"
+    }
+   },
+   "borders": {
+    "default": [],
+    "image": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%.et_pb_team_member .et_pb_team_member_image",
+       "border_styles": "%%order_class%%.et_pb_team_member .et_pb_team_member_image"
+      }
+     },
+     "tab_slug": "advanced",
+     "toggle_slug": "image"
+    }
+   },
+   "box_shadow": {
+    "default": [],
+    "image": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "image",
+     "css": {
+      "main": "%%order_class%% .et_pb_team_member_image",
+      "custom_style": true
+     },
+     "default_on_fronts": {
+      "color": "",
+      "position": ""
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": "all"
+    }
+   },
+   "max_width": {
+    "css": {
+     "module_alignment": "%%order_class%%.et_pb_team_member.et_pb_module"
+    }
+   },
+   "button": false
+  }
+ }
 }

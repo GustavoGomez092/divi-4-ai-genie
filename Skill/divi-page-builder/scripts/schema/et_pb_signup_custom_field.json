@@ -2945,5 +2945,142 @@
  "parents": [
   "et_pb_signup"
  ],
- "slug": "et_pb_signup_custom_field"
+ "slug": "et_pb_signup_custom_field",
+ "render": {
+  "main_css": ".et_pb_newsletter_form %%order_class%%",
+  "advanced_fields": {
+   "fonts": {
+    "form_field": {
+     "tab_slug": "advanced",
+     "toggle_slug": "form_field",
+     "hide_text_color": true,
+     "css": {
+      "main": [
+       "%%order_class%%.et_pb_contact_field .et_pb_contact_field_options_title",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input::-webkit-input-placeholder",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input::-moz-placeholder",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:-ms-input-placeholder",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=checkbox] + label",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=radio] + label"
+      ],
+      "hover": [
+       "%%order_class%%.et_pb_contact_field .et_pb_contact_field_options_title:hover",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:hover",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:hover::-webkit-input-placeholder",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:hover::-moz-placeholder",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:hover:-ms-input-placeholder",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=checkbox] + label:hover",
+       ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=radio] + label:hover"
+      ],
+      "important": "plugin_only"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "css": {
+     "text_orientation": "%%order_class%% input, %%order_class%% textarea, %%order_class%% label"
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "main": "%%order_class%%"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input, .et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=\"checkbox\"] + label i, .et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=\"radio\"] + label i",
+       "border_styles": ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input, .et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=\"checkbox\"] + label i, .et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=\"radio\"] + label i"
+      },
+      "important": "plugin_only"
+     },
+     "defaults": {
+      "border_radii": "on|3px|3px|3px|3px",
+      "border_styles": {
+       "width": "0px",
+       "color": "#333333",
+       "style": "solid"
+      }
+     },
+     "fields_after": {
+      "use_focus_border_color": {
+       "type": "yes_no_button",
+       "option_category": "color_option",
+       "options": {
+        "off": "No",
+        "on": "Yes"
+       },
+       "affects": [
+        "border_radii_focus",
+        "border_styles_focus"
+       ],
+       "tab_slug": "advanced",
+       "toggle_slug": "border",
+       "default_on_front": "off"
+      }
+     }
+    },
+    "focus": {
+     "css": {
+      "main": {
+       "border_radii": ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:focus, .et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=\"checkbox\"]:focus + label i, .et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=\"radio\"]:focus + label i",
+       "border_styles": ".et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input:focus, .et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=\"checkbox\"]:focus + label i, .et_pb_newsletter_form .et_pb_newsletter_fields p%%order_class%% .input[type=\"radio\"]:focus + label i"
+      },
+      "important": "plugin_only"
+     },
+     "option_category": "border",
+     "tab_slug": "advanced",
+     "toggle_slug": "border",
+     "depends_on": [
+      "use_focus_border_color"
+     ],
+     "depends_show_if": "on",
+     "defaults": {
+      "border_radii": "on|3px|3px|3px|3px",
+      "border_styles": {
+       "width": "0px",
+       "color": "#333333",
+       "style": "solid"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "main": "%%order_class%% input, %%order_class%% select, %%order_class%% textarea, %%order_class%% .et_pb_contact_field_options_list label > i",
+      "important": true
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "main": ".et_pb_newsletter_form p%%order_class%%",
+     "padding": ".et_pb_newsletter_form p%%order_class%%.et_pb_newsletter_field.et_pb_signup_custom_field",
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": []
+  }
+ }
 }

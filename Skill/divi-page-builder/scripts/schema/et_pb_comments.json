@@ -6048,5 +6048,272 @@
  "kind": "module",
  "name": "Comments",
  "parents": [],
- "slug": "et_pb_comments"
+ "slug": "et_pb_comments",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": {
+    "header": {
+     "css": {
+      "main": "%%order_class%% h1.page_title, %%order_class%% h2.page_title, %%order_class%% h3.page_title, %%order_class%% h4.page_title, %%order_class%% h5.page_title, %%order_class%% h6.page_title"
+     },
+     "header_level": {
+      "default": "h1"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "title": {
+     "css": {
+      "main": "%%order_class%% .comment-reply-title"
+     },
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "22px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "header_level": {
+      "default": "h3"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "meta": {
+     "css": {
+      "main": "%%order_class%% .comment_postinfo span",
+      "important": "all",
+      "text_align": "%%order_class%% .comment_postinfo"
+     },
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body": {
+     "css": {
+      "main": "%%order_class%% .comment-content p"
+     },
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "form_field": {
+     "tab_slug": "advanced",
+     "toggle_slug": "form_field",
+     "hide_text_color": true,
+     "css": {
+      "main": "%%order_class%% #commentform textarea, %%order_class%% #commentform input[type='text'], %%order_class%% #commentform input[type='email'], %%order_class%% #commentform input[type='url'], %%order_class%% #commentform label",
+      "important": "all"
+     },
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "18px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "css": {
+     "main": "%%order_class%% p, %%order_class%% .comment_postinfo *, %%order_class%% .page_title, %%order_class%% .comment-reply-title",
+     "text_shadow": "%%order_class%% p, %%order_class%% .comment_postinfo, %%order_class%% .page_title, %%order_class%% .comment-reply-title"
+    },
+    "options": {
+     "background_layout": {
+      "default_on_front": "light",
+      "hover": "tabs"
+     }
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%",
+       "border_styles": "%%order_class%%"
+      },
+      "important": "all"
+     }
+    },
+    "image": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%.et_pb_comments_module .commentlist li img.avatar",
+       "border_styles": "%%order_class%%.et_pb_comments_module .commentlist li img.avatar"
+      }
+     },
+     "tab_slug": "advanced",
+     "toggle_slug": "image"
+    },
+    "fields": {
+     "option_category": "field",
+     "tab_slug": "advanced",
+     "toggle_slug": "form_field",
+     "defaults": {
+      "border_radii": "on|3px|3px|3px|3px",
+      "border_styles": {
+       "width": "0px",
+       "color": "#333333",
+       "style": "solid"
+      }
+     },
+     "fields_after": {
+      "use_focus_border_color": {
+       "type": "yes_no_button",
+       "option_category": "color_option",
+       "options": {
+        "off": "No",
+        "on": "Yes"
+       },
+       "affects": [
+        "border_radii_form_field_focus",
+        "border_styles_form_field_focus"
+       ],
+       "tab_slug": "advanced",
+       "toggle_slug": "form_field",
+       "default_on_front": "off"
+      }
+     },
+     "name": "fields",
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% #commentform textarea, %%order_class%% #commentform input[type='text'], %%order_class%% #commentform input[type='email'], %%order_class%% #commentform input[type='url']",
+       "border_styles": "%%order_class%% #commentform textarea, %%order_class%% #commentform input[type='text'], %%order_class%% #commentform input[type='email'], %%order_class%% #commentform input[type='url']"
+      },
+      "important": "all"
+     }
+    },
+    "fields_focus": {
+     "option_category": "field",
+     "tab_slug": "advanced",
+     "toggle_slug": "form_field",
+     "depends_on": [
+      "use_focus_border_color"
+     ],
+     "depends_show_if": "on",
+     "defaults": {
+      "border_radii": "on|3px|3px|3px|3px",
+      "border_styles": {
+       "width": "0px",
+       "color": "#333333",
+       "style": "solid"
+      }
+     },
+     "name": "fields_focus",
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% #commentform textarea:focus, %%order_class%% #commentform input[type='text']:focus, %%order_class%% #commentform input[type='email']:focus, %%order_class%% #commentform input[type='url']:focus",
+       "border_styles": "%%order_class%% #commentform textarea:focus, %%order_class%% #commentform input[type='text']:focus, %%order_class%% #commentform input[type='email']:focus, %%order_class%% #commentform input[type='url']:focus"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": [],
+    "image": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "image",
+     "css": {
+      "main": "%%order_class%% .commentlist img.avatar"
+     }
+    },
+    "fields": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "form_field",
+     "name": "fields",
+     "css": {
+      "main": "%%order_class%% #commentform textarea, %%order_class%% #commentform input[type='text'], %%order_class%% #commentform input[type='email'], %%order_class%% #commentform input[type='url']"
+     }
+    },
+    "button": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "button",
+     "show_if": {
+      "custom_button": "on"
+     },
+     "css": {
+      "main": "%%order_class%% .et_pb_button",
+      "show_if": {
+       "custom_button": "on"
+      }
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": "all"
+    }
+   },
+   "max_width": [],
+   "button": {
+    "button": {
+     "css": {
+      "main": "%%order_class%%.et_pb_comments_module .et_pb_button",
+      "limited_main": "%%order_class%%.et_pb_comments_module .et_pb_button",
+      "alignment": "%%order_class%% .form-submit"
+     },
+     "no_rel_attr": true,
+     "use_alignment": true,
+     "box_shadow": {
+      "css": {
+       "main": "%%order_class%% .et_pb_button"
+      }
+     },
+     "margin_padding": {
+      "css": {
+       "important": "all"
+      }
+     }
+    }
+   }
+  }
+ }
 }

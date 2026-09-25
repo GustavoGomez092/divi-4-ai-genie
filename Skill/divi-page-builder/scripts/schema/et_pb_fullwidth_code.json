@@ -2508,5 +2508,34 @@
  "kind": "module",
  "name": "Fullwidth Code",
  "parents": [],
- "slug": "et_pb_fullwidth_code"
+ "slug": "et_pb_fullwidth_code",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": false,
+   "text": [],
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true
+   },
+   "box_shadow": {
+    "default": []
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

@@ -3405,5 +3405,110 @@
  "kind": "module",
  "name": "Countdown Timer",
  "parents": [],
- "slug": "et_pb_countdown_timer"
+ "slug": "et_pb_countdown_timer",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_countdown_timer",
+  "advanced_fields": {
+   "fonts": {
+    "header": {
+     "css": {
+      "main": "%%order_class%%.et_pb_countdown_timer h4, %%order_class%%.et_pb_countdown_timer h1.title, %%order_class%%.et_pb_countdown_timer h2.title, %%order_class%%.et_pb_countdown_timer h3.title, %%order_class%%.et_pb_countdown_timer h5.title, %%order_class%%.et_pb_countdown_timer h6.title",
+      "important": [
+       "size",
+       "plugin_all"
+      ]
+     },
+     "header_level": {
+      "default": "h4"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "numbers": {
+     "css": {
+      "main": ".et_pb_column %%order_class%%.et_pb_countdown_timer .section p.value, .et_pb_column %%order_class%%.et_pb_countdown_timer .section.sep p",
+      "important": "all"
+     },
+     "line_height": {
+      "range_settings": {
+       "min": "1",
+       "max": "100",
+       "step": "1"
+      }
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "separator": {
+     "css": {
+      "main": ".et_pb_column %%order_class%%.et_pb_countdown_timer .et_pb_countdown_timer_container .section.sep p",
+      "important": "all"
+     },
+     "line_height": {
+      "range_settings": {
+       "min": "1",
+       "max": "100",
+       "step": "1"
+      }
+     },
+     "hide_text_align": true,
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "css": {
+     "main": "%%order_class%% .et_pb_countdown_timer_container, %%order_class%% .title",
+     "text_orientation": "%%order_class%% .et_pb_countdown_timer_container, %%order_class%% .title"
+    },
+    "options": {
+     "text_orientation": {
+      "default": "center"
+     },
+     "background_layout": {
+      "default": "dark",
+      "hover": "tabs"
+     }
+    }
+   },
+   "background": {
+    "has_background_color_toggle": true,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "options": {
+     "background_color": {
+      "depends_show_if": "on",
+      "default": "#7EBEC5"
+     },
+     "use_background_color": {
+      "default": "on"
+     }
+    }
+   },
+   "box_shadow": {
+    "default": []
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": "all"
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

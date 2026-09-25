@@ -2670,5 +2670,86 @@
  "kind": "module",
  "name": "Heading",
  "parents": [],
- "slug": "et_pb_heading"
+ "slug": "et_pb_heading",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": {
+    "title": {
+     "css": {
+      "main": [
+       "%%order_class%% .et_pb_heading_container h1",
+       "%%order_class%% .et_pb_heading_container h2",
+       "%%order_class%% .et_pb_heading_container h3",
+       "%%order_class%% .et_pb_heading_container h4",
+       "%%order_class%% .et_pb_heading_container h5",
+       "%%order_class%% .et_pb_heading_container h6"
+      ]
+     },
+     "font_size": {
+      "default": "30px"
+     },
+     "line_height": {
+      "default": "1em"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "header_level": {
+      "default": "h1"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "use_text_orientation": false,
+    "use_background_layout": false,
+    "css": {
+     "main": [
+      "%%order_class%% h1",
+      "%%order_class%% h2",
+      "%%order_class%% h3",
+      "%%order_class%% h4",
+      "%%order_class%% h5",
+      "%%order_class%% h6"
+     ]
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "options": {
+     "parallax_method": {
+      "default": "off"
+     }
+    }
+   },
+   "box_shadow": {
+    "default": []
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": "all"
+    }
+   },
+   "max_width": {
+    "css": {
+     "important": "all"
+    }
+   }
+  }
+ }
 }

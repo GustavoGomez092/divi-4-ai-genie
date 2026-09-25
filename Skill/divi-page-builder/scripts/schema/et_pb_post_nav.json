@@ -2738,5 +2738,75 @@
  "kind": "module",
  "name": "Post Navigation",
  "parents": [],
- "slug": "et_pb_post_nav"
+ "slug": "et_pb_post_nav",
+ "render": {
+  "main_css": ".et_pb_posts_nav%%order_class%%",
+  "advanced_fields": {
+   "fonts": {
+    "title": {
+     "css": {
+      "main": ".et_pb_posts_nav%%order_class%% span a, .et_pb_posts_nav%%order_class%% span a span"
+     },
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "hide_text_align": true,
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": false,
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "main": ".et_pb_posts_nav%%order_class%% a"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": ".et_pb_posts_nav%%order_class%% span.nav-previous a, .et_pb_posts_nav%%order_class%% span.nav-next a",
+       "border_styles": ".et_pb_posts_nav%%order_class%% span.nav-previous a, .et_pb_posts_nav%%order_class%% span.nav-next a"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "main": "%%order_class%% .nav-previous a, %%order_class%% .nav-next a",
+      "overlay": "inset",
+      "important": true
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "main": ".et_pb_posts_nav%%order_class%% span.nav-previous a, .et_pb_posts_nav%%order_class%% span.nav-next a"
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

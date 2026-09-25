@@ -65,6 +65,19 @@ class SchemaTest(unittest.TestCase):
         self.assertIn("0|none", options)
         self.assertNotIn("none", options)
 
+    def test_render_config_for_the_python_renderer(self):
+        blurb = self.schema.module("et_pb_blurb").render
+        self.assertEqual(blurb["main_css"], "%%order_class%%.et_pb_blurb")
+        af = blurb["advanced_fields"]
+        self.assertEqual(af["fonts"]["header"]["css"]["main"],
+                         "%%order_class%%.et_pb_blurb .et_pb_module_header, %%order_class%%.et_pb_blurb .et_pb_module_header a")
+        self.assertIn("border_radii", af["borders"]["image"]["css"]["main"])
+        self.assertNotIn("label", af["fonts"]["header"])
+        self.assertNotIn("filters", af)  # only the families the renderer reads are kept
+        # Divi's declaration order (and so the CSS cascade) follows advanced_fields order: not sorted
+        self.assertEqual(list(af["fonts"]), ["header", "body", "body_link", "body_ul", "body_ol", "body_quote"])
+        self.assertEqual(self.schema.module("et_pb_column_inner").render["main_css"], "%%order_class%%")
+
     def test_calibration_against_real_pages(self):
         unresolved = set()
         for path in (FIXTURES / "valid").glob("divi-ai-*.txt"):
@@ -75,6 +88,35 @@ class SchemaTest(unittest.TestCase):
                     if mod.resolve(attr) is None:
                         unresolved.add((node.tag, attr))
         self.assertEqual(unresolved, KNOWN_STALE)
+
+
+class BuildSchemaRenderConfigTest(unittest.TestCase):
+    def test_render_config_keeps_css_config_and_drops_ui_text(self):
+        import build_schema
+        module = {
+            "main_css_element": "%%order_class%%.et_pb_x",
+            "advanced_fields": {
+                "fonts": {"title": {"label": "Title", "css": {"main": "%%order_class%% h2", "important": "all"},
+                                    "font_size": {"default": "14px", "label": "Size"}}},
+                "max_width": {"options": {"width": {"default": "50%", "description": "d"}}},
+                "button": False,
+                "filters": {"css": {"main": "%%order_class%%"}},
+            },
+        }
+        self.assertEqual(build_schema.render_config(module), {
+            "main_css": "%%order_class%%.et_pb_x",
+            "advanced_fields": {
+                "fonts": {"title": {"css": {"main": "%%order_class%% h2", "important": "all"},
+                                    "font_size": {"default": "14px"}}},
+                "max_width": {"options": {"width": {"default": "50%"}}},
+                "button": False,
+            },
+        })
+
+    def test_render_config_defaults(self):
+        import build_schema
+        self.assertEqual(build_schema.render_config({"advanced_fields": None}),
+                         {"main_css": "%%order_class%%", "advanced_fields": {}})
 
 
 if __name__ == "__main__":

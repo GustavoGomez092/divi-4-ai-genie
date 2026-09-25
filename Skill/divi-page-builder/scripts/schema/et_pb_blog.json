@@ -5596,5 +5596,267 @@
  "kind": "module",
  "name": "Blog",
  "parents": [],
- "slug": "et_pb_blog"
+ "slug": "et_pb_blog",
+ "render": {
+  "main_css": "%%order_class%% .et_pb_post",
+  "advanced_fields": {
+   "fonts": {
+    "header": {
+     "css": {
+      "main": "%%order_class%% .et_pb_post .entry-title, %%order_class%% .not-found-title",
+      "font": "%%order_class%% .et_pb_post .entry-title a, %%order_class%% .not-found-title",
+      "color": "%%order_class%% .et_pb_post .entry-title a, %%order_class%% .not-found-title",
+      "limited_main": "%%order_class%% .et_pb_post .entry-title, %%order_class%% .et_pb_post .entry-title a, %%order_class%% .not-found-title",
+      "hover": "%%order_class%% .et_pb_post:hover .entry-title, %%order_class%% .et_pb_post:hover .entry-title:hover a, %%order_class%% .not-found-title",
+      "color_hover": "%%order_class%% .et_pb_post:hover .entry-title a, %%order_class%%:hover .not-found-title",
+      "important": "all"
+     },
+     "header_level": {
+      "default": "h2",
+      "computed_affects": [
+       "__posts"
+      ]
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body": {
+     "css": {
+      "main": "%%order_class%% .et_pb_post .post-content, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content p, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content p",
+      "color": "%%order_class%% .et_pb_post, %%order_class%% .et_pb_post .post-content *",
+      "line_height": "%%order_class%% .et_pb_post p",
+      "limited_main": "%%order_class%% .et_pb_post, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content p, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content p, %%order_class%%.et_pb_bg_layout_light .et_pb_post a.more-link, %%order_class%%.et_pb_bg_layout_dark .et_pb_post a.more-link",
+      "hover": "%%order_class%% .et_pb_post:hover .post-content, %%order_class%%.et_pb_bg_layout_light:hover .et_pb_post .post-content p, %%order_class%%.et_pb_bg_layout_dark:hover .et_pb_post .post-content p",
+      "color_hover": "%%order_class%% .et_pb_post:hover, %%order_class%% .et_pb_post:hover .post-content *"
+     },
+     "block_elements": {
+      "tabbed_subtoggles": true,
+      "bb_icons_support": true,
+      "css": {
+       "link": "%%order_class%% .et_pb_post .post-content a, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content a, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content a",
+       "ul": "%%order_class%% .et_pb_post .post-content ul li, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ul li, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ul li",
+       "ul_item_indent": "%%order_class%% .et_pb_post .post-content ul, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ul, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ul",
+       "ol": "%%order_class%% .et_pb_post .post-content ol li, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ol li, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ol li",
+       "ol_item_indent": "%%order_class%% .et_pb_post .post-content ol, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ol, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ol",
+       "quote": "%%order_class%% .et_pb_post .post-content blockquote, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content blockquote, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content blockquote"
+      }
+     },
+     "defaults": {
+      "all_caps": "off"
+     },
+     "line_height": {
+      "default": "1.7em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "sub_toggle": "p"
+    },
+    "meta": {
+     "css": {
+      "main": "%%order_class%% .et_pb_post .post-meta, %%order_class%% .et_pb_post .post-meta a, #left-area %%order_class%% .et_pb_post .post-meta, #left-area %%order_class%% .et_pb_post .post-meta a",
+      "limited_main": "%%order_class%% .et_pb_post .post-meta, %%order_class%% .et_pb_post .post-meta a, %%order_class%% .et_pb_post .post-meta span",
+      "hover": "%%order_class%% .et_pb_post:hover .post-meta, %%order_class%% .et_pb_post:hover .post-meta a, %%order_class%% .et_pb_post:hover .post-meta span, #left-area %%order_class%% .et_pb_post .post-meta:hover, #left-area %%order_class%% .et_pb_post .post-meta:hover a, #left-area %%order_class%% .et_pb_post .post-meta:hover span"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "read_more": {
+     "css": {
+      "main": "%%order_class%% .et_pb_post div.post-content a.more-link",
+      "hover": "%%order_class%% .et_pb_post div.post-content a.more-link:hover"
+     },
+     "hide_text_align": true,
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "pagination": {
+     "css": {
+      "main": "%%order_class%% .pagination a",
+      "important": [],
+      "text_align": "%%order_class%% .wp-pagenavi",
+      "hover": "%%order_class%% .pagination a:hover"
+     },
+     "hide_text_align": true,
+     "text_align": {
+      "options": {
+       "left": "Left",
+       "center": "Center",
+       "right": "Right"
+      }
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body_link": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%% .et_pb_post .post-content a, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content a, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content a"
+     },
+     "sub_toggle": "a"
+    },
+    "body_ul": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%% .et_pb_post .post-content ul li, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ul li, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ul li li",
+      "item_indent": "%%order_class%% .et_pb_post .post-content ul, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ul, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ul"
+     },
+     "sub_toggle": "ul"
+    },
+    "body_ol": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%% .et_pb_post .post-content ol li, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ol li, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ol li li",
+      "item_indent": "%%order_class%% .et_pb_post .post-content ol, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content ol, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content ol"
+     },
+     "sub_toggle": "ol"
+    },
+    "body_quote": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%% .et_pb_post .post-content blockquote, %%order_class%%.et_pb_bg_layout_light .et_pb_post .post-content blockquote, %%order_class%%.et_pb_bg_layout_dark .et_pb_post .post-content blockquote"
+     },
+     "sub_toggle": "quote"
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "css": {
+     "text_shadow": "%%order_class%%"
+    },
+    "options": {
+     "background_layout": {
+      "depends_show_if": "on",
+      "default_on_front": "light",
+      "hover": "tabs"
+     }
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "main": "%%order_class%%"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% .et_pb_blog_grid .et_pb_post",
+       "border_styles": "%%order_class%% .et_pb_blog_grid .et_pb_post",
+       "border_styles_hover": "%%order_class%% .et_pb_blog_grid .et_pb_post:hover"
+      }
+     },
+     "depends_on": [
+      "fullwidth"
+     ],
+     "depends_show_if": "off",
+     "defaults": {
+      "border_radii": "on||||",
+      "border_styles": {
+       "width": "1px",
+       "color": "#d8d8d8",
+       "style": "solid"
+      }
+     }
+    },
+    "fullwidth": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%:not(.et_pb_blog_grid_wrapper) .et_pb_post",
+       "border_styles": "%%order_class%%:not(.et_pb_blog_grid_wrapper) .et_pb_post"
+      }
+     },
+     "depends_on": [
+      "fullwidth"
+     ],
+     "depends_show_if": "on",
+     "defaults": {
+      "border_radii": "on||||",
+      "border_styles": {
+       "width": "0px",
+       "color": "#333333",
+       "style": "solid"
+      }
+     }
+    },
+    "image": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% .et_pb_post .entry-featured-image-url, %%order_class%% .et_pb_post .et_pb_slides, %%order_class%% .et_pb_post .et_pb_video_overlay",
+       "border_styles": "%%order_class%% .et_pb_post .entry-featured-image-url, %%order_class%% .et_pb_post .et_pb_slides, %%order_class%% .et_pb_post .et_pb_video_overlay"
+      }
+     },
+     "tab_slug": "advanced",
+     "toggle_slug": "image"
+    }
+   },
+   "box_shadow": {
+    "default": [],
+    "image": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "image",
+     "css": {
+      "main": "%%order_class%% .et_pb_post .entry-featured-image-url, %%order_class%% .et_pb_post img, %%order_class%% .et_pb_post .et_pb_slides, %%order_class%% .et_pb_post .et_pb_video_overlay",
+      "overlay": "inset"
+     },
+     "default_on_fronts": {
+      "color": "",
+      "position": ""
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "main": "%%order_class%%",
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

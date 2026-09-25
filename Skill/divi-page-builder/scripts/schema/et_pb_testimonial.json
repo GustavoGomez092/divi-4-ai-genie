@@ -4923,5 +4923,226 @@
  "kind": "module",
  "name": "Testimonial",
  "parents": [],
- "slug": "et_pb_testimonial"
+ "slug": "et_pb_testimonial",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_testimonial",
+  "advanced_fields": {
+   "fonts": {
+    "body": {
+     "css": {
+      "main": "%%order_class%%.et_pb_testimonial .et_pb_testimonial_content"
+     },
+     "hide_text_shadow": true,
+     "block_elements": {
+      "tabbed_subtoggles": true,
+      "bb_icons_support": true
+     },
+     "defaults": {
+      "all_caps": "off"
+     },
+     "line_height": {
+      "default": "1.7em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "sub_toggle": "p"
+    },
+    "author": {
+     "css": {
+      "main": "%%order_class%%.et_pb_testimonial .et_pb_testimonial_author"
+     },
+     "font": {
+      "default": "|700|||||||"
+     },
+     "line_height": {
+      "default": "1.5em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "position": {
+     "css": {
+      "main": "%%order_class%%.et_pb_testimonial .et_pb_testimonial_position, %%order_class%%.et_pb_testimonial .et_pb_testimonial_separator"
+     },
+     "hide_text_align": true,
+     "line_height": {
+      "default": "1.5em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "company": {
+     "css": {
+      "main": "%%order_class%%.et_pb_testimonial .et_pb_testimonial_company, %%order_class%%.et_pb_testimonial .et_pb_testimonial_company a"
+     },
+     "hide_text_align": true,
+     "line_height": {
+      "default": "1.5em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body_link": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_testimonial .et_pb_testimonial_content a"
+     },
+     "sub_toggle": "a"
+    },
+    "body_ul": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_testimonial .et_pb_testimonial_content ul li",
+      "item_indent": "%%order_class%%.et_pb_testimonial .et_pb_testimonial_content ul"
+     },
+     "sub_toggle": "ul"
+    },
+    "body_ol": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_testimonial .et_pb_testimonial_content ol li",
+      "item_indent": "%%order_class%%.et_pb_testimonial .et_pb_testimonial_content ol"
+     },
+     "sub_toggle": "ol"
+    },
+    "body_quote": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "css": {
+      "main": "%%order_class%%.et_pb_testimonial .et_pb_testimonial_content blockquote"
+     },
+     "sub_toggle": "quote"
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "options": {
+     "text_orientation": {
+      "default": "left"
+     },
+     "background_layout": {
+      "default": "light",
+      "hover": "tabs"
+     }
+    },
+    "css": {
+     "main": "%%order_class%% .et_pb_testimonial_description p, %%order_class%% .et_pb_testimonial_description a, %%order_class%% .et_pb_testimonial_description .et_pb_testimonial_author"
+    }
+   },
+   "background": {
+    "has_background_color_toggle": true,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "options": {
+     "use_background_color": {
+      "default": "on"
+     },
+     "background_color": {
+      "depends_show_if": "on",
+      "default": "#f5f5f5"
+     }
+    },
+    "settings": {
+     "color": "alpha"
+    }
+   },
+   "borders": {
+    "default": [],
+    "portrait": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% .et_pb_testimonial_portrait, %%order_class%% .et_pb_testimonial_portrait:before",
+       "border_styles": "%%order_class%% .et_pb_testimonial_portrait"
+      }
+     },
+     "tab_slug": "advanced",
+     "toggle_slug": "image",
+     "defaults": {
+      "border_radii": "on|90px|90px|90px|90px",
+      "border_styles": {
+       "width": "0px",
+       "color": "#333333",
+       "style": "solid"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": [],
+    "image": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "image",
+     "css": {
+      "main": "%%order_class%% .et_pb_testimonial_portrait:before"
+     },
+     "default_on_fronts": {
+      "color": "",
+      "position": ""
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": "all"
+    }
+   },
+   "max_width": []
+  }
+ }
 }

@@ -1,0 +1,48 @@
+# Render fidelity: the Python renderer against real Divi
+
+The Python renderer (`Skill/divi-page-builder/scripts/divi_render/`) is the default portable
+preview. `tests/test_render_fidelity.py` compares it with real Divi, rendered through Playground by
+`research/tools/ground_truth.py` (Divi 4.27.9, cached outside the repo), for every fixture in
+`tests/fixtures/render/manifest.json`. `research/tools/fidelity.py` measures two things:
+
+- **Markup ratio:** the difflib ratio over the `(tag, class list)` sequence of the `.et-l` block.
+  1.0 means the sequence is identical.
+- **CSS ratio:** the Jaccard similarity of the builder CSS as `(media, selector, declaration)`
+  triples. 1.0 means no missing or extra declarations.
+
+Tuned fixtures (`tuned: true`) must match exactly: the sequences are equal and 0 declarations are
+missing or extra. The test records a row below for each held-out fixture (`tuned: false`) on each
+run, one row per fixture per day. Following the procedure for Tasks 25–27, a held-out page is
+measured **before** any fix. That pre-fix row is the honest number for how well the renderer
+generalizes. After the fixes, the page becomes tuned and gets a post-fix row.
+
+## Notes
+
+- Task 24 (port into the skill) came first. The package reproduces the spike's output byte for
+  byte on all 11 fixture pages, covering markup, builder CSS and the coverage report, whether it
+  reads the raw research dump or the compact schema.
+- The spike's own held-out numbers (`research/python-renderer-spike.md` §2) were measured against
+  LocalWP with a different CSS count. The rows below use Playground truth and `fidelity.py`.
+- `heldout2-inscope.txt` was never tuned in the spike. Its first two rows are the spike renderer
+  before any fix (pre-fix) and the Task 24 package after the fixes (post-fix). The fixes were:
+  - the section's `et_pb_inner_shadow` class;
+  - the image's `et_pb_image_sticky` classes, and its `width:auto` rule following Image.php;
+  - the hidden divider dropping its `et_pb_divider` and position classes;
+  - `background__hover_enabled` driving background-colour hover, the
+    `et_pb_section_video_on_hover` class and its transition;
+  - the per-module hover transition maps (`get_transition_fields_css_props`);
+  - the row's desktop padding copy;
+  - Divi's icon `content` quirk: a backslash followed by digits is swallowed, so `&#x50;` prints
+    `content:""`. This was verified against Playground renders of six icons.
+- `heldout-outofscope.txt` uses modules that are not supported until Tasks 25–27. They render as
+  placeholders and are listed in the coverage report, so a ratio of 0.9 cannot be reached yet.
+  Until they are supported, the test checks that every one of them appears in the coverage report
+  instead of checking the ratio.
+
+## Metrics
+
+| Fixture | Modules | Tuned | Markup ratio | CSS ratio | Date |
+|---|---|---|---|---|---|
+| heldout2-inscope.txt | accordion, accordion_item, blurb, button, cta, divider, fullwidth_header, heading, image, number_counter, slide, slider, text | no | 0.9574 | 0.9469 | 2026-09-24 |
+| heldout2-inscope.txt | accordion, accordion_item, blurb, button, cta, divider, fullwidth_header, heading, image, number_counter, slide, slider, text | yes | 1.0000 | 1.0000 | 2026-09-24 |
+| heldout-outofscope.txt | circle_counter, contact_field, contact_form, countdown_timer, counter, counters, heading, icon, pricing_table, pricing_tables, social_media_follow, social_media_follow_network, tab, tabs, testimonial, text | no | 0.2022 | 0.1860 | 2026-09-24 |

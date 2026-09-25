@@ -3772,5 +3772,177 @@
  "kind": "module",
  "name": "Menu",
  "parents": [],
- "slug": "et_pb_menu"
+ "slug": "et_pb_menu",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_menu",
+  "advanced_fields": {
+   "fonts": {
+    "menu": {
+     "css": {
+      "main": "%%order_class%%.et_pb_menu ul li a",
+      "limited_main": "%%order_class%%.et_pb_menu ul li a, %%order_class%%.et_pb_menu ul li",
+      "hover": "%%order_class%%.et_pb_menu ul li:hover > a"
+     },
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px",
+      "range_settings": {
+       "min": "12",
+       "max": "24",
+       "step": "1"
+      }
+     },
+     "letter_spacing": {
+      "default": "0px",
+      "range_settings": {
+       "min": "0",
+       "max": "8",
+       "step": "1"
+      }
+     },
+     "hide_text_align": true,
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "cart_quantity": {
+     "css": {
+      "main": "%%order_class%%.et_pb_menu .et_pb_menu__icon.et_pb_menu__icon__with_count .et_pb_menu__cart-count"
+     },
+     "font": {
+      "mobile_options": false,
+      "show_if": {
+       "show_cart_quantity": "on"
+      }
+     },
+     "line_height": {
+      "default": "1em",
+      "mobile_options": false,
+      "show_if": {
+       "show_cart_quantity": "on"
+      }
+     },
+     "font_size": {
+      "default": "14px",
+      "mobile_options": false,
+      "range_settings": {
+       "min": "12",
+       "max": "24",
+       "step": "1"
+      },
+      "show_if": {
+       "show_cart_quantity": "on"
+      }
+     },
+     "letter_spacing": {
+      "default": "0px",
+      "mobile_options": false,
+      "range_settings": {
+       "min": "0",
+       "max": "8",
+       "step": "1"
+      },
+      "show_if": {
+       "show_cart_quantity": "on"
+      }
+     },
+     "text_color": {
+      "mobile_options": false,
+      "show_if": {
+       "show_cart_quantity": "on"
+      }
+     },
+     "text_shadow": {
+      "mobile_options": false,
+      "show_if": {
+       "show_cart_quantity": "on"
+      }
+     },
+     "hide_text_align": true,
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "toggle_slug": "menu",
+    "options": {
+     "text_orientation": {
+      "default_on_front": "left",
+      "depends_show_if": "left_aligned",
+      "depends_on": [
+       "menu_style"
+      ]
+     },
+     "background_layout": {
+      "default_on_front": "light",
+      "hover": "tabs"
+     }
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "options": {
+     "background_color": {
+      "default": "#ffffff"
+     }
+    }
+   },
+   "borders": {
+    "default": [],
+    "image": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% .et_pb_menu__logo-wrap .et_pb_menu__logo img",
+       "border_styles": "%%order_class%% .et_pb_menu__logo-wrap .et_pb_menu__logo img"
+      }
+     },
+     "tab_slug": "advanced",
+     "toggle_slug": "image_settings"
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "main": "%%order_class%%, %%order_class%% .sub-menu",
+      "overlay": "inset"
+     }
+    },
+    "image": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "image_settings",
+     "css": {
+      "main": "%%order_class%% .et_pb_menu__logo-wrap .et_pb_menu__logo",
+      "overlay": "inset"
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "main": "%%order_class%%",
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

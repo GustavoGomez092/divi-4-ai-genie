@@ -3031,5 +3031,90 @@
  "kind": "module",
  "name": "Bar Counters",
  "parents": [],
- "slug": "et_pb_counters"
+ "slug": "et_pb_counters",
+ "render": {
+  "main_css": "%%order_class%%.et_pb_counters",
+  "advanced_fields": {
+   "fonts": {
+    "title": {
+     "css": {
+      "main": "%%order_class%%.et_pb_counters .et_pb_counter_title"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "percent": {
+     "css": {
+      "main": "%%order_class%%.et_pb_counters .et_pb_counter_amount_number",
+      "text_align": "%%order_class%%.et_pb_counters .et_pb_counter_amount"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "options": {
+     "background_layout": {
+      "default_on_front": "light",
+      "hover": "tabs"
+     }
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": "fields_only",
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "main": "%%order_class%%.et_pb_counters .et_pb_counter_container"
+    },
+    "options": {
+     "background_color": {
+      "default": ""
+     }
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%% .et_pb_counter_container, %%order_class%% .et_pb_counter_amount",
+       "border_styles": "%%order_class%% .et_pb_counter_container"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": {
+     "css": {
+      "main": "%%order_class%% .et_pb_counter_container",
+      "overlay": "inset"
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": false,
+    "css": {
+     "margin": "%%order_class%%.et_pb_counters",
+     "padding": "%%order_class%%.et_pb_counters .et_pb_counter_amount",
+     "important": [
+      "custom_margin"
+     ]
+    }
+   },
+   "max_width": [],
+   "button": false
+  }
+ }
 }

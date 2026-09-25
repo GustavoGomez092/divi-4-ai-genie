@@ -1931,5 +1931,50 @@
  "kind": "module",
  "name": "Button",
  "parents": [],
- "slug": "et_pb_button"
+ "slug": "et_pb_button",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": false,
+   "text": {
+    "use_text_orientation": false,
+    "use_background_layout": true,
+    "options": {
+     "background_layout": {
+      "default_on_front": "light",
+      "hover": "tabs"
+     }
+    }
+   },
+   "background": false,
+   "borders": {
+    "default": false
+   },
+   "box_shadow": {
+    "default": []
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "padding": "%%order_class%%_wrapper %%order_class%%, %%order_class%%_wrapper %%order_class%%:hover",
+     "margin": "%%order_class%%_wrapper",
+     "important": "all"
+    }
+   },
+   "max_width": false,
+   "button": {
+    "button": {
+     "css": {
+      "main": "%%order_class%%",
+      "limited_main": "%%order_class%%.et_pb_button"
+     },
+     "box_shadow": false,
+     "margin_padding": false
+    }
+   }
+  }
+ }
 }

@@ -656,5 +656,35 @@
  "parents": [
   "et_pb_video_slider"
  ],
- "slug": "et_pb_video_slider_item"
+ "slug": "et_pb_video_slider_item",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": false,
+   "text": {
+    "use_text_orientation": false,
+    "use_background_layout": true,
+    "options": {
+     "background_layout": {
+      "option_category": "color_option",
+      "toggle_slug": "arrows_color",
+      "default": "dark",
+      "default_on_child": true,
+      "hover": "tabs",
+      "priority": 1
+     }
+    }
+   },
+   "background": false,
+   "borders": {
+    "default": false
+   },
+   "box_shadow": {
+    "default": false
+   },
+   "margin_padding": false,
+   "max_width": false,
+   "button": false
+  }
+ }
 }

@@ -3053,5 +3053,133 @@
  "kind": "module",
  "name": "Search",
  "parents": [],
- "slug": "et_pb_search"
+ "slug": "et_pb_search",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": {
+    "button": {
+     "css": {
+      "main": "%%order_class%% input.et_pb_searchsubmit",
+      "important": [
+       "line-height",
+       "text-shadow"
+      ]
+     },
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "hide_text_align": true,
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "form_field": {
+     "tab_slug": "advanced",
+     "toggle_slug": "form_field",
+     "hide_text_color": true,
+     "css": {
+      "main": "%%order_class%% form input.et_pb_s, %%order_class%% form input.et_pb_s::placeholder, %%order_class%% form input.et_pb_s::-webkit-input-placeholder, %%order_class%% form input.et_pb_s::-ms-input-placeholder, %%order_class%% form input.et_pb_s::-moz-placeholder",
+      "placeholder": true,
+      "important": [
+       "line-height",
+       "text-shadow"
+      ]
+     },
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "letter_spacing": {
+      "default": "0px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    }
+   },
+   "text": {
+    "use_background_layout": true,
+    "css": {
+     "main": "%%order_class%% input.et_pb_searchsubmit, %%order_class%% input.et_pb_s",
+     "text_shadow": "%%order_class%% input.et_pb_searchsubmit, %%order_class%% input.et_pb_s"
+    },
+    "text_orientation": {
+     "exclude_options": [
+      "justified"
+     ]
+    },
+    "options": {
+     "text_orientation": {
+      "default": "left"
+     },
+     "background_layout": {
+      "default": "light",
+      "hover": "tabs"
+     }
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "main": "%%order_class%% .et_pb_searchform"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": "%%order_class%%.et_pb_search, %%order_class%% input.et_pb_s",
+       "border_styles": "%%order_class%%.et_pb_search"
+      }
+     },
+     "defaults": {
+      "border_radii": "on|3px|3px|3px|3px",
+      "border_styles": {
+       "width": "1px",
+       "color": "#dddddd",
+       "style": "solid"
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": []
+   },
+   "margin_padding": {
+    "use_margin": true,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "padding": "%%order_class%% input.et_pb_s",
+     "important": "all"
+    },
+    "custom_padding": {
+     "default": "0.715em|0.715em|0.715em|0.715em|false|false"
+    }
+   },
+   "max_width": [],
+   "button": false,
+   "overflow": {
+    "default": "hidden"
+   }
+  }
+ }
 }

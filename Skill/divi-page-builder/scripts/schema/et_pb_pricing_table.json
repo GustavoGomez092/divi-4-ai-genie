@@ -5766,5 +5766,282 @@
  "parents": [
   "et_pb_pricing_tables"
  ],
- "slug": "et_pb_pricing_table"
+ "slug": "et_pb_pricing_table",
+ "render": {
+  "main_css": "%%order_class%%",
+  "advanced_fields": {
+   "fonts": {
+    "header": {
+     "css": {
+      "main": "%%order_class%% .et_pb_pricing_heading h2, %%order_class%% .et_pb_pricing_heading h1.et_pb_pricing_title, %%order_class%% .et_pb_pricing_heading h3.et_pb_pricing_title, %%order_class%% .et_pb_pricing_heading h4.et_pb_pricing_title, %%order_class%% .et_pb_pricing_heading h5.et_pb_pricing_title, %%order_class%% .et_pb_pricing_heading h6.et_pb_pricing_title,\n\t\t\t\t\t\t           %%order_class%%.et_pb_featured_table .et_pb_pricing_heading h2, %%order_class%%.et_pb_featured_table .et_pb_pricing_heading h1.et_pb_pricing_title, %%order_class%%.et_pb_featured_table .et_pb_pricing_heading h3.et_pb_pricing_title, %%order_class%%.et_pb_featured_table .et_pb_pricing_heading h4.et_pb_pricing_title, %%order_class%%.et_pb_featured_table .et_pb_pricing_heading h5.et_pb_pricing_title, %%order_class%%.et_pb_featured_table .et_pb_pricing_heading h6.et_pb_pricing_title",
+      "important": "all"
+     },
+     "line_height": {
+      "range_settings": {
+       "min": "1",
+       "max": "100",
+       "step": "1"
+      }
+     },
+     "header_level": {
+      "default": "h2"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body": {
+     "css": {
+      "main": "%%order_class%% ul.et_pb_pricing li",
+      "limited_main": "%%order_class%% ul.et_pb_pricing li, %%order_class%% ul.et_pb_pricing li span, %%order_class%% ul.et_pb_pricing li a"
+     },
+     "line_height": {
+      "default": "1.7em"
+     },
+     "block_elements": {
+      "tabbed_subtoggles": true,
+      "bb_icons_support": true
+     },
+     "defaults": {
+      "all_caps": "off"
+     },
+     "fields_default_on_child": true,
+     "font_size": {
+      "default": "14px"
+     },
+     "sub_toggle": "p"
+    },
+    "subheader": {
+     "css": {
+      "main": "%%order_class%% .et_pb_pricing_heading .et_pb_best_value"
+     },
+     "line_height": {
+      "range_settings": {
+       "min": "1",
+       "max": "100",
+       "step": "1"
+      }
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "price": {
+     "css": {
+      "main": "%%order_class%% .et_pb_et_price .et_pb_sum",
+      "text_align": "%%order_class%% .et_pb_pricing_content_top"
+     },
+     "line_height": {
+      "range_settings": {
+       "min": "1",
+       "max": "100",
+       "step": "1"
+      }
+     },
+     "options_priority": {
+      "price_text_color": 8
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "currency_frequency": {
+     "css": {
+      "main": "%%order_class%% .et_pb_et_price .et_pb_dollar_sign, %%order_class%% .et_pb_et_price .et_pb_frequency"
+     },
+     "hide_text_align": true,
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "excluded": {
+     "css": {
+      "main": "%%order_class%% ul.et_pb_pricing li.et_pb_not_available, %%order_class%% ul.et_pb_pricing li.et_pb_not_available span, %%order_class%% ul.et_pb_pricing li.et_pb_not_available a"
+     },
+     "line_height": {
+      "range_settings": {
+       "min": "1",
+       "max": "100",
+       "step": "1"
+      }
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "defaults": {
+      "all_caps": "off"
+     }
+    },
+    "body_link": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "fields_default_on_child": true,
+     "css": {
+      "main": "%%order_class%% ul.et_pb_pricing li a"
+     },
+     "sub_toggle": "a"
+    },
+    "body_ul": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "fields_default_on_child": true,
+     "css": {
+      "main": "%%order_class%% ul.et_pb_pricing li ul li",
+      "item_indent": "%%order_class%% ul.et_pb_pricing li ul"
+     },
+     "sub_toggle": "ul"
+    },
+    "body_ol": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "fields_default_on_child": true,
+     "css": {
+      "main": "%%order_class%% ul.et_pb_pricing li ol li",
+      "item_indent": "%%order_class%% ul.et_pb_pricing li ol"
+     },
+     "sub_toggle": "ol"
+    },
+    "body_quote": {
+     "line_height": {
+      "default": "1em"
+     },
+     "font_size": {
+      "default": "14px"
+     },
+     "toggle_slug": "body",
+     "fields_default_on_child": true,
+     "css": {
+      "main": "%%order_class%% ul.et_pb_pricing li blockquote"
+     },
+     "sub_toggle": "quote"
+    }
+   },
+   "text": {
+    "css": {
+     "text_orientation": "%%order_class%%.et_pb_pricing_table, %%order_class%% .et_pb_pricing_content",
+     "text_shadow": "%%order_class%% .et_pb_pricing_heading, %%order_class%% .et_pb_pricing_content_top, %%order_class%% .et_pb_pricing_content"
+    }
+   },
+   "background": {
+    "has_background_color_toggle": false,
+    "use_background_color": true,
+    "use_background_color_gradient": true,
+    "use_background_image": true,
+    "use_background_image_parallax": true,
+    "use_background_video": true,
+    "use_background_color_reset": true,
+    "use_background_pattern": true,
+    "use_background_mask": true,
+    "css": {
+     "main": "%%order_class%%.et_pb_pricing_table"
+    },
+    "settings": {
+     "color": "alpha"
+    }
+   },
+   "borders": {
+    "default": {
+     "css": {
+      "main": {
+       "border_radii": ".et_pb_pricing .et_pb_pricing_table%%order_class%%",
+       "border_styles": ".et_pb_pricing .et_pb_pricing_table%%order_class%%"
+      }
+     },
+     "defaults": {
+      "border_radii": "on||||",
+      "border_styles": {
+       "width": "1px",
+       "color": "#bebebe",
+       "style": "solid"
+      }
+     }
+    },
+    "price": {
+     "css": {
+      "main": {
+       "border_radii": ".et_pb_pricing %%order_class%%  .et_pb_pricing_content_top",
+       "border_styles": ".et_pb_pricing %%order_class%%  .et_pb_pricing_content_top"
+      }
+     },
+     "option_category": "border",
+     "tab_slug": "advanced",
+     "toggle_slug": "price",
+     "defaults": {
+      "border_radii": "on||||",
+      "border_styles": {
+       "width": "0px",
+       "color": "#bebebe",
+       "style": "solid"
+      },
+      "composite": {
+       "border_bottom": {
+        "border_width_bottom": "1px"
+       }
+      }
+     }
+    }
+   },
+   "box_shadow": {
+    "default": [],
+    "button": {
+     "option_category": "layout",
+     "tab_slug": "advanced",
+     "toggle_slug": "button",
+     "show_if": {
+      "custom_button": "on"
+     },
+     "css": {
+      "main": "%%order_class%% .et_pb_button.et_pb_pricing_table_button",
+      "show_if": {
+       "custom_button": "on"
+      }
+     }
+    }
+   },
+   "margin_padding": {
+    "use_margin": false,
+    "draggable_margin": true,
+    "use_padding": true,
+    "draggable_padding": true,
+    "css": {
+     "important": "all",
+     "main": ".et_pb_pricing %%order_class%% .et_pb_pricing_heading, .et_pb_pricing %%order_class%% .et_pb_pricing_content_top, .et_pb_pricing %%order_class%% .et_pb_pricing_content",
+     "padding-right": "%%order_class%% .et_pb_button_wrapper",
+     "padding-bottom": ".et_pb_pricing %%order_class%%",
+     "padding-left": "%%order_class%% .et_pb_button_wrapper"
+    }
+   },
+   "max_width": false,
+   "button": {
+    "button": {
+     "css": {
+      "main": ".et_pb_pricing %%order_class%% .et_pb_pricing_table_button.et_pb_button",
+      "limited_main": ".et_pb_pricing %%order_class%% .et_pb_pricing_table_button.et_pb_button",
+      "alignment": ".et_pb_pricing %%order_class%% .et_pb_button_wrapper"
+     },
+     "use_alignment": true,
+     "box_shadow": {
+      "css": {
+       "main": "%%order_class%% .et_pb_button.et_pb_pricing_table_button"
+      }
+     }
+    }
+   }
+  }
+ }
 }
