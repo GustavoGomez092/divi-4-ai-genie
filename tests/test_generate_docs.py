@@ -57,6 +57,25 @@ class GenerateDocsTest(unittest.TestCase):
         _, families_reversed = classify(reversed_raw)
         self.assertEqual(render_families(families_reversed), render_families(self.families))
 
+    def test_module_page_names_linked_family_fields_the_module_lacks(self):
+        from generate_docs import render_module
+        page = render_module("et_pb_heading", RAW, self.placement, self.families, SCHEMA, None)
+        section = page[page.index("## Shared design families"):]
+        self.assertIn("text_orientation", section)
+        line = next(l for l in section.splitlines() if "text_orientation" in l)
+        self.assertIn("Text", line)
+        # a field the module does have (title_text_align, via the Font family's title_ prefix) is never listed
+        self.assertIn("title_text_align", RAW["et_pb_heading"]["fields"])
+        self.assertNotIn("`title_text_align`", section)
+
+    def test_missing_family_fields_match_the_schema(self):
+        from generate_docs import missing_family_fields
+        missing = missing_family_fields("et_pb_heading", RAW, self.placement, self.families)
+        self.assertIn("text_orientation", missing.get(("text", ""), []))
+        for (fam, prefix), names in missing.items():
+            for name in names:
+                self.assertNotIn(name, RAW["et_pb_heading"]["fields"], (fam, prefix, name))
+
     def test_button_fields_join_button_family(self):
         # button_bg_color and button_border_color aren't font-shaped, but they used to get
         # swallowed by the font-prefix check (toggle "button" also matches the "button_font"

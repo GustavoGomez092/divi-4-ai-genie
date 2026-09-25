@@ -198,7 +198,8 @@ everywhere — always confirm against that field's `options` list).
 
 ## Icons
 
-Field type: `select_icon`. Three real shapes:
+Field type: `select_icon`. To find an icon's value by name (phone, map marker, wrench, …), look it
+up in `icons.md`: every icon Divi's picker offers, with the exact value to paste. Three real shapes:
 
 - **Divi icon font:** `<numeric HTML entity>||divi||<weight>` — e.g. `&#xe03b;||divi||400`
 - **Font Awesome:** `<numeric HTML entity>||fa||<weight>` — e.g. `&#xf095;||fa||900`

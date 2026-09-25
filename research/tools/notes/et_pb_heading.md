@@ -1,0 +1,2 @@
+- Align headings with `title_text_align` (`left`/`center`/`right`/`justify`); `text_orientation` does not exist on this module, even though the Text family is linked above (`E_UNKNOWN_ATTR`).
+- The heading level is `title_level`, default `h1`: set `title_level="h2"` (or lower) for every heading except the page's one H1.

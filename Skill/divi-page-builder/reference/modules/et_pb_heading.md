@@ -69,4 +69,13 @@
 | Transitions | (none) | [design-families.md#transitions](../design-families.md#transitions) |
 | Visibility | (none) | [design-families.md#visibility](../design-families.md#visibility) |
 
+**Family fields not on this module.** These rows of a linked family's table do not exist here (writing one is `E_UNKNOWN_ATTR`); use this module's own fields above instead.
+
+- Text: `background_layout`, `text_orientation`
+
+## Gotchas
+
+- Align headings with `title_text_align` (`left`/`center`/`right`/`justify`); `text_orientation` does not exist on this module, even though the Text family is linked above (`E_UNKNOWN_ATTR`).
+- The heading level is `title_level`, default `h1`: set `title_level="h2"` (or lower) for every heading except the page's one H1.
+
 R = responsive (`_tablet`, `_phone`, `_last_edited`), H = hover (`__hover`), S = sticky (`__sticky`). See [value-formats.md](../value-formats.md).

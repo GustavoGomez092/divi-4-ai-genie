@@ -224,6 +224,25 @@ def minimal_example(slug, schema):
     return f"[et_pb_section fullwidth=\"on\" {base}]{body}[/et_pb_section]" if mod.fullwidth else in_column(body)
 
 
+def missing_family_fields(slug, raw, placement, families):
+    """{(family, prefix): [attribute, …]} for every design family the module links: the family's
+    canonical fields (prefix filled in) that this module does NOT have. A reader who follows the
+    family link must not assume these exist here (e.g. et_pb_heading links Text but has no
+    text_orientation; it aligns with title_text_align)."""
+    present = defaultdict(set)
+    for name in _real_fields(raw[slug]):
+        place = placement[slug][name]
+        if place[0] == "family":
+            present[(place[1], place[2])].add(place[3])
+    missing = {}
+    for (fam, prefix), have in sorted(present.items()):
+        names = sorted(c.replace("{p}", prefix) for c, d in families[fam]["canonical"].items() if d and c not in have)
+        names = [n for n in names if n not in raw[slug]["fields"]]
+        if names:
+            missing[(fam, prefix)] = names
+    return missing
+
+
 def render_module(slug, raw, placement, families, schema, notes_dir):
     data = raw[slug]
     meta = data["module"]
@@ -262,6 +281,14 @@ def render_module(slug, raw, placement, families, schema, notes_dir):
             prefixes = ", ".join(f"`{p}_`" for p in sorted(fam_use[fam]) if p) or "(none)"
             lines.append(f"| {FAMILY_TITLES.get(fam, fam)} | {prefixes} | [design-families.md#{fam}](../design-families.md#{fam}) |")
         lines.append("")
+        missing = missing_family_fields(slug, raw, placement, families)
+        if missing:
+            lines += ["**Family fields not on this module.** These rows of a linked family's table do not exist "
+                      "here (writing one is `E_UNKNOWN_ATTR`); use this module's own fields above instead.", ""]
+            for (fam, prefix), names in missing.items():
+                label = FAMILY_TITLES.get(fam, fam) + (f" (`{prefix}_`)" if prefix else "")
+                lines.append(f"- {label}: " + ", ".join(f"`{n}`" for n in names))
+            lines.append("")
     note = notes_dir / f"{slug}.md" if notes_dir else None
     if note and note.exists():
         lines += ["## Gotchas", "", note.read_text().strip(), ""]

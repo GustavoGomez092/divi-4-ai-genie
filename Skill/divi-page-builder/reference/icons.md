@@ -1,0 +1,2227 @@
+# Icons
+
+Every icon Divi 4.27.9's icon picker offers, with the exact value to write in an icon field
+(`font_icon`, `button_icon`, `hover_icon`, …; field type `select_icon`, see `value-formats.md` →
+Icons). Copy the value in backticks as-is: `<entity>||divi|fa||<weight>`. Search this file for a
+word ("phone", "water", "calendar"); each line is `value` name (family, style) — search terms.
+
+Blurbs need `use_icon="on"` for `font_icon` to show; buttons need `custom_button="on"` for
+`button_icon`. Divi icons (`||divi||`) always use weight `400`; Font Awesome solid is `900`, regular
+and brands are `400`.
+
+Generated from Divi 4.27.9's built-in icon list (repo only: `research/tools/gen_icons.py`); do
+not edit by hand.
+
+## Common icons (200)
+
+Contact, location, trust, trades and navigation icons for business pages, Font Awesome first.
+
+- `&#xf095;||fa||900` phone (fa, solid) — call earphone number support telephone voice
+- `&#xf879;||fa||900` phone-alt (fa, solid) — alternate call earphone number support telephone voice
+- `&#xf2a0;||fa||900` phone-volume (fa, solid) — call earphone number sound support telephone voice volumecontrolphone
+- `&#xf3cd;||fa||900` mobile-alt (fa, solid) — alternate apple call cell phone cellphone device iphone
+- `&#xf0e0;||fa||900` envelope (fa, solid) — email letter mail message notification support
+- `&#xf2b6;||fa||900` envelope-open (fa, solid) — email letter mail message notification support
+- `&#xf3c5;||fa||900` map-marker-alt (fa, solid) — alternate address coordinates destination gps localize location navigation
+- `&#xf041;||fa||900` map-marker (fa, solid) — address coordinates destination gps localize location navigation paper
+- `&#xf5a0;||fa||900` map-marked-alt (fa, solid) — alternate address coordinates destination gps localize location navigation
+- `&#xf124;||fa||900` location-arrow (fa, solid) — address compass coordinate direction gps map navigation place
+- `&#xf5eb;||fa||900` directions (fa, solid) — map navigation sign turn
+- `&#xf4d7;||fa||900` route (fa, solid) — directions navigation travel
+- `&#xf017;||fa||900` clock (fa, solid) — date late schedule time timer timestamp watch
+- `&#xf073;||fa||900` calendar-alt (fa, solid) — alternate date event schedule time when
+- `&#xf274;||fa||900` calendar-check (fa, solid) — accept agree appointment confirm correct date done event
+- `&#xf00c;||fa||900` check (fa, solid) — accept agree checkmark confirm correct done notice notification
+- `&#xf058;||fa||900` check-circle (fa, solid) — accept agree confirm correct done ok select success
+- `&#xf14a;||fa||900` check-square (fa, solid) — accept agree checkmark confirm correct done ok select
+- `&#xf005;||fa||900` star (fa, solid) — achievement award favorite important night rating score
+- `&#xf5c0;||fa||900` star-half-alt (fa, solid) — alternate achievement award rating score starhalfempty starhalffull
+- `&#xf10d;||fa||900` quote-left (fa, solid) — mention note phrase text type
+- `&#xf10e;||fa||900` quote-right (fa, solid) — mention note phrase text type
+- `&#xf007;||fa||900` user (fa, solid) — account avatar head human man person profile
+- `&#xf0c0;||fa||900` users (fa, solid) — friends group people persons profiles team
+- `&#xf508;||fa||900` user-tie (fa, solid) — avatar business clothing formal professional suit
+- `&#xf4fc;||fa||900` user-check (fa, solid) — accept person verified
+- `&#xf015;||fa||900` home (fa, solid) — abode building house main
+- `&#xf1ad;||fa||900` building (fa, solid) — apartment business city company office work
+- `&#xf54e;||fa||900` store (fa, solid) — building buy purchase shopping
+- `&#xf0ad;||fa||900` wrench (fa, solid) — construction fix mechanic plumbing settings spanner tool update
+- `&#xf7d9;||fa||900` tools (fa, solid) — admin fix repair screwdriver settings wrench
+- `&#xf6e3;||fa||900` hammer (fa, solid) — admin fix repair settings tool
+- `&#xf54a;||fa||900` screwdriver (fa, solid) — admin fix mechanic repair settings tool
+- `&#xf552;||fa||900` toolbox (fa, solid) — admin container fix repair settings tools
+- `&#xf807;||fa||900` hard-hat (fa, solid) — construction hardhat helmet safety
+- `&#xf0d1;||fa||900` truck (fa, solid) — cargo delivery shipping vehicle
+- `&#xf4df;||fa||900` truck-moving (fa, solid) — cargo inventory rental vehicle
+- `&#xf1b9;||fa||900` car (fa, solid) — auto automobile sedan transportation travel vehicle
+- `&#xf3ed;||fa||900` shield-alt (fa, solid) — alternate achievement award block defend security winner
+- `&#xf559;||fa||900` award (fa, solid) — honor praise prize recognition ribbon trophy
+- `&#xf5a2;||fa||900` medal (fa, solid) — award ribbon star trophy
+- `&#xf091;||fa||900` trophy (fa, solid) — achievement award cup game winner
+- `&#xf0a3;||fa||900` certificate (fa, solid) — badge star verified
+- `&#xf155;||fa||900` dollar-sign (fa, solid) — cost dollarsign money price usd
+- `&#xf53a;||fa||900` money-bill-wave (fa, solid) — wavy buy cash checkout payment price purchase
+- `&#xf09d;||fa||900` credit-card (fa, solid) — buy checkout creditcardalt debit money payment purchase
+- `&#xf4c0;||fa||900` hand-holding-usd (fa, solid) — us dollar carry sign donation giving lift money
+- `&#xf4d3;||fa||900` piggy-bank (fa, solid) — save savings
+- `&#xf295;||fa||900` percent (fa, solid) — discount fraction proportion rate ratio
+- `&#xf02b;||fa||900` tag (fa, solid) — discount label price shopping
+- `&#xf02c;||fa||900` tags (fa, solid) — discount label price shopping
+- `&#xf06b;||fa||900` gift (fa, solid) — christmas generosity giving holiday party present wrapped xmas
+- `&#xf004;||fa||900` heart (fa, solid) — favorite like love relationship valentine
+- `&#xf164;||fa||900` thumbs-up (fa, solid) — agree approve favorite hand like ok okay social
+- `&#xf118;||fa||900` smile (fa, solid) — smiling face approve emoticon happy rating satisfied
+- `&#xf075;||fa||900` comment (fa, solid) — bubble chat commenting conversation feedback message note notification
+- `&#xf086;||fa||900` comments (fa, solid) — bubble chat commenting conversation feedback message note notification
+- `&#xf4ad;||fa||900` comment-dots (fa, solid) — bubble chat commenting conversation feedback message more note
+- `&#xf590;||fa||900` headset (fa, solid) — audio gamer gaming listen live chat microphone shot
+- `&#xf002;||fa||900` search (fa, solid) — bigger enlarge find magnify preview zoom
+- `&#xf07a;||fa||900` shopping-cart (fa, solid) — buy checkout grocery payment purchase
+- `&#xf290;||fa||900` shopping-bag (fa, solid) — buy checkout grocery payment purchase
+- `&#xf0eb;||fa||900` lightbulb (fa, solid) — energy idea inspiration light
+- `&#xf06c;||fa||900` leaf (fa, solid) — eco flora nature plant vegan
+- `&#xf4d8;||fa||900` seedling (fa, solid) — flora grow plant vegan
+- `&#xf1bb;||fa||900` tree (fa, solid) — bark fall flora forest nature plant seasonal
+- `&#xf043;||fa||900` tint (fa, solid) — color drop droplet raindrop waterdrop
+- `&#xf773;||fa||900` water (fa, solid) — lake liquid ocean sea swim wet
+- `&#xe005;||fa||900` faucet (fa, solid) — covid19 drip house hygiene kitchen sink water
+- `&#xf2cc;||fa||900` shower (fa, solid) — bath clean faucet water
+- `&#xf2cd;||fa||900` bath (fa, solid) — clean shower tub wash
+- `&#xf7d8;||fa||900` toilet (fa, solid) — bathroom flush john loo pee plumbing poop porcelain
+- `&#xf0e7;||fa||900` bolt (fa, solid) — lightning electricity weather zap
+- `&#xf1e6;||fa||900` plug (fa, solid) — connect electric online power
+- `&#xf06d;||fa||900` fire (fa, solid) — burn caliente flame heat hot popular
+- `&#xf134;||fa||900` fire-extinguisher (fa, solid) — burn caliente fighter flame heat hot rescue
+- `&#xf2dc;||fa||900` snowflake (fa, solid) — precipitation rain winter
+- `&#xf863;||fa||900` fan (fa, solid) — ac air conditioning blade blower cool hot
+- `&#xf2c9;||fa||900` thermometer-half (fa, solid) — 1/2 full mercury status temperature
+- `&#xf769;||fa||900` temperature-high (fa, solid) — cook covid19 mercury summer thermometer warm
+- `&#xf185;||fa||900` sun (fa, solid) — brighten contrast day lighter sol solar star weather
+- `&#xf5aa;||fa||900` paint-roller (fa, solid) — acrylic art brush color fill pigment watercolor
+- `&#xf1fc;||fa||900` paint-brush (fa, solid) — acrylic art color fill pigment watercolor
+- `&#xf51a;||fa||900` broom (fa, solid) — clean firebolt fly halloween nimbus 2000 quidditch sweep
+- `&#xf2ed;||fa||900` trash-alt (fa, solid) — alternate delete garbage hide remove trasho
+- `&#xf1b8;||fa||900` recycle (fa, solid) — waste compost garbage reuse trash
+- `&#xf084;||fa||900` key (fa, solid) — lock password private secret unlock
+- `&#xf023;||fa||900` lock (fa, solid) — admin open password private protect security
+- `&#xf09c;||fa||900` unlock (fa, solid) — admin lock password private protect
+- `&#xf0ac;||fa||900` globe (fa, solid) — all coordinates country earth global gps language localize
+- `&#xf1eb;||fa||900` wifi (fa, solid) — connection hotspot internet network wireless
+- `&#xf061;||fa||900` arrow-right (fa, solid) — forward next
+- `&#xf060;||fa||900` arrow-left (fa, solid) — back previous
+- `&#xf062;||fa||900` arrow-up (fa, solid) — forward upload
+- `&#xf063;||fa||900` arrow-down (fa, solid) — download
+- `&#xf054;||fa||900` chevron-right (fa, solid) — arrow bracket forward next
+- `&#xf053;||fa||900` chevron-left (fa, solid) — arrow back bracket previous
+- `&#xf078;||fa||900` chevron-down (fa, solid) — arrow download expand
+- `&#xf077;||fa||900` chevron-up (fa, solid) — arrow collapse upload
+- `&#xf105;||fa||900` angle-right (fa, solid) — arrow care forward more next
+- `&#xf101;||fa||900` angle-double-right (fa, solid) — arrows caret forward more next quote raquo
+- `&#xf30b;||fa||900` long-arrow-alt-right (fa, solid) — alternate forward longarrowright next
+- `&#xf0da;||fa||900` caret-right (fa, solid) — arrow forward next triangle
+- `&#xf067;||fa||900` plus (fa, solid) — add create expand new positive shape
+- `&#xf068;||fa||900` minus (fa, solid) — collapse delete hide minify negative remove trash
+- `&#xf00d;||fa||900` times (fa, solid) — close cross error exit incorrect notice notification notify
+- `&#xf05a;||fa||900` info-circle (fa, solid) — details help information more support
+- `&#xf059;||fa||900` question-circle (fa, solid) — help information support unknown
+- `&#xf071;||fa||900` exclamation-triangle (fa, solid) — alert danger error important notice notification notify problem
+- `&#xf06a;||fa||900` exclamation-circle (fa, solid) — alert danger error important notice notification notify problem
+- `&#xf0f3;||fa||900` bell (fa, solid) — alarm alert chime notification reminder
+- `&#xf46c;||fa||900` clipboard-check (fa, solid) — with accept agree confirm done ok select success
+- `&#xf46d;||fa||900` clipboard-list (fa, solid) — checklist completed done finished intinerary ol schedule tick
+- `&#xf15c;||fa||900` file-alt (fa, solid) — alternate document filetext invoice new page pdf
+- `&#xf1c1;||fa||900` file-pdf (fa, solid) — acrobat document preview save
+- `&#xf019;||fa||900` download (fa, solid) — export hard drive save transfer
+- `&#xf093;||fa||900` upload (fa, solid) — hard drive import publish
+- `&#xf04b;||fa||900` play (fa, solid) — audio music playing sound start video
+- `&#xf144;||fa||900` play-circle (fa, solid) — audio music playing sound start video
+- `&#xf03d;||fa||900` video (fa, solid) — camera film movie record videocamera
+- `&#xf030;||fa||900` camera (fa, solid) — image lens photo picture record shutter video
+- `&#xf03e;||fa||900` image (fa, solid) — album landscape photo picture
+- `&#xf302;||fa||900` images (fa, solid) — album landscape photo picture
+- `&#xf0c1;||fa||900` link (fa, solid) — attach attachment chain connect
+- `&#xf35d;||fa||900` external-link-alt (fa, solid) — alternate externallink new open share
+- `&#xf1e0;||fa||900` share-alt (fa, solid) — alternate forward save send social
+- `&#xf2b5;||fa||900` handshake (fa, solid) — agreement greeting meeting partnership
+- `&#xf4c4;||fa||900` hands-helping (fa, solid) — aid assistance handshake partnership volunteering
+- `&#xf0b1;||fa||900` briefcase (fa, solid) — bag business luggage office work
+- `&#xf201;||fa||900` chart-line (fa, solid) — activity analytics dashboard gain graph increase
+- `&#xf080;||fa||900` chart-bar (fa, solid) — analytics graph
+- `&#xf0a1;||fa||900` bullhorn (fa, solid) — announcement broadcast louder megaphone share
+- `&#xf135;||fa||900` rocket (fa, solid) — aircraft app jet launch nasa space
+- `&#xf013;||fa||900` cog (fa, solid) — gear mechanical settings sprocket wheel
+- `&#xf085;||fa||900` cogs (fa, solid) — gears mechanical settings sprocket wheel
+- `&#xf0f1;||fa||900` stethoscope (fa, solid) — covid19 diagnosis doctor general practitioner hospital infirmary medicine
+- `&#xf5c9;||fa||900` tooth (fa, solid) — bicuspid dental dentist molar mouth teeth
+- `&#xf21e;||fa||900` heartbeat (fa, solid) — ekg electrocardiogram health lifeline vital signs
+- `&#xf1b0;||fa||900` paw (fa, solid) — animal cat dog pet print
+- `&#xf2e7;||fa||900` utensils (fa, solid) — cutlery dining dinner eat food fork knife restaurant
+- `&#xf0f4;||fa||900` coffee (fa, solid) — beverage breakfast cafe drink fall morning mug seasonal
+- `&#xf19d;||fa||900` graduation-cap (fa, solid) — ceremony college graduate learning school student
+- `&#xf02d;||fa||900` book (fa, solid) — diary documentation journal library read
+- `&#xf1ec;||fa||900` calculator (fa, solid) — abacus addition arithmetic counting math multiplication subtraction
+- `&#xf24e;||fa||900` balance-scale (fa, solid) — balanced justice legal measure weight
+- `&#xf0e3;||fa||900` gavel (fa, solid) — hammer judge law lawyer opinion
+- `&#xf573;||fa||900` file-signature (fa, solid) — john hancock contract document name
+- `&#xf109;||fa||900` laptop (fa, solid) — computer cpu dell demo device mac macbook machine
+- `&#xf108;||fa||900` desktop (fa, solid) — computer cpu demo device imac machine monitor pc
+- `&#xf121;||fa||900` code (fa, solid) — brackets development html
+- `&#xf39e;||fa||400` facebook-f (fa, brands)
+- `&#xf09a;||fa||400` facebook (fa, brands) — facebookofficial social network
+- `&#xf099;||fa||400` twitter (fa, brands) — social network tweet
+- `&#xf16d;||fa||400` instagram (fa, brands)
+- `&#xf0e1;||fa||400` linkedin-in (fa, brands)
+- `&#xf167;||fa||400` youtube (fa, brands) — film video youtubeplay youtubesquare
+- `&#xf1a0;||fa||400` google (fa, brands) — logo
+- `&#xf1e9;||fa||400` yelp (fa, brands)
+- `&#xf232;||fa||400` whatsapp (fa, brands) — whatsappwhat's app
+- `&#xe07b;||fa||400` tiktok (fa, brands)
+- `&#xf231;||fa||400` pinterest-p (fa, brands) — pinterest-ppinterest
+- `&#xe00b;||divi||400` Phone (divi, line/solid) — mobile device
+- `&#xe090;||divi||400` Phone (divi, solid) — call
+- `&#xe010;||divi||400` Envelop (divi, line) — mail email send envelope
+- `&#xe076;||divi||400` Envelop (divi, solid) — mail email send envelope
+- `&#xe01d;||divi||400` Map Pin (divi, line) — locatoin address
+- `&#xe081;||divi||400` Map Pin (divi, solid) — locatoin address
+- `&#x7d;||divi||400` Clock (divi, line) — time schedule history
+- `&#xe06b;||divi||400` Clock (divi, solid) — time schedule history
+- `&#x4e;||divi||400` Check (divi, line) — confirm
+- `&#x52;||divi||400` Check (divi, line) — confirm
+- `&#xe052;||divi||400` Check (divi, solid) — confirm
+- `&#xe031;||divi||400` Star (divi, line) — favorite
+- `&#xe033;||divi||400` Star (divi, solid) — favorite
+- `&#x7b;||divi||400` Quote (divi, line) — testimonial
+- `&#x7c;||divi||400` Quote (divi, line) — testimonial
+- `&#xe06a;||divi||400` Quote (divi, solid) — testimonial
+- `&#xe60f;||divi||400` Quote (divi, line) — chat
+- `&#xe009;||divi||400` Home (divi, line) — house
+- `&#xe074;||divi||400` Home (divi, solid) — house
+- `&#xe035;||divi||400` Tools (divi, solid) — settings
+- `&#xe021;||divi||400` Toolbox (divi, line) — tools box portfolio briefcase
+- `&#xe085;||divi||400` Toolbox (divi, solid) — tools box portfolio briefcase
+- `&#xe0d9;||divi||400` Shield (divi, solid) — security
+- `&#xe0ed;||divi||400` Dollar (divi, line) — money currency price
+- `&#xe0f3;||divi||400` Dollar (divi, solid) — money currency price
+- `&#xe023;||divi||400` Calendar (divi, line/solid) — date event rolodex
+- `&#xe030;||divi||400` Heart (divi, line) — like love favorite
+- `&#xe089;||divi||400` Heart (divi, solid) — like love favorite
+- `&#xe106;||divi||400` Thumbs Up (divi, line) — like rate
+- `&#xe0dd;||divi||400` Thumbs Up (divi, solid) — like rate
+- `&#x76;||divi||400` Chat (divi, line) — speak bubble speech
+- `&#x77;||divi||400` Chat (divi, line) — speak bubble speech
+- `&#xe065;||divi||400` Chat (divi, solid) — speak bubble speech
+- `&#xe066;||divi||400` Chat (divi, solid) — speak bubble speech
+- `&#xe007;||divi||400` Lightbulb (divi, line) — light idea
+- `&#xe072;||divi||400` Lightbulb (divi, solid) — light idea
+- `&#xe037;||divi||400` Gear (divi, solid) — settings
+- `&#xe08a;||divi||400` Person (divi, solid) — profile avatar
+- `&#xe08b;||divi||400` Group (divi, solid) — people
+
+## Divi icon font (380)
+
+Divi's own icons (`||divi||`), line and solid variants.
+
+- `&#x21;||divi||400` Arrow Up (divi, line) — direction previous collapse
+- `&#x22;||divi||400` Arrow Down (divi, line) — direction expand next
+- `&#x23;||divi||400` Arrow Left (divi, line) — direction prevous back
+- `&#x24;||divi||400` Arrow Right (divi, line) — direction next forward
+- `&#x25;||divi||400` Arrow Up Left (divi, line) — direction previous back
+- `&#x26;||divi||400` Arrow Up Right (divi, line) — direction next forward
+- `&#x27;||divi||400` Arrow Down Right (divi, line) — direction next forward
+- `&#x28;||divi||400` Arrow Down Left (divi, line) — direction previous back
+- `&#x29;||divi||400` Arrow Up Down (divi, line) — direction expand resize drag
+- `&#x2a;||divi||400` Arrows Up Down (divi, line) — arrow direction expand resize drag
+- `&#x2b;||divi||400` Arrows Left Right (divi, line) — arrow direction expand resize drag
+- `&#x2c;||divi||400` Arrow Left Right (divi, line) — direction expand resize drag
+- `&#x2d;||divi||400` Arrow Resize (divi, line) — expand drag
+- `&#x2e;||divi||400` Arrow Resize (divi, line) — expand drag
+- `&#x2f;||divi||400` Arrows Condense (divi, line) — arrow resize collapse close
+- `&#x30;||divi||400` Arrows Expand (divi, line) — arrow resize open
+- `&#x31;||divi||400` Move (divi, line) — arrow drag
+- `&#x32;||divi||400` Caret Up (divi, line) — arrow direction previous collapse
+- `&#x33;||divi||400` Caret down (divi, line) — arrow direction expand next
+- `&#x34;||divi||400` Caret Left (divi, line) — arrow direction prevous back
+- `&#x35;||divi||400` Caret Right (divi, line) — arrow direction next forward
+- `&#x36;||divi||400` Double Caret Up (divi, line) — arrow direction previous collapse
+- `&#x37;||divi||400` Double Caret down (divi, line) — arrow direction expand next
+- `&#x38;||divi||400` Double Caret Left (divi, line) — arrow direction prevous back
+- `&#x39;||divi||400` Double Caret Right (divi, line) — arrow direction next forward
+- `&#x3a;||divi||400` Caret Up (divi, line) — arrow direction previous collapse
+- `&#x3b;||divi||400` Caret down (divi, line) — arrow direction expand next
+- `&#x3c;||divi||400` Caret Left (divi, line) — arrow direction prevous back
+- `&#x3d;||divi||400` Caret Right (divi, line) — arrow direction next forward
+- `&#x3e;||divi||400` Double Caret Up (divi, line) — arrow direction previous collapse
+- `&#x3f;||divi||400` Double Caret down (divi, line) — arrow direction expand next
+- `&#x40;||divi||400` Double Caret Left (divi, line) — arrow direction prevous back
+- `&#x41;||divi||400` Double Caret Right (divi, line) — arrow direction next forward
+- `&#x42;||divi||400` Caret Up (divi, solid) — arrow triangle direction previous collapse
+- `&#x43;||divi||400` Caret down (divi, solid) — arrow triangle direction expand next
+- `&#x44;||divi||400` Caret Left (divi, solid) — arrow triangle direction prevous back
+- `&#x45;||divi||400` Caret Right (divi, solid) — arrow triangle direction next forward
+- `&#x46;||divi||400` Caret Up (divi, solid) — arrow triangle direction previous collapse
+- `&#x47;||divi||400` Caret down (divi, solid) — arrow triangle direction expand next
+- `&#x48;||divi||400` Caret Left (divi, solid) — arrow triangle direction prevous back
+- `&#x49;||divi||400` Caret Right (divi, solid) — arrow triangle direction next forward
+- `&#x4a;||divi||400` Arrow Back (divi, line) — left direction prevous
+- `&#x4b;||divi||400` Minus (divi, line) — dash hyphen
+- `&#x4c;||divi||400` Plus (divi, line) — add cross
+- `&#x4d;||divi||400` Close (divi, line) — x cancel delete remove
+- `&#x4e;||divi||400` Check (divi, line) — confirm
+- `&#x4f;||divi||400` Minus (divi, line) — dash hyphen
+- `&#x50;||divi||400` Plus (divi, line) — add cross
+- `&#x51;||divi||400` Close (divi, line) — x cancel delete remove
+- `&#x52;||divi||400` Check (divi, line) — confirm
+- `&#x53;||divi||400` Zoom Out (divi, line) — magnifying glass
+- `&#x54;||divi||400` Zoom In (divi, line) — magnifying glass
+- `&#x55;||divi||400` Magnifying Glass (divi, line) — search zoom
+- `&#x56;||divi||400` Checkbox Empty (divi, line) — box square
+- `&#x57;||divi||400` Checkbox Filled (divi, line/solid) — box square bullet
+- `&#x58;||divi||400` Box Minus (divi, line) — close collapse remove
+- `&#x59;||divi||400` Box Plus (divi, line) — add cross expand
+- `&#x5a;||divi||400` Checkbox Checked (divi, line) — check selected
+- `&#x5b;||divi||400` Radio Empty (divi, line) — circle bullet
+- `&#x5c;||divi||400` Radio Selected (divi, line/solid) — circle bullet
+- `&#x5d;||divi||400` Stop (divi, line/solid)
+- `&#x5e;||divi||400` Stop (divi, solid) — bullet square
+- `&#x5f;||divi||400` Pause (divi, line)
+- `&#x60;||divi||400` Pause (divi, line)
+- `&#x61;||divi||400` Menu (divi, line) — hamburger expand open reorder drag
+- `&#x62;||divi||400` Menu (divi, line) — hamburger expand open reorder drag
+- `&#x63;||divi||400` Menu (divi, line) — hamburger expand open reorder drag
+- `&#x64;||divi||400` Unordered List (divi, line)
+- `&#x65;||divi||400` Ordered List (divi, line) — numbered orderd
+- `&#x66;||divi||400` Adjustments Vertical (divi, line) — adjust options settings dial
+- `&#x67;||divi||400` Adjustments Horizontal (divi, line) — adjust options settings dial
+- `&#x68;||divi||400` Document (divi, line) — notes file
+- `&#x69;||divi||400` Documents (divi, line) — notes file
+- `&#x6a;||divi||400` Pencil (divi, solid) — edit design write compose
+- `&#x6b;||divi||400` Pencil (divi, line/solid) — edit design write compose
+- `&#x6c;||divi||400` Pencil (divi, line/solid) — edit design write compose
+- `&#x6d;||divi||400` Folder (divi, line)
+- `&#x6e;||divi||400` Open Folder (divi, line)
+- `&#x6f;||divi||400` Add Folder (divi, line)
+- `&#x70;||divi||400` Information (divi, line) — help
+- `&#x71;||divi||400` Warning (divi, line) — stop caution
+- `&#x72;||divi||400` Warning (divi, line) — caution
+- `&#x73;||divi||400` Warning (divi, line) — caution
+- `&#x74;||divi||400` Question Mark (divi, line) — help
+- `&#x75;||divi||400` Question Mark (divi, line) — help
+- `&#x76;||divi||400` Chat (divi, line) — speak bubble speech
+- `&#x77;||divi||400` Chat (divi, line) — speak bubble speech
+- `&#x78;||divi||400` Volume Mute (divi, line) — speaker
+- `&#x79;||divi||400` Volume Down (divi, line) — speaker
+- `&#x7a;||divi||400` Volume Up (divi, line) — speaker
+- `&#x7b;||divi||400` Quote (divi, line) — testimonial
+- `&#x7c;||divi||400` Quote (divi, line) — testimonial
+- `&#x7d;||divi||400` Clock (divi, line) — time schedule history
+- `&#x7e;||divi||400` Locked (divi, line) — lock security
+- `&#xe000;||divi||400` Unlocked (divi, line) — lock security
+- `&#xe001;||divi||400` Key (divi, line)
+- `&#xe002;||divi||400` Cloud (divi, line) — hosting backup storage
+- `&#xe003;||divi||400` Cloud Upload (divi, line) — hosting backup storage
+- `&#xe004;||divi||400` Cloud Download (divi, line) — hosting storage
+- `&#xe005;||divi||400` Image (divi, line/solid) — file media
+- `&#xe006;||divi||400` Images (divi, line/solid) — files media portfolio gallery
+- `&#xe007;||divi||400` Lightbulb (divi, line) — light idea
+- `&#xe008;||divi||400` Gift (divi, line) — present prize award
+- `&#xe009;||divi||400` Home (divi, line) — house
+- `&#xe00a;||divi||400` Atom (divi, line) — genius science
+- `&#xe00b;||divi||400` Phone (divi, line/solid) — mobile device
+- `&#xe00c;||divi||400` Tablet (divi, line/solid) — mobile device
+- `&#xe00d;||divi||400` Laptop (divi, line/solid) — computer device
+- `&#xe00e;||divi||400` Desktop (divi, line/solid) — monitor computer
+- `&#xe00f;||divi||400` Camera (divi, line) — photography
+- `&#xe010;||divi||400` Envelop (divi, line) — mail email send envelope
+- `&#xe011;||divi||400` Cone (divi, line) — caution
+- `&#xe012;||divi||400` Ribbon (divi, line) — bookmark
+- `&#xe013;||divi||400` Bag (divi, line) — product cart shopping ecommerce
+- `&#xe014;||divi||400` Credit Card (divi, line) — ecommerce shop
+- `&#xe015;||divi||400` Shopping Cart (divi, line) — product ecommerce
+- `&#xe016;||divi||400` Paper Clip (divi, line) — attachment file
+- `&#xe017;||divi||400` Tag (divi, line) — price sale shop ecommerce discount
+- `&#xe018;||divi||400` Tags (divi, line) — tag price sale shop ecommerce discount
+- `&#xe019;||divi||400` Trashcan (divi, line) — trash delete remove bin
+- `&#xe01a;||divi||400` Cursor (divi, line) — click hover ux
+- `&#xe01b;||divi||400` Microphone (divi, line) — audio mic record
+- `&#xe01c;||divi||400` Compass (divi, line) — browser location
+- `&#xe01d;||divi||400` Map Pin (divi, line) — locatoin address
+- `&#xe01e;||divi||400` Push Pin (divi, line)
+- `&#xe01f;||divi||400` Map (divi, line) — directions location
+- `&#xe020;||divi||400` Inbox (divi, line) — drawer
+- `&#xe021;||divi||400` Toolbox (divi, line) — tools box portfolio briefcase
+- `&#xe022;||divi||400` Book (divi, line)
+- `&#xe023;||divi||400` Calendar (divi, line/solid) — date event rolodex
+- `&#xe024;||divi||400` Film (divi, line/solid) — movie video
+- `&#xe025;||divi||400` Table (divi, line/solid) — grid
+- `&#xe026;||divi||400` Contacts (divi, line) — addresses
+- `&#xe027;||divi||400` Headphones (divi, line) — audio support
+- `&#xe028;||divi||400` Support (divi, line/solid) — lifesaver
+- `&#xe029;||divi||400` Pie Cart (divi, line/solid) — chart graph statistics
+- `&#xe02a;||divi||400` Redo (divi, line) — refresh rotate
+- `&#xe02b;||divi||400` Link (divi, line) — chain connect sync
+- `&#xe02c;||divi||400` Hyperlink (divi, line) — link chain connect sync
+- `&#xe02d;||divi||400` Loading (divi, line) — load loader spinner
+- `&#xe02e;||divi||400` Blocked (divi, line/solid) — cancel block none
+- `&#xe02f;||divi||400` Box (divi, line) — archive
+- `&#xe030;||divi||400` Heart (divi, line) — like love favorite
+- `&#xe031;||divi||400` Star (divi, line) — favorite
+- `&#xe032;||divi||400` Half Star (divi, line/solid) — favorite
+- `&#xe103;||divi||400` Printer (divi, line) — fax
+- `&#xe0ee;||divi||400` Calculator (divi, line) — math
+- `&#xe0ef;||divi||400` Buildings (divi, line) — building business city
+- `&#xe0e8;||divi||400` Save (divi, line) — floppy disk
+- `&#xe0ea;||divi||400` Hard Drive (divi, line) — server storage backup
+- `&#xe101;||divi||400` Search Document (divi, line) — zoom
+- `&#xe107;||divi||400` Identity (divi, line) — id profile
+- `&#xe108;||divi||400` Nametag (divi, line) — id identity profile tag badge
+- `&#xe102;||divi||400` Puzzle (divi, line) — strategy
+- `&#xe106;||divi||400` Thumbs Up (divi, line) — like rate
+- `&#xe0eb;||divi||400` Thumbs Down (divi, line) — dislike rate
+- `&#xe105;||divi||400` Coffee (divi, line) — mug drink
+- `&#xe0ed;||divi||400` Dollar (divi, line) — money currency price
+- `&#xe100;||divi||400` Wallet (divi, line) — money price
+- `&#xe104;||divi||400` Pens (divi, line) — compose pencil pen author
+- `&#xe0e9;||divi||400` Presentation (divi, line) — easel graph statistics
+- `&#xe109;||divi||400` Organizational Chart (divi, line) — graph organization
+- `&#xe0ec;||divi||400` Bar Chart (divi, line) — data graph statistics performance
+- `&#xe0fe;||divi||400` Brief Case (divi, line) — breifcase portfolio job work
+- `&#xe0f6;||divi||400` Shield Warning (divi, line) — sheild caution security
+- `&#xe0fb;||divi||400` Percent (divi, line) — percentage sale discount
+- `&#xe0e2;||divi||400` Globe (divi, line)
+- `&#xe0e3;||divi||400` Internet (divi, line) — globe network
+- `&#xe0f5;||divi||400` Target (divi, line/solid)
+- `&#xe0e1;||divi||400` Hourglass (divi, line/solid) — time
+- `&#xe0ff;||divi||400` Scale (divi, line/solid) — balance
+- `&#xe033;||divi||400` Star (divi, solid) — favorite
+- `&#xe034;||divi||400` Half Star (divi, solid) — favorite
+- `&#xe035;||divi||400` Tools (divi, solid) — settings
+- `&#xe036;||divi||400` Tool (divi, solid) — tools settings
+- `&#xe037;||divi||400` Gear (divi, solid) — settings
+- `&#xe038;||divi||400` Gears (divi, solid) — gear settings
+- `&#xe039;||divi||400` Arrow Up (divi, solid) — direction previous collapse
+- `&#xe03a;||divi||400` Arrow Down (divi, solid) — direction expand next
+- `&#xe03b;||divi||400` Arrow Left (divi, solid) — direction prevous back
+- `&#xe03c;||divi||400` Arrow Right (divi, solid) — direction next forward
+- `&#xe03d;||divi||400` Arrow Up Left (divi, solid) — direction previous back
+- `&#xe03e;||divi||400` Arrow Up Right (divi, solid) — direction next forward
+- `&#xe03f;||divi||400` Arrow Down Right (divi, solid) — direction next forward
+- `&#xe040;||divi||400` Arrow Down Left (divi, solid) — direction previous back
+- `&#xe041;||divi||400` Arrows Condense (divi, solid) — arrow resize collapse close
+- `&#xe042;||divi||400` Arrows Expand (divi, solid) — arrow resize open
+- `&#xe043;||divi||400` Caret Up (divi, solid) — arrow direction previous collapse
+- `&#xe044;||divi||400` Caret down (divi, solid) — arrow direction expand next
+- `&#xe045;||divi||400` Caret Left (divi, solid) — arrow direction prevous back
+- `&#xe046;||divi||400` Caret Right (divi, solid) — arrow direction next forward
+- `&#xe047;||divi||400` Double Caret Up (divi, solid) — arrow direction previous collapse
+- `&#xe048;||divi||400` Double Caret down (divi, solid) — arrow direction expand next
+- `&#xe049;||divi||400` Double Caret Left (divi, solid) — arrow direction prevous back
+- `&#xe04a;||divi||400` Double Caret Right (divi, solid) — arrow direction next forward
+- `&#xe04b;||divi||400` Solid Caret Up (divi, solid) — arrow triangle direction previous collapse
+- `&#xe04c;||divi||400` Solid Caret down (divi, solid) — arrow triangle direction expand next
+- `&#xe04d;||divi||400` Solid Caret Left (divi, solid) — arrow triangle direction prevous back
+- `&#xe04e;||divi||400` Solid Caret Right (divi, solid) — arrow triangle direction next forward
+- `&#xe04f;||divi||400` Minus (divi, solid) — dash hyphen
+- `&#xe050;||divi||400` Plus (divi, solid) — add cross
+- `&#xe051;||divi||400` Close (divi, solid) — x cancel delete remove
+- `&#xe052;||divi||400` Check (divi, solid) — confirm
+- `&#xe053;||divi||400` Zoom Out (divi, solid) — magnifying glass
+- `&#xe054;||divi||400` Zoom In (divi, solid) — magnifying glass
+- `&#xe055;||divi||400` Stop (divi, solid)
+- `&#xe056;||divi||400` Menu (divi, solid) — hamburger expand open reorder drag
+- `&#xe057;||divi||400` Menu (divi, solid) — hamburger expand open reorder drag
+- `&#xe058;||divi||400` Document (divi, solid) — notes file
+- `&#xe059;||divi||400` Documents (divi, solid) — notes file
+- `&#xe05a;||divi||400` Pencil (divi, solid) — edit design write compose
+- `&#xe05b;||divi||400` Folder (divi, solid)
+- `&#xe05c;||divi||400` Open Folder (divi, solid)
+- `&#xe05d;||divi||400` Add Folder (divi, solid)
+- `&#xe05e;||divi||400` Upload Folder (divi, solid) — backup
+- `&#xe05f;||divi||400` Download Flder (divi, solid) — folder
+- `&#xe060;||divi||400` Information (divi, solid) — help
+- `&#xe061;||divi||400` Warning (divi, solid) — stop caution
+- `&#xe062;||divi||400` Warning (divi, solid) — caution
+- `&#xe063;||divi||400` Warning (divi, solid) — caution
+- `&#xe064;||divi||400` Question Mark (divi, solid) — help
+- `&#xe065;||divi||400` Chat (divi, solid) — speak bubble speech
+- `&#xe066;||divi||400` Chat (divi, solid) — speak bubble speech
+- `&#xe067;||divi||400` Volume Mute (divi, solid) — speaker
+- `&#xe068;||divi||400` Volume Down (divi, solid) — speaker
+- `&#xe069;||divi||400` Volume Up (divi, solid) — speaker
+- `&#xe06a;||divi||400` Quote (divi, solid) — testimonial
+- `&#xe06b;||divi||400` Clock (divi, solid) — time schedule history
+- `&#xe06c;||divi||400` Locked (divi, solid) — lock security
+- `&#xe06d;||divi||400` Unlocked (divi, solid) — lock security
+- `&#xe06e;||divi||400` Key (divi, solid)
+- `&#xe06f;||divi||400` Cloud (divi, solid) — hosting backup storage
+- `&#xe070;||divi||400` Cloud Upload (divi, solid) — hosting backup storage
+- `&#xe071;||divi||400` Cloud Download (divi, solid) — hosting storage
+- `&#xe072;||divi||400` Lightbulb (divi, solid) — light idea
+- `&#xe073;||divi||400` Gift (divi, solid) — present prize award
+- `&#xe074;||divi||400` Home (divi, solid) — house
+- `&#xe075;||divi||400` Camera (divi, solid) — photography
+- `&#xe076;||divi||400` Envelop (divi, solid) — mail email send envelope
+- `&#xe077;||divi||400` Cone (divi, solid) — caution
+- `&#xe078;||divi||400` Ribbon (divi, solid) — bookmark
+- `&#xe079;||divi||400` Bag (divi, solid) — product cart shopping ecommerce
+- `&#xe07a;||divi||400` Shopping Cart (divi, solid) — product ecommerce
+- `&#xe07b;||divi||400` Tag (divi, solid) — price sale shop ecommerce discount
+- `&#xe07c;||divi||400` Tags (divi, solid) — tag price sale shop ecommerce discount
+- `&#xe07d;||divi||400` Trashcan (divi, solid) — trash delete remove bin
+- `&#xe07e;||divi||400` Cursor (divi, solid) — click hover ux
+- `&#xe07f;||divi||400` Microphone (divi, solid) — audio mic record
+- `&#xe080;||divi||400` Compass (divi, solid) — browser location
+- `&#xe081;||divi||400` Map Pin (divi, solid) — locatoin address
+- `&#xe082;||divi||400` Push Pin (divi, solid)
+- `&#xe083;||divi||400` Map (divi, solid) — directions location
+- `&#xe084;||divi||400` Inbox (divi, solid) — drawer
+- `&#xe085;||divi||400` Toolbox (divi, solid) — tools box portfolio briefcase
+- `&#xe086;||divi||400` Book (divi, solid)
+- `&#xe087;||divi||400` Contacts (divi, solid) — addresses
+- `&#xe088;||divi||400` Box (divi, solid) — archive
+- `&#xe089;||divi||400` Heart (divi, solid) — like love favorite
+- `&#xe08a;||divi||400` Person (divi, solid) — profile avatar
+- `&#xe08b;||divi||400` Group (divi, solid) — people
+- `&#xe08c;||divi||400` Grid (divi, solid)
+- `&#xe08d;||divi||400` Grid (divi, solid)
+- `&#xe08e;||divi||400` Audio (divi, solid) — note music sound song
+- `&#xe08f;||divi||400` Pause (divi, solid)
+- `&#xe090;||divi||400` Phone (divi, solid) — call
+- `&#xe091;||divi||400` Upload (divi, solid)
+- `&#xe092;||divi||400` Download (divi, solid)
+- `&#xe0f8;||divi||400` Castle (divi, solid) — chess strategy rook
+- `&#xe0fa;||divi||400` Printer (divi, solid) — fax
+- `&#xe0e7;||divi||400` Calculator (divi, solid) — math
+- `&#xe0fd;||divi||400` Buildings (divi, solid) — building business city
+- `&#xe0e4;||divi||400` Save (divi, solid) — floppy disk
+- `&#xe0e5;||divi||400` Hard Drive (divi, solid) — server storage backup
+- `&#xe0f7;||divi||400` Search Document (divi, solid) — zoom
+- `&#xe0e0;||divi||400` Identity (divi, solid) — id profile
+- `&#xe0fc;||divi||400` Nametag (divi, solid) — id identity profile tag badge
+- `&#xe0f9;||divi||400` Puzzle (divi, solid) — strategy
+- `&#xe0dd;||divi||400` Thumbs Up (divi, solid) — like rate
+- `&#xe0f1;||divi||400` Thumbs Down (divi, solid) — dislike rate
+- `&#xe0dc;||divi||400` Coffee (divi, solid) — mug drink
+- `&#xe0f3;||divi||400` Dollar (divi, solid) — money currency price
+- `&#xe0d8;||divi||400` Wallet (divi, solid) — money price
+- `&#xe0db;||divi||400` Pens (divi, solid) — compose pencil pen author
+- `&#xe0f0;||divi||400` Presentation (divi, solid) — easel graph statistics
+- `&#xe0df;||divi||400` Organizational Chart (divi, solid) — graph organization
+- `&#xe0f2;||divi||400` Bar Chart (divi, solid) — data graph statistics performance
+- `&#xe0f4;||divi||400` Brief Case (divi, solid) — breifcase portfolio job work
+- `&#xe0d9;||divi||400` Shield (divi, solid) — security
+- `&#xe0da;||divi||400` Percent (divi, solid) — percentage sale discount
+- `&#xe0de;||divi||400` Globe (divi, solid)
+- `&#xe0e6;||divi||400` Clipboard (divi, solid) — list
+- `&#xe093;||divi||400` Facebook (divi, solid) — social
+- `&#xe094;||divi||400` Twitter (divi, solid) — social
+- `&#xe095;||divi||400` Pinterest (divi, solid) — social
+- `&#xe096;||divi||400` Google Plus (divi, solid) — social
+- `&#xe097;||divi||400` Tumbler (divi, solid) — social tumblr
+- `&#xe098;||divi||400` StumbleUpon (divi, solid) — social
+- `&#xe099;||divi||400` WordPress (divi, solid)
+- `&#xe09a;||divi||400` Instagram (divi, solid) — social
+- `&#xe09b;||divi||400` Dribbble (divi, solid) — social
+- `&#xe09c;||divi||400` Venmo (divi, solid)
+- `&#xe09d;||divi||400` LinkedIn (divi, solid) — social
+- `&#xe09e;||divi||400` RSS (divi, solid)
+- `&#xe09f;||divi||400` DeviantArt (divi, solid) — social
+- `&#xe0a0;||divi||400` Share (divi, solid) — social network
+- `&#xe0a1;||divi||400` MySpace (divi, solid) — social
+- `&#xe0a2;||divi||400` Skype (divi, solid)
+- `&#xe0a3;||divi||400` YouTube (divi, solid) — play video
+- `&#xe0a4;||divi||400` Picassa (divi, solid)
+- `&#xe0a5;||divi||400` Google Drive (divi, solid)
+- `&#xe0a6;||divi||400` Flickr (divi, solid)
+- `&#xe0a7;||divi||400` Blogger (divi, solid) — social
+- `&#xe0a8;||divi||400` Spotify (divi, solid)
+- `&#xe0a9;||divi||400` Delicious (divi, solid) — social
+- `&#xe0aa;||divi||400` Facebook (divi, solid) — social
+- `&#xe0ab;||divi||400` Twitter (divi, solid) — social
+- `&#xe0ac;||divi||400` Pinterest (divi, solid) — social
+- `&#xe0ad;||divi||400` Google Plus (divi, solid) — social
+- `&#xe0ae;||divi||400` Tumbler (divi, solid) — social tumblr
+- `&#xe0af;||divi||400` StumbleUpon (divi, solid) — social
+- `&#xe0b0;||divi||400` WordPress (divi, solid)
+- `&#xe0b1;||divi||400` Instagram (divi, solid) — social
+- `&#xe0b2;||divi||400` Dribbble (divi, solid) — social
+- `&#xe0b3;||divi||400` Venmo (divi, solid)
+- `&#xe0b4;||divi||400` LinkedIn (divi, solid) — social
+- `&#xe0b5;||divi||400` RSS (divi, solid)
+- `&#xe0b6;||divi||400` DeviantArt (divi, solid) — social
+- `&#xe0b7;||divi||400` Share (divi, solid) — social network
+- `&#xe0b8;||divi||400` MySpace (divi, solid) — social
+- `&#xe0b9;||divi||400` Skype (divi, solid)
+- `&#xe0ba;||divi||400` YouTube (divi, solid) — play video
+- `&#xe0bb;||divi||400` Picassa (divi, solid)
+- `&#xe0bc;||divi||400` Google Drive (divi, solid)
+- `&#xe0bd;||divi||400` Flickr (divi, solid)
+- `&#xe0be;||divi||400` Blogger (divi, solid) — social
+- `&#xe0bf;||divi||400` Spotify (divi, solid)
+- `&#xe0c0;||divi||400` Delicious (divi, solid) — social
+- `&#xe0c1;||divi||400` Facebook (divi, solid) — social
+- `&#xe0c2;||divi||400` Twitter (divi, solid) — social
+- `&#xe0c3;||divi||400` Pinterest (divi, solid) — social
+- `&#xe0c4;||divi||400` Google Plus (divi, solid) — social
+- `&#xe0c5;||divi||400` Tumbler (divi, solid) — social tumblr
+- `&#xe0c6;||divi||400` StumbleUpon (divi, solid) — social
+- `&#xe0c7;||divi||400` WordPress (divi, solid)
+- `&#xe0c8;||divi||400` Instagram (divi, solid) — social
+- `&#xe0c9;||divi||400` Dribbble (divi, solid) — social
+- `&#xe0ca;||divi||400` Venmo (divi, solid)
+- `&#xe0cb;||divi||400` LinkedIn (divi, solid) — social
+- `&#xe0cc;||divi||400` RSS (divi, solid)
+- `&#xe0cd;||divi||400` DeviantArt (divi, solid) — social
+- `&#xe0ce;||divi||400` Share (divi, solid) — social network
+- `&#xe0cf;||divi||400` MySpace (divi, solid) — social
+- `&#xe0d0;||divi||400` Skype (divi, solid)
+- `&#xe0d1;||divi||400` YouTube (divi, solid) — play video
+- `&#xe0d2;||divi||400` Picassa (divi, solid)
+- `&#xe0d3;||divi||400` Google Drive (divi, solid)
+- `&#xe0d4;||divi||400` Flickr (divi, solid)
+- `&#xe0d5;||divi||400` Blogger (divi, solid) — social
+- `&#xe0d6;||divi||400` Spotify (divi, solid)
+- `&#xe0d7;||divi||400` Delicious (divi, solid) — social
+- `&#xe600;||divi||400` Accordion (divi, solid) — toggle list
+- `&#xe601;||divi||400` Tabs (divi, solid)
+- `&#xe602;||divi||400` RSS (divi, line)
+- `&#xe603;||divi||400` Slider (divi, line) — gallery
+- `&#xe604;||divi||400` Sidebar (divi, line)
+- `&#xe605;||divi||400` Share (divi, line) — social network
+- `&#xe606;||divi||400` Pricing Tables (divi, line)
+- `&#xe607;||divi||400` Table (divi, line) — grid
+- `&#xe608;||divi||400` Hashtag (divi, line) — number pound
+- `&#xe609;||divi||400` Header (divi, line) — browser website
+- `&#xe60a;||divi||400` Table (divi, line) — grid
+- `&#xe60b;||divi||400` Spacer (divi, line) — divider expand arrow resize drag
+- `&#xe60c;||divi||400` Button (divi, line) — link
+- `&#xe60d;||divi||400` History (divi, line) — clock backup time
+- `&#xe60e;||divi||400` Percent (divi, line) — percentage counter graph data
+- `&#xe60f;||divi||400` Quote (divi, line) — chat
+- `&#xe610;||divi||400` Text (divi, line) — list
+- `&#xe611;||divi||400` Audio (divi, line) — note music sound song
+- `&#xe612;||divi||400` Accordion (divi, line) — toggle list
+- `&#xe620;||divi||400` Code (divi, line)
+
+## Font Awesome solid (1001)
+
+`||fa||900`.
+
+- `&#xf641;||fa||900` ad (fa, solid) — advertisement media newspaper promotion publicity
+- `&#xf2b9;||fa||900` address-book (fa, solid) — contact directory index little black rolodex
+- `&#xf2bb;||fa||900` address-card (fa, solid) — about contact id identification postcard profile
+- `&#xf042;||fa||900` adjust (fa, solid) — contrast dark light saturation
+- `&#xf5d0;||fa||900` air-freshener (fa, solid) — car deodorize fresh pine scent
+- `&#xf037;||fa||900` align-center (fa, solid) — format middle paragraph text
+- `&#xf039;||fa||900` align-justify (fa, solid) — format paragraph text
+- `&#xf036;||fa||900` align-left (fa, solid) — format paragraph text
+- `&#xf038;||fa||900` align-right (fa, solid) — format paragraph text
+- `&#xf461;||fa||900` allergies (fa, solid) — allergy freckles hand hives pox skin spots
+- `&#xf0f9;||fa||900` ambulance (fa, solid) — covid19 emergency emt er help hospital support vehicle
+- `&#xf2a3;||fa||900` american-sign-language-interpreting (fa, solid) — asl deaf finger hand interpret speak
+- `&#xf13d;||fa||900` anchor (fa, solid) — berth boat dock embed link maritime moor secure
+- `&#xf103;||fa||900` angle-double-down (fa, solid) — arrows caret download expand
+- `&#xf100;||fa||900` angle-double-left (fa, solid) — arrows back caret laquo previous quote
+- `&#xf101;||fa||900` angle-double-right (fa, solid) — arrows caret forward more next quote raquo
+- `&#xf102;||fa||900` angle-double-up (fa, solid) — arrows caret collapse upload
+- `&#xf107;||fa||900` angle-down (fa, solid) — arrow caret download expand
+- `&#xf104;||fa||900` angle-left (fa, solid) — arrow back caret less previous
+- `&#xf105;||fa||900` angle-right (fa, solid) — arrow care forward more next
+- `&#xf106;||fa||900` angle-up (fa, solid) — arrow caret collapse upload
+- `&#xf556;||fa||900` angry (fa, solid) — face disapprove emoticon mad upset
+- `&#xf644;||fa||900` ankh (fa, solid) — amulet copper coptic christianity copts crux ansata egypt
+- `&#xf5d1;||fa||900` apple-alt (fa, solid) — fruit fall fuji macintosh orchard seasonal vegan
+- `&#xf187;||fa||900` archive (fa, solid) — box package save storage
+- `&#xf557;||fa||900` archway (fa, solid) — arc monument road street tunnel
+- `&#xf358;||fa||900` arrow-alt-circle-down (fa, solid) — alternate arrowcircleodown download
+- `&#xf359;||fa||900` arrow-alt-circle-left (fa, solid) — alternate arrowcircleoleft back previous
+- `&#xf35a;||fa||900` arrow-alt-circle-right (fa, solid) — alternate arrowcircleoright forward next
+- `&#xf35b;||fa||900` arrow-alt-circle-up (fa, solid) — alternate arrowcircleoup
+- `&#xf0ab;||fa||900` arrow-circle-down (fa, solid) — download
+- `&#xf0a8;||fa||900` arrow-circle-left (fa, solid) — back previous
+- `&#xf0a9;||fa||900` arrow-circle-right (fa, solid) — forward next
+- `&#xf0aa;||fa||900` arrow-circle-up (fa, solid) — upload
+- `&#xf063;||fa||900` arrow-down (fa, solid) — download
+- `&#xf060;||fa||900` arrow-left (fa, solid) — back previous
+- `&#xf061;||fa||900` arrow-right (fa, solid) — forward next
+- `&#xf062;||fa||900` arrow-up (fa, solid) — forward upload
+- `&#xf0b2;||fa||900` arrows-alt (fa, solid) — alternate arrow bigger enlarge expand fullscreen move position
+- `&#xf337;||fa||900` arrows-alt-h (fa, solid) — alternate horizontal arrowsh expand landscape resize wide
+- `&#xf338;||fa||900` arrows-alt-v (fa, solid) — alternate vertical arrowsv expand portrait resize tall
+- `&#xf2a2;||fa||900` assistive-listening-systems (fa, solid) — amplify audio deaf ear headset hearing sound
+- `&#xf069;||fa||900` asterisk (fa, solid) — annotation details reference star
+- `&#xf1fa;||fa||900` at (fa, solid) — address author email handle
+- `&#xf558;||fa||900` atlas (fa, solid) — book directions geography globe map travel wayfinding
+- `&#xf5d2;||fa||900` atom (fa, solid) — atheism chemistry electron ion isotope neutron nuclear proton
+- `&#xf29e;||fa||900` audio-description (fa, solid) — blind narration video visual
+- `&#xf559;||fa||900` award (fa, solid) — honor praise prize recognition ribbon trophy
+- `&#xf77c;||fa||900` baby (fa, solid) — child diaper doll human infant kid offspring person
+- `&#xf77d;||fa||900` baby-carriage (fa, solid) — buggy carrier infant push stroller transportation walk wheels
+- `&#xf55a;||fa||900` backspace (fa, solid) — command delete erase keyboard undo
+- `&#xf04a;||fa||900` backward (fa, solid) — previous rewind
+- `&#xf7e5;||fa||900` bacon (fa, solid) — blt breakfast ham lard meat pancetta pork rasher
+- `&#xe059;||fa||900` bacteria (fa, solid) — antibiotic antibody covid19 health organism sick
+- `&#xe05a;||fa||900` bacterium (fa, solid) — antibiotic antibody covid19 health organism sick
+- `&#xf666;||fa||900` bahai (fa, solid) — bahá'í bah star
+- `&#xf24e;||fa||900` balance-scale (fa, solid) — balanced justice legal measure weight
+- `&#xf515;||fa||900` balance-scale-left (fa, solid) — (left-weighted) justice legal measure unbalanced weight
+- `&#xf516;||fa||900` balance-scale-right (fa, solid) — (right-weighted) justice legal measure unbalanced weight
+- `&#xf05e;||fa||900` ban (fa, solid) — abort block cancel delete hide prohibit remove stop
+- `&#xf462;||fa||900` band-aid (fa, solid) — bandage boo first ouch
+- `&#xf02a;||fa||900` barcode (fa, solid) — info laser price scan upc
+- `&#xf0c9;||fa||900` bars (fa, solid) — checklist drag hamburger list menu nav navigation ol
+- `&#xf433;||fa||900` baseball-ball (fa, solid) — foul hardball league leather mlb softball sport
+- `&#xf434;||fa||900` basketball-ball (fa, solid) — dribble dunk hoop nba
+- `&#xf2cd;||fa||900` bath (fa, solid) — clean shower tub wash
+- `&#xf244;||fa||900` battery-empty (fa, solid) — charge dead power status
+- `&#xf240;||fa||900` battery-full (fa, solid) — charge power status
+- `&#xf242;||fa||900` battery-half (fa, solid) — 1/2 full charge power status
+- `&#xf243;||fa||900` battery-quarter (fa, solid) — 1/4 full charge low power status
+- `&#xf241;||fa||900` battery-three-quarters (fa, solid) — 3/4 full charge power status
+- `&#xf236;||fa||900` bed (fa, solid) — lodging mattress rest sleep travel
+- `&#xf0fc;||fa||900` beer (fa, solid) — alcohol ale bar beverage brewery drink lager liquor
+- `&#xf0f3;||fa||900` bell (fa, solid) — alarm alert chime notification reminder
+- `&#xf1f6;||fa||900` bell-slash (fa, solid) — alert cancel disabled notification off reminder
+- `&#xf55b;||fa||900` bezier-curve (fa, solid) — curves illustrator lines path vector
+- `&#xf647;||fa||900` bible (fa, solid) — book catholicism christianity god holy
+- `&#xf206;||fa||900` bicycle (fa, solid) — bike gears pedal transportation vehicle
+- `&#xf84a;||fa||900` biking (fa, solid) — bicycle bike cycle cycling ride wheel
+- `&#xf1e5;||fa||900` binoculars (fa, solid) — glasses magnify scenic spyglass view
+- `&#xf780;||fa||900` biohazard (fa, solid) — covid19 danger dangerous hazmat medical radioactive toxic waste
+- `&#xf1fd;||fa||900` birthday-cake (fa, solid) — anniversary bakery candles celebration dessert frosting holiday party
+- `&#xf517;||fa||900` blender (fa, solid) — cocktail milkshake mixer puree smoothie
+- `&#xf6b6;||fa||900` blender-phone (fa, solid) — appliance cocktail communication fantasy milkshake mixer puree silly
+- `&#xf29d;||fa||900` blind (fa, solid) — cane disability person sight
+- `&#xf781;||fa||900` blog (fa, solid) — journal log online personal post web 20 wordpress
+- `&#xf032;||fa||900` bold (fa, solid) — emphasis format text
+- `&#xf0e7;||fa||900` bolt (fa, solid) — lightning electricity weather zap
+- `&#xf1e2;||fa||900` bomb (fa, solid) — error explode fuse grenade warning
+- `&#xf5d7;||fa||900` bone (fa, solid) — calcium dog skeletal skeleton tibia
+- `&#xf55c;||fa||900` bong (fa, solid) — aparatus cannabis marijuana pipe smoke smoking
+- `&#xf02d;||fa||900` book (fa, solid) — diary documentation journal library read
+- `&#xf6b7;||fa||900` book-dead (fa, solid) — of the dungeons dragons crossbones dd dark arts
+- `&#xf7e6;||fa||900` book-medical (fa, solid) — diary documentation health history journal library read record
+- `&#xf518;||fa||900` book-open (fa, solid) — flyer library notebook pamphlet reading
+- `&#xf5da;||fa||900` book-reader (fa, solid) — flyer library notebook open pamphlet reading
+- `&#xf02e;||fa||900` bookmark (fa, solid) — favorite marker read remember save
+- `&#xf84c;||fa||900` border-all (fa, solid) — cell grid outline stroke table
+- `&#xf850;||fa||900` border-none (fa, solid) — cell grid outline stroke table
+- `&#xf853;||fa||900` border-style (fa, solid) — border-styleborder
+- `&#xf436;||fa||900` bowling-ball (fa, solid) — alley candlepin gutter lane strike tenpin
+- `&#xf466;||fa||900` box (fa, solid) — archive container package storage
+- `&#xf49e;||fa||900` box-open (fa, solid) — archive container package storage unpack
+- `&#xe05b;||fa||900` box-tissue (fa, solid) — cough covid19 kleenex mucus nose sneeze snot
+- `&#xf468;||fa||900` boxes (fa, solid) — archives inventory storage warehouse
+- `&#xf2a1;||fa||900` braille (fa, solid) — alphabet blind dots raised vision
+- `&#xf5dc;||fa||900` brain (fa, solid) — cerebellum gray matter intellect medulla oblongata mind noodle
+- `&#xf7ec;||fa||900` bread-slice (fa, solid) — bake bakery baking dough flour gluten grain sandwich
+- `&#xf0b1;||fa||900` briefcase (fa, solid) — bag business luggage office work
+- `&#xf469;||fa||900` briefcase-medical (fa, solid) — doctor emt first aid health
+- `&#xf519;||fa||900` broadcast-tower (fa, solid) — airwaves antenna radio reception waves
+- `&#xf51a;||fa||900` broom (fa, solid) — clean firebolt fly halloween nimbus 2000 quidditch sweep
+- `&#xf55d;||fa||900` brush (fa, solid) — art bristles color handle paint
+- `&#xf188;||fa||900` bug (fa, solid) — beetle error insect report
+- `&#xf1ad;||fa||900` building (fa, solid) — apartment business city company office work
+- `&#xf0a1;||fa||900` bullhorn (fa, solid) — announcement broadcast louder megaphone share
+- `&#xf140;||fa||900` bullseye (fa, solid) — archery goal objective target
+- `&#xf46a;||fa||900` burn (fa, solid) — caliente energy fire flame gas heat hot
+- `&#xf207;||fa||900` bus (fa, solid) — public transportation travel vehicle
+- `&#xf55e;||fa||900` bus-alt (fa, solid) — mta public transportation travel vehicle
+- `&#xf64a;||fa||900` business-time (fa, solid) — alarm briefcase socks clock flight of the conchords
+- `&#xf1ec;||fa||900` calculator (fa, solid) — abacus addition arithmetic counting math multiplication subtraction
+- `&#xf133;||fa||900` calendar (fa, solid) — calendaro date event schedule time when
+- `&#xf073;||fa||900` calendar-alt (fa, solid) — alternate date event schedule time when
+- `&#xf274;||fa||900` calendar-check (fa, solid) — accept agree appointment confirm correct date done event
+- `&#xf783;||fa||900` calendar-day (fa, solid) — with focus date detail event schedule single time
+- `&#xf272;||fa||900` calendar-minus (fa, solid) — date delete event negative remove schedule time when
+- `&#xf271;||fa||900` calendar-plus (fa, solid) — add create date event new positive schedule time
+- `&#xf273;||fa||900` calendar-times (fa, solid) — archive date delete event remove schedule time when
+- `&#xf784;||fa||900` calendar-week (fa, solid) — with focus date detail event schedule single time
+- `&#xf030;||fa||900` camera (fa, solid) — image lens photo picture record shutter video
+- `&#xf083;||fa||900` camera-retro (fa, solid) — image lens photo picture record shutter video
+- `&#xf6bb;||fa||900` campground (fa, solid) — camping fall outdoors teepee tent tipi
+- `&#xf786;||fa||900` candy-cane (fa, solid) — christmas holiday mint peppermint striped xmas
+- `&#xf55f;||fa||900` cannabis (fa, solid) — bud chronic drugs endica endo ganja marijuana mary
+- `&#xf46b;||fa||900` capsules (fa, solid) — drugs medicine pills prescription
+- `&#xf1b9;||fa||900` car (fa, solid) — auto automobile sedan transportation travel vehicle
+- `&#xf5de;||fa||900` car-alt (fa, solid) — alternate auto automobile sedan transportation travel vehicle
+- `&#xf5df;||fa||900` car-battery (fa, solid) — auto electric mechanic power
+- `&#xf5e1;||fa||900` car-crash (fa, solid) — accident auto automobile insurance sedan transportation vehicle wreck
+- `&#xf5e4;||fa||900` car-side (fa, solid) — auto automobile sedan transportation travel vehicle
+- `&#xf8ff;||fa||900` caravan (fa, solid) — camper motor home rv trailer travel
+- `&#xf0d7;||fa||900` caret-down (fa, solid) — arrow dropdown expand menu more triangle
+- `&#xf0d9;||fa||900` caret-left (fa, solid) — arrow back previous triangle
+- `&#xf0da;||fa||900` caret-right (fa, solid) — arrow forward next triangle
+- `&#xf150;||fa||900` caret-square-down (fa, solid) — arrow caretsquareodown dropdown expand menu more triangle
+- `&#xf191;||fa||900` caret-square-left (fa, solid) — arrow back caretsquareoleft previous triangle
+- `&#xf152;||fa||900` caret-square-right (fa, solid) — arrow caretsquareoright forward next triangle
+- `&#xf151;||fa||900` caret-square-up (fa, solid) — arrow caretsquareoup collapse triangle upload
+- `&#xf0d8;||fa||900` caret-up (fa, solid) — arrow collapse triangle
+- `&#xf787;||fa||900` carrot (fa, solid) — bugs bunny orange vegan vegetable
+- `&#xf218;||fa||900` cart-arrow-down (fa, solid) — shopping download save
+- `&#xf217;||fa||900` cart-plus (fa, solid) — add to shopping create new positive
+- `&#xf788;||fa||900` cash-register (fa, solid) — buy chaching change checkout commerce leaerboard machine pay
+- `&#xf6be;||fa||900` cat (fa, solid) — feline halloween holiday kitten kitty meow pet
+- `&#xf0a3;||fa||900` certificate (fa, solid) — badge star verified
+- `&#xf6c0;||fa||900` chair (fa, solid) — furniture seat sit
+- `&#xf51b;||fa||900` chalkboard (fa, solid) — blackboard learning school teaching whiteboard writing
+- `&#xf51c;||fa||900` chalkboard-teacher (fa, solid) — blackboard instructor learning professor school whiteboard writing
+- `&#xf5e7;||fa||900` charging-station (fa, solid) — electric ev tesla vehicle
+- `&#xf1fe;||fa||900` chart-area (fa, solid) — analytics graph
+- `&#xf080;||fa||900` chart-bar (fa, solid) — analytics graph
+- `&#xf201;||fa||900` chart-line (fa, solid) — activity analytics dashboard gain graph increase
+- `&#xf200;||fa||900` chart-pie (fa, solid) — analytics diagram graph
+- `&#xf00c;||fa||900` check (fa, solid) — accept agree checkmark confirm correct done notice notification
+- `&#xf058;||fa||900` check-circle (fa, solid) — accept agree confirm correct done ok select success
+- `&#xf560;||fa||900` check-double (fa, solid) — accept agree checkmark confirm correct done notice notification
+- `&#xf14a;||fa||900` check-square (fa, solid) — accept agree checkmark confirm correct done ok select
+- `&#xf7ef;||fa||900` cheese (fa, solid) — cheddar curd gouda melt parmesan sandwich swiss wedge
+- `&#xf439;||fa||900` chess (fa, solid) — board castle checkmate game king rook strategy tournament
+- `&#xf43a;||fa||900` chess-bishop (fa, solid) — board checkmate game strategy
+- `&#xf43c;||fa||900` chess-board (fa, solid) — checkmate game strategy
+- `&#xf43f;||fa||900` chess-king (fa, solid) — board checkmate game strategy
+- `&#xf441;||fa||900` chess-knight (fa, solid) — board checkmate game horse strategy
+- `&#xf443;||fa||900` chess-pawn (fa, solid) — board checkmate game strategy
+- `&#xf445;||fa||900` chess-queen (fa, solid) — board checkmate game strategy
+- `&#xf447;||fa||900` chess-rook (fa, solid) — board castle checkmate game strategy
+- `&#xf13a;||fa||900` chevron-circle-down (fa, solid) — arrow download dropdown menu more
+- `&#xf137;||fa||900` chevron-circle-left (fa, solid) — arrow back previous
+- `&#xf138;||fa||900` chevron-circle-right (fa, solid) — arrow forward next
+- `&#xf139;||fa||900` chevron-circle-up (fa, solid) — arrow collapse upload
+- `&#xf078;||fa||900` chevron-down (fa, solid) — arrow download expand
+- `&#xf053;||fa||900` chevron-left (fa, solid) — arrow back bracket previous
+- `&#xf054;||fa||900` chevron-right (fa, solid) — arrow bracket forward next
+- `&#xf077;||fa||900` chevron-up (fa, solid) — arrow collapse upload
+- `&#xf1ae;||fa||900` child (fa, solid) — boy girl kid toddler young
+- `&#xf51d;||fa||900` church (fa, solid) — building cathedral chapel community religion
+- `&#xf111;||fa||900` circle (fa, solid) — circlethin diameter dot ellipse notification round
+- `&#xf1ce;||fa||900` circle-notch (fa, solid) — notched circleonotch diameter dot ellipse round spinner
+- `&#xf64f;||fa||900` city (fa, solid) — buildings busy skyscrapers urban windows
+- `&#xf7f2;||fa||900` clinic-medical (fa, solid) — covid19 doctor general practitioner hospital infirmary medicine office
+- `&#xf328;||fa||900` clipboard (fa, solid) — copy notes paste record
+- `&#xf46c;||fa||900` clipboard-check (fa, solid) — with accept agree confirm done ok select success
+- `&#xf46d;||fa||900` clipboard-list (fa, solid) — checklist completed done finished intinerary ol schedule tick
+- `&#xf017;||fa||900` clock (fa, solid) — date late schedule time timer timestamp watch
+- `&#xf24d;||fa||900` clone (fa, solid) — arrange copy duplicate paste
+- `&#xf20a;||fa||900` closed-captioning (fa, solid) — cc deaf hearing subtitle subtitling text video
+- `&#xf0c2;||fa||900` cloud (fa, solid) — atmosphere fog overcast save upload weather
+- `&#xf381;||fa||900` cloud-download-alt (fa, solid) — alternate export save
+- `&#xf73b;||fa||900` cloud-meatball (fa, solid) — with (a chance of) fldsmdfr food spaghetti storm
+- `&#xf6c3;||fa||900` cloud-moon (fa, solid) — with crescent evening lunar night partly cloudy sky
+- `&#xf73c;||fa||900` cloud-moon-rain (fa, solid) — with and crescent evening lunar night partly cloudy
+- `&#xf73d;||fa||900` cloud-rain (fa, solid) — with precipitation sky storm
+- `&#xf740;||fa||900` cloud-showers-heavy (fa, solid) — with precipitation rain sky storm
+- `&#xf6c4;||fa||900` cloud-sun (fa, solid) — with clear day daytime fall outdoors overcast partly
+- `&#xf743;||fa||900` cloud-sun-rain (fa, solid) — with and day overcast precipitation storm summer sunshower
+- `&#xf382;||fa||900` cloud-upload-alt (fa, solid) — alternate cloudupload import save
+- `&#xf561;||fa||900` cocktail (fa, solid) — alcohol beverage drink gin glass margarita martini vodka
+- `&#xf121;||fa||900` code (fa, solid) — brackets development html
+- `&#xf126;||fa||900` code-branch (fa, solid) — codefork fork git github rebase svn vcs version
+- `&#xf0f4;||fa||900` coffee (fa, solid) — beverage breakfast cafe drink fall morning mug seasonal
+- `&#xf013;||fa||900` cog (fa, solid) — gear mechanical settings sprocket wheel
+- `&#xf085;||fa||900` cogs (fa, solid) — gears mechanical settings sprocket wheel
+- `&#xf51e;||fa||900` coins (fa, solid) — currency dime financial gold money penny
+- `&#xf0db;||fa||900` columns (fa, solid) — browser dashboard organize panes split
+- `&#xf075;||fa||900` comment (fa, solid) — bubble chat commenting conversation feedback message note notification
+- `&#xf27a;||fa||900` comment-alt (fa, solid) — alternate bubble chat commenting conversation feedback message note
+- `&#xf651;||fa||900` comment-dollar (fa, solid) — bubble chat commenting conversation feedback message money note
+- `&#xf4ad;||fa||900` comment-dots (fa, solid) — bubble chat commenting conversation feedback message more note
+- `&#xf7f5;||fa||900` comment-medical (fa, solid) — alternate chat advice bubble commenting conversation diagnose feedback
+- `&#xf4b3;||fa||900` comment-slash (fa, solid) — bubble cancel chat commenting conversation feedback message mute
+- `&#xf086;||fa||900` comments (fa, solid) — bubble chat commenting conversation feedback message note notification
+- `&#xf653;||fa||900` comments-dollar (fa, solid) — bubble chat commenting conversation feedback message money note
+- `&#xf51f;||fa||900` compact-disc (fa, solid) — album bluray cd dvd media movie music record
+- `&#xf14e;||fa||900` compass (fa, solid) — directions directory location menu navigation safari travel
+- `&#xf066;||fa||900` compress (fa, solid) — collapse fullscreen minimize move resize shrink smaller
+- `&#xf422;||fa||900` compress-alt (fa, solid) — alternate collapse fullscreen minimize move resize shrink smaller
+- `&#xf78c;||fa||900` compress-arrows-alt (fa, solid) — alternate collapse fullscreen minimize move resize shrink smaller
+- `&#xf562;||fa||900` concierge-bell (fa, solid) — attention hotel receptionist service support
+- `&#xf563;||fa||900` cookie (fa, solid) — baked good chips chocolate eat snack sweet treat
+- `&#xf564;||fa||900` cookie-bite (fa, solid) — baked good bitten chips chocolate eat snack sweet
+- `&#xf0c5;||fa||900` copy (fa, solid) — clone duplicate file fileso paper paste
+- `&#xf1f9;||fa||900` copyright (fa, solid) — brand mark register trademark
+- `&#xf4b8;||fa||900` couch (fa, solid) — chair cushion furniture relax sofa
+- `&#xf09d;||fa||900` credit-card (fa, solid) — buy checkout creditcardalt debit money payment purchase
+- `&#xf125;||fa||900` crop (fa, solid) — design frame mask resize shrink
+- `&#xf565;||fa||900` crop-alt (fa, solid) — alternate design frame mask resize shrink
+- `&#xf654;||fa||900` cross (fa, solid) — catholicism christianity church jesus
+- `&#xf05b;||fa||900` crosshairs (fa, solid) — aim bullseye gpd picker position
+- `&#xf520;||fa||900` crow (fa, solid) — bird bullfrog fauna halloween holiday toad
+- `&#xf521;||fa||900` crown (fa, solid) — award favorite king queen royal tiara
+- `&#xf7f7;||fa||900` crutch (fa, solid) — cane injury mobility wheelchair
+- `&#xf1b2;||fa||900` cube (fa, solid) — 3d block dice package square tesseract
+- `&#xf1b3;||fa||900` cubes (fa, solid) — 3d block dice package pyramid square stack tesseract
+- `&#xf0c4;||fa||900` cut (fa, solid) — clip scissors snip
+- `&#xf1c0;||fa||900` database (fa, solid) — computer development directory memory storage
+- `&#xf2a4;||fa||900` deaf (fa, solid) — ear hearing sign language
+- `&#xf747;||fa||900` democrat (fa, solid) — american democratic party donkey election left leftwing liberal
+- `&#xf108;||fa||900` desktop (fa, solid) — computer cpu demo device imac machine monitor pc
+- `&#xf655;||fa||900` dharmachakra (fa, solid) — buddhism buddhist wheel of dharma
+- `&#xf470;||fa||900` diagnoses (fa, solid) — analyze detect diagnosis examine medicine
+- `&#xf522;||fa||900` dice (fa, solid) — chance gambling game roll
+- `&#xf6cf;||fa||900` dice-d20 (fa, solid) — dungeons dragons chance dd dnd fantasy gambling game
+- `&#xf6d1;||fa||900` dice-d6 (fa, solid) — dungeons dragons chance dd dnd fantasy gambling game
+- `&#xf523;||fa||900` dice-five (fa, solid) — chance gambling game roll
+- `&#xf524;||fa||900` dice-four (fa, solid) — chance gambling game roll
+- `&#xf525;||fa||900` dice-one (fa, solid) — chance gambling game roll
+- `&#xf526;||fa||900` dice-six (fa, solid) — chance gambling game roll
+- `&#xf527;||fa||900` dice-three (fa, solid) — chance gambling game roll
+- `&#xf528;||fa||900` dice-two (fa, solid) — chance gambling game roll
+- `&#xf566;||fa||900` digital-tachograph (fa, solid) — data distance speed tachometer
+- `&#xf5eb;||fa||900` directions (fa, solid) — map navigation sign turn
+- `&#xf7fa;||fa||900` disease (fa, solid) — bacteria cancer covid19 illness infection sickness virus
+- `&#xf529;||fa||900` divide (fa, solid) — arithmetic calculus division math
+- `&#xf567;||fa||900` dizzy (fa, solid) — face dazed dead disapprove emoticon
+- `&#xf471;||fa||900` dna (fa, solid) — double helix genetic molecule protein
+- `&#xf6d3;||fa||900` dog (fa, solid) — animal canine fauna mammal pet pooch puppy woof
+- `&#xf155;||fa||900` dollar-sign (fa, solid) — cost dollarsign money price usd
+- `&#xf472;||fa||900` dolly (fa, solid) — carry shipping transport
+- `&#xf474;||fa||900` dolly-flatbed (fa, solid) — carry inventory shipping transport
+- `&#xf4b9;||fa||900` donate (fa, solid) — contribute generosity gift give
+- `&#xf52a;||fa||900` door-closed (fa, solid) — enter exit locked
+- `&#xf52b;||fa||900` door-open (fa, solid) — enter exit welcome
+- `&#xf192;||fa||900` dot-circle (fa, solid) — bullseye notification target
+- `&#xf4ba;||fa||900` dove (fa, solid) — bird fauna flying peace war
+- `&#xf019;||fa||900` download (fa, solid) — export hard drive save transfer
+- `&#xf568;||fa||900` drafting-compass (fa, solid) — design map mechanical drawing plot plotting
+- `&#xf6d5;||fa||900` dragon (fa, solid) — dungeons dragons dd dnd fantasy fire lizard serpent
+- `&#xf5ee;||fa||900` draw-polygon (fa, solid) — anchors lines object render shape
+- `&#xf569;||fa||900` drum (fa, solid) — instrument music percussion snare sound
+- `&#xf56a;||fa||900` drum-steelpan (fa, solid) — calypso instrument music percussion reggae snare sound steel
+- `&#xf6d7;||fa||900` drumstick-bite (fa, solid) — with taken out bone chicken leg meat poultry
+- `&#xf44b;||fa||900` dumbbell (fa, solid) — exercise gym strength weight weightlifting
+- `&#xf793;||fa||900` dumpster (fa, solid) — alley bin commercial trash waste
+- `&#xf794;||fa||900` dumpster-fire (fa, solid) — alley bin commercial danger dangerous euphemism flame heat
+- `&#xf6d9;||fa||900` dungeon (fa, solid) — dungeons dragons building dd dnd door entrance fantasy
+- `&#xf044;||fa||900` edit (fa, solid) — pen pencil update write
+- `&#xf7fb;||fa||900` egg (fa, solid) — breakfast chicken easter shell yolk
+- `&#xf052;||fa||900` eject (fa, solid) — abort cancel cd discharge
+- `&#xf141;||fa||900` ellipsis-h (fa, solid) — horizontal dots drag kebab list menu nav navigation
+- `&#xf142;||fa||900` ellipsis-v (fa, solid) — vertical dots drag kebab list menu nav navigation
+- `&#xf0e0;||fa||900` envelope (fa, solid) — email letter mail message notification support
+- `&#xf2b6;||fa||900` envelope-open (fa, solid) — email letter mail message notification support
+- `&#xf658;||fa||900` envelope-open-text (fa, solid) — open-text email letter mail message notification support
+- `&#xf199;||fa||900` envelope-square (fa, solid) — email letter mail message notification support
+- `&#xf52c;||fa||900` equals (fa, solid) — arithmetic even match math
+- `&#xf12d;||fa||900` eraser (fa, solid) — art delete remove rubber
+- `&#xf796;||fa||900` ethernet (fa, solid) — cable cat 5 6 connection hardware internet network
+- `&#xf153;||fa||900` euro-sign (fa, solid) — currency dollar exchange money
+- `&#xf362;||fa||900` exchange-alt (fa, solid) — alternate arrow arrows reciprocate return swap transfer
+- `&#xf12a;||fa||900` exclamation (fa, solid) — alert danger error important notice notification notify problem
+- `&#xf06a;||fa||900` exclamation-circle (fa, solid) — alert danger error important notice notification notify problem
+- `&#xf071;||fa||900` exclamation-triangle (fa, solid) — alert danger error important notice notification notify problem
+- `&#xf065;||fa||900` expand (fa, solid) — bigger enlarge fullscreen resize
+- `&#xf424;||fa||900` expand-alt (fa, solid) — alternate arrows bigger enlarge fullscreen resize
+- `&#xf31e;||fa||900` expand-arrows-alt (fa, solid) — alternate bigger enlarge fullscreen move resize
+- `&#xf35d;||fa||900` external-link-alt (fa, solid) — alternate externallink new open share
+- `&#xf360;||fa||900` external-link-square-alt (fa, solid) — alternate externallinksquare new open share
+- `&#xf06e;||fa||900` eye (fa, solid) — look optic see seen show sight views visible
+- `&#xf1fb;||fa||900` eye-dropper (fa, solid) — beaker clone color copy eyedropper pipette
+- `&#xf070;||fa||900` eye-slash (fa, solid) — blind hide show toggle unseen views visible visiblity
+- `&#xf863;||fa||900` fan (fa, solid) — ac air conditioning blade blower cool hot
+- `&#xf049;||fa||900` fast-backward (fa, solid) — beginning first previous rewind start
+- `&#xf050;||fa||900` fast-forward (fa, solid) — end last next
+- `&#xe005;||fa||900` faucet (fa, solid) — covid19 drip house hygiene kitchen sink water
+- `&#xf1ac;||fa||900` fax (fa, solid) — business communicate copy facsimile send
+- `&#xf52d;||fa||900` feather (fa, solid) — bird light plucked quill write
+- `&#xf56b;||fa||900` feather-alt (fa, solid) — alternate bird light plucked quill write
+- `&#xf182;||fa||900` female (fa, solid) — human person profile user woman
+- `&#xf0fb;||fa||900` fighter-jet (fa, solid) — airplane fast fly goose maverick plane quick top
+- `&#xf15b;||fa||900` file (fa, solid) — document new page pdf resume
+- `&#xf15c;||fa||900` file-alt (fa, solid) — alternate document filetext invoice new page pdf
+- `&#xf1c6;||fa||900` file-archive (fa, solid) — zip bundle compress compression download
+- `&#xf1c7;||fa||900` file-audio (fa, solid) — document mp3 music page play sound
+- `&#xf1c9;||fa||900` file-code (fa, solid) — css development document html
+- `&#xf56c;||fa||900` file-contract (fa, solid) — agreement binding document legal signature
+- `&#xf6dd;||fa||900` file-csv (fa, solid) — document excel numbers spreadsheets table
+- `&#xf56d;||fa||900` file-download (fa, solid) — document export save
+- `&#xf1c3;||fa||900` file-excel (fa, solid) — csv document numbers spreadsheets table
+- `&#xf56e;||fa||900` file-export (fa, solid) — download save
+- `&#xf1c5;||fa||900` file-image (fa, solid) — document jpg photo png
+- `&#xf56f;||fa||900` file-import (fa, solid) — copy document send upload
+- `&#xf570;||fa||900` file-invoice (fa, solid) — account bill charge document payment receipt
+- `&#xf571;||fa||900` file-invoice-dollar (fa, solid) — with us account bill charge document dollarsign money
+- `&#xf477;||fa||900` file-medical (fa, solid) — document health history prescription record
+- `&#xf478;||fa||900` file-medical-alt (fa, solid) — alternate document health history prescription record
+- `&#xf1c1;||fa||900` file-pdf (fa, solid) — acrobat document preview save
+- `&#xf1c4;||fa||900` file-powerpoint (fa, solid) — display document keynote presentation
+- `&#xf572;||fa||900` file-prescription (fa, solid) — document drugs medical medicine rx
+- `&#xf573;||fa||900` file-signature (fa, solid) — john hancock contract document name
+- `&#xf574;||fa||900` file-upload (fa, solid) — document import page save
+- `&#xf1c8;||fa||900` file-video (fa, solid) — document m4v movie mp4 play
+- `&#xf1c2;||fa||900` file-word (fa, solid) — document edit page text writing
+- `&#xf575;||fa||900` fill (fa, solid) — bucket color paint
+- `&#xf576;||fa||900` fill-drip (fa, solid) — bucket color drop paint spill
+- `&#xf008;||fa||900` film (fa, solid) — cinema movie strip video
+- `&#xf0b0;||fa||900` filter (fa, solid) — funnel options separate sort
+- `&#xf577;||fa||900` fingerprint (fa, solid) — human id identification lock smudge touch unique unlock
+- `&#xf06d;||fa||900` fire (fa, solid) — burn caliente flame heat hot popular
+- `&#xf7e4;||fa||900` fire-alt (fa, solid) — alternate burn caliente flame heat hot popular
+- `&#xf134;||fa||900` fire-extinguisher (fa, solid) — burn caliente fighter flame heat hot rescue
+- `&#xf479;||fa||900` first-aid (fa, solid) — emergency emt health medical rescue
+- `&#xf578;||fa||900` fish (fa, solid) — fauna gold seafood swimming
+- `&#xf6de;||fa||900` fist-raised (fa, solid) — dungeons dragons dd dnd fantasy hand ki monk
+- `&#xf024;||fa||900` flag (fa, solid) — country notice notification notify pole report symbol
+- `&#xf11e;||fa||900` flag-checkered (fa, solid) — notice notification notify pole racing report symbol
+- `&#xf74d;||fa||900` flag-usa (fa, solid) — united states of america betsy ross country old
+- `&#xf0c3;||fa||900` flask (fa, solid) — beaker experimental labs science
+- `&#xf579;||fa||900` flushed (fa, solid) — face embarrassed emoticon
+- `&#xf07b;||fa||900` folder (fa, solid) — archive directory document file
+- `&#xf65d;||fa||900` folder-minus (fa, solid) — archive delete directory document file negative remove
+- `&#xf07c;||fa||900` folder-open (fa, solid) — archive directory document empty file new
+- `&#xf65e;||fa||900` folder-plus (fa, solid) — add archive create directory document file new positive
+- `&#xf031;||fa||900` font (fa, solid) — alphabet glyph text type typeface
+- `&#xf44e;||fa||900` football-ball (fa, solid) — fall nfl pigskin seasonal
+- `&#xf04e;||fa||900` forward (fa, solid) — next skip
+- `&#xf52e;||fa||900` frog (fa, solid) — amphibian bullfrog fauna hop kermit kiss prince ribbit
+- `&#xf119;||fa||900` frown (fa, solid) — frowning face disapprove emoticon rating sad
+- `&#xf57a;||fa||900` frown-open (fa, solid) — frowning face with mouth disapprove emoticon rating sad
+- `&#xf662;||fa||900` funnel-dollar (fa, solid) — filter money options separate sort
+- `&#xf1e3;||fa||900` futbol (fa, solid) — ball football mls soccer
+- `&#xf11b;||fa||900` gamepad (fa, solid) — arcade controller dpad joystick video game
+- `&#xf52f;||fa||900` gas-pump (fa, solid) — car fuel gasoline petrol
+- `&#xf0e3;||fa||900` gavel (fa, solid) — hammer judge law lawyer opinion
+- `&#xf3a5;||fa||900` gem (fa, solid) — diamond jewelry sapphire stone treasure
+- `&#xf22d;||fa||900` genderless (fa, solid) — androgynous asexual sexless
+- `&#xf6e2;||fa||900` ghost (fa, solid) — apparition blinky clyde floating halloween holiday inky pinky
+- `&#xf06b;||fa||900` gift (fa, solid) — christmas generosity giving holiday party present wrapped xmas
+- `&#xf79c;||fa||900` gifts (fa, solid) — christmas generosity giving holiday party present wrapped xmas
+- `&#xf79f;||fa||900` glass-cheers (fa, solid) — alcohol bar beverage celebration champagne clink drink holiday
+- `&#xf000;||fa||900` glass-martini (fa, solid) — alcohol bar beverage drink liquor
+- `&#xf57b;||fa||900` glass-martini-alt (fa, solid) — alternate alcohol bar beverage drink liquor
+- `&#xf7a0;||fa||900` glass-whiskey (fa, solid) — alcohol bar beverage bourbon drink liquor neat rye
+- `&#xf530;||fa||900` glasses (fa, solid) — hipster nerd reading sight spectacles vision
+- `&#xf0ac;||fa||900` globe (fa, solid) — all coordinates country earth global gps language localize
+- `&#xf57c;||fa||900` globe-africa (fa, solid) — with shown all country earth global gps language
+- `&#xf57d;||fa||900` globe-americas (fa, solid) — with shown all country earth global gps language
+- `&#xf57e;||fa||900` globe-asia (fa, solid) — with shown all country earth global gps language
+- `&#xf7a2;||fa||900` globe-europe (fa, solid) — with shown all country earth global gps language
+- `&#xf450;||fa||900` golf-ball (fa, solid) — caddy eagle putt tee
+- `&#xf664;||fa||900` gopuram (fa, solid) — building entrance hinduism temple tower
+- `&#xf19d;||fa||900` graduation-cap (fa, solid) — ceremony college graduate learning school student
+- `&#xf531;||fa||900` greater-than (fa, solid) — arithmetic compare math
+- `&#xf532;||fa||900` greater-than-equal (fa, solid) — to arithmetic compare math
+- `&#xf57f;||fa||900` grimace (fa, solid) — grimacing face cringe emoticon teeth
+- `&#xf580;||fa||900` grin (fa, solid) — grinning face emoticon laugh smile
+- `&#xf581;||fa||900` grin-alt (fa, solid) — alternate grinning face emoticon laugh smile
+- `&#xf582;||fa||900` grin-beam (fa, solid) — grinning face with smiling eyes emoticon laugh smile
+- `&#xf583;||fa||900` grin-beam-sweat (fa, solid) — grinning face with embarass emoticon smile
+- `&#xf584;||fa||900` grin-hearts (fa, solid) — smiling face with heart-eyes emoticon love smile
+- `&#xf585;||fa||900` grin-squint (fa, solid) — grinning squinting face emoticon laugh smile
+- `&#xf586;||fa||900` grin-squint-tears (fa, solid) — rolling on the floor laughing emoticon face happy
+- `&#xf587;||fa||900` grin-stars (fa, solid) — star-struck emoticon face starstruck
+- `&#xf588;||fa||900` grin-tears (fa, solid) — face with of joy lol emoticon
+- `&#xf589;||fa||900` grin-tongue (fa, solid) — face with lol emoticon
+- `&#xf58a;||fa||900` grin-tongue-squint (fa, solid) — squinting face with lol emoticon
+- `&#xf58b;||fa||900` grin-tongue-wink (fa, solid) — winking face with lol emoticon
+- `&#xf58c;||fa||900` grin-wink (fa, solid) — grinning winking face emoticon flirt laugh smile
+- `&#xf58d;||fa||900` grip-horizontal (fa, solid) — affordance drag drop grab handle
+- `&#xf7a4;||fa||900` grip-lines (fa, solid) — affordance drag drop grab handle
+- `&#xf7a5;||fa||900` grip-lines-vertical (fa, solid) — affordance drag drop grab handle
+- `&#xf58e;||fa||900` grip-vertical (fa, solid) — affordance drag drop grab handle
+- `&#xf7a6;||fa||900` guitar (fa, solid) — acoustic instrument music rock and roll song strings
+- `&#xf0fd;||fa||900` h-square (fa, solid) — directions emergency hospital hotel map
+- `&#xf805;||fa||900` hamburger (fa, solid) — bacon beef burger king cheeseburger fast food grill
+- `&#xf6e3;||fa||900` hammer (fa, solid) — admin fix repair settings tool
+- `&#xf665;||fa||900` hamsa (fa, solid) — amulet christianity islam jewish judaism muslim protection
+- `&#xf4bd;||fa||900` hand-holding (fa, solid) — carry lift
+- `&#xf4be;||fa||900` hand-holding-heart (fa, solid) — carry charity gift lift package
+- `&#xe05c;||fa||900` hand-holding-medical (fa, solid) — cross care covid19 donate help
+- `&#xf4c0;||fa||900` hand-holding-usd (fa, solid) — us dollar carry sign donation giving lift money
+- `&#xf4c1;||fa||900` hand-holding-water (fa, solid) — carry covid19 drought grow lift
+- `&#xf258;||fa||900` hand-lizard (fa, solid) — (hand) game roshambo
+- `&#xf806;||fa||900` hand-middle-finger (fa, solid) — with raised flip the bird gesture hate rude
+- `&#xf256;||fa||900` hand-paper (fa, solid) — (hand) game halt roshambo stop
+- `&#xf25b;||fa||900` hand-peace (fa, solid) — (hand) rest truce
+- `&#xf0a7;||fa||900` hand-point-down (fa, solid) — pointing finger handodown
+- `&#xf0a5;||fa||900` hand-point-left (fa, solid) — pointing back finger handoleft previous
+- `&#xf0a4;||fa||900` hand-point-right (fa, solid) — pointing finger forward handoright next
+- `&#xf0a6;||fa||900` hand-point-up (fa, solid) — pointing finger handoup
+- `&#xf25a;||fa||900` hand-pointer (fa, solid) — (hand) arrow cursor select
+- `&#xf255;||fa||900` hand-rock (fa, solid) — (hand) fist game roshambo
+- `&#xf257;||fa||900` hand-scissors (fa, solid) — (hand) cut game roshambo
+- `&#xe05d;||fa||900` hand-sparkles (fa, solid) — clean covid19 hygiene magic soap wash
+- `&#xf259;||fa||900` hand-spock (fa, solid) — (hand) live long prosper salute star trek vulcan
+- `&#xf4c2;||fa||900` hands (fa, solid) — carry hold lift
+- `&#xf4c4;||fa||900` hands-helping (fa, solid) — aid assistance handshake partnership volunteering
+- `&#xe05e;||fa||900` hands-wash (fa, solid) — covid19 hygiene soap
+- `&#xf2b5;||fa||900` handshake (fa, solid) — agreement greeting meeting partnership
+- `&#xe05f;||fa||900` handshake-alt-slash (fa, solid) — alternate broken covid19 social distance
+- `&#xe060;||fa||900` handshake-slash (fa, solid) — broken covid19 social distance
+- `&#xf6e6;||fa||900` hanukiah (fa, solid) — candle hanukkah jewish judaism light
+- `&#xf807;||fa||900` hard-hat (fa, solid) — construction hardhat helmet safety
+- `&#xf292;||fa||900` hashtag (fa, solid) — twitter instagram pound social media tag
+- `&#xf8c0;||fa||900` hat-cowboy (fa, solid) — buckaroo horse jackeroo john b old west pardner
+- `&#xf8c1;||fa||900` hat-cowboy-side (fa, solid) — buckaroo horse jackeroo john b old west pardner
+- `&#xf6e8;||fa||900` hat-wizard (fa, solid) — wizard's dungeons dragons accessory buckle clothing dd dnd
+- `&#xf0a0;||fa||900` hdd (fa, solid) — cpu hard drive harddrive machine save storage
+- `&#xe061;||fa||900` head-side-cough (fa, solid) — covid19 germs lungs respiratory sick
+- `&#xe062;||fa||900` head-side-cough-slash (fa, solid) — side-cough-slash covid19 germs lungs respiratory sick
+- `&#xe063;||fa||900` head-side-mask (fa, solid) — breath covid19 filter respirator virus
+- `&#xe064;||fa||900` head-side-virus (fa, solid) — cold covid19 flu sick
+- `&#xf1dc;||fa||900` heading (fa, solid) — format header text title
+- `&#xf025;||fa||900` headphones (fa, solid) — audio listen music sound speaker
+- `&#xf58f;||fa||900` headphones-alt (fa, solid) — alternate audio listen music sound speaker
+- `&#xf590;||fa||900` headset (fa, solid) — audio gamer gaming listen live chat microphone shot
+- `&#xf004;||fa||900` heart (fa, solid) — favorite like love relationship valentine
+- `&#xf7a9;||fa||900` heart-broken (fa, solid) — breakup crushed dislike dumped grief love lovesick relationship
+- `&#xf21e;||fa||900` heartbeat (fa, solid) — ekg electrocardiogram health lifeline vital signs
+- `&#xf533;||fa||900` helicopter (fa, solid) — airwolf apache chopper flight fly travel
+- `&#xf591;||fa||900` highlighter (fa, solid) — edit marker sharpie update write
+- `&#xf6ec;||fa||900` hiking (fa, solid) — activity backpack fall fitness outdoors person seasonal walking
+- `&#xf6ed;||fa||900` hippo (fa, solid) — animal fauna hippopotamus hungry mammal
+- `&#xf1da;||fa||900` history (fa, solid) — rewind clock reverse time machine
+- `&#xf453;||fa||900` hockey-puck (fa, solid) — ice nhl sport
+- `&#xf7aa;||fa||900` holly-berry (fa, solid) — catwoman christmas decoration flora halle holiday ororo munroe
+- `&#xf015;||fa||900` home (fa, solid) — abode building house main
+- `&#xf6f0;||fa||900` horse (fa, solid) — equus fauna mammmal mare neigh pony
+- `&#xf7ab;||fa||900` horse-head (fa, solid) — equus fauna mammmal mare neigh pony
+- `&#xf0f8;||fa||900` hospital (fa, solid) — building covid19 emergency room medical center
+- `&#xf47d;||fa||900` hospital-alt (fa, solid) — alternate building covid19 emergency room medical center
+- `&#xf47e;||fa||900` hospital-symbol (fa, solid) — clinic covid19 emergency map
+- `&#xf80d;||fa||900` hospital-user (fa, solid) — with covid19 doctor network patient primary care
+- `&#xf593;||fa||900` hot-tub (fa, solid) — bath jacuzzi massage sauna spa
+- `&#xf80f;||fa||900` hotdog (fa, solid) — hot dog bun chili frankfurt frankfurter kosher polish
+- `&#xf594;||fa||900` hotel (fa, solid) — building inn lodging motel resort travel
+- `&#xf254;||fa||900` hourglass (fa, solid) — hour minute sand stopwatch time
+- `&#xf253;||fa||900` hourglass-end (fa, solid) — hour minute sand stopwatch time
+- `&#xf252;||fa||900` hourglass-half (fa, solid) — hour minute sand stopwatch time
+- `&#xf251;||fa||900` hourglass-start (fa, solid) — hour minute sand stopwatch time
+- `&#xf6f1;||fa||900` house-damage (fa, solid) — damaged building devastation disaster home insurance
+- `&#xe065;||fa||900` house-user (fa, solid) — covid19 home isolation quarantine
+- `&#xf6f2;||fa||900` hryvnia (fa, solid) — currency money ukraine ukrainian
+- `&#xf246;||fa||900` i-cursor (fa, solid) — beam editing ibeam type writing
+- `&#xf810;||fa||900` ice-cream (fa, solid) — chocolate cone dessert frozen scoop sorbet vanilla yogurt
+- `&#xf7ad;||fa||900` icicles (fa, solid) — cold frozen hanging ice seasonal sharp
+- `&#xf86d;||fa||900` icons (fa, solid) — bolt emoji heart image music photo symbols
+- `&#xf2c1;||fa||900` id-badge (fa, solid) — identification address contact license profile
+- `&#xf2c2;||fa||900` id-card (fa, solid) — identification contact demographics document issued profile
+- `&#xf47f;||fa||900` id-card-alt (fa, solid) — alternate identification contact demographics document issued profile
+- `&#xf7ae;||fa||900` igloo (fa, solid) — dome dwelling eskimo home house ice snow
+- `&#xf03e;||fa||900` image (fa, solid) — album landscape photo picture
+- `&#xf302;||fa||900` images (fa, solid) — album landscape photo picture
+- `&#xf01c;||fa||900` inbox (fa, solid) — archive desk email mail message
+- `&#xf03c;||fa||900` indent (fa, solid) — align justify paragraph tab
+- `&#xf275;||fa||900` industry (fa, solid) — building factory industrial manufacturing mill warehouse
+- `&#xf534;||fa||900` infinity (fa, solid) — eternity forever math
+- `&#xf129;||fa||900` info (fa, solid) — details help information more support
+- `&#xf05a;||fa||900` info-circle (fa, solid) — details help information more support
+- `&#xf033;||fa||900` italic (fa, solid) — edit emphasis font format text type
+- `&#xf669;||fa||900` jedi (fa, solid) — crest force sith skywalker star wars yoda
+- `&#xf595;||fa||900` joint (fa, solid) — blunt cannabis doobie drugs marijuana roach smoke smoking
+- `&#xf66a;||fa||900` journal-whills (fa, solid) — of the book force jedi sith star wars
+- `&#xf66b;||fa||900` kaaba (fa, solid) — building cube islam muslim
+- `&#xf084;||fa||900` key (fa, solid) — lock password private secret unlock
+- `&#xf11c;||fa||900` keyboard (fa, solid) — accessory edit input text type write
+- `&#xf66d;||fa||900` khanda (fa, solid) — chakkar sikh sikhism sword
+- `&#xf596;||fa||900` kiss (fa, solid) — kissing face beso emoticon love smooch
+- `&#xf597;||fa||900` kiss-beam (fa, solid) — kissing face with smiling eyes beso emoticon love
+- `&#xf598;||fa||900` kiss-wink-heart (fa, solid) — face blowing a beso emoticon love smooch
+- `&#xf535;||fa||900` kiwi-bird (fa, solid) — fauna new zealand
+- `&#xf66f;||fa||900` landmark (fa, solid) — building historic memorable monument politics
+- `&#xf1ab;||fa||900` language (fa, solid) — dialect idiom localize speech translate vernacular
+- `&#xf109;||fa||900` laptop (fa, solid) — computer cpu dell demo device mac macbook machine
+- `&#xf5fc;||fa||900` laptop-code (fa, solid) — computer cpu dell demo develop device mac macbook
+- `&#xe066;||fa||900` laptop-house (fa, solid) — computer covid19 device office remote work from home
+- `&#xf812;||fa||900` laptop-medical (fa, solid) — computer device ehr electronic health records history
+- `&#xf599;||fa||900` laugh (fa, solid) — grinning face with big eyes lol emoticon smile
+- `&#xf59a;||fa||900` laugh-beam (fa, solid) — face with beaming eyes lol emoticon happy smile
+- `&#xf59b;||fa||900` laugh-squint (fa, solid) — laughing squinting face lol emoticon happy smile
+- `&#xf59c;||fa||900` laugh-wink (fa, solid) — laughing winking face lol emoticon happy smile
+- `&#xf5fd;||fa||900` layer-group (fa, solid) — arrange develop layers map stack
+- `&#xf06c;||fa||900` leaf (fa, solid) — eco flora nature plant vegan
+- `&#xf094;||fa||900` lemon (fa, solid) — citrus lemonade lime tart
+- `&#xf536;||fa||900` less-than (fa, solid) — arithmetic compare math
+- `&#xf537;||fa||900` less-than-equal (fa, solid) — to arithmetic compare math
+- `&#xf3be;||fa||900` level-down-alt (fa, solid) — alternate arrow leveldown
+- `&#xf3bf;||fa||900` level-up-alt (fa, solid) — alternate arrow levelup
+- `&#xf1cd;||fa||900` life-ring (fa, solid) — coast guard help overboard save support
+- `&#xf0eb;||fa||900` lightbulb (fa, solid) — energy idea inspiration light
+- `&#xf0c1;||fa||900` link (fa, solid) — attach attachment chain connect
+- `&#xf195;||fa||900` lira-sign (fa, solid) — turkish currency money try
+- `&#xf03a;||fa||900` list (fa, solid) — checklist completed done finished ol todo ul
+- `&#xf022;||fa||900` list-alt (fa, solid) — alternate checklist completed done finished ol todo ul
+- `&#xf0cb;||fa||900` list-ol (fa, solid) — checklist completed done finished numbers todo ul
+- `&#xf0ca;||fa||900` list-ul (fa, solid) — checklist completed done finished ol todo
+- `&#xf124;||fa||900` location-arrow (fa, solid) — address compass coordinate direction gps map navigation place
+- `&#xf023;||fa||900` lock (fa, solid) — admin open password private protect security
+- `&#xf3c1;||fa||900` lock-open (fa, solid) — admin password private protect security
+- `&#xf309;||fa||900` long-arrow-alt-down (fa, solid) — alternate download longarrowdown
+- `&#xf30a;||fa||900` long-arrow-alt-left (fa, solid) — alternate back longarrowleft previous
+- `&#xf30b;||fa||900` long-arrow-alt-right (fa, solid) — alternate forward longarrowright next
+- `&#xf30c;||fa||900` long-arrow-alt-up (fa, solid) — alternate longarrowup upload
+- `&#xf2a8;||fa||900` low-vision (fa, solid) — blind eye sight
+- `&#xf59d;||fa||900` luggage-cart (fa, solid) — bag baggage suitcase travel
+- `&#xf604;||fa||900` lungs (fa, solid) — air breath covid19 organ respiratory
+- `&#xe067;||fa||900` lungs-virus (fa, solid) — breath covid19 respiratory sick
+- `&#xf0d0;||fa||900` magic (fa, solid) — autocomplete automatic mage spell wand witch wizard
+- `&#xf076;||fa||900` magnet (fa, solid) — attract lodestone tool
+- `&#xf674;||fa||900` mail-bulk (fa, solid) — archive envelope letter post office postal postcard send
+- `&#xf183;||fa||900` male (fa, solid) — human man person profile user
+- `&#xf279;||fa||900` map (fa, solid) — address coordinates destination gps localize location navigation paper
+- `&#xf59f;||fa||900` map-marked (fa, solid) — address coordinates destination gps localize location navigation paper
+- `&#xf5a0;||fa||900` map-marked-alt (fa, solid) — alternate address coordinates destination gps localize location navigation
+- `&#xf041;||fa||900` map-marker (fa, solid) — address coordinates destination gps localize location navigation paper
+- `&#xf3c5;||fa||900` map-marker-alt (fa, solid) — alternate address coordinates destination gps localize location navigation
+- `&#xf276;||fa||900` map-pin (fa, solid) — address agree coordinates destination gps localize location marker
+- `&#xf277;||fa||900` map-signs (fa, solid) — directions directory signage wayfinding
+- `&#xf5a1;||fa||900` marker (fa, solid) — design edit sharpie update write
+- `&#xf222;||fa||900` mars (fa, solid) — male
+- `&#xf227;||fa||900` mars-double (fa, solid) — mars-doublemars
+- `&#xf229;||fa||900` mars-stroke (fa, solid) — mars-strokemars
+- `&#xf22b;||fa||900` mars-stroke-h (fa, solid) — mars-stroke-hmars horizontal
+- `&#xf22a;||fa||900` mars-stroke-v (fa, solid) — mars-stroke-vmars vertical
+- `&#xf6fa;||fa||900` mask (fa, solid) — carnivale costume disguise halloween secret super hero
+- `&#xf5a2;||fa||900` medal (fa, solid) — award ribbon star trophy
+- `&#xf0fa;||fa||900` medkit (fa, solid) — first aid firstaid health help support
+- `&#xf11a;||fa||900` meh (fa, solid) — neutral face emoticon rating
+- `&#xf5a4;||fa||900` meh-blank (fa, solid) — face without mouth emoticon neutral rating
+- `&#xf5a5;||fa||900` meh-rolling-eyes (fa, solid) — face with emoticon neutral rating
+- `&#xf538;||fa||900` memory (fa, solid) — dimm ram hardware storage technology
+- `&#xf676;||fa||900` menorah (fa, solid) — candle hanukkah jewish judaism light
+- `&#xf223;||fa||900` mercury (fa, solid) — transgender
+- `&#xf753;||fa||900` meteor (fa, solid) — armageddon asteroid comet shooting star space
+- `&#xf2db;||fa||900` microchip (fa, solid) — cpu hardware processor technology
+- `&#xf130;||fa||900` microphone (fa, solid) — audio podcast record sing sound voice
+- `&#xf3c9;||fa||900` microphone-alt (fa, solid) — alternate audio podcast record sing sound voice
+- `&#xf539;||fa||900` microphone-alt-slash (fa, solid) — alternate audio disable mute podcast record sing sound
+- `&#xf131;||fa||900` microphone-slash (fa, solid) — audio disable mute podcast record sing sound voice
+- `&#xf610;||fa||900` microscope (fa, solid) — covid19 electron lens optics science shrink
+- `&#xf068;||fa||900` minus (fa, solid) — collapse delete hide minify negative remove trash
+- `&#xf056;||fa||900` minus-circle (fa, solid) — delete hide negative remove shape trash
+- `&#xf146;||fa||900` minus-square (fa, solid) — collapse delete hide minify negative remove shape trash
+- `&#xf7b5;||fa||900` mitten (fa, solid) — clothing cold glove hands knitted seasonal warmth
+- `&#xf10b;||fa||900` mobile (fa, solid) — phone apple call cell cellphone device iphone number
+- `&#xf3cd;||fa||900` mobile-alt (fa, solid) — alternate apple call cell phone cellphone device iphone
+- `&#xf0d6;||fa||900` money-bill (fa, solid) — buy cash checkout payment price purchase
+- `&#xf3d1;||fa||900` money-bill-alt (fa, solid) — alternate buy cash checkout payment price purchase
+- `&#xf53a;||fa||900` money-bill-wave (fa, solid) — wavy buy cash checkout payment price purchase
+- `&#xf53b;||fa||900` money-bill-wave-alt (fa, solid) — alternate wavy buy cash checkout payment price purchase
+- `&#xf53c;||fa||900` money-check (fa, solid) — bank buy checkout cheque payment price purchase
+- `&#xf53d;||fa||900` money-check-alt (fa, solid) — alternate bank buy checkout cheque payment price purchase
+- `&#xf5a6;||fa||900` monument (fa, solid) — building historic landmark memorable
+- `&#xf186;||fa||900` moon (fa, solid) — contrast crescent dark lunar night
+- `&#xf5a7;||fa||900` mortar-pestle (fa, solid) — crush culinary grind medical mix pharmacy prescription spices
+- `&#xf678;||fa||900` mosque (fa, solid) — building islam landmark muslim
+- `&#xf21c;||fa||900` motorcycle (fa, solid) — bike machine transportation vehicle
+- `&#xf6fc;||fa||900` mountain (fa, solid) — glacier hiking hill landscape travel view
+- `&#xf8cc;||fa||900` mouse (fa, solid) — click computer cursor input peripheral
+- `&#xf245;||fa||900` mouse-pointer (fa, solid) — arrow cursor select
+- `&#xf7b6;||fa||900` mug-hot (fa, solid) — caliente cocoa coffee cup drink holiday chocolate steam
+- `&#xf001;||fa||900` music (fa, solid) — lyrics melody note sing sound
+- `&#xf6ff;||fa||900` network-wired (fa, solid) — computer connect ethernet internet intranet
+- `&#xf22c;||fa||900` neuter (fa, solid)
+- `&#xf1ea;||fa||900` newspaper (fa, solid) — article editorial headline journal journalism news press
+- `&#xf53e;||fa||900` not-equal (fa, solid) — arithmetic compare math
+- `&#xf481;||fa||900` notes-medical (fa, solid) — clipboard doctor ehr health history records
+- `&#xf247;||fa||900` object-group (fa, solid) — combine copy design merge select
+- `&#xf248;||fa||900` object-ungroup (fa, solid) — copy design merge select separate
+- `&#xf613;||fa||900` oil-can (fa, solid) — auto crude gasoline grease lubricate petroleum
+- `&#xf679;||fa||900` om (fa, solid) — buddhism hinduism jainism mantra
+- `&#xf700;||fa||900` otter (fa, solid) — animal badger fauna fur mammal marten
+- `&#xf03b;||fa||900` outdent (fa, solid) — align justify paragraph tab
+- `&#xf815;||fa||900` pager (fa, solid) — beeper cellphone communication
+- `&#xf1fc;||fa||900` paint-brush (fa, solid) — acrylic art color fill pigment watercolor
+- `&#xf5aa;||fa||900` paint-roller (fa, solid) — acrylic art brush color fill pigment watercolor
+- `&#xf53f;||fa||900` palette (fa, solid) — acrylic art brush color fill paint pigment watercolor
+- `&#xf482;||fa||900` pallet (fa, solid) — archive box inventory shipping warehouse
+- `&#xf1d8;||fa||900` paper-plane (fa, solid) — air float fold mail send
+- `&#xf0c6;||fa||900` paperclip (fa, solid) — attach attachment connect link
+- `&#xf4cd;||fa||900` parachute-box (fa, solid) — aid assistance rescue supplies
+- `&#xf1dd;||fa||900` paragraph (fa, solid) — edit format text writing
+- `&#xf540;||fa||900` parking (fa, solid) — auto car garage meter
+- `&#xf5ab;||fa||900` passport (fa, solid) — document id identification issued travel
+- `&#xf67b;||fa||900` pastafarianism (fa, solid) — agnosticism atheism flying spaghetti monster fsm
+- `&#xf0ea;||fa||900` paste (fa, solid) — clipboard copy document paper
+- `&#xf04c;||fa||900` pause (fa, solid) — hold wait
+- `&#xf28b;||fa||900` pause-circle (fa, solid) — hold wait
+- `&#xf1b0;||fa||900` paw (fa, solid) — animal cat dog pet print
+- `&#xf67c;||fa||900` peace (fa, solid) — serenity tranquility truce war
+- `&#xf304;||fa||900` pen (fa, solid) — design edit update write
+- `&#xf305;||fa||900` pen-alt (fa, solid) — alternate design edit update write
+- `&#xf5ac;||fa||900` pen-fancy (fa, solid) — design edit fountain update write
+- `&#xf5ad;||fa||900` pen-nib (fa, solid) — design edit fountain update write
+- `&#xf14b;||fa||900` pen-square (fa, solid) — edit pencilsquare update write
+- `&#xf303;||fa||900` pencil-alt (fa, solid) — alternate design edit update write
+- `&#xf5ae;||fa||900` pencil-ruler (fa, solid) — design draft draw
+- `&#xe068;||fa||900` people-arrows (fa, solid) — covid19 personal space social distance spread users
+- `&#xf4ce;||fa||900` people-carry (fa, solid) — box fragile help movers package
+- `&#xf816;||fa||900` pepper-hot (fa, solid) — buffalo wings capsicum chili chilli habanero jalapeno mexican
+- `&#xf295;||fa||900` percent (fa, solid) — discount fraction proportion rate ratio
+- `&#xf541;||fa||900` percentage (fa, solid) — discount fraction proportion rate ratio
+- `&#xf756;||fa||900` person-booth (fa, solid) — entering changing room election human vote voting
+- `&#xf095;||fa||900` phone (fa, solid) — call earphone number support telephone voice
+- `&#xf879;||fa||900` phone-alt (fa, solid) — alternate call earphone number support telephone voice
+- `&#xf3dd;||fa||900` phone-slash (fa, solid) — call cancel earphone mute number support telephone voice
+- `&#xf098;||fa||900` phone-square (fa, solid) — call earphone number support telephone voice
+- `&#xf87b;||fa||900` phone-square-alt (fa, solid) — alternate call earphone number support telephone voice
+- `&#xf2a0;||fa||900` phone-volume (fa, solid) — call earphone number sound support telephone voice volumecontrolphone
+- `&#xf87c;||fa||900` photo-video (fa, solid) — av film image library media
+- `&#xf4d3;||fa||900` piggy-bank (fa, solid) — save savings
+- `&#xf484;||fa||900` pills (fa, solid) — drugs medicine prescription tablets
+- `&#xf818;||fa||900` pizza-slice (fa, solid) — cheese chicago italian mozzarella new york pepperoni pie
+- `&#xf67f;||fa||900` place-of-worship (fa, solid) — building church holy mosque synagogue
+- `&#xf072;||fa||900` plane (fa, solid) — airplane destination fly location mode travel trip
+- `&#xf5af;||fa||900` plane-arrival (fa, solid) — airplane arriving destination fly land landing location mode
+- `&#xf5b0;||fa||900` plane-departure (fa, solid) — airplane departing destination fly location mode take off
+- `&#xe069;||fa||900` plane-slash (fa, solid) — airplane mode canceled covid19 delayed grounded travel
+- `&#xf04b;||fa||900` play (fa, solid) — audio music playing sound start video
+- `&#xf144;||fa||900` play-circle (fa, solid) — audio music playing sound start video
+- `&#xf1e6;||fa||900` plug (fa, solid) — connect electric online power
+- `&#xf067;||fa||900` plus (fa, solid) — add create expand new positive shape
+- `&#xf055;||fa||900` plus-circle (fa, solid) — add create expand new positive shape
+- `&#xf0fe;||fa||900` plus-square (fa, solid) — add create expand new positive shape
+- `&#xf2ce;||fa||900` podcast (fa, solid) — audio broadcast music sound
+- `&#xf681;||fa||900` poll (fa, solid) — results survey trend vote voting
+- `&#xf682;||fa||900` poll-h (fa, solid) — results survey trend vote voting
+- `&#xf2fe;||fa||900` poo (fa, solid) — crap poop shit smile turd
+- `&#xf75a;||fa||900` poo-storm (fa, solid) — bolt cloud euphemism lightning mess poop shit turd
+- `&#xf619;||fa||900` poop (fa, solid) — crap shit smile turd
+- `&#xf3e0;||fa||900` portrait (fa, solid) — id image photo picture selfie
+- `&#xf154;||fa||900` pound-sign (fa, solid) — currency gbp money
+- `&#xf011;||fa||900` power-off (fa, solid) — cancel computer on reboot restart
+- `&#xf683;||fa||900` pray (fa, solid) — kneel preach religion worship
+- `&#xf684;||fa||900` praying-hands (fa, solid) — kneel preach religion worship
+- `&#xf5b1;||fa||900` prescription (fa, solid) — drugs medical medicine pharmacy rx
+- `&#xf485;||fa||900` prescription-bottle (fa, solid) — drugs medical medicine pharmacy rx
+- `&#xf486;||fa||900` prescription-bottle-alt (fa, solid) — alternate drugs medical medicine pharmacy rx
+- `&#xf02f;||fa||900` print (fa, solid) — business copy document office paper
+- `&#xf487;||fa||900` procedures (fa, solid) — ekg bed electrocardiogram health hospital life patient vital
+- `&#xf542;||fa||900` project-diagram (fa, solid) — chart graph network pert
+- `&#xe06a;||fa||900` pump-medical (fa, solid) — antibacterial clean covid19 disinfect hygiene grade sanitizer soap
+- `&#xe06b;||fa||900` pump-soap (fa, solid) — antibacterial clean covid19 disinfect hygiene sanitizer
+- `&#xf12e;||fa||900` puzzle-piece (fa, solid) — addon game section
+- `&#xf029;||fa||900` qrcode (fa, solid) — barcode info information scan
+- `&#xf128;||fa||900` question (fa, solid) — help information support unknown
+- `&#xf059;||fa||900` question-circle (fa, solid) — help information support unknown
+- `&#xf458;||fa||900` quidditch (fa, solid) — ball bludger broom golden snitch harry potter hogwarts
+- `&#xf10d;||fa||900` quote-left (fa, solid) — mention note phrase text type
+- `&#xf10e;||fa||900` quote-right (fa, solid) — mention note phrase text type
+- `&#xf687;||fa||900` quran (fa, solid) — book islam muslim religion
+- `&#xf7b9;||fa||900` radiation (fa, solid) — danger dangerous deadly hazard nuclear radioactive warning
+- `&#xf7ba;||fa||900` radiation-alt (fa, solid) — alternate danger dangerous deadly hazard nuclear radioactive warning
+- `&#xf75b;||fa||900` rainbow (fa, solid) — gold leprechaun prism rain sky
+- `&#xf074;||fa||900` random (fa, solid) — arrows shuffle sort swap switch transfer
+- `&#xf543;||fa||900` receipt (fa, solid) — check invoice money pay table
+- `&#xf8d9;||fa||900` record-vinyl (fa, solid) — lp album analog music phonograph sound
+- `&#xf1b8;||fa||900` recycle (fa, solid) — waste compost garbage reuse trash
+- `&#xf01e;||fa||900` redo (fa, solid) — forward refresh reload repeat
+- `&#xf2f9;||fa||900` redo-alt (fa, solid) — alternate forward refresh reload repeat
+- `&#xf25d;||fa||900` registered (fa, solid) — trademark copyright mark
+- `&#xf87d;||fa||900` remove-format (fa, solid) — cancel font style text
+- `&#xf3e5;||fa||900` reply (fa, solid) — mail message respond
+- `&#xf122;||fa||900` reply-all (fa, solid) — mail message respond
+- `&#xf75e;||fa||900` republican (fa, solid) — american conservative election elephant politics party right rightwing
+- `&#xf7bd;||fa||900` restroom (fa, solid) — bathroom john loo potty washroom waste wc
+- `&#xf079;||fa||900` retweet (fa, solid) — refresh reload share swap
+- `&#xf4d6;||fa||900` ribbon (fa, solid) — badge cause lapel pin
+- `&#xf70b;||fa||900` ring (fa, solid) — dungeons dragons gollum band binding dd dnd engagement
+- `&#xf018;||fa||900` road (fa, solid) — highway map pavement route street travel
+- `&#xf544;||fa||900` robot (fa, solid) — android automate computer cyborg
+- `&#xf135;||fa||900` rocket (fa, solid) — aircraft app jet launch nasa space
+- `&#xf4d7;||fa||900` route (fa, solid) — directions navigation travel
+- `&#xf09e;||fa||900` rss (fa, solid) — blog feed journal news writing
+- `&#xf143;||fa||900` rss-square (fa, solid) — blog feed journal news writing
+- `&#xf158;||fa||900` ruble-sign (fa, solid) — currency money rub
+- `&#xf545;||fa||900` ruler (fa, solid) — design draft length measure planning
+- `&#xf546;||fa||900` ruler-combined (fa, solid) — design draft length measure planning
+- `&#xf547;||fa||900` ruler-horizontal (fa, solid) — design draft length measure planning
+- `&#xf548;||fa||900` ruler-vertical (fa, solid) — design draft length measure planning
+- `&#xf70c;||fa||900` running (fa, solid) — exercise health jog person run sport sprint
+- `&#xf156;||fa||900` rupee-sign (fa, solid) — indian currency inr money
+- `&#xf5b3;||fa||900` sad-cry (fa, solid) — crying face emoticon tear tears
+- `&#xf5b4;||fa||900` sad-tear (fa, solid) — loudly crying face emoticon tears
+- `&#xf7bf;||fa||900` satellite (fa, solid) — communications hardware orbit space
+- `&#xf7c0;||fa||900` satellite-dish (fa, solid) — seti communications hardware receiver saucer signal space
+- `&#xf0c7;||fa||900` save (fa, solid) — disk download floppy floppyo
+- `&#xf549;||fa||900` school (fa, solid) — building education learn student teacher
+- `&#xf54a;||fa||900` screwdriver (fa, solid) — admin fix mechanic repair settings tool
+- `&#xf70e;||fa||900` scroll (fa, solid) — dungeons dragons announcement dd dnd fantasy paper script
+- `&#xf7c2;||fa||900` sd-card (fa, solid) — image memory photo save
+- `&#xf002;||fa||900` search (fa, solid) — bigger enlarge find magnify preview zoom
+- `&#xf688;||fa||900` search-dollar (fa, solid) — bigger enlarge find magnify money preview zoom
+- `&#xf689;||fa||900` search-location (fa, solid) — bigger enlarge find magnify preview zoom
+- `&#xf010;||fa||900` search-minus (fa, solid) — minify negative smaller zoom out
+- `&#xf00e;||fa||900` search-plus (fa, solid) — bigger enlarge magnify positive zoom in
+- `&#xf4d8;||fa||900` seedling (fa, solid) — flora grow plant vegan
+- `&#xf233;||fa||900` server (fa, solid) — computer cpu database hardware network
+- `&#xf61f;||fa||900` shapes (fa, solid) — blocks build circle square triangle
+- `&#xf064;||fa||900` share (fa, solid) — forward save send social
+- `&#xf1e0;||fa||900` share-alt (fa, solid) — alternate forward save send social
+- `&#xf1e1;||fa||900` share-alt-square (fa, solid) — alternate forward save send social
+- `&#xf14d;||fa||900` share-square (fa, solid) — forward save send social
+- `&#xf20b;||fa||900` shekel-sign (fa, solid) — currency ils money
+- `&#xf3ed;||fa||900` shield-alt (fa, solid) — alternate achievement award block defend security winner
+- `&#xe06c;||fa||900` shield-virus (fa, solid) — antibodies barrier covid19 health protect
+- `&#xf21a;||fa||900` ship (fa, solid) — boat sea water
+- `&#xf48b;||fa||900` shipping-fast (fa, solid) — express fedex mail overnight package ups
+- `&#xf54b;||fa||900` shoe-prints (fa, solid) — feet footprints steps walk
+- `&#xf290;||fa||900` shopping-bag (fa, solid) — buy checkout grocery payment purchase
+- `&#xf291;||fa||900` shopping-basket (fa, solid) — buy checkout grocery payment purchase
+- `&#xf07a;||fa||900` shopping-cart (fa, solid) — buy checkout grocery payment purchase
+- `&#xf2cc;||fa||900` shower (fa, solid) — bath clean faucet water
+- `&#xf5b6;||fa||900` shuttle-van (fa, solid) — airport machine publictransportation transportation travel vehicle
+- `&#xf4d9;||fa||900` sign (fa, solid) — directions real estate signage wayfinding
+- `&#xf2f6;||fa||900` sign-in-alt (fa, solid) — alternate arrow enter join log login up signin
+- `&#xf2a7;||fa||900` sign-language (fa, solid) — translate asl deaf hands
+- `&#xf2f5;||fa||900` sign-out-alt (fa, solid) — alternate arrow exit leave log logout signout
+- `&#xf012;||fa||900` signal (fa, solid) — bars graph online reception status
+- `&#xf5b7;||fa||900` signature (fa, solid) — john hancock cursive name writing
+- `&#xf7c4;||fa||900` sim-card (fa, solid) — hard drive hardware portable storage technology tiny
+- `&#xe06d;||fa||900` sink (fa, solid) — bathroom covid19 faucet kitchen wash
+- `&#xf0e8;||fa||900` sitemap (fa, solid) — directory hierarchy ia information architecture organization
+- `&#xf7c5;||fa||900` skating (fa, solid) — activity figure fitness ice person winter
+- `&#xf7c9;||fa||900` skiing (fa, solid) — activity downhill fast fitness olympics outdoors person seasonal
+- `&#xf7ca;||fa||900` skiing-nordic (fa, solid) — activity cross country fitness outdoors person seasonal
+- `&#xf54c;||fa||900` skull (fa, solid) — bones skeleton xray yorick
+- `&#xf714;||fa||900` skull-crossbones (fa, solid) — & dungeons dragons alert bones dd danger dead
+- `&#xf715;||fa||900` slash (fa, solid) — cancel close mute off stop x
+- `&#xf7cc;||fa||900` sleigh (fa, solid) — christmas claus fly holiday santa sled snow xmas
+- `&#xf1de;||fa||900` sliders-h (fa, solid) — horizontal adjust settings toggle
+- `&#xf118;||fa||900` smile (fa, solid) — smiling face approve emoticon happy rating satisfied
+- `&#xf5b8;||fa||900` smile-beam (fa, solid) — beaming face with smiling eyes emoticon happy positive
+- `&#xf4da;||fa||900` smile-wink (fa, solid) — winking face emoticon happy hint joke
+- `&#xf75f;||fa||900` smog (fa, solid) — dragon fog haze pollution smoke weather
+- `&#xf48d;||fa||900` smoking (fa, solid) — cancer cigarette nicotine status tobacco
+- `&#xf54d;||fa||900` smoking-ban (fa, solid) — cancel no nonsmoking
+- `&#xf7cd;||fa||900` sms (fa, solid) — chat conversation message mobile notification phone texting
+- `&#xf7ce;||fa||900` snowboarding (fa, solid) — activity fitness olympics outdoors person
+- `&#xf2dc;||fa||900` snowflake (fa, solid) — precipitation rain winter
+- `&#xf7d0;||fa||900` snowman (fa, solid) — decoration frost frosty holiday
+- `&#xf7d2;||fa||900` snowplow (fa, solid) — clean up cold road storm winter
+- `&#xe06e;||fa||900` soap (fa, solid) — bubbles clean covid19 hygiene wash
+- `&#xf696;||fa||900` socks (fa, solid) — business time clothing feet flight of the conchords
+- `&#xf5ba;||fa||900` solar-panel (fa, solid) — clean ecofriendly energy green sun
+- `&#xf0dc;||fa||900` sort (fa, solid) — filter order
+- `&#xf15d;||fa||900` sort-alpha-down (fa, solid) — alphabetical arrange filter order sortalphaasc
+- `&#xf881;||fa||900` sort-alpha-down-alt (fa, solid) — alternate alphabetical arrange filter order sortalphaasc
+- `&#xf15e;||fa||900` sort-alpha-up (fa, solid) — alphabetical arrange filter order sortalphadesc
+- `&#xf882;||fa||900` sort-alpha-up-alt (fa, solid) — alternate alphabetical arrange filter order sortalphadesc
+- `&#xf160;||fa||900` sort-amount-down (fa, solid) — arrange filter number order sortamountasc
+- `&#xf884;||fa||900` sort-amount-down-alt (fa, solid) — alternate arrange filter order sortamountasc
+- `&#xf161;||fa||900` sort-amount-up (fa, solid) — arrange filter order sortamountdesc
+- `&#xf885;||fa||900` sort-amount-up-alt (fa, solid) — alternate arrange filter order sortamountdesc
+- `&#xf0dd;||fa||900` sort-down (fa, solid) — (descending) arrow descending filter order sortdesc
+- `&#xf162;||fa||900` sort-numeric-down (fa, solid) — arrange filter numbers order sortnumericasc
+- `&#xf886;||fa||900` sort-numeric-down-alt (fa, solid) — alternate arrange filter numbers order sortnumericasc
+- `&#xf163;||fa||900` sort-numeric-up (fa, solid) — arrange filter numbers order sortnumericdesc
+- `&#xf887;||fa||900` sort-numeric-up-alt (fa, solid) — alternate arrange filter numbers order sortnumericdesc
+- `&#xf0de;||fa||900` sort-up (fa, solid) — (ascending) arrow ascending filter order sortasc
+- `&#xf5bb;||fa||900` spa (fa, solid) — flora massage mindfulness plant wellness
+- `&#xf197;||fa||900` space-shuttle (fa, solid) — astronaut machine nasa rocket transportation
+- `&#xf891;||fa||900` spell-check (fa, solid) — dictionary edit editor grammar text
+- `&#xf717;||fa||900` spider (fa, solid) — arachnid bug charlotte crawl eight halloween
+- `&#xf110;||fa||900` spinner (fa, solid) — circle loading progress
+- `&#xf5bc;||fa||900` splotch (fa, solid) — ink blob blotch glob stain
+- `&#xf5bd;||fa||900` spray-can (fa, solid) — paint aerosol design graffiti tag
+- `&#xf0c8;||fa||900` square (fa, solid) — block box shape
+- `&#xf45c;||fa||900` square-full (fa, solid) — block box shape
+- `&#xf698;||fa||900` square-root-alt (fa, solid) — alternate arithmetic calculus division math
+- `&#xf5bf;||fa||900` stamp (fa, solid) — art certificate imprint rubber seal
+- `&#xf005;||fa||900` star (fa, solid) — achievement award favorite important night rating score
+- `&#xf699;||fa||900` star-and-crescent (fa, solid) — islam muslim religion
+- `&#xf089;||fa||900` star-half (fa, solid) — achievement award rating score starhalfempty starhalffull
+- `&#xf5c0;||fa||900` star-half-alt (fa, solid) — alternate achievement award rating score starhalfempty starhalffull
+- `&#xf69a;||fa||900` star-of-david (fa, solid) — jewish judaism religion
+- `&#xf621;||fa||900` star-of-life (fa, solid) — doctor emt first aid health medical
+- `&#xf048;||fa||900` step-backward (fa, solid) — beginning first previous rewind start
+- `&#xf051;||fa||900` step-forward (fa, solid) — end last next
+- `&#xf0f1;||fa||900` stethoscope (fa, solid) — covid19 diagnosis doctor general practitioner hospital infirmary medicine
+- `&#xf249;||fa||900` sticky-note (fa, solid) — message paper reminder sticker
+- `&#xf04d;||fa||900` stop (fa, solid) — block box square
+- `&#xf28d;||fa||900` stop-circle (fa, solid) — block box square
+- `&#xf2f2;||fa||900` stopwatch (fa, solid) — clock reminder time
+- `&#xe06f;||fa||900` stopwatch-20 (fa, solid) — abcs countdown covid19 happy birthday i will survive
+- `&#xf54e;||fa||900` store (fa, solid) — building buy purchase shopping
+- `&#xf54f;||fa||900` store-alt (fa, solid) — alternate building buy purchase shopping
+- `&#xe070;||fa||900` store-alt-slash (fa, solid) — alternate building buy closed covid19 purchase shopping
+- `&#xe071;||fa||900` store-slash (fa, solid) — building buy closed covid19 purchase shopping
+- `&#xf550;||fa||900` stream (fa, solid) — flow list timeline
+- `&#xf21d;||fa||900` street-view (fa, solid) — directions location map navigation
+- `&#xf0cc;||fa||900` strikethrough (fa, solid) — cancel edit font format text type
+- `&#xf551;||fa||900` stroopwafel (fa, solid) — caramel cookie dessert sweets waffle
+- `&#xf12c;||fa||900` subscript (fa, solid) — edit font format text type
+- `&#xf239;||fa||900` subway (fa, solid) — machine railway train transportation vehicle
+- `&#xf0f2;||fa||900` suitcase (fa, solid) — baggage luggage move travel trip
+- `&#xf5c1;||fa||900` suitcase-rolling (fa, solid) — baggage luggage move travel trip
+- `&#xf185;||fa||900` sun (fa, solid) — brighten contrast day lighter sol solar star weather
+- `&#xf12b;||fa||900` superscript (fa, solid) — edit exponential font format text type
+- `&#xf5c2;||fa||900` surprise (fa, solid) — hushed face emoticon shocked
+- `&#xf5c3;||fa||900` swatchbook (fa, solid) — pantone color design hue palette
+- `&#xf5c4;||fa||900` swimmer (fa, solid) — athlete head man olympics person pool water
+- `&#xf5c5;||fa||900` swimming-pool (fa, solid) — ladder recreation swim water
+- `&#xf69b;||fa||900` synagogue (fa, solid) — building jewish judaism religion star of david temple
+- `&#xf021;||fa||900` sync (fa, solid) — exchange refresh reload rotate swap
+- `&#xf2f1;||fa||900` sync-alt (fa, solid) — alternate exchange refresh reload rotate swap
+- `&#xf48e;||fa||900` syringe (fa, solid) — covid19 doctor immunizations medical needle
+- `&#xf0ce;||fa||900` table (fa, solid) — data excel spreadsheet
+- `&#xf45d;||fa||900` table-tennis (fa, solid) — ball paddle ping pong
+- `&#xf10a;||fa||900` tablet (fa, solid) — apple device ipad kindle screen
+- `&#xf3fa;||fa||900` tablet-alt (fa, solid) — alternate apple device ipad kindle screen
+- `&#xf490;||fa||900` tablets (fa, solid) — drugs medicine pills prescription
+- `&#xf3fd;||fa||900` tachometer-alt (fa, solid) — alternate dashboard fast odometer speed speedometer
+- `&#xf02b;||fa||900` tag (fa, solid) — discount label price shopping
+- `&#xf02c;||fa||900` tags (fa, solid) — discount label price shopping
+- `&#xf4db;||fa||900` tape (fa, solid) — design package sticky
+- `&#xf0ae;||fa||900` tasks (fa, solid) — checklist downloading downloads loading progress project management settings
+- `&#xf1ba;||fa||900` taxi (fa, solid) — cab cabbie car service lyft machine transportation travel
+- `&#xf62e;||fa||900` teeth (fa, solid) — bite dental dentist gums mouth smile tooth
+- `&#xf62f;||fa||900` teeth-open (fa, solid) — dental dentist gums bite mouth smile tooth
+- `&#xf769;||fa||900` temperature-high (fa, solid) — cook covid19 mercury summer thermometer warm
+- `&#xf76b;||fa||900` temperature-low (fa, solid) — cold cool covid19 mercury thermometer winter
+- `&#xf7d7;||fa||900` tenge (fa, solid) — currency kazakhstan money price
+- `&#xf120;||fa||900` terminal (fa, solid) — code command console development prompt
+- `&#xf034;||fa||900` text-height (fa, solid) — edit font format type
+- `&#xf035;||fa||900` text-width (fa, solid) — edit font format type
+- `&#xf00a;||fa||900` th (fa, solid) — blocks boxes grid squares
+- `&#xf009;||fa||900` th-large (fa, solid) — blocks boxes grid squares
+- `&#xf00b;||fa||900` th-list (fa, solid) — checklist completed done finished ol todo ul
+- `&#xf630;||fa||900` theater-masks (fa, solid) — comedy perform theatre tragedy
+- `&#xf491;||fa||900` thermometer (fa, solid) — covid19 mercury status temperature
+- `&#xf2cb;||fa||900` thermometer-empty (fa, solid) — cold mercury status temperature
+- `&#xf2c7;||fa||900` thermometer-full (fa, solid) — fever hot mercury status temperature
+- `&#xf2c9;||fa||900` thermometer-half (fa, solid) — 1/2 full mercury status temperature
+- `&#xf2ca;||fa||900` thermometer-quarter (fa, solid) — 1/4 full mercury status temperature
+- `&#xf2c8;||fa||900` thermometer-three-quarters (fa, solid) — 3/4 full mercury status temperature
+- `&#xf165;||fa||900` thumbs-down (fa, solid) — disagree disapprove dislike hand social thumbsodown
+- `&#xf164;||fa||900` thumbs-up (fa, solid) — agree approve favorite hand like ok okay social
+- `&#xf08d;||fa||900` thumbtack (fa, solid) — coordinates location marker pin
+- `&#xf3ff;||fa||900` ticket-alt (fa, solid) — alternate movie pass support
+- `&#xf00d;||fa||900` times (fa, solid) — close cross error exit incorrect notice notification notify
+- `&#xf057;||fa||900` times-circle (fa, solid) — close cross exit incorrect notice notification notify problem
+- `&#xf043;||fa||900` tint (fa, solid) — color drop droplet raindrop waterdrop
+- `&#xf5c7;||fa||900` tint-slash (fa, solid) — color drop droplet raindrop waterdrop
+- `&#xf5c8;||fa||900` tired (fa, solid) — face angry emoticon grumpy upset
+- `&#xf204;||fa||900` toggle-off (fa, solid) — switch
+- `&#xf205;||fa||900` toggle-on (fa, solid) — switch
+- `&#xf7d8;||fa||900` toilet (fa, solid) — bathroom flush john loo pee plumbing poop porcelain
+- `&#xf71e;||fa||900` toilet-paper (fa, solid) — bathroom covid19 halloween holiday lavatory prank restroom roll
+- `&#xe072;||fa||900` toilet-paper-slash (fa, solid) — bathroom covid19 halloween holiday lavatory leaves prank restroom
+- `&#xf552;||fa||900` toolbox (fa, solid) — admin container fix repair settings tools
+- `&#xf7d9;||fa||900` tools (fa, solid) — admin fix repair screwdriver settings wrench
+- `&#xf5c9;||fa||900` tooth (fa, solid) — bicuspid dental dentist molar mouth teeth
+- `&#xf6a0;||fa||900` torah (fa, solid) — book jewish judaism religion scroll
+- `&#xf6a1;||fa||900` torii-gate (fa, solid) — building shintoism
+- `&#xf722;||fa||900` tractor (fa, solid) — agriculture farm vehicle
+- `&#xf25c;||fa||900` trademark (fa, solid) — copyright register symbol
+- `&#xf637;||fa||900` traffic-light (fa, solid) — direction road signal travel
+- `&#xe041;||fa||900` trailer (fa, solid) — carry haul moving travel
+- `&#xf238;||fa||900` train (fa, solid) — bullet commute locomotive railway subway
+- `&#xf7da;||fa||900` tram (fa, solid) — crossing machine mountains seasonal transportation
+- `&#xf224;||fa||900` transgender (fa, solid) — intersex
+- `&#xf225;||fa||900` transgender-alt (fa, solid) — alternate intersex
+- `&#xf1f8;||fa||900` trash (fa, solid) — delete garbage hide remove
+- `&#xf2ed;||fa||900` trash-alt (fa, solid) — alternate delete garbage hide remove trasho
+- `&#xf829;||fa||900` trash-restore (fa, solid) — back control z oops undo
+- `&#xf82a;||fa||900` trash-restore-alt (fa, solid) — alternative back control z oops undo
+- `&#xf1bb;||fa||900` tree (fa, solid) — bark fall flora forest nature plant seasonal
+- `&#xf091;||fa||900` trophy (fa, solid) — achievement award cup game winner
+- `&#xf0d1;||fa||900` truck (fa, solid) — cargo delivery shipping vehicle
+- `&#xf4de;||fa||900` truck-loading (fa, solid) — box cargo delivery inventory moving rental vehicle
+- `&#xf63b;||fa||900` truck-monster (fa, solid) — offroad vehicle wheel
+- `&#xf4df;||fa||900` truck-moving (fa, solid) — cargo inventory rental vehicle
+- `&#xf63c;||fa||900` truck-pickup (fa, solid) — side cargo vehicle
+- `&#xf553;||fa||900` tshirt (fa, solid) — t-shirt clothing fashion garment shirt
+- `&#xf1e4;||fa||900` tty (fa, solid) — communication deaf telephone teletypewriter text
+- `&#xf26c;||fa||900` tv (fa, solid) — television computer display monitor
+- `&#xf0e9;||fa||900` umbrella (fa, solid) — protection rain storm wet
+- `&#xf5ca;||fa||900` umbrella-beach (fa, solid) — protection recreation sand shade summer sun
+- `&#xf0cd;||fa||900` underline (fa, solid) — edit emphasis format text writing
+- `&#xf0e2;||fa||900` undo (fa, solid) — back control z exchange oops return rotate swap
+- `&#xf2ea;||fa||900` undo-alt (fa, solid) — alternate back control z exchange oops return swap
+- `&#xf29a;||fa||900` universal-access (fa, solid) — accessibility hearing person seeing visual impairment
+- `&#xf19c;||fa||900` university (fa, solid) — bank building college higher education students institution
+- `&#xf127;||fa||900` unlink (fa, solid) — attachment chain chainbroken remove
+- `&#xf09c;||fa||900` unlock (fa, solid) — admin lock password private protect
+- `&#xf13e;||fa||900` unlock-alt (fa, solid) — alternate admin lock password private protect
+- `&#xf093;||fa||900` upload (fa, solid) — hard drive import publish
+- `&#xf007;||fa||900` user (fa, solid) — account avatar head human man person profile
+- `&#xf406;||fa||900` user-alt (fa, solid) — alternate account avatar head human man person profile
+- `&#xf4fa;||fa||900` user-alt-slash (fa, solid) — alternate account avatar head human man person profile
+- `&#xf4fb;||fa||900` user-astronaut (fa, solid) — avatar clothing cosmonaut nasa space suit
+- `&#xf4fc;||fa||900` user-check (fa, solid) — accept person verified
+- `&#xf2bd;||fa||900` user-circle (fa, solid) — account avatar head human man person profile
+- `&#xf4fd;||fa||900` user-clock (fa, solid) — alert person remind time
+- `&#xf4fe;||fa||900` user-cog (fa, solid) — admin person settings
+- `&#xf4ff;||fa||900` user-edit (fa, solid) — pen pencil person update write
+- `&#xf500;||fa||900` user-friends (fa, solid) — group people person team users
+- `&#xf501;||fa||900` user-graduate (fa, solid) — cap clothing commencement gown graduation person student
+- `&#xf728;||fa||900` user-injured (fa, solid) — cast injury ouch patient person sling
+- `&#xf502;||fa||900` user-lock (fa, solid) — admin person private unlock
+- `&#xf0f0;||fa||900` user-md (fa, solid) — doctor covid19 job medical nurse occupation physician profile
+- `&#xf503;||fa||900` user-minus (fa, solid) — delete negative remove
+- `&#xf504;||fa||900` user-ninja (fa, solid) — assassin avatar dangerous deadly sneaky
+- `&#xf82f;||fa||900` user-nurse (fa, solid) — covid19 doctor midwife practitioner surgeon
+- `&#xf234;||fa||900` user-plus (fa, solid) — add avatar positive sign up signup team
+- `&#xf21b;||fa||900` user-secret (fa, solid) — clothing coat hat incognito person privacy spy whisper
+- `&#xf505;||fa||900` user-shield (fa, solid) — admin person private protect safe
+- `&#xf506;||fa||900` user-slash (fa, solid) — ban delete remove
+- `&#xf507;||fa||900` user-tag (fa, solid) — avatar discount label person role special
+- `&#xf508;||fa||900` user-tie (fa, solid) — avatar business clothing formal professional suit
+- `&#xf235;||fa||900` user-times (fa, solid) — remove archive delete x
+- `&#xf0c0;||fa||900` users (fa, solid) — friends group people persons profiles team
+- `&#xf509;||fa||900` users-cog (fa, solid) — admin group person settings team
+- `&#xe073;||fa||900` users-slash (fa, solid) — disband friends group people persons profiles separate team
+- `&#xf2e5;||fa||900` utensil-spoon (fa, solid) — cutlery dining scoop silverware
+- `&#xf2e7;||fa||900` utensils (fa, solid) — cutlery dining dinner eat food fork knife restaurant
+- `&#xf5cb;||fa||900` vector-square (fa, solid) — anchors lines object render shape
+- `&#xf221;||fa||900` venus (fa, solid) — female
+- `&#xf226;||fa||900` venus-double (fa, solid) — female
+- `&#xf228;||fa||900` venus-mars (fa, solid) — gender
+- `&#xe085;||fa||900` vest (fa, solid) — biker fashion style
+- `&#xe086;||fa||900` vest-patches (fa, solid) — biker fashion style
+- `&#xf492;||fa||900` vial (fa, solid) — experiment lab sample science test tube
+- `&#xf493;||fa||900` vials (fa, solid) — experiment lab sample science test tube
+- `&#xf03d;||fa||900` video (fa, solid) — camera film movie record videocamera
+- `&#xf4e2;||fa||900` video-slash (fa, solid) — add create film new positive record
+- `&#xf6a7;||fa||900` vihara (fa, solid) — buddhism buddhist building monastery
+- `&#xe074;||fa||900` virus (fa, solid) — bug covid19 flu health sick viral
+- `&#xe075;||fa||900` virus-slash (fa, solid) — bug covid19 cure eliminate flu health sick viral
+- `&#xe076;||fa||900` viruses (fa, solid) — bugs covid19 flu health multiply sick spread viral
+- `&#xf897;||fa||900` voicemail (fa, solid) — answer inbox message phone
+- `&#xf45f;||fa||900` volleyball-ball (fa, solid) — beach olympics sport
+- `&#xf027;||fa||900` volume-down (fa, solid) — audio lower music quieter sound speaker
+- `&#xf6a9;||fa||900` volume-mute (fa, solid) — audio music quiet sound speaker
+- `&#xf026;||fa||900` volume-off (fa, solid) — audio ban music mute quiet silent sound
+- `&#xf028;||fa||900` volume-up (fa, solid) — audio higher louder music sound speaker
+- `&#xf772;||fa||900` vote-yea (fa, solid) — accept cast election politics positive yes
+- `&#xf729;||fa||900` vr-cardboard (fa, solid) — 3d augment google reality virtual
+- `&#xf554;||fa||900` walking (fa, solid) — exercise health pedometer person steps
+- `&#xf555;||fa||900` wallet (fa, solid) — billfold cash currency money
+- `&#xf494;||fa||900` warehouse (fa, solid) — building capacity garage inventory storage
+- `&#xf773;||fa||900` water (fa, solid) — lake liquid ocean sea swim wet
+- `&#xf83e;||fa||900` wave-square (fa, solid) — frequency pulse signal
+- `&#xf496;||fa||900` weight (fa, solid) — health measurement scale
+- `&#xf5cd;||fa||900` weight-hanging (fa, solid) — anvil heavy measurement
+- `&#xf193;||fa||900` wheelchair (fa, solid) — accessible handicap person
+- `&#xf1eb;||fa||900` wifi (fa, solid) — connection hotspot internet network wireless
+- `&#xf72e;||fa||900` wind (fa, solid) — air blow breeze fall seasonal weather
+- `&#xf410;||fa||900` window-close (fa, solid) — browser cancel computer development
+- `&#xf2d0;||fa||900` window-maximize (fa, solid) — browser computer development expand
+- `&#xf2d1;||fa||900` window-minimize (fa, solid) — browser collapse computer development
+- `&#xf2d2;||fa||900` window-restore (fa, solid) — browser computer development
+- `&#xf72f;||fa||900` wine-bottle (fa, solid) — alcohol beverage cabernet drink glass grapes merlot sauvignon
+- `&#xf4e3;||fa||900` wine-glass (fa, solid) — alcohol beverage cabernet drink grapes merlot sauvignon
+- `&#xf5ce;||fa||900` wine-glass-alt (fa, solid) — alternate glas alcohol beverage cabernet drink grapes merlot
+- `&#xf159;||fa||900` won-sign (fa, solid) — currency krw money
+- `&#xf0ad;||fa||900` wrench (fa, solid) — construction fix mechanic plumbing settings spanner tool update
+- `&#xf497;||fa||900` x-ray (fa, solid) — health medical radiological images radiology skeleton
+- `&#xf157;||fa||900` yen-sign (fa, solid) — currency jpy money
+- `&#xf6ad;||fa||900` yin-yang (fa, solid) — daoism opposites taoism
+
+## Font Awesome regular (151)
+
+`||fa||400` outline versions.
+
+- `&#xf2b9;||fa||400` address-book (fa, regular) — contact directory index little black rolodex
+- `&#xf2bb;||fa||400` address-card (fa, regular) — about contact id identification postcard profile
+- `&#xf556;||fa||400` angry (fa, regular) — face disapprove emoticon mad upset
+- `&#xf358;||fa||400` arrow-alt-circle-down (fa, regular) — alternate arrowcircleodown download
+- `&#xf359;||fa||400` arrow-alt-circle-left (fa, regular) — alternate arrowcircleoleft back previous
+- `&#xf35a;||fa||400` arrow-alt-circle-right (fa, regular) — alternate arrowcircleoright forward next
+- `&#xf35b;||fa||400` arrow-alt-circle-up (fa, regular) — alternate arrowcircleoup
+- `&#xf0f3;||fa||400` bell (fa, regular) — alarm alert chime notification reminder
+- `&#xf1f6;||fa||400` bell-slash (fa, regular) — alert cancel disabled notification off reminder
+- `&#xf02e;||fa||400` bookmark (fa, regular) — favorite marker read remember save
+- `&#xf1ad;||fa||400` building (fa, regular) — apartment business city company office work
+- `&#xf133;||fa||400` calendar (fa, regular) — calendaro date event schedule time when
+- `&#xf073;||fa||400` calendar-alt (fa, regular) — alternate date event schedule time when
+- `&#xf274;||fa||400` calendar-check (fa, regular) — accept agree appointment confirm correct date done event
+- `&#xf272;||fa||400` calendar-minus (fa, regular) — date delete event negative remove schedule time when
+- `&#xf271;||fa||400` calendar-plus (fa, regular) — add create date event new positive schedule time
+- `&#xf273;||fa||400` calendar-times (fa, regular) — archive date delete event remove schedule time when
+- `&#xf150;||fa||400` caret-square-down (fa, regular) — arrow caretsquareodown dropdown expand menu more triangle
+- `&#xf191;||fa||400` caret-square-left (fa, regular) — arrow back caretsquareoleft previous triangle
+- `&#xf152;||fa||400` caret-square-right (fa, regular) — arrow caretsquareoright forward next triangle
+- `&#xf151;||fa||400` caret-square-up (fa, regular) — arrow caretsquareoup collapse triangle upload
+- `&#xf080;||fa||400` chart-bar (fa, regular) — analytics graph
+- `&#xf058;||fa||400` check-circle (fa, regular) — accept agree confirm correct done ok select success
+- `&#xf14a;||fa||400` check-square (fa, regular) — accept agree checkmark confirm correct done ok select
+- `&#xf111;||fa||400` circle (fa, regular) — circlethin diameter dot ellipse notification round
+- `&#xf328;||fa||400` clipboard (fa, regular) — copy notes paste record
+- `&#xf017;||fa||400` clock (fa, regular) — date late schedule time timer timestamp watch
+- `&#xf24d;||fa||400` clone (fa, regular) — arrange copy duplicate paste
+- `&#xf20a;||fa||400` closed-captioning (fa, regular) — cc deaf hearing subtitle subtitling text video
+- `&#xf075;||fa||400` comment (fa, regular) — bubble chat commenting conversation feedback message note notification
+- `&#xf27a;||fa||400` comment-alt (fa, regular) — alternate bubble chat commenting conversation feedback message note
+- `&#xf4ad;||fa||400` comment-dots (fa, regular) — bubble chat commenting conversation feedback message more note
+- `&#xf086;||fa||400` comments (fa, regular) — bubble chat commenting conversation feedback message note notification
+- `&#xf14e;||fa||400` compass (fa, regular) — directions directory location menu navigation safari travel
+- `&#xf0c5;||fa||400` copy (fa, regular) — clone duplicate file fileso paper paste
+- `&#xf1f9;||fa||400` copyright (fa, regular) — brand mark register trademark
+- `&#xf09d;||fa||400` credit-card (fa, regular) — buy checkout creditcardalt debit money payment purchase
+- `&#xf567;||fa||400` dizzy (fa, regular) — face dazed dead disapprove emoticon
+- `&#xf192;||fa||400` dot-circle (fa, regular) — bullseye notification target
+- `&#xf044;||fa||400` edit (fa, regular) — pen pencil update write
+- `&#xf0e0;||fa||400` envelope (fa, regular) — email letter mail message notification support
+- `&#xf2b6;||fa||400` envelope-open (fa, regular) — email letter mail message notification support
+- `&#xf06e;||fa||400` eye (fa, regular) — look optic see seen show sight views visible
+- `&#xf070;||fa||400` eye-slash (fa, regular) — blind hide show toggle unseen views visible visiblity
+- `&#xf15b;||fa||400` file (fa, regular) — document new page pdf resume
+- `&#xf15c;||fa||400` file-alt (fa, regular) — alternate document filetext invoice new page pdf
+- `&#xf1c6;||fa||400` file-archive (fa, regular) — zip bundle compress compression download
+- `&#xf1c7;||fa||400` file-audio (fa, regular) — document mp3 music page play sound
+- `&#xf1c9;||fa||400` file-code (fa, regular) — css development document html
+- `&#xf1c3;||fa||400` file-excel (fa, regular) — csv document numbers spreadsheets table
+- `&#xf1c5;||fa||400` file-image (fa, regular) — document jpg photo png
+- `&#xf1c1;||fa||400` file-pdf (fa, regular) — acrobat document preview save
+- `&#xf1c4;||fa||400` file-powerpoint (fa, regular) — display document keynote presentation
+- `&#xf1c8;||fa||400` file-video (fa, regular) — document m4v movie mp4 play
+- `&#xf1c2;||fa||400` file-word (fa, regular) — document edit page text writing
+- `&#xf024;||fa||400` flag (fa, regular) — country notice notification notify pole report symbol
+- `&#xf579;||fa||400` flushed (fa, regular) — face embarrassed emoticon
+- `&#xf07b;||fa||400` folder (fa, regular) — archive directory document file
+- `&#xf07c;||fa||400` folder-open (fa, regular) — archive directory document empty file new
+- `&#xf119;||fa||400` frown (fa, regular) — frowning face disapprove emoticon rating sad
+- `&#xf57a;||fa||400` frown-open (fa, regular) — frowning face with mouth disapprove emoticon rating sad
+- `&#xf1e3;||fa||400` futbol (fa, regular) — ball football mls soccer
+- `&#xf3a5;||fa||400` gem (fa, regular) — diamond jewelry sapphire stone treasure
+- `&#xf57f;||fa||400` grimace (fa, regular) — grimacing face cringe emoticon teeth
+- `&#xf580;||fa||400` grin (fa, regular) — grinning face emoticon laugh smile
+- `&#xf581;||fa||400` grin-alt (fa, regular) — alternate grinning face emoticon laugh smile
+- `&#xf582;||fa||400` grin-beam (fa, regular) — grinning face with smiling eyes emoticon laugh smile
+- `&#xf583;||fa||400` grin-beam-sweat (fa, regular) — grinning face with embarass emoticon smile
+- `&#xf584;||fa||400` grin-hearts (fa, regular) — smiling face with heart-eyes emoticon love smile
+- `&#xf585;||fa||400` grin-squint (fa, regular) — grinning squinting face emoticon laugh smile
+- `&#xf586;||fa||400` grin-squint-tears (fa, regular) — rolling on the floor laughing emoticon face happy
+- `&#xf587;||fa||400` grin-stars (fa, regular) — star-struck emoticon face starstruck
+- `&#xf588;||fa||400` grin-tears (fa, regular) — face with of joy lol emoticon
+- `&#xf589;||fa||400` grin-tongue (fa, regular) — face with lol emoticon
+- `&#xf58a;||fa||400` grin-tongue-squint (fa, regular) — squinting face with lol emoticon
+- `&#xf58b;||fa||400` grin-tongue-wink (fa, regular) — winking face with lol emoticon
+- `&#xf58c;||fa||400` grin-wink (fa, regular) — grinning winking face emoticon flirt laugh smile
+- `&#xf258;||fa||400` hand-lizard (fa, regular) — (hand) game roshambo
+- `&#xf256;||fa||400` hand-paper (fa, regular) — (hand) game halt roshambo stop
+- `&#xf25b;||fa||400` hand-peace (fa, regular) — (hand) rest truce
+- `&#xf0a7;||fa||400` hand-point-down (fa, regular) — pointing finger handodown
+- `&#xf0a5;||fa||400` hand-point-left (fa, regular) — pointing back finger handoleft previous
+- `&#xf0a4;||fa||400` hand-point-right (fa, regular) — pointing finger forward handoright next
+- `&#xf0a6;||fa||400` hand-point-up (fa, regular) — pointing finger handoup
+- `&#xf25a;||fa||400` hand-pointer (fa, regular) — (hand) arrow cursor select
+- `&#xf255;||fa||400` hand-rock (fa, regular) — (hand) fist game roshambo
+- `&#xf257;||fa||400` hand-scissors (fa, regular) — (hand) cut game roshambo
+- `&#xf259;||fa||400` hand-spock (fa, regular) — (hand) live long prosper salute star trek vulcan
+- `&#xf2b5;||fa||400` handshake (fa, regular) — agreement greeting meeting partnership
+- `&#xf0a0;||fa||400` hdd (fa, regular) — cpu hard drive harddrive machine save storage
+- `&#xf004;||fa||400` heart (fa, regular) — favorite like love relationship valentine
+- `&#xf0f8;||fa||400` hospital (fa, regular) — building covid19 emergency room medical center
+- `&#xf254;||fa||400` hourglass (fa, regular) — hour minute sand stopwatch time
+- `&#xf2c1;||fa||400` id-badge (fa, regular) — identification address contact license profile
+- `&#xf2c2;||fa||400` id-card (fa, regular) — identification contact demographics document issued profile
+- `&#xf03e;||fa||400` image (fa, regular) — album landscape photo picture
+- `&#xf302;||fa||400` images (fa, regular) — album landscape photo picture
+- `&#xf11c;||fa||400` keyboard (fa, regular) — accessory edit input text type write
+- `&#xf596;||fa||400` kiss (fa, regular) — kissing face beso emoticon love smooch
+- `&#xf597;||fa||400` kiss-beam (fa, regular) — kissing face with smiling eyes beso emoticon love
+- `&#xf598;||fa||400` kiss-wink-heart (fa, regular) — face blowing a beso emoticon love smooch
+- `&#xf599;||fa||400` laugh (fa, regular) — grinning face with big eyes lol emoticon smile
+- `&#xf59a;||fa||400` laugh-beam (fa, regular) — face with beaming eyes lol emoticon happy smile
+- `&#xf59b;||fa||400` laugh-squint (fa, regular) — laughing squinting face lol emoticon happy smile
+- `&#xf59c;||fa||400` laugh-wink (fa, regular) — laughing winking face lol emoticon happy smile
+- `&#xf094;||fa||400` lemon (fa, regular) — citrus lemonade lime tart
+- `&#xf1cd;||fa||400` life-ring (fa, regular) — coast guard help overboard save support
+- `&#xf0eb;||fa||400` lightbulb (fa, regular) — energy idea inspiration light
+- `&#xf022;||fa||400` list-alt (fa, regular) — alternate checklist completed done finished ol todo ul
+- `&#xf279;||fa||400` map (fa, regular) — address coordinates destination gps localize location navigation paper
+- `&#xf11a;||fa||400` meh (fa, regular) — neutral face emoticon rating
+- `&#xf5a4;||fa||400` meh-blank (fa, regular) — face without mouth emoticon neutral rating
+- `&#xf5a5;||fa||400` meh-rolling-eyes (fa, regular) — face with emoticon neutral rating
+- `&#xf146;||fa||400` minus-square (fa, regular) — collapse delete hide minify negative remove shape trash
+- `&#xf3d1;||fa||400` money-bill-alt (fa, regular) — alternate buy cash checkout payment price purchase
+- `&#xf186;||fa||400` moon (fa, regular) — contrast crescent dark lunar night
+- `&#xf1ea;||fa||400` newspaper (fa, regular) — article editorial headline journal journalism news press
+- `&#xf247;||fa||400` object-group (fa, regular) — combine copy design merge select
+- `&#xf248;||fa||400` object-ungroup (fa, regular) — copy design merge select separate
+- `&#xf1d8;||fa||400` paper-plane (fa, regular) — air float fold mail send
+- `&#xf28b;||fa||400` pause-circle (fa, regular) — hold wait
+- `&#xf144;||fa||400` play-circle (fa, regular) — audio music playing sound start video
+- `&#xf0fe;||fa||400` plus-square (fa, regular) — add create expand new positive shape
+- `&#xf059;||fa||400` question-circle (fa, regular) — help information support unknown
+- `&#xf25d;||fa||400` registered (fa, regular) — trademark copyright mark
+- `&#xf5b3;||fa||400` sad-cry (fa, regular) — crying face emoticon tear tears
+- `&#xf5b4;||fa||400` sad-tear (fa, regular) — loudly crying face emoticon tears
+- `&#xf0c7;||fa||400` save (fa, regular) — disk download floppy floppyo
+- `&#xf14d;||fa||400` share-square (fa, regular) — forward save send social
+- `&#xf118;||fa||400` smile (fa, regular) — smiling face approve emoticon happy rating satisfied
+- `&#xf5b8;||fa||400` smile-beam (fa, regular) — beaming face with smiling eyes emoticon happy positive
+- `&#xf4da;||fa||400` smile-wink (fa, regular) — winking face emoticon happy hint joke
+- `&#xf2dc;||fa||400` snowflake (fa, regular) — precipitation rain winter
+- `&#xf0c8;||fa||400` square (fa, regular) — block box shape
+- `&#xf005;||fa||400` star (fa, regular) — achievement award favorite important night rating score
+- `&#xf089;||fa||400` star-half (fa, regular) — achievement award rating score starhalfempty starhalffull
+- `&#xf249;||fa||400` sticky-note (fa, regular) — message paper reminder sticker
+- `&#xf28d;||fa||400` stop-circle (fa, regular) — block box square
+- `&#xf185;||fa||400` sun (fa, regular) — brighten contrast day lighter sol solar star weather
+- `&#xf5c2;||fa||400` surprise (fa, regular) — hushed face emoticon shocked
+- `&#xf165;||fa||400` thumbs-down (fa, regular) — disagree disapprove dislike hand social thumbsodown
+- `&#xf164;||fa||400` thumbs-up (fa, regular) — agree approve favorite hand like ok okay social
+- `&#xf057;||fa||400` times-circle (fa, regular) — close cross exit incorrect notice notification notify problem
+- `&#xf5c8;||fa||400` tired (fa, regular) — face angry emoticon grumpy upset
+- `&#xf2ed;||fa||400` trash-alt (fa, regular) — alternate delete garbage hide remove trasho
+- `&#xf007;||fa||400` user (fa, regular) — account avatar head human man person profile
+- `&#xf2bd;||fa||400` user-circle (fa, regular) — account avatar head human man person profile
+- `&#xf410;||fa||400` window-close (fa, regular) — browser cancel computer development
+- `&#xf2d0;||fa||400` window-maximize (fa, regular) — browser computer development expand
+- `&#xf2d1;||fa||400` window-minimize (fa, regular) — browser collapse computer development
+- `&#xf2d2;||fa||400` window-restore (fa, regular) — browser computer development
+
+## Font Awesome brands (457)
+
+`||fa||400` brand logos.
+
+- `&#xf26e;||fa||400` 500px (fa, brands)
+- `&#xf368;||fa||400` accessible-icon (fa, brands) — accessibility handicap person wheelchair wheelchairalt
+- `&#xf369;||fa||400` accusoft (fa, brands)
+- `&#xf6af;||fa||400` acquisitions-incorporated (fa, brands) — dungeons dragons dd dnd fantasy game gaming tabletop
+- `&#xf170;||fa||400` adn (fa, brands) — adnapp.net
+- `&#xf36a;||fa||400` adversal (fa, brands)
+- `&#xf36b;||fa||400` affiliatetheme (fa, brands)
+- `&#xf834;||fa||400` airbnb (fa, brands)
+- `&#xf36c;||fa||400` algolia (fa, brands)
+- `&#xf642;||fa||400` alipay (fa, brands)
+- `&#xf270;||fa||400` amazon (fa, brands)
+- `&#xf42c;||fa||400` amazon-pay (fa, brands) — amazon-payamazon
+- `&#xf36d;||fa||400` amilia (fa, brands)
+- `&#xf17b;||fa||400` android (fa, brands) — robot
+- `&#xf209;||fa||400` angellist (fa, brands)
+- `&#xf36e;||fa||400` angrycreative (fa, brands) — angrycreativeangry creative
+- `&#xf420;||fa||400` angular (fa, brands)
+- `&#xf36f;||fa||400` app-store (fa, brands) — app-storeapp
+- `&#xf370;||fa||400` app-store-ios (fa, brands) — app-store-iosios
+- `&#xf371;||fa||400` apper (fa, brands) — systems ab
+- `&#xf179;||fa||400` apple (fa, brands) — fruit ios mac operating system os osx
+- `&#xf415;||fa||400` apple-pay (fa, brands) — apple-payapple
+- `&#xf77a;||fa||400` artstation (fa, brands)
+- `&#xf372;||fa||400` asymmetrik (fa, brands) — asymmetrik, ltd.
+- `&#xf77b;||fa||400` atlassian (fa, brands)
+- `&#xf373;||fa||400` audible (fa, brands)
+- `&#xf41c;||fa||400` autoprefixer (fa, brands)
+- `&#xf374;||fa||400` avianex (fa, brands)
+- `&#xf421;||fa||400` aviato (fa, brands)
+- `&#xf375;||fa||400` aws (fa, brands) — amazon web services (aws)
+- `&#xf2d5;||fa||400` bandcamp (fa, brands)
+- `&#xf835;||fa||400` battle-net (fa, brands) — battle-netbattle.net
+- `&#xf1b4;||fa||400` behance (fa, brands)
+- `&#xf1b5;||fa||400` behance-square (fa, brands) — behance-squarebehance
+- `&#xf378;||fa||400` bimobject (fa, brands)
+- `&#xf171;||fa||400` bitbucket (fa, brands) — atlassian bitbucketsquare git
+- `&#xf379;||fa||400` bitcoin (fa, brands)
+- `&#xf37a;||fa||400` bity (fa, brands)
+- `&#xf27e;||fa||400` black-tie (fa, brands) — black-tiefont awesome
+- `&#xf37b;||fa||400` blackberry (fa, brands)
+- `&#xf37c;||fa||400` blogger (fa, brands)
+- `&#xf37d;||fa||400` blogger-b (fa, brands) — blogger-bblogger
+- `&#xf293;||fa||400` bluetooth (fa, brands)
+- `&#xf294;||fa||400` bluetooth-b (fa, brands) — bluetooth-bbluetooth
+- `&#xf836;||fa||400` bootstrap (fa, brands)
+- `&#xf15a;||fa||400` btc (fa, brands)
+- `&#xf837;||fa||400` buffer (fa, brands)
+- `&#xf37f;||fa||400` buromobelexperte (fa, brands) — buromobelexpertebüromöbel-experte gmbh & co. kg.
+- `&#xf8a6;||fa||400` buy-n-large (fa, brands) — buy-n-largebuy
+- `&#xf20d;||fa||400` buysellads (fa, brands)
+- `&#xf785;||fa||400` canadian-maple-leaf (fa, brands) — canada flag flora nature plant
+- `&#xf42d;||fa||400` cc-amazon-pay (fa, brands) — cc-amazon-payamazon credit card
+- `&#xf1f3;||fa||400` cc-amex (fa, brands) — american express credit card
+- `&#xf416;||fa||400` cc-apple-pay (fa, brands) — cc-apple-payapple credit card
+- `&#xf24c;||fa||400` cc-diners-club (fa, brands) — cc-diners-clubdiner's credit card
+- `&#xf1f2;||fa||400` cc-discover (fa, brands) — cc-discoverdiscover credit card
+- `&#xf24b;||fa||400` cc-jcb (fa, brands) — cc-jcbjcb credit card
+- `&#xf1f1;||fa||400` cc-mastercard (fa, brands) — cc-mastercardmastercard credit card
+- `&#xf1f4;||fa||400` cc-paypal (fa, brands) — cc-paypalpaypal credit card
+- `&#xf1f5;||fa||400` cc-stripe (fa, brands) — cc-stripestripe credit card
+- `&#xf1f0;||fa||400` cc-visa (fa, brands) — cc-visavisa credit card
+- `&#xf380;||fa||400` centercode (fa, brands)
+- `&#xf789;||fa||400` centos (fa, brands) — linux operating system os
+- `&#xf268;||fa||400` chrome (fa, brands) — browser
+- `&#xf838;||fa||400` chromecast (fa, brands)
+- `&#xe07d;||fa||400` cloudflare (fa, brands)
+- `&#xf383;||fa||400` cloudscale (fa, brands) — cloudscale.ch
+- `&#xf384;||fa||400` cloudsmith (fa, brands)
+- `&#xf385;||fa||400` cloudversify (fa, brands)
+- `&#xf1cb;||fa||400` codepen (fa, brands)
+- `&#xf284;||fa||400` codiepie (fa, brands) — codiepiecodie pie
+- `&#xf78d;||fa||400` confluence (fa, brands) — atlassian
+- `&#xf20e;||fa||400` connectdevelop (fa, brands) — connectdevelopconnect develop
+- `&#xf26d;||fa||400` contao (fa, brands)
+- `&#xf89e;||fa||400` cotton-bureau (fa, brands) — clothing tshirts
+- `&#xf388;||fa||400` cpanel (fa, brands)
+- `&#xf25e;||fa||400` creative-commons (fa, brands) — creative-commonscreative
+- `&#xf4e7;||fa||400` creative-commons-by (fa, brands) — creative-commons-bycreative attribution
+- `&#xf4e8;||fa||400` creative-commons-nc (fa, brands) — creative-commons-nccreative noncommercial
+- `&#xf4e9;||fa||400` creative-commons-nc-eu (fa, brands) — creative-commons-nc-eucreative noncommercial (euro sign)
+- `&#xf4ea;||fa||400` creative-commons-nc-jp (fa, brands) — creative-commons-nc-jpcreative noncommercial (yen sign)
+- `&#xf4eb;||fa||400` creative-commons-nd (fa, brands) — creative-commons-ndcreative no derivative works
+- `&#xf4ec;||fa||400` creative-commons-pd (fa, brands) — creative-commons-pdcreative public domain
+- `&#xf4ed;||fa||400` creative-commons-pd-alt (fa, brands) — creative-commons-pd-altalternate public domain
+- `&#xf4ee;||fa||400` creative-commons-remix (fa, brands) — creative-commons-remixcreative
+- `&#xf4ef;||fa||400` creative-commons-sa (fa, brands) — creative-commons-sacreative share alike
+- `&#xf4f0;||fa||400` creative-commons-sampling (fa, brands) — creative-commons-samplingcreative
+- `&#xf4f1;||fa||400` creative-commons-sampling-plus (fa, brands) — creative-commons-sampling-pluscreative +
+- `&#xf4f2;||fa||400` creative-commons-share (fa, brands) — creative-commons-sharecreative
+- `&#xf4f3;||fa||400` creative-commons-zero (fa, brands) — creative-commons-zerocreative cc0
+- `&#xf6c9;||fa||400` critical-role (fa, brands) — dungeons dragons dd dnd fantasy game gaming tabletop
+- `&#xf13c;||fa||400` css3 (fa, brands) — css 3 logo code
+- `&#xf38b;||fa||400` css3-alt (fa, brands) — css3-altalternate logo
+- `&#xf38c;||fa||400` cuttlefish (fa, brands)
+- `&#xf38d;||fa||400` d-and-d (fa, brands) — d-and-ddungeons & dragons
+- `&#xf6ca;||fa||400` d-and-d-beyond (fa, brands) — d&d dungeons dragons dd dnd fantasy gaming tabletop
+- `&#xe052;||fa||400` dailymotion (fa, brands)
+- `&#xf210;||fa||400` dashcube (fa, brands)
+- `&#xe077;||fa||400` deezer (fa, brands)
+- `&#xf1a5;||fa||400` delicious (fa, brands)
+- `&#xf38e;||fa||400` deploydog (fa, brands) — deploydogdeploy.dog
+- `&#xf38f;||fa||400` deskpro (fa, brands)
+- `&#xf6cc;||fa||400` dev (fa, brands)
+- `&#xf1bd;||fa||400` deviantart (fa, brands)
+- `&#xf790;||fa||400` dhl (fa, brands) — dalsey hillblom and lynn german package shipping
+- `&#xf791;||fa||400` diaspora (fa, brands)
+- `&#xf1a6;||fa||400` digg (fa, brands) — logo
+- `&#xf391;||fa||400` digital-ocean (fa, brands) — digital-oceandigital
+- `&#xf392;||fa||400` discord (fa, brands)
+- `&#xf393;||fa||400` discourse (fa, brands)
+- `&#xf394;||fa||400` dochub (fa, brands)
+- `&#xf395;||fa||400` docker (fa, brands)
+- `&#xf396;||fa||400` draft2digital (fa, brands)
+- `&#xf17d;||fa||400` dribbble (fa, brands)
+- `&#xf397;||fa||400` dribbble-square (fa, brands) — dribbble-squaredribbble
+- `&#xf16b;||fa||400` dropbox (fa, brands)
+- `&#xf1a9;||fa||400` drupal (fa, brands) — logo
+- `&#xf399;||fa||400` dyalog (fa, brands)
+- `&#xf39a;||fa||400` earlybirds (fa, brands)
+- `&#xf4f4;||fa||400` ebay (fa, brands)
+- `&#xf282;||fa||400` edge (fa, brands) — browser ie
+- `&#xe078;||fa||400` edge-legacy (fa, brands) — edge-legacyedge browser
+- `&#xf430;||fa||400` elementor (fa, brands)
+- `&#xf5f1;||fa||400` ello (fa, brands)
+- `&#xf423;||fa||400` ember (fa, brands)
+- `&#xf1d1;||fa||400` empire (fa, brands) — galactic
+- `&#xf299;||fa||400` envira (fa, brands) — gallery leaf
+- `&#xf39d;||fa||400` erlang (fa, brands)
+- `&#xf42e;||fa||400` ethereum (fa, brands)
+- `&#xf2d7;||fa||400` etsy (fa, brands)
+- `&#xf839;||fa||400` evernote (fa, brands)
+- `&#xf23e;||fa||400` expeditedssl (fa, brands)
+- `&#xf09a;||fa||400` facebook (fa, brands) — facebookofficial social network
+- `&#xf39e;||fa||400` facebook-f (fa, brands)
+- `&#xf39f;||fa||400` facebook-messenger (fa, brands) — facebook-messengerfacebook
+- `&#xf082;||fa||400` facebook-square (fa, brands) — social network
+- `&#xf6dc;||fa||400` fantasy-flight-games (fa, brands) — flight-games dungeons dragons dd dnd game gaming tabletop
+- `&#xf797;||fa||400` fedex (fa, brands) — federal express package shipping
+- `&#xf798;||fa||400` fedora (fa, brands) — linux operating system os
+- `&#xf799;||fa||400` figma (fa, brands) — app design interface
+- `&#xf269;||fa||400` firefox (fa, brands) — browser
+- `&#xe007;||fa||400` firefox-browser (fa, brands)
+- `&#xf2b0;||fa||400` first-order (fa, brands) — first-orderfirst
+- `&#xf50a;||fa||400` first-order-alt (fa, brands) — first-order-altalternate
+- `&#xf3a1;||fa||400` firstdraft (fa, brands)
+- `&#xf16e;||fa||400` flickr (fa, brands)
+- `&#xf44d;||fa||400` flipboard (fa, brands)
+- `&#xf417;||fa||400` fly (fa, brands)
+- `&#xf2b4;||fa||400` font-awesome (fa, brands) — meanpath
+- `&#xf35c;||fa||400` font-awesome-alt (fa, brands) — font-awesome-altalternate
+- `&#xf425;||fa||400` font-awesome-flag (fa, brands) — font-awesome-flagfont
+- `&#xf280;||fa||400` fonticons (fa, brands)
+- `&#xf3a2;||fa||400` fonticons-fi (fa, brands) — fonticons-fifonticons
+- `&#xf286;||fa||400` fort-awesome (fa, brands) — castle
+- `&#xf3a3;||fa||400` fort-awesome-alt (fa, brands) — alternate castle
+- `&#xf211;||fa||400` forumbee (fa, brands)
+- `&#xf180;||fa||400` foursquare (fa, brands)
+- `&#xf2c5;||fa||400` free-code-camp (fa, brands) — free-code-campfreecodecamp
+- `&#xf3a4;||fa||400` freebsd (fa, brands)
+- `&#xf50b;||fa||400` fulcrum (fa, brands)
+- `&#xf50c;||fa||400` galactic-republic (fa, brands) — politics star wars
+- `&#xf50d;||fa||400` galactic-senate (fa, brands) — star wars
+- `&#xf265;||fa||400` get-pocket (fa, brands) — get-pocketget
+- `&#xf260;||fa||400` gg (fa, brands) — currency
+- `&#xf261;||fa||400` gg-circle (fa, brands) — gg-circlegg currency
+- `&#xf1d3;||fa||400` git (fa, brands)
+- `&#xf841;||fa||400` git-alt (fa, brands) — git-altgit
+- `&#xf1d2;||fa||400` git-square (fa, brands) — git-squaregit
+- `&#xf09b;||fa||400` github (fa, brands) — octocat
+- `&#xf113;||fa||400` github-alt (fa, brands) — alternate octocat
+- `&#xf092;||fa||400` github-square (fa, brands) — octocat
+- `&#xf3a6;||fa||400` gitkraken (fa, brands)
+- `&#xf296;||fa||400` gitlab (fa, brands) — axosoft
+- `&#xf426;||fa||400` gitter (fa, brands)
+- `&#xf2a5;||fa||400` glide (fa, brands)
+- `&#xf2a6;||fa||400` glide-g (fa, brands) — glide-gglide
+- `&#xf3a7;||fa||400` gofore (fa, brands)
+- `&#xf3a8;||fa||400` goodreads (fa, brands)
+- `&#xf3a9;||fa||400` goodreads-g (fa, brands) — goodreads-ggoodreads
+- `&#xf1a0;||fa||400` google (fa, brands) — logo
+- `&#xf3aa;||fa||400` google-drive (fa, brands) — google-drivegoogle
+- `&#xe079;||fa||400` google-pay (fa, brands) — google-paygoogle
+- `&#xf3ab;||fa||400` google-play (fa, brands) — google-playgoogle
+- `&#xf2b3;||fa||400` google-plus (fa, brands) — googlepluscircle googleplusofficial
+- `&#xf0d5;||fa||400` google-plus-g (fa, brands) — googleplus social network
+- `&#xf0d4;||fa||400` google-plus-square (fa, brands) — social network
+- `&#xf1ee;||fa||400` google-wallet (fa, brands) — google-walletgoogle
+- `&#xf184;||fa||400` gratipay (fa, brands) — (gittip) favorite heart like love
+- `&#xf2d6;||fa||400` grav (fa, brands)
+- `&#xf3ac;||fa||400` gripfire (fa, brands) — gripfire, inc.
+- `&#xf3ad;||fa||400` grunt (fa, brands)
+- `&#xe07e;||fa||400` guilded (fa, brands)
+- `&#xf3ae;||fa||400` gulp (fa, brands)
+- `&#xf1d4;||fa||400` hacker-news (fa, brands) — hacker-newshacker
+- `&#xf3af;||fa||400` hacker-news-square (fa, brands) — hacker-news-squarehacker
+- `&#xf5f7;||fa||400` hackerrank (fa, brands)
+- `&#xf452;||fa||400` hips (fa, brands)
+- `&#xf3b0;||fa||400` hire-a-helper (fa, brands) — hire-a-helperhireahelper
+- `&#xe07f;||fa||400` hive (fa, brands) — blockchain network
+- `&#xf427;||fa||400` hooli (fa, brands)
+- `&#xf592;||fa||400` hornbill (fa, brands)
+- `&#xf3b1;||fa||400` hotjar (fa, brands)
+- `&#xf27c;||fa||400` houzz (fa, brands)
+- `&#xf13b;||fa||400` html5 (fa, brands) — html5html 5 logo
+- `&#xf3b2;||fa||400` hubspot (fa, brands)
+- `&#xe013;||fa||400` ideal (fa, brands)
+- `&#xf2d8;||fa||400` imdb (fa, brands)
+- `&#xe080;||fa||400` innosoft (fa, brands)
+- `&#xf16d;||fa||400` instagram (fa, brands)
+- `&#xe055;||fa||400` instagram-square (fa, brands) — instagram-squareinstagram
+- `&#xe081;||fa||400` instalod (fa, brands)
+- `&#xf7af;||fa||400` intercom (fa, brands) — app customer messenger
+- `&#xf26b;||fa||400` internet-explorer (fa, brands) — browser ie
+- `&#xf7b0;||fa||400` invision (fa, brands) — app design interface
+- `&#xf208;||fa||400` ioxhost (fa, brands)
+- `&#xf83a;||fa||400` itch-io (fa, brands) — itch-ioitch.io
+- `&#xf3b4;||fa||400` itunes (fa, brands)
+- `&#xf3b5;||fa||400` itunes-note (fa, brands) — itunes-noteitunes
+- `&#xf4e4;||fa||400` java (fa, brands)
+- `&#xf50e;||fa||400` jedi-order (fa, brands) — star wars
+- `&#xf3b6;||fa||400` jenkins (fa, brands) — jenkinsjenkis
+- `&#xf7b1;||fa||400` jira (fa, brands) — atlassian
+- `&#xf3b7;||fa||400` joget (fa, brands)
+- `&#xf1aa;||fa||400` joomla (fa, brands) — logo
+- `&#xf3b8;||fa||400` js (fa, brands) — javascript (js)
+- `&#xf3b9;||fa||400` js-square (fa, brands) — js-squarejavascript (js)
+- `&#xf1cc;||fa||400` jsfiddle (fa, brands)
+- `&#xf5fa;||fa||400` kaggle (fa, brands)
+- `&#xf4f5;||fa||400` keybase (fa, brands)
+- `&#xf3ba;||fa||400` keycdn (fa, brands)
+- `&#xf3bb;||fa||400` kickstarter (fa, brands)
+- `&#xf3bc;||fa||400` kickstarter-k (fa, brands) — kickstarter-kkickstarter
+- `&#xf42f;||fa||400` korvue (fa, brands)
+- `&#xf3bd;||fa||400` laravel (fa, brands)
+- `&#xf202;||fa||400` lastfm (fa, brands) — lastfmlast.fm
+- `&#xf203;||fa||400` lastfm-square (fa, brands) — lastfm-squarelast.fm
+- `&#xf212;||fa||400` leanpub (fa, brands)
+- `&#xf41d;||fa||400` less (fa, brands)
+- `&#xf3c0;||fa||400` line (fa, brands)
+- `&#xf08c;||fa||400` linkedin (fa, brands) — linkedinsquare
+- `&#xf0e1;||fa||400` linkedin-in (fa, brands)
+- `&#xf2b8;||fa||400` linode (fa, brands)
+- `&#xf17c;||fa||400` linux (fa, brands) — tux
+- `&#xf3c3;||fa||400` lyft (fa, brands)
+- `&#xf3c4;||fa||400` magento (fa, brands)
+- `&#xf59e;||fa||400` mailchimp (fa, brands)
+- `&#xf50f;||fa||400` mandalorian (fa, brands)
+- `&#xf60f;||fa||400` markdown (fa, brands)
+- `&#xf4f6;||fa||400` mastodon (fa, brands)
+- `&#xf136;||fa||400` maxcdn (fa, brands)
+- `&#xf8ca;||fa||400` mdb (fa, brands) — mdbmaterial design for bootstrap
+- `&#xf3c6;||fa||400` medapps (fa, brands)
+- `&#xf23a;||fa||400` medium (fa, brands)
+- `&#xf3c7;||fa||400` medium-m (fa, brands) — medium-mmedium
+- `&#xf3c8;||fa||400` medrt (fa, brands) — medrtmrt
+- `&#xf2e0;||fa||400` meetup (fa, brands)
+- `&#xf5a3;||fa||400` megaport (fa, brands)
+- `&#xf7b3;||fa||400` mendeley (fa, brands)
+- `&#xe01a;||fa||400` microblog (fa, brands) — microblogmicro.blog
+- `&#xf3ca;||fa||400` microsoft (fa, brands)
+- `&#xf3cb;||fa||400` mix (fa, brands)
+- `&#xf289;||fa||400` mixcloud (fa, brands)
+- `&#xe056;||fa||400` mixer (fa, brands)
+- `&#xf3cc;||fa||400` mizuni (fa, brands)
+- `&#xf285;||fa||400` modx (fa, brands)
+- `&#xf3d0;||fa||400` monero (fa, brands)
+- `&#xf3d2;||fa||400` napster (fa, brands)
+- `&#xf612;||fa||400` neos (fa, brands)
+- `&#xf5a8;||fa||400` nimblr (fa, brands)
+- `&#xf419;||fa||400` node (fa, brands) — node.js
+- `&#xf3d3;||fa||400` node-js (fa, brands) — node-jsnode.js
+- `&#xf3d4;||fa||400` npm (fa, brands)
+- `&#xf3d5;||fa||400` ns8 (fa, brands)
+- `&#xf3d6;||fa||400` nutritionix (fa, brands)
+- `&#xe082;||fa||400` octopus-deploy (fa, brands) — octopus-deployoctopus
+- `&#xf263;||fa||400` odnoklassniki (fa, brands)
+- `&#xf264;||fa||400` odnoklassniki-square (fa, brands) — odnoklassniki-squareodnoklassniki
+- `&#xf510;||fa||400` old-republic (fa, brands) — politics star wars
+- `&#xf23d;||fa||400` opencart (fa, brands)
+- `&#xf19b;||fa||400` openid (fa, brands)
+- `&#xf26a;||fa||400` opera (fa, brands)
+- `&#xf23c;||fa||400` optin-monster (fa, brands) — optin-monsteroptin
+- `&#xf8d2;||fa||400` orcid (fa, brands)
+- `&#xf41a;||fa||400` osi (fa, brands) — osiopen source initiative
+- `&#xf3d7;||fa||400` page4 (fa, brands) — corporation
+- `&#xf18c;||fa||400` pagelines (fa, brands) — eco flora leaf leaves nature plant tree
+- `&#xf3d8;||fa||400` palfed (fa, brands)
+- `&#xf3d9;||fa||400` patreon (fa, brands)
+- `&#xf1ed;||fa||400` paypal (fa, brands)
+- `&#xf704;||fa||400` penny-arcade (fa, brands) — dungeons dragons dd dnd fantasy game gaming pax
+- `&#xe083;||fa||400` perbyte (fa, brands)
+- `&#xf3da;||fa||400` periscope (fa, brands)
+- `&#xf3db;||fa||400` phabricator (fa, brands)
+- `&#xf3dc;||fa||400` phoenix-framework (fa, brands) — phoenix-frameworkphoenix
+- `&#xf511;||fa||400` phoenix-squadron (fa, brands) — phoenix-squadronphoenix
+- `&#xf457;||fa||400` php (fa, brands)
+- `&#xf2ae;||fa||400` pied-piper (fa, brands) — pied-piperpied logo
+- `&#xf1a8;||fa||400` pied-piper-alt (fa, brands) — pied-piper-altalternate logo (old)
+- `&#xf4e5;||fa||400` pied-piper-hat (fa, brands) — (old) clothing
+- `&#xf1a7;||fa||400` pied-piper-pp (fa, brands) — pied-piper-pppied logo (old)
+- `&#xe01e;||fa||400` pied-piper-square (fa, brands) — pied-piper-squarepied logo (old)
+- `&#xf0d2;||fa||400` pinterest (fa, brands)
+- `&#xf231;||fa||400` pinterest-p (fa, brands) — pinterest-ppinterest
+- `&#xf0d3;||fa||400` pinterest-square (fa, brands) — pinterest-squarepinterest
+- `&#xf3df;||fa||400` playstation (fa, brands)
+- `&#xf288;||fa||400` product-hunt (fa, brands) — product-huntproduct
+- `&#xf3e1;||fa||400` pushed (fa, brands)
+- `&#xf3e2;||fa||400` python (fa, brands)
+- `&#xf1d6;||fa||400` qq (fa, brands)
+- `&#xf459;||fa||400` quinscape (fa, brands)
+- `&#xf2c4;||fa||400` quora (fa, brands)
+- `&#xf4f7;||fa||400` r-project (fa, brands) — r-projectr
+- `&#xf7bb;||fa||400` raspberry-pi (fa, brands) — raspberry-piraspberry
+- `&#xf2d9;||fa||400` ravelry (fa, brands)
+- `&#xf41b;||fa||400` react (fa, brands)
+- `&#xf75d;||fa||400` reacteurope (fa, brands)
+- `&#xf4d5;||fa||400` readme (fa, brands)
+- `&#xf1d0;||fa||400` rebel (fa, brands) — alliance
+- `&#xf3e3;||fa||400` red-river (fa, brands) — red-riverred
+- `&#xf1a1;||fa||400` reddit (fa, brands) — logo
+- `&#xf281;||fa||400` reddit-alien (fa, brands) — reddit-alienreddit
+- `&#xf1a2;||fa||400` reddit-square (fa, brands) — reddit-squarereddit
+- `&#xf7bc;||fa||400` redhat (fa, brands) — linux operating system os
+- `&#xf18b;||fa||400` renren (fa, brands)
+- `&#xf3e6;||fa||400` replyd (fa, brands)
+- `&#xf4f8;||fa||400` researchgate (fa, brands)
+- `&#xf3e7;||fa||400` resolving (fa, brands)
+- `&#xf5b2;||fa||400` rev (fa, brands) — rev.io
+- `&#xf3e8;||fa||400` rocketchat (fa, brands) — rocketchatrocket.chat
+- `&#xf3e9;||fa||400` rockrms (fa, brands)
+- `&#xe07a;||fa||400` rust (fa, brands)
+- `&#xf267;||fa||400` safari (fa, brands) — browser
+- `&#xf83b;||fa||400` salesforce (fa, brands)
+- `&#xf41e;||fa||400` sass (fa, brands)
+- `&#xf3ea;||fa||400` schlix (fa, brands)
+- `&#xf28a;||fa||400` scribd (fa, brands)
+- `&#xf3eb;||fa||400` searchengin (fa, brands)
+- `&#xf2da;||fa||400` sellcast (fa, brands) — eercast
+- `&#xf213;||fa||400` sellsy (fa, brands)
+- `&#xf3ec;||fa||400` servicestack (fa, brands)
+- `&#xf214;||fa||400` shirtsinbulk (fa, brands) — shirtsinbulkshirts in bulk
+- `&#xe057;||fa||400` shopify (fa, brands)
+- `&#xf5b5;||fa||400` shopware (fa, brands)
+- `&#xf215;||fa||400` simplybuilt (fa, brands)
+- `&#xf3ee;||fa||400` sistrix (fa, brands)
+- `&#xf512;||fa||400` sith (fa, brands)
+- `&#xf7c6;||fa||400` sketch (fa, brands) — app design interface
+- `&#xf216;||fa||400` skyatlas (fa, brands)
+- `&#xf17e;||fa||400` skype (fa, brands)
+- `&#xf198;||fa||400` slack (fa, brands) — logo anchor hash hashtag
+- `&#xf3ef;||fa||400` slack-hash (fa, brands) — hashtag anchor
+- `&#xf1e7;||fa||400` slideshare (fa, brands)
+- `&#xf2ab;||fa||400` snapchat (fa, brands)
+- `&#xf2ac;||fa||400` snapchat-ghost (fa, brands) — snapchat-ghostsnapchat
+- `&#xf2ad;||fa||400` snapchat-square (fa, brands) — snapchat-squaresnapchat
+- `&#xf1be;||fa||400` soundcloud (fa, brands)
+- `&#xf7d3;||fa||400` sourcetree (fa, brands)
+- `&#xf3f3;||fa||400` speakap (fa, brands)
+- `&#xf83c;||fa||400` speaker-deck (fa, brands) — speaker-deckspeaker
+- `&#xf1bc;||fa||400` spotify (fa, brands)
+- `&#xf5be;||fa||400` squarespace (fa, brands)
+- `&#xf18d;||fa||400` stack-exchange (fa, brands) — stack-exchangestack
+- `&#xf16c;||fa||400` stack-overflow (fa, brands) — stack-overflowstack
+- `&#xf842;||fa||400` stackpath (fa, brands)
+- `&#xf3f5;||fa||400` staylinked (fa, brands)
+- `&#xf1b6;||fa||400` steam (fa, brands)
+- `&#xf1b7;||fa||400` steam-square (fa, brands) — steam-squaresteam
+- `&#xf3f6;||fa||400` steam-symbol (fa, brands) — steam-symbolsteam
+- `&#xf3f7;||fa||400` sticker-mule (fa, brands) — sticker-mulesticker
+- `&#xf428;||fa||400` strava (fa, brands)
+- `&#xf429;||fa||400` stripe (fa, brands)
+- `&#xf42a;||fa||400` stripe-s (fa, brands) — stripe-sstripe
+- `&#xf3f8;||fa||400` studiovinari (fa, brands) — studiovinaristudio vinari
+- `&#xf1a4;||fa||400` stumbleupon (fa, brands) — logo
+- `&#xf1a3;||fa||400` stumbleupon-circle (fa, brands) — stumbleupon-circlestumbleupon
+- `&#xf2dd;||fa||400` superpowers (fa, brands)
+- `&#xf3f9;||fa||400` supple (fa, brands)
+- `&#xf7d6;||fa||400` suse (fa, brands) — linux operating system os
+- `&#xf8e1;||fa||400` swift (fa, brands)
+- `&#xf83d;||fa||400` symfony (fa, brands)
+- `&#xf4f9;||fa||400` teamspeak (fa, brands)
+- `&#xf2c6;||fa||400` telegram (fa, brands)
+- `&#xf3fe;||fa||400` telegram-plane (fa, brands) — telegram-planetelegram
+- `&#xf1d5;||fa||400` tencent-weibo (fa, brands) — tencent-weibotencent
+- `&#xf69d;||fa||400` the-red-yeti (fa, brands) — the-red-yetithe
+- `&#xf5c6;||fa||400` themeco (fa, brands)
+- `&#xf2b2;||fa||400` themeisle (fa, brands)
+- `&#xf731;||fa||400` think-peaks (fa, brands) — think-peaksthink
+- `&#xe07b;||fa||400` tiktok (fa, brands)
+- `&#xf513;||fa||400` trade-federation (fa, brands) — trade-federationtrade
+- `&#xf181;||fa||400` trello (fa, brands) — atlassian
+- `&#xf262;||fa||400` tripadvisor (fa, brands)
+- `&#xf173;||fa||400` tumblr (fa, brands)
+- `&#xf174;||fa||400` tumblr-square (fa, brands) — tumblr-squaretumblr
+- `&#xf1e8;||fa||400` twitch (fa, brands)
+- `&#xf099;||fa||400` twitter (fa, brands) — social network tweet
+- `&#xf081;||fa||400` twitter-square (fa, brands) — social network tweet
+- `&#xf42b;||fa||400` typo3 (fa, brands)
+- `&#xf402;||fa||400` uber (fa, brands)
+- `&#xf7df;||fa||400` ubuntu (fa, brands) — linux operating system os
+- `&#xf403;||fa||400` uikit (fa, brands)
+- `&#xf8e8;||fa||400` umbraco (fa, brands)
+- `&#xe084;||fa||400` uncharted (fa, brands) — software
+- `&#xf404;||fa||400` uniregistry (fa, brands)
+- `&#xe049;||fa||400` unity (fa, brands) — 3d
+- `&#xe07c;||fa||400` unsplash (fa, brands)
+- `&#xf405;||fa||400` untappd (fa, brands)
+- `&#xf7e0;||fa||400` ups (fa, brands) — united parcel service package shipping
+- `&#xf287;||fa||400` usb (fa, brands)
+- `&#xf7e1;||fa||400` usps (fa, brands) — united states postal service american package shipping usa
+- `&#xf407;||fa||400` ussunnah (fa, brands) — ussunnahus-sunnah foundation
+- `&#xf408;||fa||400` vaadin (fa, brands)
+- `&#xf237;||fa||400` viacoin (fa, brands)
+- `&#xf2a9;||fa||400` viadeo (fa, brands)
+- `&#xf2aa;||fa||400` viadeo-square (fa, brands) — viadeo-squareviadeo
+- `&#xf409;||fa||400` viber (fa, brands)
+- `&#xf40a;||fa||400` vimeo (fa, brands)
+- `&#xf194;||fa||400` vimeo-square (fa, brands) — vimeo-squarevimeo
+- `&#xf27d;||fa||400` vimeo-v (fa, brands) — vimeo-vvimeo
+- `&#xf1ca;||fa||400` vine (fa, brands)
+- `&#xf189;||fa||400` vk (fa, brands)
+- `&#xf40b;||fa||400` vnv (fa, brands)
+- `&#xf41f;||fa||400` vuejs (fa, brands) — vuejsvue.js
+- `&#xe087;||fa||400` watchman-monitoring (fa, brands) — watchman-monitoringwatchman
+- `&#xf83f;||fa||400` waze (fa, brands)
+- `&#xf5cc;||fa||400` weebly (fa, brands)
+- `&#xf18a;||fa||400` weibo (fa, brands)
+- `&#xf1d7;||fa||400` weixin (fa, brands) — (wechat)
+- `&#xf232;||fa||400` whatsapp (fa, brands) — whatsappwhat's app
+- `&#xf40c;||fa||400` whatsapp-square (fa, brands) — whatsapp-squarewhat's app
+- `&#xf40d;||fa||400` whmcs (fa, brands)
+- `&#xf266;||fa||400` wikipedia-w (fa, brands) — wikipedia-wwikipedia
+- `&#xf17a;||fa||400` windows (fa, brands) — microsoft operating system os
+- `&#xf5cf;||fa||400` wix (fa, brands)
+- `&#xf730;||fa||400` wizards-of-the-coast (fa, brands) — dungeons dragons dd dnd fantasy game gaming tabletop
+- `&#xe088;||fa||400` wodu (fa, brands)
+- `&#xf514;||fa||400` wolf-pack-battalion (fa, brands) — wolf-pack-battalionwolf
+- `&#xf19a;||fa||400` wordpress (fa, brands) — logo
+- `&#xf411;||fa||400` wordpress-simple (fa, brands) — wordpress-simplewordpress
+- `&#xf297;||fa||400` wpbeginner (fa, brands)
+- `&#xf2de;||fa||400` wpexplorer (fa, brands)
+- `&#xf298;||fa||400` wpforms (fa, brands)
+- `&#xf3e4;||fa||400` wpressr (fa, brands) — rendact
+- `&#xf412;||fa||400` xbox (fa, brands)
+- `&#xf168;||fa||400` xing (fa, brands)
+- `&#xf169;||fa||400` xing-square (fa, brands) — xing-squarexing
+- `&#xf23b;||fa||400` y-combinator (fa, brands) — y-combinatory
+- `&#xf19e;||fa||400` yahoo (fa, brands) — logo
+- `&#xf840;||fa||400` yammer (fa, brands)
+- `&#xf413;||fa||400` yandex (fa, brands)
+- `&#xf414;||fa||400` yandex-international (fa, brands) — yandex-internationalyandex
+- `&#xf7e3;||fa||400` yarn (fa, brands)
+- `&#xf1e9;||fa||400` yelp (fa, brands)
+- `&#xf2b1;||fa||400` yoast (fa, brands)
+- `&#xf167;||fa||400` youtube (fa, brands) — film video youtubeplay youtubesquare
+- `&#xf431;||fa||400` youtube-square (fa, brands) — youtube-squareyoutube
+- `&#xf63f;||fa||400` zhihu (fa, brands)

@@ -153,4 +153,10 @@
 | Transitions | (none) | [design-families.md#transitions](../design-families.md#transitions) |
 | Visibility | (none) | [design-families.md#visibility](../design-families.md#visibility) |
 
+**Family fields not on this module.** These rows of a linked family's table do not exist here (writing one is `E_UNKNOWN_ATTR`); use this module's own fields above instead.
+
+- Font (`body_`): `body_text_shadow_blur_strength`, `body_text_shadow_color`, `body_text_shadow_horizontal_length`, `body_text_shadow_style`, `body_text_shadow_vertical_length`
+- Font (`company_`): `company_text_align`
+- Font (`position_`): `position_text_align`
+
 R = responsive (`_tablet`, `_phone`, `_last_edited`), H = hover (`__hover`), S = sticky (`__sticky`). See [value-formats.md](../value-formats.md).

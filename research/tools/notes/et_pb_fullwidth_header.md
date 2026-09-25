@@ -1,0 +1,2 @@
+- Always set `background_color` explicitly (a token color; over a `background_image`, a color or an `rgba()` overlay you chose): left unset, Divi's default teal `#7EBEC5` shows.
+- The title renders at `title_level`, default `h1`: a closing/secondary fullwidth header needs `title_level="h2"`, or the page gets a second H1 (`E_MULTIPLE_H1`).

@@ -75,4 +75,10 @@
 | Transitions | (none) | [design-families.md#transitions](../design-families.md#transitions) |
 | Visibility | (none) | [design-families.md#visibility](../design-families.md#visibility) |
 
+**Family fields not on this module.** These rows of a linked family's table do not exist here (writing one is `E_UNKNOWN_ATTR`); use this module's own fields above instead.
+
+- Button (`button_`): `button_alignment`, `button_icon`, `button_icon_color`, `button_icon_placement`, `button_on_hover`, `button_use_icon`
+- Scroll effects: `sticky_limit_bottom`, `sticky_limit_top`, `sticky_offset_bottom`, `sticky_offset_surrounding`, `sticky_offset_top`, `sticky_position`, `sticky_transition`
+- Visibility: `disabled_on`
+
 R = responsive (`_tablet`, `_phone`, `_last_edited`), H = hover (`__hover`), S = sticky (`__sticky`). See [value-formats.md](../value-formats.md).

@@ -80,4 +80,8 @@
 | Transitions | (none) | [design-families.md#transitions](../design-families.md#transitions) |
 | Visibility | (none) | [design-families.md#visibility](../design-families.md#visibility) |
 
+**Family fields not on this module.** These rows of a linked family's table do not exist here (writing one is `E_UNKNOWN_ATTR`); use this module's own fields above instead.
+
+- Background: `__video_background`, `allow_player_pause`, `background_video_height`, `background_video_mp4`, `background_video_pause_outside_viewport`, `background_video_webm`, `background_video_width`, `parallax`, `parallax_method`
+
 R = responsive (`_tablet`, `_phone`, `_last_edited`), H = hover (`__hover`), S = sticky (`__sticky`). See [value-formats.md](../value-formats.md).

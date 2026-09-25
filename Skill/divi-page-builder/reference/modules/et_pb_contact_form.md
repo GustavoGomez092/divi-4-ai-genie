@@ -122,4 +122,10 @@
 | Transitions | (none) | [design-families.md#transitions](../design-families.md#transitions) |
 | Visibility | (none) | [design-families.md#visibility](../design-families.md#visibility) |
 
+**Family fields not on this module.** These rows of a linked family's table do not exist here (writing one is `E_UNKNOWN_ATTR`); use this module's own fields above instead.
+
+- Button (`button_`): `button_alignment`
+- Font (`captcha_`): `captcha_text_align`
+- Text: `background_layout`
+
 R = responsive (`_tablet`, `_phone`, `_last_edited`), H = hover (`__hover`), S = sticky (`__sticky`). See [value-formats.md](../value-formats.md).

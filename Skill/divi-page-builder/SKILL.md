@@ -45,6 +45,7 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 | `reference/page-format.md` | writing any shortcode: grammar, escaping, what's stored where |
 | `reference/structure.md` | choosing section, row and column layouts; parent/child modules |
 | `reference/value-formats.md` | writing colors, fonts, spacing, icons, responsive/hover/sticky values |
+| `reference/icons.md` | picking an icon: name → exact `font_icon`/`button_icon` value |
 | `reference/design-families.md` | styling: background, font, border, shadow, spacing, animation… |
 | `reference/modules/README.md` | finding a module; each `reference/modules/<slug>.md` lists all of its fields |
 | `reference/design-tokens.md` | extracting and applying a site's styles |

@@ -107,4 +107,9 @@
 | Transitions | (none) | [design-families.md#transitions](../design-families.md#transitions) |
 | Visibility | (none) | [design-families.md#visibility](../design-families.md#visibility) |
 
+**Family fields not on this module.** These rows of a linked family's table do not exist here (writing one is `E_UNKNOWN_ATTR`); use this module's own fields above instead.
+
+- Scroll effects: `motion_trigger_start`, `scroll_blur`, `scroll_blur_enable`, `scroll_effects`, `scroll_fade`, `scroll_fade_enable`, `scroll_horizontal_motion`, `scroll_horizontal_motion_enable`, `scroll_rotating`, `scroll_rotating_enable`, `scroll_scaling`, `scroll_scaling_enable`, `scroll_vertical_motion`, `scroll_vertical_motion_enable`
+- Text: `background_layout`
+
 R = responsive (`_tablet`, `_phone`, `_last_edited`), H = hover (`__hover`), S = sticky (`__sticky`). See [value-formats.md](../value-formats.md).

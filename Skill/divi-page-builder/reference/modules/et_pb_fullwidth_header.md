@@ -212,4 +212,14 @@
 | Transitions | (none) | [design-families.md#transitions](../design-families.md#transitions) |
 | Visibility | (none) | [design-families.md#visibility](../design-families.md#visibility) |
 
+**Family fields not on this module.** These rows of a linked family's table do not exist here (writing one is `E_UNKNOWN_ATTR`); use this module's own fields above instead.
+
+- Button (`button_one_`): `button_one_alignment`
+- Button (`button_two_`): `button_two_alignment`
+
+## Gotchas
+
+- Always set `background_color` explicitly (a token color; over a `background_image`, a color or an `rgba()` overlay you chose): left unset, Divi's default teal `#7EBEC5` shows.
+- The title renders at `title_level`, default `h1`: a closing/secondary fullwidth header needs `title_level="h2"`, or the page gets a second H1 (`E_MULTIPLE_H1`).
+
 R = responsive (`_tablet`, `_phone`, `_last_edited`), H = hover (`__hover`), S = sticky (`__sticky`). See [value-formats.md](../value-formats.md).
