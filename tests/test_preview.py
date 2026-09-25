@@ -1,21 +1,27 @@
+import http.server
 import os
 import re
 import shutil
 import subprocess
 import tempfile
+import threading
 import unittest
+import urllib.parse
 from pathlib import Path
 
 from _paths import FIXTURES, SKILL, WP_LOCAL
 from divi_shortcode import parse
 
 PREVIEW = SKILL / "scripts" / "preview" / "preview.mjs"
+FETCH_DIVI = SKILL / "scripts" / "preview" / "fetch-divi.mjs"
 VERSION = "4.27.9"
 
 # Builder-CSS fidelity check, same method as research/playground-prototype/compare.py (the spike's
 # verified 2,064/2,064-declaration match against page 11): explode grouped selectors into (media,
-# selector, declaration) triples and keep only rules whose selector has a module *order class*
-# (.et_pb_text_3, not the structural .et_pb_column_1_3 or .et_pb_row_4col).
+# selector, declaration) triples and keep only rules whose selector has an order-class-shaped digit
+# (.et_pb_text_3). This also matches structural classes like .et_pb_column_1_3 or .et_pb_row_4col
+# (inherited imprecision from compare.py, harmless here) - those are theme-base CSS, not per-module
+# design CSS, and are excluded separately via the style-block id filter in _decls (require_id).
 _SKIP_STYLE_ID = re.compile(r'id=[\'"]divi-dynamic-critical-inline-css')
 _ORDER = re.compile(r'\.et_pb_[a-z_]+?_\d+(?![\d_])')
 
@@ -136,6 +142,60 @@ class PreviewTest(unittest.TestCase):
         for secret in env.values():
             if secret:
                 self.assertNotIn(secret, logs)
+
+    def test_fetch_divi_redacts_percent_encoded_credentials(self):
+        """A username/key needing percent-encoding ('@', '+', '/') must never leak, raw or
+        percent-encoded, on the "is not downloadable" error path. Regression: redact() used to
+        string-match the *raw* credentials against a URL built with URLSearchParams, which
+        percent-encodes them (e.g. '@' -> '%40'), so an email-style username or a key containing
+        '+'/'/' survived untouched in the encoded URL and leaked into the error message."""
+        if shutil.which("node") is None:
+            raise unittest.SkipTest("node not installed")
+
+        class _Handler(http.server.BaseHTTPRequestHandler):
+            """Stands in for the Elegant Themes API (PP_ET_ENDPOINT): always says "not available",
+            so ensureDivi hits the redacted-URL error path without any real network access."""
+
+            def do_GET(self):
+                body = b'a:1:{s:6:"status";s:13:"not_available"}'
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            def log_message(self, *_a):
+                pass
+
+        server = http.server.HTTPServer(("127.0.0.1", 0), _Handler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            username, api_key = "someone@example.com", "abc+def/123"
+            with tempfile.TemporaryDirectory() as cache:
+                script = (
+                    f"import({FETCH_DIVI.as_uri()!r}).then(m => m.ensureDivi('9.9.9', {cache!r}, () => {{}}))"
+                    ".catch(e => { console.error(e.message); process.exit(1); });"
+                )
+                env = dict(os.environ, ET_USERNAME=username, ET_API_KEY=api_key,
+                           PP_ET_ENDPOINT=f"http://127.0.0.1:{server.server_address[1]}/")
+                proc = subprocess.run(["node", "--input-type=module", "-e", script],
+                                      capture_output=True, text=True, timeout=30, env=env)
+        finally:
+            server.shutdown()
+            thread.join(timeout=5)
+            server.server_close()
+
+        out = proc.stdout + proc.stderr
+        self.assertIn("not downloadable", out)
+        # The fix engaged (placeholders present, percent-encoded like the rest of the query string)...
+        self.assertIn(urllib.parse.quote("<ET_USERNAME>", safe=""), out)
+        self.assertIn(urllib.parse.quote("<API_KEY>", safe=""), out)
+        # ...and neither secret appears, raw or percent-encoded, anywhere in stdout/stderr.
+        for secret in (username, api_key):
+            self.assertNotIn(secret, out)
+            self.assertNotIn(urllib.parse.quote(secret, safe=""), out)
+            self.assertNotIn(urllib.parse.quote_plus(secret), out)
 
 
 if __name__ == "__main__":

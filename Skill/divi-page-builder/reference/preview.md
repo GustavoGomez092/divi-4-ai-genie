@@ -124,6 +124,16 @@ $PP_CACHE_DIR (default ~/.cache/divi-page-builder; %LOCALAPPDATA%\divi-page-buil
 Nothing under `PP_CACHE_DIR` is ever committed to a repo — it's licensed Elegant Themes code
 and generated WordPress installs, not source.
 
+Two more environment variables exist but are **internal/test-only** — not part of the normal
+workflow, and not documented for end users beyond this note:
+
+- `PP_DIVI_CACHE`: overrides just the Divi cache directory (`fetch-divi.mjs`'s
+  `defaultCacheDir()`), independent of `PP_CACHE_DIR`. Used by tests to point at an isolated,
+  pre-seeded Divi cache without touching a real `PP_CACHE_DIR`.
+- `PP_ET_ENDPOINT`: overrides the Elegant Themes API base URL. Used by tests to exercise
+  `fetch-divi.mjs`'s error paths (and their credential redaction) against a local stand-in
+  server instead of the real API. Never set this for real Divi downloads.
+
 After the first `render` or `serve` for a given Divi + WordPress pair (which downloads Divi,
 WordPress, and the Playground CLI's npm package), **everything works fully offline**: verified
 in the spike with all outbound network blocked. The only things that still need network to

@@ -22,7 +22,9 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const API = 'https://www.elegantthemes.com/api/';
+// PP_ET_ENDPOINT: internal/test-only override for the API base URL (never set for real use). Lets
+// tests point at a local stand-in instead of the real Elegant Themes API, without real credentials.
+const API = process.env.PP_ET_ENDPOINT || 'https://www.elegantthemes.com/api/';
 const UA = 'WordPress/6.8; Elegant Themes/4.27.9; https://localhost/';
 
 export function cacheRoot() {
@@ -39,12 +41,24 @@ function creds() {
 	if (!username || !api_key) throw new Error('Divi is not cached for this version: set ET_USERNAME and ET_API_KEY (Elegant Themes account > API Key) to download it.');
 	return { username, api_key };
 }
+// For response BODY text, which is never URL-encoded, so a raw substring match is correct here.
 const redact = (s, c) => String(s).split(c.api_key).join('<API_KEY>').split(c.username).join('<ET_USERNAME>');
+
+// A safe-to-print URL built from the SAME params, with credentials replaced before encoding. Never
+// derive this by string-matching the raw credentials against the already-encoded URL: URLSearchParams
+// percent-encodes (e.g. '@' -> '%40', '+' -> '%2B'), so an email-style username or a key containing
+// '+'/'/' would survive untouched in that encoded form and leak into an error message.
+function redactedUrl(endpoint, params) {
+	const safe = { ...params };
+	if ('username' in safe) safe.username = '<ET_USERNAME>';
+	if ('api_key' in safe) safe.api_key = '<API_KEY>';
+	return API + endpoint + '.php?' + new URLSearchParams(safe);
+}
 
 async function etGet(endpoint, params) {
 	const url = API + endpoint + '.php?' + new URLSearchParams(params);
 	const r = await fetch(url, { headers: { 'User-Agent': UA } });
-	return { status: r.status, type: r.headers.get('content-type') || '', body: Buffer.from(await r.arrayBuffer()), url };
+	return { status: r.status, type: r.headers.get('content-type') || '', body: Buffer.from(await r.arrayBuffer()), url, redactedUrl: redactedUrl(endpoint, params) };
 }
 
 export async function latestVersion() {
@@ -78,14 +92,14 @@ export async function ensureDivi(version = 'latest', cacheDir = defaultCacheDir(
 	const st = await etGet('api', { api_update: 1, action: 'check_version_status', product: 'Divi', version, ...c });
 	const status = (st.body.toString().match(/"status";s:\d+:"([^"]+)"/) || [])[1];
 	if (status !== 'available') {
-		throw new Error(`Divi ${version} is not downloadable (status=${status || 'unexpected response HTTP ' + st.status + (st.status === 429 ? ' rate-limited, retry later' : '')}) url=${redact(st.url, c)}`);
+		throw new Error(`Divi ${version} is not downloadable (status=${status || 'unexpected response HTTP ' + st.status + (st.status === 429 ? ' rate-limited, retry later' : '')}) url=${st.redactedUrl}`);
 	}
 
 	const t0 = Date.now();
 	const dl = await etGet('api_downloads', { api_update: 1, theme: 'Divi', version, ...c });
 	if (dl.status !== 200 || dl.body.subarray(0, 2).toString() !== 'PK') {
 		// A redacted URL (never the raw credentials) so a failed download can still be diagnosed.
-		throw new Error(`Divi download failed: HTTP ${dl.status} ${dl.type} url=${redact(dl.url, c)} ${redact(dl.body.toString().slice(0, 160), c).trim()}`);
+		throw new Error(`Divi download failed: HTTP ${dl.status} ${dl.type} url=${dl.redactedUrl} ${redact(dl.body.toString().slice(0, 160), c).trim()}`);
 	}
 	fs.mkdirSync(cacheDir, { recursive: true });
 	const zip = path.join(cacheDir, `Divi-${version}.zip`);
