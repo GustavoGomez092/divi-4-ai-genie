@@ -48,7 +48,8 @@ follows the same "one `h2` per section, `h3` one level down" pattern as every ot
   explicit in the recipe), and the FAQ accordion items (`toggle_level="h3"`, set explicitly here
   too since Pricing's `h3` headers come from a sibling section, not a guarantee the accordion's own
   default would be safe).
-- **`h4`:** the closing CTA band, safe once Alternating Features/Pricing have already reached `h3`.
+- **`h4`:** the closing CTA band, one step below the heading right before it (the FAQ items' `h3`);
+  `validate.py` warns `W_HEADING_SKIP` on any jump of two or more levels going deeper.
 - Tab labels (`et_pb_tab`'s `title`) are not headings at all — Divi renders them as clickable tab
   nav items, not `h`-tags, so they don't factor into the outline.
 

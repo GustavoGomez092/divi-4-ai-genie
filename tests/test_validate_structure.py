@@ -9,7 +9,8 @@ V = '_builder_version="4.27.9"'
 
 
 def codes(src, level="error"):
-    return [f.code for f in validate_source(src, SCHEMA) if f.level == level]
+    # snippets, not whole pages: fragment=True keeps the page-level W_NO_H1 out of these structure tests
+    return [f.code for f in validate_source(src, SCHEMA, fragment=True) if f.level == level]
 
 
 def page(inner):

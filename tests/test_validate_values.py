@@ -12,7 +12,8 @@ def wrap(module):
 
 
 def found(module, level=None):
-    return [(f.level, f.code, f.attr) for f in validate_source(wrap(module), SCHEMA)
+    # one module wrapped in a section: a fragment, so the page-level W_NO_H1 stays out of these tests
+    return [(f.level, f.code, f.attr) for f in validate_source(wrap(module), SCHEMA, fragment=True)
             if level is None or f.level == level]
 
 
@@ -120,6 +121,36 @@ class AttributeTest(unittest.TestCase):
             SCHEMA, site_url="https://client.example")]
         self.assertIn(("warning", "W_UNKNOWN_PRESET"), fs)
         self.assertIn(("warning", "W_EXTERNAL_IMAGE"), fs)
+
+    def external_images(self, module):
+        return [f.attr for f in validate_source(wrap(module), SCHEMA, site_url="https://client.example")
+                if f.code == "W_EXTERNAL_IMAGE"]
+
+    def test_external_image_is_module_aware_video_src_is_not_an_image(self):
+        self.assertEqual(self.external_images('[et_pb_video src="https://www.youtube.com/watch?v=dQw4w9WgXcQ"][/et_pb_video]'), [])
+        self.assertEqual(self.external_images(
+            '[et_pb_video_slider][et_pb_video_slider_item src="https://vimeo.com/1"][/et_pb_video_slider_item][/et_pb_video_slider]'), [])
+        self.assertEqual(self.external_images('[et_pb_audio audio="https://cdn.example/a.mp3"][/et_pb_audio]'), [])
+
+    def test_external_image_still_warns_on_image_fields(self):
+        self.assertEqual(self.external_images('[et_pb_image src="https://images.unsplash.com/x.jpg"][/et_pb_image]'), ["src"])
+        # the video's poster image IS an image field
+        self.assertEqual(self.external_images(
+            '[et_pb_video src="https://www.youtube.com/watch?v=1" image_src="https://img.example/p.jpg"][/et_pb_video]'),
+            ["image_src"])
+        self.assertEqual(self.external_images('[et_pb_blurb image="https://img.example/b.png"][/et_pb_blurb]'), ["image"])
+        self.assertEqual(self.external_images(
+            '[et_pb_text background_image="https://img.example/bg.jpg"]<p>x</p>[/et_pb_text]'), ["background_image"])
+        self.assertEqual(self.external_images(
+            '[et_pb_image src="https://client.example/wp-content/uploads/x.jpg"][/et_pb_image]'), [])
+
+    def test_image_field_detection_uses_the_schema_data_type(self):
+        from divi_checks_values import is_image_field
+        video = SCHEMA.module("et_pb_video")
+        self.assertFalse(is_image_field(video.resolve("src")))
+        self.assertTrue(is_image_field(video.resolve("image_src")))
+        self.assertTrue(is_image_field(SCHEMA.module("et_pb_image").resolve("src_tablet")))
+        self.assertFalse(is_image_field(SCHEMA.module("et_pb_section").resolve("background_video_mp4")))
 
     def test_global_colors_info_must_be_json(self):
         self.assertIn(("error", "E_VALUE_FORMAT", "global_colors_info"),

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Validate Divi 4 page shortcode against Divi's module schema.
 
-Usage: validate.py PAGE [--tokens tokens.json] [--baseline ORIGINAL] [--site-url URL] [--json]
+Usage: validate.py PAGE [--tokens tokens.json] [--baseline ORIGINAL] [--site-url URL] [--fragment] [--json]
+--fragment: PAGE is one section or snippet, not a whole page (skips the page-level W_NO_H1).
 Exit status: 0 = no blocking errors, 1 = errors found, 2 = usage or I/O problem.
 """
 from __future__ import annotations
@@ -16,7 +17,7 @@ from typing import List, Optional
 from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from divi_checks_structure import check_structure  # noqa: E402
+from divi_checks_structure import check_headings, check_structure  # noqa: E402
 from divi_checks_tokens import check_tokens  # noqa: E402
 from divi_checks_values import check_attributes  # noqa: E402
 from divi_schema import Schema, load_schema  # noqa: E402
@@ -60,17 +61,20 @@ def mark_preexisting(findings, baseline_findings) -> None:
 
 
 def validate_source(source: str, schema: Schema, tokens: Optional[dict] = None,
-                    site_url: Optional[str] = None, baseline: Optional[str] = None) -> List[Finding]:
+                    site_url: Optional[str] = None, baseline: Optional[str] = None,
+                    fragment: bool = False) -> List[Finding]:
     doc = parse(source)
     report = Reporter(doc)
     check_structure(doc, schema, report)
+    check_headings(doc, schema, report, fragment=fragment)
     known = {p["uuid"] for lst in (tokens or {}).get("presets", {}).values() for p in lst}
     host = urlparse(site_url or (tokens or {}).get("site", {}).get("url", "")).hostname
     check_attributes(doc, schema, report, known_presets=known, site_host=host)
     if tokens:
         check_tokens(doc, schema, tokens, report)
     if baseline is not None:
-        mark_preexisting(report.findings, validate_source(baseline, schema, tokens=tokens, site_url=site_url))
+        mark_preexisting(report.findings, validate_source(baseline, schema, tokens=tokens, site_url=site_url,
+                                                          fragment=fragment))
     return report.findings
 
 
@@ -87,6 +91,8 @@ def main(argv=None) -> int:
     ap.add_argument("--tokens")
     ap.add_argument("--baseline")
     ap.add_argument("--site-url")
+    ap.add_argument("--fragment", action="store_true",
+                    help="PAGE is a single section/snippet: skip the page-level W_NO_H1 check")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
     try:
@@ -97,7 +103,8 @@ def main(argv=None) -> int:
     except (OSError, ValueError) as exc:
         print(f"validate.py: {exc}", file=sys.stderr)
         return 2
-    findings = validate_source(source, schema, tokens=tokens, site_url=args.site_url, baseline=baseline)
+    findings = validate_source(source, schema, tokens=tokens, site_url=args.site_url, baseline=baseline,
+                               fragment=args.fragment)
     blocking = [f for f in findings if f.level == "error" and not f.preexisting]
     warnings = sum(f.level == "warning" and not f.preexisting for f in findings)
     if args.json:

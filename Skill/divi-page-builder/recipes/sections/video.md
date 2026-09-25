@@ -9,12 +9,9 @@ play-icon button on first load — the actual YouTube/Vimeo iframe (and its own 
 is only requested after a visitor clicks play. Always set `image_src`; without it, Divi still shows
 a play button over a black box, but skips the chance to show a real, fast-loading preview frame and
 to avoid the oEmbed request until the visitor actually wants the video. **Validator note.**
-`validate.py`'s `W_EXTERNAL_IMAGE` check treats every module's `src` attribute as an image URL that
-should live on the site's own domain — it has no video-specific exemption. For `et_pb_video`, a
-YouTube/Vimeo `src` is expected to point off-site (that's the entire point of the field), so this
-one warning is a known, harmless false positive for this module specifically, not a real
-off-brand/off-site content problem — it does not apply to `image_src` (the poster image), which
-must still be a real Media Library upload on the site's own domain.
+`validate.py`'s `W_EXTERNAL_IMAGE` check only looks at image fields (upload fields whose media type
+is an image), so a YouTube/Vimeo `src` on `et_pb_video` is never flagged; `image_src` (the poster
+image) is an image field and must be a real Media Library upload on the site's own domain.
 
 ## Structure
 ```text

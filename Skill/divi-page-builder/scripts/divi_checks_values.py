@@ -26,6 +26,7 @@ EMAIL_PROVIDER_LISTS = {f"{p}_list" for p in (
     "fluentcrm", "getresponse", "hubspot", "icontact", "infusionsoft", "madmimi", "mailchimp", "mailerlite",
     "mailpoet", "mailster", "ontraport", "salesforce", "sendinblue")}
 LINE_STYLES = {"", "solid", "double", "dotted", "dashed", "wavy"}
+# Attribute names publish.py scans for local files to upload (any media: images, and video/audio src).
 IMAGE_ATTRS = ("src", "image", "background_image", "logo", "image_url", "portrait_url", "logo_image_url")
 
 Problem = Tuple[str, str, str, str]  # (level, code, message, hint)
@@ -47,6 +48,18 @@ def is_color_field(name: str, field: Optional[dict]) -> bool:
     if ftype in COLOR_TYPES:
         return True
     return ftype == "background-field" and name.endswith("_color")
+
+
+def is_image_field(res) -> bool:
+    """True when the resolved attribute holds an image URL: an upload field whose media type is image
+    (et_pb_image src, blurb image, background_image, a video's image_src poster), or a button's
+    *_bg_image background. False for video/audio uploads (et_pb_video src, background_video_mp4)."""
+    if res is None:
+        return False
+    field = res.field or {}
+    if field.get("type") == "upload":
+        return field.get("data_type", "image") == "image"
+    return res.base.endswith("_bg_image")
 
 
 def _length_ok(part: str, units) -> bool:
@@ -169,7 +182,7 @@ def check_attributes(doc, schema, report, known_presets=frozenset(), site_host: 
                 continue
             for level, code, message, hint in value_problems(res, name, node.value(name)):
                 report(level, code, message, node=node, path=path, attr=name, value=raw, hint=hint)
-            if site_host and name in IMAGE_ATTRS or site_host and name.endswith("_image") and node.value(name).startswith("http"):
+            if site_host and is_image_field(res):
                 host = urlparse(node.value(name)).hostname
                 if host and host != site_host:
                     report("warning", "W_EXTERNAL_IMAGE", f"{name} points to {host}, not the site", node=node, path=path,

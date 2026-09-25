@@ -237,6 +237,7 @@
    ]
   },
   "image_src": {
+   "data_type": "image",
    "hover": true,
    "label": "Image Overlay URL",
    "responsive": true,
@@ -388,6 +389,7 @@
    "type": "select"
   },
   "src": {
+   "data_type": "video",
    "hover": true,
    "label": "Video MP4/URL",
    "responsive": true,
@@ -396,6 +398,7 @@
    "type": "upload"
   },
   "src_webm": {
+   "data_type": "video",
    "hover": true,
    "label": "Video Webm",
    "responsive": true,

@@ -14,7 +14,7 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 2. **Tokens:** reuse the site's `tokens.json` if you have one; otherwise run `python3 scripts/extract_tokens.py --site URL --user USER --page ID --out tokens.json` with the password in `WP_APP_PASSWORD`. See `reference/design-tokens.md`.
 3. **Plan:** map the brief to recipes (`recipes/README.md`, `recipes/pages/`). Show the user the section outline and get a yes before writing.
 4. **Compose:** for each section, follow its recipe. Look up every module in `reference/modules/<slug>.md`, and take every color, font, spacing and button style from `tokens.json`.
-5. **Validate:** `python3 scripts/validate.py page.txt --tokens tokens.json` (add `--baseline original.txt` for edits). Repeat until there are 0 errors; read every warning. (Structure/heading checks aren't enforced by the validator yet — apply the Headings rule below yourself.)
+5. **Validate:** `python3 scripts/validate.py page.txt --tokens tokens.json` (add `--baseline original.txt` for edits). Repeat until there are 0 errors; read every warning, including the heading-outline ones. For a single section, add `--fragment`.
 6. **Preview:** `python3 scripts/preview.py render page.txt --tokens tokens.json --out preview.html` (or `serve` for live reload), then open it. If the coverage report lists unsupported modules, or something looks off, re-run with `--exact` (real Divi in Playground; needs Node 20+). See `reference/preview.md`. Client Customizer and preset styling looks generic in both.
 7. **Publish:** `python3 scripts/publish.py draft page.txt --site URL --user USER --title "…"` uploads local images and saves a **draft** (it validates first). Share the printed `preview_url`; after the user approves, run `publish.py publish --page-id ID --yes` (`reference/publishing.md`). The WordPress draft is the authoritative visual check.
 
@@ -22,7 +22,7 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 - **Never invent attributes.** An attribute not on the module's page (or in its linked design families) does not exist; `validate.py` reports it as `E_UNKNOWN_ATTR`.
 - **Styles:** use inline attributes, or `_module_preset` UUIDs listed in `tokens.json`. Never use preset UUIDs from anywhere else.
 - **Escaping inside attribute values:** `"` → `%22`, `[` → `%91`, `]` → `%93` (`reference/page-format.md`).
-- **Headings:** exactly one H1 per page, and no skipped heading levels. (`validate.py` does not check this yet — verify it yourself.)
+- **Headings:** exactly one H1 per page, and no skipped heading levels. `validate.py` enforces this (`E_MULTIPLE_H1`, `W_NO_H1`, `W_HEADING_SKIP`).
 - **Images:** upload to the site's Media Library and use that URL. Never hotlink. Always write `alt`.
 - **Edits:** use `scripts/page_edit.py`. Everything you weren't asked to change stays byte-identical.
 - **Testimonials, reviews, prices and stats:** only as provided in the brief. Never invent them.
@@ -32,7 +32,7 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 ## Scripts
 | script | purpose |
 |---|---|
-| `scripts/validate.py` | structure, attributes, value formats, tokens; `--baseline` for edits; `--json` |
+| `scripts/validate.py` | structure, heading outline, attributes, value formats, tokens; `--baseline` for edits; `--fragment`; `--json` |
 | `scripts/extract_tokens.py` | site design tokens via REST (Application Password) + public CSS |
 | `scripts/page_edit.py` | outline / extract / replace / insert-after / insert-before / set-attr / delete, surgically |
 | `scripts/preview.py` | default preview, Python only: `render`, `serve` (live reload), `doctor`, `fetch-divi`; `--exact` hands off to Playground |

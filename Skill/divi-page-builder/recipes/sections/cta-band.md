@@ -3,7 +3,8 @@
 **Use for:** a short, high-contrast call-to-action band between content sections — "ready to book?"
 — that interrupts the page's default light rhythm with a colored section and a single clear button.
 · **SEO:** the band's own heading renders at `header_level` (set to `h4` here, matching this site's
-own "Free Quote CTA" section elsewhere on the page) so it never introduces a second `h1`/`h2`;
+own "Free Quote CTA" section, which follows an `h3`) so it never introduces a second `h1`/`h2`. In
+your page, pick one level below the heading just before the band, never two (`W_HEADING_SKIP`);
 `button_text` should describe the action ("Get My Free Quote"), not "Click Here".
 
 ## Structure
@@ -33,8 +34,9 @@ Required: [`et_pb_section`](../../reference/modules/et_pb_section.md) `backgroun
 `content`, `button_text`, `button_url`, `header_font`, `header_text_color`, `body_font`,
 `body_text_color`, `button_font`, `custom_button`, `button_bg_color`, `button_text_color`, `button_border_radius`.
 
-Optional: `header_level` (defaults to `h2` — override to `h4`/`h5` on a mid-page band so it doesn't
-outrank the page's real section headings); `use_background_color="off"` (see the token mapping row
+Optional: `header_level` (defaults to `h2`; on a mid-page band use at most one level below the
+heading just before it, e.g. `h3` after a section `h2`, so it doesn't outrank the page's real section
+headings without skipping a level); `use_background_color="off"` (see the token mapping row
 above); `url_new_window` if the button should open in a new tab (rare for a `tel:`/on-page anchor
 link).
 

@@ -68,6 +68,9 @@ def compact_field(name: str, d: dict, raw: dict) -> dict:
         out["sticky"] = True
     if d.get("composite_of"):
         out["composite_of"] = d["composite_of"]
+    if d.get("type") == "upload":
+        # what the media picker holds: Divi's upload field defaults to images; video/audio say so
+        out["data_type"] = str(d.get("data_type") or "image")
     return out
 
 

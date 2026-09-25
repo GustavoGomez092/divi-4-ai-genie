@@ -229,9 +229,10 @@ sequences in a URL value at all.
 ```
 
 **Common mistake:** pointing an image attribute at a URL on a different host than the site
-(`validate.py --site-url ...` warns `W_EXTERNAL_IMAGE` for `src`/`image`/`background_image`/
-`logo`/`image_url`/`portrait_url`/`logo_image_url` and any `*_image` attribute that starts with
-`http`) — upload the image to the site's own Media Library first and use that URL, so it survives
+(`validate.py --site-url ...` warns `W_EXTERNAL_IMAGE` for every image field: an upload field
+whose media type is an image — `et_pb_image` `src`, blurb `image`, `background_image`, `logo`,
+`image_url`, `portrait_url`, a video's `image_src` poster, … — and button `*_bg_image`s; video and
+audio fields such as `et_pb_video` `src` are not image fields and are never flagged) — upload the image to the site's own Media Library first and use that URL, so it survives
 the site being moved/renamed and benefits from the site's own image optimization.
 
 ## Gradient stops

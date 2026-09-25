@@ -39,8 +39,8 @@ recipe rather than inventing a page-level scale.
 - **`h3`:** sub-items inside a section that already has an `h2` (service blurbs, feature titles,
   stat labels, FAQ accordion items).
 - **`h4`:** only the closing CTA band's `et_pb_cta` title, which the recipe already sets to
-  `header_level="h4"` — safe once `h3` has appeared earlier in the page (Services' blurbs and
-  Alternating Features' titles both use it before the CTA band is reached).
+  `header_level="h4"` — one step below the heading right before it (the FAQ items' `h3`), which is
+  what `validate.py` checks (`W_HEADING_SKIP` fires on any jump of two or more levels going deeper).
 
 ## Internal links
 

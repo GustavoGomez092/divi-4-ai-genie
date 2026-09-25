@@ -344,6 +344,7 @@
    ]
   },
   "background_image": {
+   "data_type": "image",
    "hover": true,
    "label": "Background Image",
    "responsive": true,
@@ -978,6 +979,7 @@
    "type": "skip"
   },
   "background_video_mp4": {
+   "data_type": "video",
    "hover": true,
    "label": "Background Video MP4",
    "responsive": true,
@@ -1006,6 +1008,7 @@
    "type": "yes_no_button"
   },
   "background_video_webm": {
+   "data_type": "video",
    "hover": true,
    "label": "Background Video Webm",
    "responsive": true,

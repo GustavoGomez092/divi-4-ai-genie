@@ -173,7 +173,7 @@ edit. Instead:
 
 ## Structural validator codes
 
-Every error/warning `check_structure()` (`Skill/divi-page-builder/scripts/divi_checks_structure.py`)
+Every error/warning `check_structure()` and `check_headings()` (`scripts/divi_checks_structure.py`)
 can raise, in the order it can fire, with a one-line fix:
 
 | code | level | meaning | fix |
@@ -199,3 +199,24 @@ can raise, in the order it can fire, with a one-line fix:
 | `E_FULLWIDTH_IN_COLUMN` | error | a fullwidth-only module is placed inside a regular column | move it to `[et_pb_section fullwidth="on"]` instead. |
 | `E_BAD_CHILD` | error | a module with exactly one legal child slug (see the Parent → child table) contains something else | replace the offending tag with the module's actual child slug. |
 | `E_NESTED_MODULE` | error | any other module has something nested inside it (leaf modules can't contain modules at all) | remove the nested tag, or move it to sit alongside the leaf module instead of inside it. |
+| `E_MULTIPLE_H1` | error | the page renders more than one `h1` (reported at each extra one) | keep one `h1`, the page's main heading; set the others' `title_level`/`header_level` (or the accordion's `toggle_level`) to `h2`, or change the `<h1>` in the content. |
+| `W_NO_H1` | warning | the page renders no `h1` at all (not reported with `--fragment`) | make the hero heading the `h1` (`et_pb_heading` and `et_pb_fullwidth_header` titles default to `h1`). |
+| `W_HEADING_SKIP` | warning | going deeper, a heading jumps two or more levels past the one before it (`h2` → `h4`) | use the next level down (`h3`), or add the missing level above it; going back up (`h4` → `h2`) is fine. |
+
+### Heading outline
+
+`validate.py` builds the page's heading outline in document order and checks it (`E_MULTIPLE_H1`,
+`W_NO_H1`, `W_HEADING_SKIP`, all baseline-aware like every other finding). It counts:
+- every module heading-level field, using the schema default when unset (`et_pb_heading`
+  `title_level` h1, `et_pb_fullwidth_header` `title_level` h1, `et_pb_blurb` `header_level` h4,
+  `et_pb_cta` h2, `et_pb_team_member` h4, …), but only when the module shows that heading (for
+  example a blurb with no `title` renders no heading);
+- children that inherit their parent's level when theirs is empty: accordion items take the
+  accordion's `toggle_level` (default h5), slides the slider's `header_level`, pricing tables the
+  pricing tables' `header_level`;
+- `<h1>`–`<h6>` tags inside module content (`et_pb_text`, `et_pb_code`, blurb/toggle/tab bodies, …);
+- site-data titles (blog/post-slider post titles, portfolio/gallery titles, `et_pb_post_title`)
+  once each, unless their show-title toggle is `off`.
+
+Validating one section or snippet on its own, pass `--fragment`: it skips `W_NO_H1` (a section
+recipe has no `h1` of its own) but still reports extra `h1`s and skipped levels.

@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Validate every ```divi fenced block in the skill's Markdown. Usage: check_doc_examples.py <skill_dir>"""
+"""Validate every ```divi fenced block in the skill's Markdown. Usage: check_doc_examples.py <skill_dir>
+
+A block fails on any validation error, and on the heading-outline warnings: W_HEADING_SKIP in any
+block, W_NO_H1 only in whole-page recipes (recipes/pages/). Every other block (section recipes,
+edit recipes, module reference snippets) is a fragment of a page and is validated with
+fragment=True (validate.py --fragment), which skips the page-level W_NO_H1.
+"""
 import re
 import sys
 from pathlib import Path
@@ -14,6 +20,11 @@ BLOCK_RE = re.compile(r"^```divi\n(.*?)^```", re.S | re.M)
 # would then either fail to match that block at all, or (with more than one block in the file)
 # swallow a later block's fence as its own closer. Either way the counts stop agreeing.
 OPEN_FENCE_RE = re.compile(r"^```divi[ \t]*$", re.M)
+FAILING_WARNINGS = {"W_HEADING_SKIP", "W_NO_H1"}
+
+
+def is_whole_page(rel: Path) -> bool:
+    return rel.parts[:2] == ("recipes", "pages")
 
 
 def check(skill_dir: Path):
@@ -30,8 +41,10 @@ def check(skill_dir: Path):
                 "a closing ``` is probably glued to the last content line instead of on its own line",
             )]))
             continue
+        rel = md.relative_to(skill_dir)
         for i, m in enumerate(blocks):
-            errors = [f for f in validate_source(m.group(1).strip(), schema) if f.level == "error"]
+            findings = validate_source(m.group(1).strip(), schema, fragment=not is_whole_page(rel))
+            errors = [f for f in findings if f.level == "error" or f.code in FAILING_WARNINGS]
             if errors:
                 failures.append((md.relative_to(skill_dir), i, [(e.code, e.attr, e.message) for e in errors[:5]]))
     return failures
