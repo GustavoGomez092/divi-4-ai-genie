@@ -194,7 +194,9 @@ def ensure_divi(version: str = "latest", cache_dir: Optional[Path] = None, log=N
     t0 = time.time()
     dl = _et_get("api_downloads", {"api_update": 1, "theme": "Divi", "version": version, **c})
     if dl["status"] != 200 or dl["body"][:2] != b"PK":
-        snippet = _redact(dl["body"][:160].decode("utf-8", "replace"), c).strip()
+        # Redact the whole body first, then truncate: truncating first could cut a credential in two,
+        # and the surviving fragment would no longer match (and so escape) the redaction.
+        snippet = _redact(dl["body"].decode("utf-8", "replace"), c)[:160].strip()
         raise FetchError(f"Divi download failed: HTTP {dl['status']} {dl['type']} url={dl['redacted_url']} {snippet}")
 
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -214,9 +216,20 @@ def ensure_divi(version: str = "latest", cache_dir: Optional[Path] = None, log=N
     return dest / "Divi"
 
 
+VERSION_ARG = re.compile(r"\d+(?:\.\d+)+")
+
+
+def valid_version_arg(version: str) -> bool:
+    """`latest` or a dotted number such as 4.27.9 (anything else is a usage error, e.g. --help)."""
+    return version == "latest" or VERSION_ARG.fullmatch(version) is not None
+
+
 def main(argv=None) -> int:
     argv = sys.argv[1:] if argv is None else argv
     version = argv[0] if argv else "latest"
+    if not valid_version_arg(version):
+        print(f"fetch_divi: usage: fetch_divi.py [latest | VERSION like 4.27.9] (got {version!r})", file=sys.stderr)
+        return 2
     try:
         path = ensure_divi(version)
     except FetchError as e:

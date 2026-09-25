@@ -18,10 +18,11 @@
       Downloads and caches a Divi version (needs ET_USERNAME / ET_API_KEY; the only command that does).
 
 --exact runs the same command on the real-Divi preview (node scripts/preview/preview.mjs on
-WordPress Playground) for pages the Python renderer can't reproduce. It needs Node 18+.
+WordPress Playground) for pages the Python renderer can't reproduce. It needs Node 20+.
 
 Divi version (render/serve): --divi, else --tokens (site.divi_version), else the newest cached
-version, else "latest". A cached version never triggers an Elegant Themes API call.
+version, else "latest". An empty site.divi_version falls through to the next rule (with a note).
+A cached version never triggers an Elegant Themes API call.
 """
 from __future__ import annotations
 
@@ -47,7 +48,8 @@ import fetch_divi  # noqa: E402
 
 PREVIEW_MJS = HERE / "preview" / "preview.mjs"
 DIVI_ROUTE = "/__divi/"
-NODE_GUIDANCE = ("--exact needs Node.js 18+ (it runs the real Divi theme on WordPress Playground via "
+NODE_MIN_MAJOR = 20
+NODE_GUIDANCE = ("--exact needs Node 20+ (it runs the real Divi theme on WordPress Playground via "
                  "scripts/preview/preview.mjs). Install Node from https://nodejs.org/ or drop --exact to "
                  "use the Python preview.")
 RELOAD_JS = """<script>(function(){var m=null;setInterval(function(){fetch('/__mtime/%s',{cache:'no-store'})
@@ -79,10 +81,16 @@ def resolve_divi_version(divi: str | None, tokens: str | None) -> str:
             data = json.loads(Path(tokens).read_text(encoding="utf-8"))
         except (OSError, ValueError) as e:
             raise UsageError(f"cannot read {tokens}: {e}") from None
-        version = (data.get("site") or {}).get("divi_version") if isinstance(data, dict) else None
-        if not version:
+        site = (data.get("site") or {}) if isinstance(data, dict) else {}
+        if "divi_version" not in site:
             raise UsageError(f"No site.divi_version in {tokens}")
-        return version
+        version = site.get("divi_version")
+        if version:
+            return version
+        fallback = fetch_divi.newest_cached() or "latest"
+        print(f"note: site.divi_version is empty in {tokens}; using "
+              f"{'the newest cached Divi, ' + fallback if fallback != 'latest' else 'latest'}", file=sys.stderr)
+        return fallback
     return fetch_divi.newest_cached() or "latest"
 
 
@@ -159,11 +167,27 @@ def exact_args(a) -> list:
     return args
 
 
+def node_major(node: str) -> tuple:
+    """(major, version string) of this Node binary; major is None when it can't be read."""
+    try:
+        out = subprocess.run([node, "--version"], capture_output=True, text=True, timeout=10).stdout.strip()
+    except (OSError, subprocess.SubprocessError):
+        return None, "(version unknown)"
+    try:
+        return int(out.lstrip("v").split(".")[0]), out
+    except ValueError:
+        return None, out or "(version unknown)"
+
+
 def run_exact(a) -> int:
     """Hands the command to the real-Divi preview (Playground)."""
     node = shutil.which("node")
     if not node:
         print(f"preview: {NODE_GUIDANCE}", file=sys.stderr)
+        return 2
+    major, version = node_major(node)
+    if major is None or major < NODE_MIN_MAJOR:
+        print(f"preview: found Node {version} at {node}. {NODE_GUIDANCE}", file=sys.stderr)
         return 2
     return subprocess.call([node, str(PREVIEW_MJS), *exact_args(a)])
 
@@ -283,10 +307,9 @@ def cmd_doctor(a) -> int:
     node = shutil.which("node")
     node_version = ""
     if node:
-        try:
-            node_version = subprocess.run([node, "--version"], capture_output=True, text=True, timeout=10).stdout.strip()
-        except (OSError, subprocess.SubprocessError):
-            node_version = "(version unknown)"
+        major, node_version = node_major(node)
+        if major is None or major < NODE_MIN_MAJOR:
+            node_version += f" (too old for --exact: need Node {NODE_MIN_MAJOR}+)"
     jq = find_jquery()
     lines = [
         f"python: {platform.python_version()} ({sys.executable})",

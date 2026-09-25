@@ -30,7 +30,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { ensureDivi, defaultCacheDir, cacheRoot, unzip } from './fetch-divi.mjs';
+import { ensureDivi, defaultCacheDir, cacheRoot, unzip, playgroundEnv } from './fetch-divi.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 // Pinned: the offline/preferredVersions quirks documented below are specific to this CLI version.
@@ -72,9 +72,13 @@ function resolveDiviVersion(o, diviCache) {
 	if (o.divi) return o.divi;
 	if (o.tokens) {
 		const tokens = JSON.parse(fs.readFileSync(path.resolve(o.tokens), 'utf8'));
-		const v = tokens && tokens.site && tokens.site.divi_version;
-		if (!v) throw new Error(`No site.divi_version in ${o.tokens}`);
-		return v;
+		const site = (tokens && tokens.site) || {};
+		if (!('divi_version' in site)) throw new Error(`No site.divi_version in ${o.tokens}`);
+		if (site.divi_version) return site.divi_version;
+		// Empty version (not detected when the tokens were extracted): fall through to the next rule.
+		const fallback = newestCached(diviCache) || 'latest';
+		console.error(`note: site.divi_version is empty in ${o.tokens}; using ${fallback === 'latest' ? 'latest' : 'the newest cached Divi, ' + fallback}`);
+		return fallback;
 	}
 	return newestCached(diviCache) || 'latest';
 }
@@ -128,7 +132,7 @@ function startPlayground({ siteDir, themeDir, pagesDir, port, php, debug }) {
 		`--blueprint=${writeBlueprint(php)}`];
 	if (debug) args.push('--define-bool', 'WP_DEBUG', 'true', '--define-bool', 'WP_DEBUG_DISPLAY', 'true');
 	const win = process.platform === 'win32';
-	const child = spawn(win ? 'npx.cmd' : 'npx', args, { stdio: ['ignore', 'pipe', 'pipe'], detached: !win, shell: win });
+	const child = spawn(win ? 'npx.cmd' : 'npx', args, { stdio: ['ignore', 'pipe', 'pipe'], detached: !win, shell: win, env: playgroundEnv() });
 	let exited = false;
 	child.on('exit', () => { exited = true; });
 	const kill = (sig) => { try { win ? spawn('taskkill', ['/pid', String(child.pid), '/T', '/F']) : process.kill(-child.pid, sig); } catch {} };

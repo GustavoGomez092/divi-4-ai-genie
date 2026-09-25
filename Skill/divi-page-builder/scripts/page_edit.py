@@ -62,7 +62,12 @@ def main(argv=None) -> int:
             if len(a.args) != 3:
                 ap.error("set-attr needs PATH NAME VALUE")
             node.attrs[a.args[1]] = escape_attr_value(a.args[2], a.args[1])
-            result = replace_span(src, node.start, node.open_end, build_open_tag(node))
+            opening = build_open_tag(node)
+            if node.raw_open[:-1].rstrip().endswith("/"):
+                # keep an explicit self-closing tag self-closing: without the "/", the node would
+                # swallow its following siblings up to the next matching closer
+                opening = opening[:-1] + " /]"
+            result = replace_span(src, node.start, node.open_end, opening)
         else:
             if len(a.args) != 2:
                 ap.error(f"{a.command} needs PATH FILE")

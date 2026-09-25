@@ -47,6 +47,30 @@ class PageEditTest(unittest.TestCase):
         self.assertNotIn("<p>Sidebar note.</p>", out)
         self.assertNotIn("admin_label=\"Closing\"", run("delete", "et_pb_section[3]"))
 
+    def test_set_attr_on_self_closing_node_keeps_it_self_closing(self):
+        before = '[et_pb_text _builder_version="4.27.9"]<p>Before</p>[/et_pb_text]'
+        after = '[et_pb_text _builder_version="4.27.9"]<p>After</p>[/et_pb_text]'
+        page = ('[et_pb_section][et_pb_row][et_pb_column type="4_4"]' + before
+                + '[et_pb_image src="https://example.com/a.jpg" alt="A" /]' + after
+                + '[/et_pb_column][/et_pb_row][/et_pb_section]')
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write(page)
+        self.addCleanup(Path(f.name).unlink)
+        path = "et_pb_section[0] > et_pb_row[0] > et_pb_column[0] > et_pb_image[0]"
+        proc = subprocess.run([sys.executable, str(SCRIPTS / "page_edit.py"), f.name, "set-attr", path, "alt", "B"],
+                              capture_output=True, text=True)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        out = proc.stdout
+        self.assertEqual(out, page.replace('alt="A" /]', 'alt="B" /]'))
+        # siblings unchanged and still siblings (the image did not swallow them)
+        from divi_shortcode import parse
+        column = parse(out).find("et_pb_section[0] > et_pb_row[0] > et_pb_column[0]")
+        self.assertEqual([c.tag for c in column.children if hasattr(c, "tag")], ["et_pb_text", "et_pb_image", "et_pb_text"])
+        from divi_schema import load_schema
+        from validate import validate_source
+        errors = [f for f in validate_source(out, load_schema()) if f.level == "error"]
+        self.assertEqual(errors, [])
+
     def test_bad_path_fails_cleanly(self):
         proc = subprocess.run([sys.executable, str(SCRIPTS / "page_edit.py"), str(PAGE), "extract", "et_pb_section[9]"],
                               capture_output=True, text=True)

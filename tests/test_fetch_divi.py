@@ -4,7 +4,10 @@ Uses a fake HTTP server (PP_ET_ENDPOINT) so no real network access or credential
 """
 import http.server
 import io
+import json
 import os
+import shutil
+import subprocess
 import tempfile
 import threading
 import unittest
@@ -15,6 +18,8 @@ from pathlib import Path
 from unittest import mock
 
 from _paths import SCRIPTS  # noqa: F401  (puts Skill scripts on sys.path)
+
+FETCH_MJS = SCRIPTS / "preview" / "fetch-divi.mjs"
 
 import fetch_divi
 from fetch_divi import FetchError
@@ -189,6 +194,81 @@ class RedactionTest(unittest.TestCase):
         # redaction path actually engaged rather than, say, the URL being omitted entirely.
         self.assertIn(urllib.parse.quote("<ET_USERNAME>", safe=""), msg)
         self.assertIn(urllib.parse.quote("<API_KEY>", safe=""), msg)
+
+# A credential that straddles the 160-byte snippet boundary: truncating before redacting would
+# leave a partial key ("SECRETKEY1") that no longer matches the full key and so escapes redaction.
+STRADDLE_KEY = "SECRETKEY1234567890"
+STRADDLE_BODY = (b"x" * 150) + STRADDLE_KEY.encode() + b" is not valid"
+
+
+class SnippetRedactionTest(unittest.TestCase):
+    def test_python_redacts_before_truncating(self):
+        handler = _make_handler(dl_status=200, dl_body=STRADDLE_BODY, dl_ctype="text/html")
+        with _server(handler) as base, tempfile.TemporaryDirectory() as cache:
+            env = {"ET_USERNAME": "someone", "ET_API_KEY": STRADDLE_KEY, "PP_ET_ENDPOINT": base}
+            with mock.patch.dict(os.environ, env, clear=True):
+                with self.assertRaises(FetchError) as ctx:
+                    fetch_divi.ensure_divi("1.2.3", cache)
+        msg = str(ctx.exception)
+        self.assertNotIn(STRADDLE_KEY[:6], msg)
+        self.assertIn("<API_KEY>", msg)
+
+    @unittest.skipUnless(shutil.which("node"), "node not installed")
+    def test_node_redacts_before_truncating(self):
+        handler = _make_handler(dl_status=200, dl_body=STRADDLE_BODY, dl_ctype="text/html")
+        with _server(handler) as base, tempfile.TemporaryDirectory() as cache:
+            script = (f"import({FETCH_MJS.as_uri()!r}).then(m => m.ensureDivi('1.2.3', {cache!r}, () => {{}}))"
+                      ".catch(e => { console.error(e.message); process.exit(1); });")
+            env = dict(os.environ, ET_USERNAME="someone", ET_API_KEY=STRADDLE_KEY, PP_ET_ENDPOINT=base)
+            proc = subprocess.run(["node", "--input-type=module", "-e", script],
+                                  capture_output=True, text=True, timeout=30, env=env)
+        out = proc.stdout + proc.stderr
+        self.assertIn("download failed", out)
+        self.assertNotIn(STRADDLE_KEY[:6], out)
+        self.assertIn("<API_KEY>", out)
+
+
+class VersionArgTest(unittest.TestCase):
+    def test_rejects_non_version_arguments_before_any_network_call(self):
+        calls = []
+
+        class Counting(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):
+                calls.append(self.path)
+                self.send_response(500)
+                self.end_headers()
+
+            def log_message(self, *_a):
+                pass
+
+        for bad in ("--help", "-v", "4.x", "../4.27.9", "4.27.9; rm", ""):
+            with self.subTest(bad=bad), _server(Counting) as base, tempfile.TemporaryDirectory() as cache:
+                env = {"ET_USERNAME": "someone", "ET_API_KEY": "secretkey", "PP_ET_ENDPOINT": base,
+                       "PP_CACHE_DIR": cache}
+                err = io.StringIO()
+                with mock.patch.dict(os.environ, env, clear=True), mock.patch("sys.stderr", err):
+                    self.assertEqual(fetch_divi.main([bad]), 2)
+                self.assertIn("latest", err.getvalue())
+        self.assertEqual(calls, [])
+
+    def test_accepts_latest_and_dotted_versions(self):
+        for good in ("latest", "4.27.9", "4.27", "10.0.1.2"):
+            self.assertTrue(fetch_divi.valid_version_arg(good), good)
+
+
+@unittest.skipUnless(shutil.which("node"), "node not installed")
+class PlaygroundEnvTest(unittest.TestCase):
+    def test_secrets_are_stripped_from_the_playground_environment(self):
+        script = (f"import({FETCH_MJS.as_uri()!r}).then(m => console.log(JSON.stringify(m.playgroundEnv({{"
+                  "PATH: '/bin', HOME: '/h', ET_USERNAME: 'u', ET_API_KEY: 'k', WP_APP_PASSWORD: 'p'}))));")
+        proc = subprocess.run(["node", "--input-type=module", "-e", script], capture_output=True, text=True, timeout=30)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(json.loads(proc.stdout), {"PATH": "/bin", "HOME": "/h"})
+
+    def test_preview_mjs_spawns_playground_with_scrubbed_env(self):
+        text = (SCRIPTS / "preview" / "preview.mjs").read_text()
+        spawn_line = next(line for line in text.splitlines() if "spawn(win ? 'npx.cmd' : 'npx'" in line)
+        self.assertIn("env: playgroundEnv()", spawn_line)
 
 
 if __name__ == "__main__":

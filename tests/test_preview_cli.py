@@ -4,7 +4,9 @@ The render/serve tests need a cached Divi build (they never download one) and ar
 without it. The user found in the spike that icons break when a page served over HTTP references
 file:// assets; these tests pin the fix (data: URIs in standalone files, /__divi/ when serving).
 """
+import contextlib
 import http.client
+import io
 import json
 import os
 import re
@@ -74,6 +76,32 @@ class DoctorAndExactTest(unittest.TestCase):
             r = run("render", LANDING, "--exact", env=env)
         self.assertEqual(r.returncode, 2, r.stdout + r.stderr)
         self.assertIn("Node", r.stderr)
+
+    def _fake_node(self, d, version):
+        node = Path(d) / "node"
+        node.write_text(f"#!/bin/sh\nif [ \"$1\" = --version ]; then echo {version}; exit 0; fi\necho ran-preview; exit 0\n")
+        node.chmod(0o755)
+        return {**os.environ, "PATH": d}
+
+    def test_exact_with_old_node_exits_2_with_guidance(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = run("render", LANDING, "--exact", env=self._fake_node(d, "v18.19.0"))
+        self.assertEqual(r.returncode, 2, r.stdout + r.stderr)
+        self.assertIn("20", r.stderr)
+        self.assertIn("v18.19.0", r.stderr)
+        self.assertNotIn("ran-preview", r.stdout)
+
+    def test_exact_with_node_20_runs_preview_mjs(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = run("render", LANDING, "--exact", env=self._fake_node(d, "v20.11.1"))
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("ran-preview", r.stdout)
+
+    def test_docs_say_node_20(self):
+        text = PREVIEW.read_text()
+        self.assertNotIn("Node 18", text)
+        self.assertNotIn("Node.js 18", text)
+        self.assertIn("Node 20+", text)
 
     def test_usage_without_command_exits_2(self):
         self.assertEqual(run().returncode, 2)
@@ -181,6 +209,34 @@ class VersionResolutionTest(unittest.TestCase):
         tokens.write_text(json.dumps({"site": {}}))
         with self.assertRaises(self.preview.UsageError):
             self.preview.resolve_divi_version(None, str(tokens))
+
+    def test_tokens_with_empty_version_falls_through_to_newest_cached(self):
+        tokens = self.cache / "tokens.json"
+        tokens.write_text(json.dumps({"site": {"url": "https://x.example", "divi_version": ""}}))
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err):
+            self.assertEqual(self.preview.resolve_divi_version(None, str(tokens)), "4.27.10")
+        note = err.getvalue().strip()
+        self.assertEqual(len(note.splitlines()), 1, note)
+        self.assertIn("divi_version", note)
+        self.assertIn("4.27.10", note)
+
+    def test_tokens_with_empty_version_and_no_cache_falls_through_to_latest(self):
+        tokens = self.cache / "tokens.json"
+        tokens.write_text(json.dumps({"site": {"divi_version": ""}}))
+        with mock.patch.dict(os.environ, {"PP_DIVI_CACHE": str(self.cache / "none")}), \
+                contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(self.preview.resolve_divi_version(None, str(tokens)), "latest")
+
+    def test_cli_render_with_empty_token_version_does_not_exit_2(self):
+        tokens = self.cache / "tokens.json"
+        tokens.write_text(json.dumps({"site": {"divi_version": ""}}))
+        env = {k: v for k, v in os.environ.items() if k not in ("ET_USERNAME", "ET_API_KEY")}
+        env["PP_DIVI_CACHE"] = str(self.cache)
+        with tempfile.TemporaryDirectory() as d:
+            r = run("render", LANDING, "--tokens", tokens, "--out", Path(d) / "x.html", env=env)
+        self.assertNotIn("No site.divi_version", r.stderr)
+        self.assertIn("4.27.10", r.stdout + r.stderr)
 
     def test_newest_cached_then_latest(self):
         self.assertEqual(self.preview.resolve_divi_version(None, None), "4.27.10")

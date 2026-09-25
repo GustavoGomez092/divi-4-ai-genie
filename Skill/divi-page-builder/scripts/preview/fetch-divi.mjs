@@ -41,6 +41,13 @@ function creds() {
 	if (!username || !api_key) throw new Error('Divi is not cached for this version: set ET_USERNAME and ET_API_KEY (Elegant Themes account > API Key) to download it.');
 	return { username, api_key };
 }
+// Secrets that must never reach a child process that doesn't need them (npx / WordPress Playground).
+const CHILD_SECRETS = ['ET_USERNAME', 'ET_API_KEY', 'WP_APP_PASSWORD'];
+export function playgroundEnv(env = process.env) {
+	const out = { ...env };
+	for (const k of CHILD_SECRETS) delete out[k];
+	return out;
+}
 // For response BODY text, which is never URL-encoded, so a raw substring match is correct here.
 const redact = (s, c) => String(s).split(c.api_key).join('<API_KEY>').split(c.username).join('<ET_USERNAME>');
 
@@ -98,8 +105,9 @@ export async function ensureDivi(version = 'latest', cacheDir = defaultCacheDir(
 	const t0 = Date.now();
 	const dl = await etGet('api_downloads', { api_update: 1, theme: 'Divi', version, ...c });
 	if (dl.status !== 200 || dl.body.subarray(0, 2).toString() !== 'PK') {
-		// A redacted URL (never the raw credentials) so a failed download can still be diagnosed.
-		throw new Error(`Divi download failed: HTTP ${dl.status} ${dl.type} url=${dl.redactedUrl} ${redact(dl.body.toString().slice(0, 160), c).trim()}`);
+		// A redacted URL (never the raw credentials) so a failed download can still be diagnosed. The body is
+		// redacted before it is truncated, so a credential cut in two by the slice can't escape redaction.
+		throw new Error(`Divi download failed: HTTP ${dl.status} ${dl.type} url=${dl.redactedUrl} ${redact(dl.body.toString(), c).slice(0, 160).trim()}`);
 	}
 	fs.mkdirSync(cacheDir, { recursive: true });
 	const zip = path.join(cacheDir, `Divi-${version}.zip`);

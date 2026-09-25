@@ -228,7 +228,9 @@ the account's latest) into the cache and exits.
 Preview on the client's own Divi version so what you see matches what they'll get. Resolution
 order, first match wins: `--divi VERSION` → `--tokens tokens.json` (reads `site.divi_version`,
 the file `extract_tokens.py` produces) → the newest version already cached → `latest` from
-Elegant Themes (needs credentials and network — the fallback of last resort).
+Elegant Themes (needs credentials and network — the fallback of last resort). A tokens file whose
+`site.divi_version` is empty (`""`, the version wasn't detected) counts as not giving one: both
+previews fall through to the newest cached version, else `latest`, and print a one-line note.
 
 ### Caching
 
@@ -256,7 +258,7 @@ workflow:
 | Symptom | Cause | Fix |
 |---|---|---|
 | A `render`ed file's icons are missing/broken when opened over `file://` | An old/manual build referenced fonts by a relative or `file://` path instead of embedding them. | `preview.py render` always embeds icon fonts (and all local assets) as `data:` URIs in standalone output — it never emits a `file://` URL. If you see this, you're not looking at `preview.py`'s own output; `serve` instead maps assets under `/__divi/…`, which needs the server running. |
-| `--exact` fails with `preview: --exact needs Node.js 18+ …` and exits `2` | Node isn't installed, or isn't on `PATH`. | Install Node ≥ 20 from https://nodejs.org/, or drop `--exact` to use the Python preview. `doctor` reports whether Node is found. |
+| `--exact` fails with `preview: … --exact needs Node 20+ …` and exits `2` | Node isn't installed, isn't on `PATH`, or is older than 20 (the message then starts `found Node v18…`). | Install Node ≥ 20 from https://nodejs.org/, or drop `--exact` to use the Python preview. `doctor` reports the Node version it finds and flags one that's too old. |
 | `render`/`serve`/`fetch-divi` fails with "Divi is not cached for this version: set ET_USERNAME and ET_API_KEY" | The requested Divi version isn't cached and no credentials are set. | Set `ET_USERNAME`/`ET_API_KEY` (Elegant Themes account → API), or use a version that's already cached (`doctor` lists them). |
 | A download fails with `HTTP 429` / "rate-limited" | Elegant Themes' rate limit (~15 calls / 5 min). | Wait a few minutes. A cached version never calls the API, so this only affects fetching a *new* version. |
 | `serve` returns a `500` page with a Python traceback | The `.txt` page failed to render (bad encoding, a renderer bug). | The traceback is printed on the page itself and to stderr; the server keeps running and other pages keep serving. Fix the page (or file a bug) and reload — no restart needed. |
