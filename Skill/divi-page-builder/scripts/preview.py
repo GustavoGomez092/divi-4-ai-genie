@@ -355,8 +355,8 @@ def et_credential_source(keys_path=None) -> str:
         return "env"
     try:
         creds = wp_keys.resolve_et_credentials(keys_path)
-    except wp_keys.KeysError:
-        return "none"
+    except wp_keys.KeysError as exc:  # KeysError messages never contain secrets
+        return f"none (keys.json problem: {exc})"
     return "keys.json" if creds else "none"
 
 

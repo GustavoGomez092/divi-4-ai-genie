@@ -125,6 +125,29 @@ class LoadKeysTest(TempKeysMixin, unittest.TestCase):
         self.assertIn(str(path), buf.getvalue())
 
     @unittest.skipUnless(os.name == "posix", "POSIX file mode only")
+    def test_warns_once_per_path_per_process(self):
+        path = self.write_keys([KEY_A], name="warn-once.json")
+        path.chmod(0o644)
+        import io
+        from contextlib import redirect_stderr
+        buf = io.StringIO()
+        with redirect_stderr(buf):
+            load_keys(path)
+            list_keys(path)
+            wp_keys.file_elegant_themes(path)
+        self.assertEqual(buf.getvalue().count("chmod 600"), 1)
+
+    def test_doctor_source_reports_keys_json_problem_without_secret(self):
+        import preview
+        path = self.write_object({"elegant_themes": {"username": "et-user", "api_key": ""}})
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("ET_USERNAME", None)
+            os.environ.pop("ET_API_KEY", None)
+            source = preview.et_credential_source(str(path))
+        self.assertTrue(source.startswith("none (keys.json problem:"), source)
+        self.assert_no_secret_leak(source)
+
+    @unittest.skipUnless(os.name == "posix", "POSIX file mode only")
     def test_no_warning_when_mode_is_600(self):
         path = self.write_keys([KEY_A])
         path.chmod(0o600)

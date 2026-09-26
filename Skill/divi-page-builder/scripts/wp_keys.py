@@ -51,14 +51,19 @@ def resolve_keys_path(keys_path=None):
     return default_keys_path(), False
 
 
+_WARNED: set = set()
+
+
 def _warn_if_insecure(path: Path) -> None:
-    if os.name != "posix":
+    """Warn once per path per process (a command may read the file more than once)."""
+    if os.name != "posix" or str(path) in _WARNED:
         return
     try:
         mode = path.stat().st_mode
     except OSError:
         return
     if mode & 0o077:
+        _WARNED.add(str(path))
         print(f"keys.json is readable by other users; run chmod 600 {path}", file=sys.stderr)
 
 
