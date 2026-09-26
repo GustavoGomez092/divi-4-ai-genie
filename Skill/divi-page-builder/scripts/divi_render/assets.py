@@ -69,11 +69,12 @@ class Theme:
         self._uris: dict = {}
 
     @classmethod
-    def for_version(cls, version: Optional[str], **kw) -> "Theme":
-        """Cache-first: an already cached version never touches the Elegant Themes API."""
+    def for_version(cls, version: Optional[str], keys_path: Optional[str] = None, **kw) -> "Theme":
+        """Cache-first: an already cached version never touches the Elegant Themes API. keys_path
+        is only used if a download is actually needed (see fetch_divi.ensure_divi)."""
         version = version or fetch_divi.newest_cached() or "latest"
         path = fetch_divi.theme_dir(version) if version != "latest" else None
-        return cls(path or fetch_divi.ensure_divi(version), **kw)
+        return cls(path or fetch_divi.ensure_divi(version, keys_path=keys_path), **kw)
 
     # -- files
     def file(self, rel: str) -> Optional[Path]:

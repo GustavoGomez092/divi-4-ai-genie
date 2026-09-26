@@ -47,21 +47,26 @@ class RenderResult:
 
 
 @lru_cache(maxsize=16)
-def theme_for(divi_version: Optional[str], asset_base: Optional[str] = None, embed: bool = False) -> Theme:
-    """One Theme per (version, delivery mode), so its static CSS and font list are read once."""
-    return Theme.for_version(divi_version, asset_base=asset_base, embed=embed)
+def theme_for(divi_version: Optional[str], asset_base: Optional[str] = None, embed: bool = False,
+              keys_path: Optional[str] = None) -> Theme:
+    """One Theme per (version, delivery mode, keys_path), so its static CSS and font list are read
+    once. keys_path: a keys.json path for Elegant Themes credentials if the version needs
+    downloading (see fetch_divi.ensure_divi / wp_keys.resolve_et_credentials)."""
+    return Theme.for_version(divi_version, asset_base=asset_base, embed=embed, keys_path=keys_path)
 
 
 def render_page(source: str, divi_version: Optional[str] = None, title: str = "Preview", with_js: bool = True,
-                embed_assets: bool = False, asset_base: Optional[str] = None) -> RenderResult:
+                embed_assets: bool = False, asset_base: Optional[str] = None,
+                keys_path: Optional[str] = None) -> RenderResult:
     """Renders page content (Divi shortcodes) to a complete HTML document.
 
     divi_version: a cached Divi build (default: the newest cached one, else downloads latest).
     embed_assets: inline fonts/images as data: URIs (standalone files); asset_base: reference
     them under that URL prefix instead (the preview server's /__divi/). Never emits file:// URLs.
+    keys_path: a keys.json path used for Elegant Themes credentials if a download is needed.
     """
     t0 = time.perf_counter()
-    theme = theme_for(divi_version, asset_base, embed_assets)
+    theme = theme_for(divi_version, asset_base, embed_assets, keys_path)
     doc = parse(source)
     ctx = Ctx(theme)
     builder = "".join(render_node(n, ctx) for n in doc.nodes if isinstance(n, Node))

@@ -13,7 +13,9 @@ Credentials come from a keys.json file (`--key NAME` picks an entry, or `--site`
 matched against it) or, for backward compatibility, `--site`/`--user` plus env WP_APP_PASSWORD.
 `--keys PATH` overrides the keys file location (otherwise env DIVI_KEYS_FILE, then
 ~/.config/divi-page-builder/keys.json); see wp_keys.py and reference/publishing.md. `keys` lists
-the available `name`/`site`/`user` entries; a key value is never printed. `draft` validates the page first and
+the available `name`/`site`/`user` entries, plus `elegant_themes: {"username": ..., "configured": true}`
+when the keys file has that optional section (`{"configured": false}` otherwise); a key value or
+api_key is never printed. `draft` validates the page first and
 refuses on errors; image attributes pointing at local files (file://, ./, ../) are uploaded to the
 Media Library and rewritten. Pages are saved as drafts; `publish` requires --yes (after user approval).
 Validation baseline: with --baseline FILE, or (with --page-id) the page's current content.raw, findings
@@ -43,7 +45,7 @@ from divi_schema import load_schema  # noqa: E402
 from divi_shortcode import escape_attr_value, parse, serialize  # noqa: E402
 from local_media import LOCAL_PREFIXES, iter_local_images  # noqa: E402,F401  (LOCAL_PREFIXES: back-compat re-export)
 from validate import validate_source  # noqa: E402
-from wp_keys import KeysError, list_keys, resolve_credentials, resolve_keys_path  # noqa: E402
+from wp_keys import KeysError, file_elegant_themes, list_keys, resolve_credentials, resolve_keys_path  # noqa: E402
 
 
 class PublishError(Exception):
@@ -244,7 +246,9 @@ def cmd_keys(a) -> int:
         path, explicit = resolve_keys_path(a.keys)
         if not explicit and not path.exists():
             print(f"no keys file found; the default location is {path}", file=sys.stderr)
-    _print({"keys": keys})
+    et = file_elegant_themes(a.keys)
+    elegant_themes = {"username": et["username"], "configured": True} if et else {"configured": False}
+    _print({"keys": keys, "elegant_themes": elegant_themes})
     return 0
 
 

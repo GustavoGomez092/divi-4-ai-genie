@@ -432,7 +432,7 @@ class PublishFakeServerTest(unittest.TestCase):
         self.assertEqual(json.loads(proc.stdout), {"keys": [
             {"name": "Test Key Local site", "site": "http://divi-test.local", "user": "user"},
             {"name": "Client A", "site": "https://client-a.com", "user": "seo-bot"},
-        ]})
+        ], "elegant_themes": {"configured": False}})
         for stream in (proc.stdout, proc.stderr):
             self.assertNotIn(secret_a, stream)
             self.assertNotIn(secret_b, stream)
@@ -444,8 +444,37 @@ class PublishFakeServerTest(unittest.TestCase):
             proc = subprocess.run([sys.executable, str(SCRIPTS / "publish.py"), "keys"],
                                   capture_output=True, text=True, env=env)
         self.assertEqual(proc.returncode, 0, proc.stderr)
-        self.assertEqual(json.loads(proc.stdout), {"keys": []})
+        self.assertEqual(json.loads(proc.stdout), {"keys": [], "elegant_themes": {"configured": False}})
         self.assertIn(".config/divi-page-builder/keys.json", proc.stderr)
+
+    def test_keys_command_shows_elegant_themes_username_when_configured(self):
+        keys_file = self._write_keys([])
+        et_secret = "et-api-key-value-should-not-leak"
+        data = json.loads(Path(keys_file).read_text())
+        data["elegant_themes"] = {"username": "you@example.com", "api_key": et_secret}
+        Path(keys_file).write_text(json.dumps(data))
+        proc = self.run_cli("keys", "--keys", keys_file, password=None)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(json.loads(proc.stdout), {
+            "keys": [],
+            "elegant_themes": {"username": "you@example.com", "configured": True},
+        })
+        for stream in (proc.stdout, proc.stderr):
+            self.assertNotIn(et_secret, stream)
+
+    def test_keys_command_elegant_themes_only_file(self):
+        # A keys.json with only "elegant_themes" (no "keys" list at all) is valid.
+        keys_file = Path(tempfile.NamedTemporaryFile(suffix=".json", delete=False).name)
+        self.addCleanup(os.unlink, keys_file)
+        et_secret = "another-et-secret"
+        keys_file.write_text(json.dumps({"elegant_themes": {"username": "solo@example.com", "api_key": et_secret}}))
+        proc = self.run_cli("keys", "--keys", str(keys_file), password=None)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(json.loads(proc.stdout), {
+            "keys": [],
+            "elegant_themes": {"username": "solo@example.com", "configured": True},
+        })
+        self.assertNotIn(et_secret, proc.stdout + proc.stderr)
 
     def test_key_not_found_exits_2_without_leaking(self):
         secret = "supersecretkeyvalue"

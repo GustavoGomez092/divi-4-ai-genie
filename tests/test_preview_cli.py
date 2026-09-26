@@ -6,6 +6,7 @@ file:// assets; these tests pin the fix (data: URIs in standalone files, /__divi
 """
 import contextlib
 import http.client
+import http.server
 import io
 import json
 import os
@@ -14,8 +15,12 @@ import socket
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 import unittest
+import urllib.parse
+import zipfile
+from contextlib import contextmanager
 from pathlib import Path
 from unittest import mock
 
@@ -62,6 +67,51 @@ def get(port: int, raw_path: str):
         conn.close()
 
 
+# --- a minimal fake Elegant Themes server, for the --keys credential-flow tests below (mirrors
+# tests/test_fetch_divi.py's fake-server style) --------------------------------------------------
+def _et_zip_bytes(version):
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as zf:
+        zf.writestr("Divi/style.css", f"/*\nTheme Name: Divi\nVersion: {version}\n*/\n")
+        zf.writestr("Divi/functions.php", "<?php\n")
+    return buf.getvalue()
+
+
+def _et_recording_handler(dl_body):
+    received = []
+
+    class Handler(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            received.append(self.path)
+            if "api_downloads.php" in self.path:
+                body, code, ctype = dl_body, 200, "application/zip"
+            else:
+                body, code, ctype = b'a:1:{s:6:"status";s:9:"available"}', 200, "text/html"
+            self.send_response(code)
+            self.send_header("Content-Type", ctype)
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *_a):
+            pass
+
+    return Handler, received
+
+
+@contextmanager
+def _et_server(handler_cls):
+    server = http.server.HTTPServer(("127.0.0.1", 0), handler_cls)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield f"http://127.0.0.1:{server.server_address[1]}/"
+    finally:
+        server.shutdown()
+        thread.join(timeout=5)
+        server.server_close()
+
+
 class DoctorAndExactTest(unittest.TestCase):
     def test_doctor_exits_zero_and_reports(self):
         r = run("doctor")
@@ -105,6 +155,116 @@ class DoctorAndExactTest(unittest.TestCase):
 
     def test_usage_without_command_exits_2(self):
         self.assertEqual(run().returncode, 2)
+
+
+class ExactEnvTest(unittest.TestCase):
+    """The environment preview.py builds for the --exact (preview.mjs) child process: ET_* filled
+    in from resolve_et_credentials, env always taking precedence over the keys file."""
+
+    def setUp(self):
+        sys.path.insert(0, str(SCRIPTS))
+        import preview
+        self.preview = preview
+
+    def test_no_credentials_leaves_et_vars_unset(self):
+        with tempfile.TemporaryDirectory() as home:
+            env = {"HOME": home, "PATH": os.environ.get("PATH", "")}
+            env.pop("ET_USERNAME", None)
+            env.pop("ET_API_KEY", None)
+            with mock.patch.dict(os.environ, env, clear=True):
+                got = self.preview.exact_env(None)
+        self.assertNotIn("ET_USERNAME", got)
+        self.assertNotIn("ET_API_KEY", got)
+
+    def test_keys_file_credentials_fill_the_child_env(self):
+        with tempfile.TemporaryDirectory() as d:
+            keys_file = Path(d) / "keys.json"
+            keys_file.write_text(json.dumps({"elegant_themes": {"username": "fileuser", "api_key": "filesecret"}}))
+            with mock.patch.dict(os.environ, {}, clear=True):
+                os.environ["PATH"] = "/usr/bin:/bin"
+                got = self.preview.exact_env(str(keys_file))
+        self.assertEqual(got["ET_USERNAME"], "fileuser")
+        self.assertEqual(got["ET_API_KEY"], "filesecret")
+
+    def test_env_credentials_win_over_keys_file(self):
+        with tempfile.TemporaryDirectory() as d:
+            keys_file = Path(d) / "keys.json"
+            keys_file.write_text(json.dumps({"elegant_themes": {"username": "fileuser", "api_key": "filesecret"}}))
+            with mock.patch.dict(os.environ, {"ET_USERNAME": "envuser", "ET_API_KEY": "envsecret"}):
+                got = self.preview.exact_env(str(keys_file))
+        self.assertEqual(got["ET_USERNAME"], "envuser")
+        self.assertEqual(got["ET_API_KEY"], "envsecret")
+
+    def test_preserves_the_rest_of_the_current_environment(self):
+        with mock.patch.dict(os.environ, {"SOME_MARKER_VAR": "yes"}):
+            got = self.preview.exact_env(None)
+        self.assertEqual(got.get("SOME_MARKER_VAR"), "yes")
+
+
+class DoctorKeysFlagTest(unittest.TestCase):
+    def test_reports_none_when_no_credentials(self):
+        with tempfile.TemporaryDirectory() as home:
+            env = {k: v for k, v in os.environ.items() if k not in ("ET_USERNAME", "ET_API_KEY", "DIVI_KEYS_FILE")}
+            env["HOME"] = home
+            r = run("doctor", env=env)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("Elegant Themes credentials: none", r.stdout)
+
+    def test_reports_env_when_env_vars_set(self):
+        env = {**os.environ, "ET_USERNAME": "someone", "ET_API_KEY": "secretvalue"}
+        r = run("doctor", env=env)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("Elegant Themes credentials: env", r.stdout)
+        self.assertNotIn("secretvalue", r.stdout)
+
+    def test_reports_keys_json_when_only_file_has_it(self):
+        with tempfile.TemporaryDirectory() as d:
+            keys_file = Path(d) / "keys.json"
+            keys_file.write_text(json.dumps({"elegant_themes": {"username": "fileuser", "api_key": "filesecret"}}))
+            env = {k: v for k, v in os.environ.items() if k not in ("ET_USERNAME", "ET_API_KEY")}
+            r = run("doctor", "--keys", str(keys_file), env=env)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("Elegant Themes credentials: keys.json", r.stdout)
+        self.assertNotIn("filesecret", r.stdout)
+
+
+class FetchDiviAndRenderKeysFlagTest(unittest.TestCase):
+    """`preview.py fetch-divi` / `render` get ET credentials from --keys when the version isn't
+    cached (same fake-ET-server style as tests/test_fetch_divi.py)."""
+
+    def test_fetch_divi_uses_keys_file_reaching_fake_server(self):
+        handler, received = _et_recording_handler(_et_zip_bytes("6.0.0"))
+        with _et_server(handler) as base, tempfile.TemporaryDirectory() as cache, tempfile.TemporaryDirectory() as d:
+            keys_file = Path(d) / "keys.json"
+            keys_file.write_text(json.dumps({"elegant_themes": {"username": "fileuser", "api_key": "filesecret"}}))
+            env = {k: v for k, v in os.environ.items() if k not in ("ET_USERNAME", "ET_API_KEY")}
+            env["PP_ET_ENDPOINT"] = base
+            env["PP_CACHE_DIR"] = cache
+            r = run("fetch-divi", "6.0.0", "--keys", str(keys_file), env=env)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertTrue(any("fileuser" in p for p in received), received)
+        for stream in (r.stdout, r.stderr):
+            self.assertNotIn("filesecret", stream)
+
+    def test_render_downloads_uncached_version_via_keys_file(self):
+        page = ('[et_pb_section][et_pb_row][et_pb_column type="4_4"]'
+               '[et_pb_text]Hi[/et_pb_text][/et_pb_column][/et_pb_row][/et_pb_section]')
+        handler, received = _et_recording_handler(_et_zip_bytes("6.0.1"))
+        with _et_server(handler) as base, tempfile.TemporaryDirectory() as cache, tempfile.TemporaryDirectory() as d:
+            keys_file = Path(d) / "keys.json"
+            keys_file.write_text(json.dumps({"elegant_themes": {"username": "fileuser2", "api_key": "filesecret2"}}))
+            page_file = Path(d) / "p.txt"
+            page_file.write_text(page)
+            out_file = Path(d) / "out.html"
+            env = {k: v for k, v in os.environ.items() if k not in ("ET_USERNAME", "ET_API_KEY")}
+            env["PP_ET_ENDPOINT"] = base
+            env["PP_CACHE_DIR"] = cache
+            r = run("render", page_file, "--divi", "6.0.1", "--out", out_file, "--keys", str(keys_file), env=env)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            self.assertTrue(out_file.exists())
+        self.assertTrue(any("fileuser2" in p for p in received), received)
+        for stream in (r.stdout, r.stderr):
+            self.assertNotIn("filesecret2", stream)
 
 
 class ExactArgsTest(unittest.TestCase):

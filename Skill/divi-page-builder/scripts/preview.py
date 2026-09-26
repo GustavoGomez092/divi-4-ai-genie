@@ -1,21 +1,28 @@
 #!/usr/bin/env python3
 """Divi 4 page preview with the pure-Python renderer (stdlib only, no Node, PHP or WordPress).
 
-  python3 preview.py render PAGE [--out FILE] [--tokens tokens.json | --divi VER] [--no-js] [--exact]
+  python3 preview.py render PAGE [--out FILE] [--tokens tokens.json | --divi VER] [--no-js] [--exact] [--keys PATH]
       Writes one standalone HTML file (Divi's CSS/JS inlined, icon fonts and theme images as data:
       URIs, so it works opened from disk or over HTTP) and prints the coverage summary: modules the
       Python renderer doesn't support (--exact renders them), content that needs the live site's
       data (posts, menus, media, comments, widgets: neither preview has it, so check the WordPress
       draft preview) and attributes it ignored. Default --out: <page name>.html.
-  python3 preview.py serve [--pages DIR] [--port 8765] [--tokens tokens.json | --divi VER] [--no-js] [--exact]
+  python3 preview.py serve [--pages DIR] [--port 8765] [--tokens tokens.json | --divi VER] [--no-js] [--exact] [--keys PATH]
       Serves http://127.0.0.1:PORT/<name> for every DIR/<name>.txt, re-rendered on each request.
       The page polls for edits and reloads itself. Divi's fonts/images/JS come from /__divi/...
       Pages with unsupported modules or site-data content show a banner saying which preview can show them.
-  python3 preview.py doctor
-      Reports Python, the cache dir, cached Divi versions and whether Node is present (only
-      needed for --exact).
-  python3 preview.py fetch-divi VER
-      Downloads and caches a Divi version (needs ET_USERNAME / ET_API_KEY; the only command that does).
+  python3 preview.py doctor [--keys PATH]
+      Reports Python, the cache dir, cached Divi versions, whether Node is present (only needed
+      for --exact) and whether Elegant Themes credentials are available and from where (env /
+      keys.json / none).
+  python3 preview.py fetch-divi VER [--keys PATH]
+      Downloads and caches a Divi version (the only command that always needs ET credentials).
+
+Elegant Themes credentials, wherever a version isn't cached and must be downloaded (fetch-divi,
+and render/serve/doctor when they fall through to a download): env ET_USERNAME + ET_API_KEY win
+when both are set; otherwise the keys.json file's "elegant_themes" section (--keys PATH, else env
+DIVI_KEYS_FILE, else ~/.config/divi-page-builder/keys.json) -- see wp_keys.resolve_et_credentials.
+--exact hands the same resolved credentials to the preview.mjs child through its environment.
 
 --exact runs the same command on the real-Divi preview (node scripts/preview/preview.mjs on
 WordPress Playground) for pages the Python renderer can't reproduce. It needs Node 20+.
@@ -46,6 +53,7 @@ if str(HERE) not in sys.path:
 
 import fetch_divi  # noqa: E402
 import local_media  # noqa: E402
+import wp_keys  # noqa: E402
 
 PREVIEW_MJS = HERE / "preview" / "preview.mjs"
 DIVI_ROUTE = "/__divi/"
@@ -181,6 +189,17 @@ def node_major(node: str) -> tuple:
         return None, out or "(version unknown)"
 
 
+def exact_env(keys_path=None) -> dict:
+    """The environment for the preview.mjs child: the current environment, with ET_USERNAME /
+    ET_API_KEY filled in from wp_keys.resolve_et_credentials(keys_path) when not already set there
+    (env always wins over the keys file, same as everywhere else). Never prints or logs this."""
+    env = dict(os.environ)
+    creds = wp_keys.resolve_et_credentials(keys_path)
+    if creds:
+        env["ET_USERNAME"], env["ET_API_KEY"] = creds
+    return env
+
+
 def run_exact(a) -> int:
     """Hands the command to the real-Divi preview (Playground)."""
     node = shutil.which("node")
@@ -191,7 +210,12 @@ def run_exact(a) -> int:
     if major is None or major < NODE_MIN_MAJOR:
         print(f"preview: found Node {version} at {node}. {NODE_GUIDANCE}", file=sys.stderr)
         return 2
-    return subprocess.call([node, str(PREVIEW_MJS), *exact_args(a)])
+    try:
+        env = exact_env(getattr(a, "keys", None))
+    except wp_keys.KeysError as e:
+        print(f"preview: {e}", file=sys.stderr)
+        return 2
+    return subprocess.call([node, str(PREVIEW_MJS), *exact_args(a)], env=env)
 
 
 def _renderer():
@@ -208,7 +232,7 @@ def cmd_render(a) -> int:
     dr = _renderer()
     source = local_media.embed_local_images(page.read_text(encoding="utf-8"), page.resolve().parent)
     result = dr.render_page(source, divi_version=version, title=page.stem,
-                            with_js=not a.no_js, embed_assets=True)
+                            with_js=not a.no_js, embed_assets=True, keys_path=a.keys)
     out = Path(a.out) if a.out else Path.cwd() / (page.stem + ".html")
     out.write_text(result.html, encoding="utf-8")
     print(f"wrote {out} ({len(result.html) / 1024:.0f} KB)")
@@ -217,10 +241,10 @@ def cmd_render(a) -> int:
 
 
 # ----------------------------------------------------------------------------- serve
-def make_handler(pages: Path, version: str, with_js: bool):
+def make_handler(pages: Path, version: str, with_js: bool, keys_path=None):
     dr = _renderer()
     from divi_render.assets import mime_type, resolve_asset
-    theme = dr.theme_for(version, DIVI_ROUTE, False)
+    theme = dr.theme_for(version, DIVI_ROUTE, False, keys_path=keys_path)
     # Per-page allowlist of the local image files that page's own attributes reference, rebuilt
     # on every render of that page: name -> {token: resolved Path}. /__local/<name>/<token> only
     # ever serves a path that's in here -- never a path built from the request itself, which is
@@ -275,7 +299,7 @@ def make_handler(pages: Path, version: str, with_js: bool):
                 source, local_allow[name] = local_media.rewrite_for_serve(
                     f.read_text(encoding="utf-8"), f.resolve().parent, f"{LOCAL_ROUTE}{name}/")
                 result = dr.render_page(source, divi_version=version, title=name,
-                                        with_js=with_js, asset_base=DIVI_ROUTE)
+                                        with_js=with_js, asset_base=DIVI_ROUTE, keys_path=keys_path)
             except Exception:  # a local dev server: show the error instead of dropping the connection
                 tb = traceback.format_exc()
                 sys.stderr.write(f"render error in {f}:\n{tb}")
@@ -303,7 +327,7 @@ def cmd_serve(a) -> int:
     if not pages.is_dir():
         raise UsageError(f"no such pages dir: {pages}")
     version = resolve_divi_version(a.divi, a.tokens)
-    handler = make_handler(pages, version, not a.no_js)
+    handler = make_handler(pages, version, not a.no_js, keys_path=a.keys)
     server = ThreadingHTTPServer(("127.0.0.1", a.port), handler)
     base = f"http://127.0.0.1:{server.server_address[1]}"
     names = sorted(p.stem for p in pages.glob("*.txt"))
@@ -322,6 +346,20 @@ def cmd_serve(a) -> int:
 
 
 # ----------------------------------------------------------------------------- doctor / fetch
+def et_credential_source(keys_path=None) -> str:
+    """"env" / "keys.json" / "none": where ensure_divi would get Elegant Themes credentials from,
+    without ever returning the credentials themselves. Mirrors resolve_et_credentials' own
+    env-first precedence; an explicit --keys pointing at a missing file reports "none" rather
+    than raising (doctor is a diagnostic, not a hard failure)."""
+    if os.environ.get("ET_USERNAME") and os.environ.get("ET_API_KEY"):
+        return "env"
+    try:
+        creds = wp_keys.resolve_et_credentials(keys_path)
+    except wp_keys.KeysError:
+        return "none"
+    return "keys.json" if creds else "none"
+
+
 def cmd_doctor(a) -> int:
     from divi_render.assets import find_jquery
     cached = fetch_divi.list_cached()
@@ -338,13 +376,15 @@ def cmd_doctor(a) -> int:
         f"cached Divi versions: {', '.join(cached) if cached else '(none: python3 preview.py fetch-divi VER)'}",
         f"jQuery: {jq if jq else 'CDN (no cached WordPress copy)'}",
         f"node: {node + ' ' + node_version if node else 'not found'} (only needed for --exact)",
+        f"Elegant Themes credentials: {et_credential_source(getattr(a, 'keys', None))}",
     ]
     print("\n".join(lines))
     return 0
 
 
 def cmd_fetch_divi(a) -> int:
-    return fetch_divi.main([a.version])
+    args = (["--keys", a.keys] if a.keys else []) + [a.version]
+    return fetch_divi.main(args)
 
 
 # ----------------------------------------------------------------------------- main
@@ -353,12 +393,17 @@ def build_parser() -> argparse.ArgumentParser:
                                  formatter_class=argparse.RawDescriptionHelpFormatter, epilog=__doc__)
     sub = ap.add_subparsers(dest="cmd")
 
+    keys_help = ("keys.json path, for its optional \"elegant_themes\" section (default: env "
+                 "DIVI_KEYS_FILE, then ~/.config/divi-page-builder/keys.json); env ET_USERNAME + "
+                 "ET_API_KEY still win when both are set")
+
     def version_flags(p):
         g = p.add_mutually_exclusive_group()
         g.add_argument("--divi", help="Divi version (default: --tokens, else newest cached, else latest)")
         g.add_argument("--tokens", help="tokens.json whose site.divi_version picks the Divi version")
         p.add_argument("--no-js", action="store_true", help="leave out Divi's front-end JS")
         p.add_argument("--exact", action="store_true", help="use the real-Divi Playground preview (needs Node)")
+        p.add_argument("--keys", help=keys_help)
 
     r = sub.add_parser("render", help="render one page to a standalone HTML file")
     r.add_argument("page")
@@ -368,9 +413,11 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--pages", default=".")
     s.add_argument("--port", type=int, default=8765)
     version_flags(s)
-    sub.add_parser("doctor", help="report what the preview can use")
+    d = sub.add_parser("doctor", help="report what the preview can use")
+    d.add_argument("--keys", help=keys_help)
     f = sub.add_parser("fetch-divi", help="download and cache a Divi version")
     f.add_argument("version")
+    f.add_argument("--keys", help=keys_help)
     return ap
 
 

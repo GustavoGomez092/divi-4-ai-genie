@@ -1,8 +1,10 @@
-"""Multi-site WordPress credentials from a keys.json file.
+"""Multi-site WordPress credentials, and optional Elegant Themes credentials, from a keys.json file.
 
-File format (every entry needs name/site/user/key, each a non-empty string; other keys ignored)::
+File format (every ``keys`` entry needs name/site/user/key, each a non-empty string; other
+top-level keys ignored)::
 
     {
+      "elegant_themes": {"username": "you@example.com", "api_key": "xxxxxxxxxxxxxxxxxxxxxxxx"},
       "keys": [
         {"name": "Test Key Local site", "site": "http://divi-test.local", "user": "user",
          "key": "xxxx xxxx xxxx xxxx xxxx xxxx"},
@@ -11,9 +13,14 @@ File format (every entry needs name/site/user/key, each a non-empty string; othe
       ]
     }
 
+Both top-level sections are optional; a file may hold either one or both (a missing ``keys``
+means no site entries). The top level must be an object; ``keys``, if present, must be a list;
+``elegant_themes``, if present, must be an object with non-empty string ``username`` and
+``api_key``.
+
 Location, in order of precedence: the ``--keys PATH`` flag, the env var ``DIVI_KEYS_FILE``, then
 the default ``~/.config/divi-page-builder/keys.json``. A KeysError's message never contains a key
-value -- only names, sites, users and paths, none of which are secret.
+value or an api_key -- only names, sites, users and paths, none of which are secret.
 """
 from __future__ import annotations
 
@@ -74,9 +81,11 @@ def _validate_entry(index: int, entry) -> None:
             raise KeysError(f"{label}: {field!r} must be a non-empty string")
 
 
-def load_keys(path) -> list:
-    """Load and validate every entry in the keys file at `path`. Raises KeysError; never leaks a key value."""
-    p = Path(path)
+def _read_keys_object(p: Path) -> dict:
+    """Parse and top-level-validate the keys file at `p`, warn if insecure, and return the raw
+    dict. Shape rules: the top level must be an object; "keys", if present, must be a list;
+    "elegant_themes", if present, must be an object. Field-level validation happens elsewhere.
+    Raises KeysError; never leaks a key value."""
     if not p.exists():
         raise KeysError(f"keys file not found: {p}")
     try:
@@ -87,9 +96,22 @@ def load_keys(path) -> list:
         obj = json.loads(text)
     except json.JSONDecodeError as exc:
         raise KeysError(f"invalid JSON in {p}: {exc}") from None
-    if not isinstance(obj, dict) or not isinstance(obj.get("keys"), list):
-        raise KeysError(f"{p}: expected a JSON object with a \"keys\" list")
-    entries = obj["keys"]
+    if not isinstance(obj, dict):
+        raise KeysError(f"{p}: expected a JSON object")
+    if "keys" in obj and not isinstance(obj["keys"], list):
+        raise KeysError(f"{p}: \"keys\" must be a list")
+    if "elegant_themes" in obj and not isinstance(obj["elegant_themes"], dict):
+        raise KeysError(f"{p}: \"elegant_themes\" must be an object")
+    _warn_if_insecure(p)
+    return obj
+
+
+def load_keys(path) -> list:
+    """Load and validate every `keys` entry in the keys file at `path` (a missing "keys" means no
+    entries -- the file may hold only "elegant_themes"). Raises KeysError; never leaks a key value."""
+    p = Path(path)
+    obj = _read_keys_object(p)
+    entries = obj.get("keys") or []
     for i, entry in enumerate(entries):
         _validate_entry(i, entry)
     seen = {}
@@ -98,8 +120,51 @@ def load_keys(path) -> list:
         if norm in seen:
             raise KeysError(f"duplicate key name (case-insensitive): {seen[norm]!r} and {entry['name']!r}")
         seen[norm] = entry["name"]
-    _warn_if_insecure(p)
     return entries
+
+
+def _validate_et(et, path: Path) -> None:
+    if not isinstance(et, dict):
+        raise KeysError(f"{path}: \"elegant_themes\" must be an object")
+    username = et.get("username")
+    if not isinstance(username, str) or not username:
+        raise KeysError(f"{path}: \"elegant_themes.username\" must be a non-empty string")
+    api_key = et.get("api_key")
+    if not isinstance(api_key, str) or not api_key:
+        raise KeysError(f"{path}: \"elegant_themes.api_key\" must be a non-empty string")
+
+
+def file_elegant_themes(keys_path=None) -> dict | None:
+    """The `elegant_themes` section straight from the keys file (ignoring ET_* env), found by the
+    same --keys / DIVI_KEYS_FILE / default precedence as everything else. None when the section is
+    absent, or the default path doesn't exist. An explicit missing path is a KeysError, like
+    load_keys. Never leaks the api_key."""
+    path, explicit = resolve_keys_path(keys_path)
+    if not path.exists():
+        if explicit:
+            raise KeysError(f"keys file not found: {path}")
+        return None
+    obj = _read_keys_object(path)
+    et = obj.get("elegant_themes")
+    if et is None:
+        return None
+    _validate_et(et, path)
+    return et
+
+
+def resolve_et_credentials(keys_path=None):
+    """Return (username, api_key) for Elegant Themes: env ET_USERNAME + ET_API_KEY (both set) win;
+    otherwise the keys file's "elegant_themes" section (same location precedence as everything
+    else); otherwise None. The default path not existing is not an error; an explicit missing path
+    is a KeysError, like load_keys. Never leaks the api_key."""
+    env_user = os.environ.get("ET_USERNAME")
+    env_key = os.environ.get("ET_API_KEY")
+    if env_user and env_key:
+        return env_user, env_key
+    et = file_elegant_themes(keys_path)
+    if et is None:
+        return None
+    return et["username"], et["api_key"]
 
 
 def _load_entries(keys_path=None) -> list:

@@ -2,6 +2,11 @@
 """Download + unpack a specific Divi 4 version from the Elegant Themes API into a local cache.
 
   ET_USERNAME=... ET_API_KEY=... python3 fetch_divi.py [version|latest]
+  python3 fetch_divi.py [--keys PATH] [version|latest]
+
+Credentials: env ET_USERNAME/ET_API_KEY win if both are set; otherwise the keys.json file's
+"elegant_themes" section (--keys PATH, else env DIVI_KEYS_FILE, else
+~/.config/divi-page-builder/keys.json) -- see wp_keys.resolve_et_credentials.
 
 A stdlib port of scripts/preview/fetch-divi.mjs, sharing the identical cache layout so Node and
 Python fetch/reuse the same download:
@@ -43,6 +48,8 @@ import urllib.request
 import zipfile
 from pathlib import Path
 from typing import Optional
+
+import wp_keys
 
 UA = "WordPress/6.8; Elegant Themes/4.27.9; https://localhost/"
 
@@ -97,13 +104,18 @@ def newest_cached(cache_dir: Optional[Path] = None) -> Optional[str]:
     return versions[-1] if versions else None
 
 
-def _creds():
-    username, api_key = os.environ.get("ET_USERNAME"), os.environ.get("ET_API_KEY")
-    if not username or not api_key:
+def _creds(keys_path=None):
+    try:
+        creds = wp_keys.resolve_et_credentials(keys_path)
+    except wp_keys.KeysError as exc:
+        raise FetchError(str(exc)) from None
+    if not creds:
         raise FetchError(
             "Divi is not cached for this version: set ET_USERNAME and ET_API_KEY "
-            "(Elegant Themes account > API Key) to download it."
+            "(Elegant Themes account > API Key), or add an \"elegant_themes\" section to "
+            "keys.json, to download it."
         )
+    username, api_key = creds
     return {"username": username, "api_key": api_key}
 
 
@@ -140,8 +152,8 @@ def _et_get(endpoint: str, params: dict) -> dict:
     return {"status": status, "type": ctype, "body": body, "url": url, "redacted_url": _redacted_url(endpoint, params)}
 
 
-def latest_version() -> str:
-    c = _creds()
+def latest_version(keys_path=None) -> str:
+    c = _creds(keys_path)
     body = urllib.parse.urlencode(
         {"action": "check_theme_updates", "installed_themes[Divi]": "4.0.0", "class_version": "1.2", "automatic_updates": "on", **c}
     ).encode()
@@ -164,21 +176,24 @@ def latest_version() -> str:
     return m.group(1)
 
 
-def ensure_divi(version: str = "latest", cache_dir: Optional[Path] = None, log=None) -> Path:
+def ensure_divi(version: str = "latest", cache_dir: Optional[Path] = None, log=None, keys_path=None) -> Path:
     """Returns the absolute path of the unpacked Divi theme dir (.../Divi-<version>/Divi) for
-    `version`, downloading (and caching) it first if it isn't already cached. Raises FetchError
-    with credentials redacted on any failure; never prints or writes credentials."""
+    `version`, downloading (and caching) it first if it isn't already cached. Credentials: env
+    ET_USERNAME/ET_API_KEY first, else the keys file's "elegant_themes" section (see
+    wp_keys.resolve_et_credentials; `keys_path` picks the file, same precedence as everywhere
+    else). Raises FetchError with credentials redacted on any failure; never prints or writes
+    credentials."""
     cache_dir = Path(cache_dir) if cache_dir is not None else default_cache_dir()
     log = log or (lambda msg: print(msg, file=sys.stderr))
 
     if version == "latest":
-        version = latest_version()
+        version = latest_version(keys_path)
 
     cached = theme_dir(version, cache_dir)
     if cached is not None:
         return cached
 
-    c = _creds()
+    c = _creds(keys_path)
     st = _et_get("api", {"api_update": 1, "action": "check_version_status", "product": "Divi", "version": version, **c})
     m = re.search(r'"status";s:\d+:"([^"]+)"', st["body"].decode("utf-8", "replace"))
     status = m.group(1) if m else None
@@ -225,13 +240,26 @@ def valid_version_arg(version: str) -> bool:
 
 
 def main(argv=None) -> int:
-    argv = sys.argv[1:] if argv is None else argv
-    version = argv[0] if argv else "latest"
+    argv = sys.argv[1:] if argv is None else list(argv)
+    keys_path = None
+    positional = []
+    it = iter(argv)
+    for tok in it:
+        if tok == "--keys":
+            try:
+                keys_path = next(it)
+            except StopIteration:
+                print("fetch_divi: --keys requires a PATH", file=sys.stderr)
+                return 2
+        else:
+            positional.append(tok)
+    version = positional[0] if positional else "latest"
     if not valid_version_arg(version):
-        print(f"fetch_divi: usage: fetch_divi.py [latest | VERSION like 4.27.9] (got {version!r})", file=sys.stderr)
+        print(f"fetch_divi: usage: fetch_divi.py [--keys PATH] [latest | VERSION like 4.27.9] "
+              f"(got {version!r})", file=sys.stderr)
         return 2
     try:
-        path = ensure_divi(version)
+        path = ensure_divi(version, keys_path=keys_path)
     except FetchError as e:
         print(f"fetch_divi: {e}", file=sys.stderr)
         return 1

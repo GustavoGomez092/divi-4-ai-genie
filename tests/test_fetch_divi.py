@@ -228,6 +228,100 @@ class SnippetRedactionTest(unittest.TestCase):
         self.assertIn("<API_KEY>", out)
 
 
+class KeysFileCredentialsTest(unittest.TestCase):
+    """Elegant Themes credentials from a keys.json `elegant_themes` section (via --keys / keys_path),
+    used when ET_USERNAME/ET_API_KEY aren't set. Mirrors the existing fake-ET-server test style."""
+
+    def _write_keys_file(self, tmp, et):
+        path = Path(tmp) / "keys.json"
+        path.write_text(json.dumps({"elegant_themes": et}))
+        return path
+
+    def _recording_handler(self, dl_body):
+        received = []
+
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):
+                received.append(self.path)
+                if "api_downloads.php" in self.path:
+                    body, code, ctype = dl_body, 200, "application/zip"
+                else:
+                    body, code, ctype = AVAILABLE, 200, "text/html"
+                self.send_response(code)
+                self.send_header("Content-Type", ctype)
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            def log_message(self, *_a):
+                pass
+
+        return Handler, received
+
+    def test_ensure_divi_uses_keys_file_credentials_reaching_fake_server(self):
+        handler, received = self._recording_handler(_zip_bytes("2.0.0"))
+        with _server(handler) as base, tempfile.TemporaryDirectory() as cache, \
+                tempfile.TemporaryDirectory() as keysdir:
+            keys_file = self._write_keys_file(keysdir, {"username": "fileuser", "api_key": "filesecretkey"})
+            with mock.patch.dict(os.environ, {"PP_ET_ENDPOINT": base}, clear=True):
+                result = fetch_divi.ensure_divi("2.0.0", cache, keys_path=keys_file)
+            self.assertEqual(result, Path(cache) / "Divi-2.0.0" / "Divi")
+        self.assertTrue(received, "fake server never received a request")
+        self.assertTrue(any("fileuser" in p for p in received), received)
+
+    def test_no_credentials_error_mentions_keys_json(self):
+        with tempfile.TemporaryDirectory() as cache:
+            with mock.patch.dict(os.environ, {}, clear=True):
+                with self.assertRaises(FetchError) as ctx:
+                    fetch_divi.ensure_divi("1.2.3", cache, keys_path=None)
+        msg = str(ctx.exception)
+        self.assertIn("ET_USERNAME", msg)
+        self.assertIn("elegant_themes", msg)
+
+    def test_cli_keys_flag_with_no_env_reaches_server_without_leaking(self):
+        handler, received = self._recording_handler(_zip_bytes("2.0.1"))
+        with _server(handler) as base, tempfile.TemporaryDirectory() as cache, \
+                tempfile.TemporaryDirectory() as keysdir:
+            keys_file = self._write_keys_file(keysdir, {"username": "fileuser2", "api_key": "sup3r-secret-key"})
+            env = {"PP_ET_ENDPOINT": base, "PP_CACHE_DIR": cache}
+            out, err = io.StringIO(), io.StringIO()
+            with mock.patch.dict(os.environ, env, clear=True), \
+                    mock.patch("sys.stdout", out), mock.patch("sys.stderr", err):
+                rc = fetch_divi.main(["--keys", str(keys_file), "2.0.1"])
+        self.assertEqual(rc, 0, err.getvalue())
+        self.assertTrue(any("fileuser2" in p for p in received), received)
+        for stream in (out.getvalue(), err.getvalue()):
+            self.assertNotIn("sup3r-secret-key", stream)
+            self.assertNotIn(urllib.parse.quote("sup3r-secret-key", safe=""), stream)
+
+    def test_cli_keys_flag_error_response_does_not_leak(self):
+        handler = _make_handler(dl_status=200, dl_body=b"API key is not valid", dl_ctype="text/html")
+        with _server(handler) as base, tempfile.TemporaryDirectory() as cache, \
+                tempfile.TemporaryDirectory() as keysdir:
+            keys_file = self._write_keys_file(keysdir, {"username": "fileuser3", "api_key": "another-secret-99"})
+            env = {"PP_ET_ENDPOINT": base, "PP_CACHE_DIR": cache}
+            out, err = io.StringIO(), io.StringIO()
+            with mock.patch.dict(os.environ, env, clear=True), \
+                    mock.patch("sys.stdout", out), mock.patch("sys.stderr", err):
+                rc = fetch_divi.main(["--keys", str(keys_file), "1.2.3"])
+        self.assertEqual(rc, 1)
+        for stream in (out.getvalue(), err.getvalue()):
+            self.assertNotIn("another-secret-99", stream)
+            self.assertNotIn(urllib.parse.quote("another-secret-99", safe=""), stream)
+            self.assertNotIn("fileuser3", stream)
+
+    def test_cli_keys_flag_missing_path_is_clean_error(self):
+        with tempfile.TemporaryDirectory() as cache, tempfile.TemporaryDirectory() as keysdir:
+            missing = str(Path(keysdir) / "nope.json")
+            env = {"PP_CACHE_DIR": cache}
+            err = io.StringIO()
+            with mock.patch.dict(os.environ, env, clear=True), mock.patch("sys.stderr", err):
+                rc = fetch_divi.main(["--keys", missing, "1.2.3"])
+        self.assertEqual(rc, 1)
+        self.assertIn(missing, err.getvalue())
+        self.assertNotIn("Traceback", err.getvalue())
+
+
 class VersionArgTest(unittest.TestCase):
     def test_rejects_non_version_arguments_before_any_network_call(self):
         calls = []

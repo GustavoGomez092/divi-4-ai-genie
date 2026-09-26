@@ -9,13 +9,14 @@ from unittest import mock
 
 from _paths import SCRIPTS  # noqa: F401  (puts scripts/ on sys.path via _paths)
 import wp_keys
-from wp_keys import KeysError, list_keys, load_keys, normalize_site, resolve_credentials
+from wp_keys import KeysError, list_keys, load_keys, normalize_site, resolve_credentials, resolve_et_credentials
 
 KEY_A = {"name": "Test Key Local site", "site": "http://divi-test.local", "user": "user",
          "key": "aaaa BBBB cccc DDDD eeee FFFF"}
 KEY_B = {"name": "Client A", "site": "https://client-a.com", "user": "seo-bot",
          "key": "zzzz YYYY xxxx WWWW vvvv UUUU"}
-ALL_SECRETS = (KEY_A["key"], KEY_B["key"])
+ET = {"username": "you@example.com", "api_key": "et-secret-api-key-value"}
+ALL_SECRETS = (KEY_A["key"], KEY_B["key"], ET["api_key"])
 
 
 class TempKeysMixin:
@@ -27,6 +28,11 @@ class TempKeysMixin:
     def write_keys(self, entries, name="keys.json"):
         path = self.dir / name
         path.write_text(json.dumps({"keys": entries}))
+        return path
+
+    def write_object(self, obj, name="keys.json"):
+        path = self.dir / name
+        path.write_text(json.dumps(obj))
         return path
 
     def assert_no_secret_leak(self, err):
@@ -60,11 +66,12 @@ class LoadKeysTest(TempKeysMixin, unittest.TestCase):
             load_keys(path)
         self.assert_no_secret_leak(ctx.exception)
 
-    def test_top_level_without_keys_field(self):
+    def test_top_level_without_keys_field_means_no_entries(self):
+        # "keys" is optional (relaxed for the elegant_themes-only case); other top-level keys are
+        # ignored. Only an explicitly non-list "keys" value is an error (see the test above).
         path = self.dir / "keys.json"
         path.write_text(json.dumps({"other": []}))
-        with self.assertRaises(KeysError):
-            load_keys(path)
+        self.assertEqual(load_keys(path), [])
 
     def test_missing_field_is_keys_error(self):
         bad = {"name": "X", "site": "https://x.example", "user": "u"}  # no key
@@ -227,6 +234,88 @@ class ResolveCredentialsTest(TempKeysMixin, unittest.TestCase):
                 resolve_credentials(keys_path=None)
         self.assertIn("WP_APP_PASSWORD", str(ctx.exception))
         self.assert_no_secret_leak(ctx.exception)
+
+
+class ResolveEtCredentialsTest(TempKeysMixin, unittest.TestCase):
+    def test_from_file_only(self):
+        path = self.write_object({"elegant_themes": ET})
+        self.assertEqual(resolve_et_credentials(path), (ET["username"], ET["api_key"]))
+
+    def test_env_wins_over_file(self):
+        path = self.write_object({"elegant_themes": ET})
+        with mock.patch.dict(os.environ, {"ET_USERNAME": "env-user", "ET_API_KEY": "env-secret-key"}):
+            self.assertEqual(resolve_et_credentials(path), ("env-user", "env-secret-key"))
+
+    def test_partial_env_does_not_win(self):
+        # Only ET_USERNAME set (no ET_API_KEY): per the spec, both must be set for env to win.
+        path = self.write_object({"elegant_themes": ET})
+        with mock.patch.dict(os.environ, {"ET_USERNAME": "env-user"}, clear=False):
+            os.environ.pop("ET_API_KEY", None)
+            self.assertEqual(resolve_et_credentials(path), (ET["username"], ET["api_key"]))
+
+    def test_none_when_neither_env_nor_file_section(self):
+        path = self.write_object({"keys": []})
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("ET_USERNAME", None)
+            os.environ.pop("ET_API_KEY", None)
+            self.assertIsNone(resolve_et_credentials(path))
+
+    def test_none_when_default_path_does_not_exist(self):
+        with mock.patch.dict(os.environ, {"HOME": str(self.dir)}, clear=False):
+            os.environ.pop("DIVI_KEYS_FILE", None)
+            os.environ.pop("ET_USERNAME", None)
+            os.environ.pop("ET_API_KEY", None)
+            self.assertIsNone(resolve_et_credentials(None))
+
+    def test_explicit_missing_path_is_keys_error(self):
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("ET_USERNAME", None)
+            os.environ.pop("ET_API_KEY", None)
+            with self.assertRaises(KeysError) as ctx:
+                resolve_et_credentials(self.dir / "nope.json")
+        self.assert_no_secret_leak(ctx.exception)
+
+    def test_missing_api_key_is_keys_error_without_leaking(self):
+        path = self.write_object({"elegant_themes": {"username": ET["username"]}})
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("ET_USERNAME", None)
+            os.environ.pop("ET_API_KEY", None)
+            with self.assertRaises(KeysError) as ctx:
+                resolve_et_credentials(path)
+        self.assert_no_secret_leak(ctx.exception)
+
+    def test_empty_username_is_keys_error(self):
+        path = self.write_object({"elegant_themes": {"username": "", "api_key": ET["api_key"]}})
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("ET_USERNAME", None)
+            os.environ.pop("ET_API_KEY", None)
+            with self.assertRaises(KeysError) as ctx:
+                resolve_et_credentials(path)
+        self.assert_no_secret_leak(ctx.exception)
+
+    def test_only_elegant_themes_keeps_list_keys_empty(self):
+        path = self.write_object({"elegant_themes": ET})
+        self.assertEqual(list_keys(path), [])
+        self.assertEqual(resolve_et_credentials(path), (ET["username"], ET["api_key"]))
+
+    def test_only_keys_still_works_with_no_elegant_themes(self):
+        path = self.write_keys([KEY_A])
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("ET_USERNAME", None)
+            os.environ.pop("ET_API_KEY", None)
+            self.assertIsNone(resolve_et_credentials(path))
+        self.assertEqual(load_keys(path), [KEY_A])
+
+    @unittest.skipUnless(os.name == "posix", "POSIX file mode only")
+    def test_permission_warning_still_fires_for_elegant_themes_only_file(self):
+        path = self.write_object({"elegant_themes": ET})
+        path.chmod(0o644)
+        import io
+        from contextlib import redirect_stderr
+        buf = io.StringIO()
+        with redirect_stderr(buf):
+            resolve_et_credentials(path)
+        self.assertIn("chmod 600", buf.getvalue())
 
 
 if __name__ == "__main__":
