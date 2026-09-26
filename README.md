@@ -67,7 +67,7 @@ Divi's own builder stores).
 | **Python 3.10+** | Standard library only — no `pip install` for anything the skill ships. |
 | **Node 20+** | Only needed for `--exact` (the real-Divi Playground preview). The default preview doesn't need it. |
 | **A Divi 4 site with the REST API reachable** | The standard WordPress REST API (`/wp-json/wp/v2/...`), enabled by default. |
-| **An Elegant Themes account** (username + API key) | Lets the previewer download a real copy of Divi once; after that it's cached and works offline for that version. The API key is in your Elegant Themes Members Area → **Account → API Key**. |
+| **An Elegant Themes account** (username + API key) | Lets the previewer download a real copy of Divi once; after that it's cached and works offline for that version. The API key is in your Elegant Themes Members Area → **Account → API Key**. Put it in `keys.json`'s `elegant_themes` section (below), or env `ET_USERNAME`/`ET_API_KEY`. |
 
 ## Install
 
@@ -118,8 +118,16 @@ python3 scripts/preview.py doctor
 ```
 
 This reports the Python interpreter, the cache directory, which Divi versions are already cached,
-and whether Node is present (only needed for `--exact`). Then warm the cache with a real Divi
-download:
+whether Node is present (only needed for `--exact`), and whether Elegant Themes credentials are
+available and where from (`env`, `keys.json`, or `none`). Then warm the cache with a real Divi
+download, with your Elegant Themes credentials in `keys.json`'s `elegant_themes` section (see
+[Connect your sites](#connect-your-sites-keysjson) below):
+
+```bash
+python3 scripts/preview.py fetch-divi latest
+```
+
+Or, without a `keys.json`, env vars work the same way (and always take priority over the file):
 
 ```bash
 ET_USERNAME=you@example.com ET_API_KEY=your-api-key python3 scripts/preview.py fetch-divi latest
@@ -143,6 +151,10 @@ to you exactly once.
 
 ```json
 {
+  "elegant_themes": {
+    "username": "you@example.com",
+    "api_key": "your-elegant-themes-api-key"
+  },
   "keys": [
     {
       "name": "Client A",
@@ -154,9 +166,18 @@ to you exactly once.
 }
 ```
 
-Every entry needs `name`, `site`, `user` and `key`, each a non-empty string; other keys in an entry
-are allowed and ignored. Entry names must be unique, case-insensitively (JSON Schema on its own
-can't express that uniqueness rule, so `wp_keys.py` enforces it itself and refuses a duplicate).
+Both top-level sections are optional; a file may hold either one or both.
+
+Every `keys` entry needs `name`, `site`, `user` and `key`, each a non-empty string; other keys in
+an entry are allowed and ignored. Entry names must be unique, case-insensitively (JSON Schema on
+its own can't express that uniqueness rule, so `wp_keys.py` enforces it itself and refuses a
+duplicate).
+
+`elegant_themes`, if present, needs `username` and `api_key`, each a non-empty string — find your
+API key in the Elegant Themes Members Area → **Account → API Key**. It's used to download Divi
+for the local preview (`fetch-divi`, and `render`/`serve`/`doctor` whenever a version isn't
+already cached). Env vars `ET_USERNAME`/`ET_API_KEY` always override this section when both are
+set; leave the section out entirely to rely on the env vars only.
 
 <details>
 <summary>JSON Schema (draft 2020-12)</summary>
@@ -166,8 +187,16 @@ can't express that uniqueness rule, so `wp_keys.py` enforces it itself and refus
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "divi-page-builder keys.json",
   "type": "object",
-  "required": ["keys"],
   "properties": {
+    "elegant_themes": {
+      "type": "object",
+      "required": ["username", "api_key"],
+      "properties": {
+        "username": { "type": "string", "minLength": 1 },
+        "api_key": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": true
+    },
     "keys": {
       "type": "array",
       "items": {
@@ -209,11 +238,14 @@ POSIX system, the scripts print a warning (`keys.json is readable by other users
 
 ### 4. Using it
 
-List what's configured (never prints a key value):
+List what's configured (never prints a key value or the Elegant Themes api_key):
 
 ```bash
 python3 scripts/publish.py keys
 ```
+
+This prints `{"keys": [...], "elegant_themes": {"username": "...", "configured": true}}` (or
+`{"configured": false}` when the file has no `elegant_themes` section).
 
 Select a site by name (case-insensitive):
 
@@ -278,7 +310,7 @@ this table covers the common path.
 | `scripts/extract_tokens.py` | `--key NAME` / `--site URL --user USER` (env `WP_APP_PASSWORD`), `--page ID` (repeatable), `--shortcode-file FILE --url URL` (offline), `--out FILE` | Extract a site's design tokens (colors, fonts, spacing, module styles) into `tokens.json`, from live REST pages or an offline shortcode file. |
 | `scripts/validate.py` | `PAGE`, `--tokens FILE`, `--baseline FILE`, `--site-url URL`, `--fragment`, `--json` | Validate shortcode against Divi's module schema: structure, heading outline, attributes, value formats, and (with `--tokens`) off-brand values. `--baseline` only fails on *new* errors versus an original page. |
 | `scripts/page_edit.py` | `PAGE outline` / `extract PATH` / `replace PATH FILE` / `insert-after PATH FILE` / `insert-before PATH FILE` / `set-attr PATH NAME VALUE` / `delete PATH`, `--out FILE` | Surgical edits to one node of a page by path (e.g. `et_pb_section[1] > et_pb_row[0] > et_pb_column[2]`); everything outside the targeted node stays byte-identical. |
-| `scripts/preview.py` | `render PAGE [--out FILE]`, `serve [--pages DIR] [--port N]`, `doctor`, `fetch-divi VERSION`; both `render`/`serve` take `--tokens FILE`, `--divi VER`, `--no-js`, `--exact` | Default (pure-Python, stdlib-only) local preview: one standalone HTML file, or a live-reload server. `--exact` hands off to the Node preview for full fidelity. |
+| `scripts/preview.py` | `render PAGE [--out FILE]`, `serve [--pages DIR] [--port N]`, `doctor`, `fetch-divi VERSION`; `render`/`serve`/`doctor`/`fetch-divi` all take `--keys PATH`, and `render`/`serve` also take `--tokens FILE`, `--divi VER`, `--no-js`, `--exact` | Default (pure-Python, stdlib-only) local preview: one standalone HTML file, or a live-reload server. `--exact` hands off to the Node preview for full fidelity, passing it the same resolved Elegant Themes credentials. |
 | `scripts/preview/preview.mjs` | `serve [--pages DIR] [--port N]`, `render LAYOUT.txt [--out FILE]`, `fetch-divi VER\|latest`, `doctor`; both take `--divi VER` / `--tokens FILE` | The real Divi 4 theme running on WordPress Playground (Node 20+, WebAssembly PHP). Invoked automatically by `preview.py ... --exact`. |
 | `scripts/publish.py` | `keys`, `fetch --page-id ID --out FILE`, `media FILE --alt TEXT`, `draft PAGE --title T [--page-id ID] [--baseline F] [--tokens F] [--page-fields JSON]`, `publish --page-id ID --yes [--content F] [--status publish]` | Push to WordPress over REST: list configured sites, fetch a page's current content, upload one image, save a draft (validates + uploads local images first), and publish (requires `--yes`). |
 
@@ -380,7 +412,7 @@ validator schema, generate docs, then check examples and run tests — see
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `render`/`serve`/`fetch-divi` fails: "Divi is not cached for this version: set ET_USERNAME and ET_API_KEY" | The requested Divi version isn't cached yet and no credentials are set. | Set `ET_USERNAME`/`ET_API_KEY` (an Elegant Themes account's API key), or use a version already cached (`preview.py doctor` lists them). |
+| `render`/`serve`/`fetch-divi` fails: "Divi is not cached for this version: set ET_USERNAME and ET_API_KEY" | The requested Divi version isn't cached yet and no credentials are set. | Add an `elegant_themes` section to `keys.json` (see [Connect your sites](#connect-your-sites-keysjson)), pass `--keys PATH`, set `ET_USERNAME`/`ET_API_KEY` (an Elegant Themes account's API key), or use a version already cached (`preview.py doctor` lists them and reports where its credentials come from). |
 | `--exact` fails: "`--exact` needs Node 20+" | Node isn't installed, isn't on `PATH`, or is older than 20. | Install Node ≥ 20 from nodejs.org, or drop `--exact` to use the default Python preview. |
 | A download fails with `HTTP 429` / "rate-limited" | Elegant Themes' API rate limit (~15 calls per 5 minutes). | Wait a few minutes; a cached Divi version never calls the API again. |
 | Coverage summary says "use `--exact`" for a module | The Python renderer doesn't implement that module yet. | Re-render with `--exact` to see it via the real Divi theme. |

@@ -39,6 +39,11 @@ it lives only in that one file on disk, outside version control.
 When you're done with a key, revoke it on the site's own profile screen: **Users → Profile →
 Application Passwords**.
 
+The same `keys.json` may also hold an optional top-level `elegant_themes` section (`{"username":
+"...", "api_key": "..."}`), used for the local preview's Divi download — see `reference/preview.md`.
+`publish.py keys` reports it too: `{"username": "...", "configured": true}`, or `{"configured":
+false}` when the section is absent, and never the `api_key`.
+
 ## Using publish.py
 
 `scripts/publish.py` wraps the REST flow below into five commands. Credentials come from either

@@ -28,7 +28,7 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 - **Edits:** use `scripts/page_edit.py`. Everything you weren't asked to change stays byte-identical.
 - **Testimonials, reviews, prices and stats:** only as provided in the brief. Never invent them.
 - **Always push as a draft first.**
-- **Never print or write credentials.** They come from `keys.json` (outside the repo, `chmod 600`) or env `WP_APP_PASSWORD`; `ET_USERNAME` / `ET_API_KEY` still come from the environment only.
+- **Never print or write credentials.** They come from `keys.json` (outside the repo, `chmod 600`) or env `WP_APP_PASSWORD`; `ET_USERNAME` / `ET_API_KEY` come from env or keys.json's `elegant_themes` section, env winning.
 
 ## Scripts
 | script | purpose |

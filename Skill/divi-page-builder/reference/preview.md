@@ -163,12 +163,14 @@ doesn't compare tuned vs. held-out for a single feature set.
   any remote image referenced by URL only render correctly with network access; without it the
   page still renders, just with fallback fonts and missing images.
 - **One Elegant Themes download per Divi version.** `fetch-divi` (and an uncached `render`/
-  `serve`) needs `ET_USERNAME`/`ET_API_KEY` (an Elegant Themes account's API key) the *first*
-  time a given Divi version is used; after that it's cached and fully offline for that version.
-  Credentials are read only from the environment, used only in request URLs, and every error
-  message redacts them before printing — never logged or written to disk. The API rate-limits at
-  about 15 calls per 5 minutes; a cached version never calls it, so this only affects fetching new
-  versions.
+  `serve`/`doctor`) needs Elegant Themes credentials the *first* time a given Divi version is
+  used; after that it's cached and fully offline for that version. Credentials come from env
+  `ET_USERNAME`/`ET_API_KEY` if both are set, else the keys.json file's `elegant_themes` section
+  (`--keys PATH`, else env `DIVI_KEYS_FILE`, else `~/.config/divi-page-builder/keys.json` — see
+  `reference/publishing.md`); env always wins when both are set. They're used only in request
+  URLs, and every error message redacts them before printing — never logged or written to disk.
+  The API rate-limits at about 15 calls per 5 minutes; a cached version never calls it, so this
+  only affects fetching new versions.
 
 ## 6. Commands
 
@@ -222,20 +224,25 @@ cache dir: /Users/you/.cache/divi-page-builder
 cached Divi versions: 4.27.3, 4.27.9
 jQuery: CDN (no cached WordPress copy)
 node: /usr/local/bin/node v24.1.0 (only needed for --exact)
+Elegant Themes credentials: keys.json
 ```
 
-Reports Python, the cache dir, cached Divi versions, where jQuery will come from, and whether
-Node is present — Node is only needed for `--exact`.
+Reports Python, the cache dir, cached Divi versions, where jQuery will come from, whether Node is
+present (only needed for `--exact`), and whether Elegant Themes credentials are available and
+where from — `env`, `keys.json`, or `none` — without ever printing them. `--keys PATH` picks the
+keys.json file, same as everywhere else.
 
 ### `fetch-divi` — warm the cache
 
 ```bash
-ET_USERNAME=you@example.com ET_API_KEY=your-api-key python3 scripts/preview.py fetch-divi 4.27.9
+python3 scripts/preview.py fetch-divi 4.27.9 --keys ~/.config/divi-page-builder/keys.json
 python3 scripts/preview.py fetch-divi latest
+ET_USERNAME=you@example.com ET_API_KEY=your-api-key python3 scripts/preview.py fetch-divi 4.27.9
 ```
 
-The only command that talks to Elegant Themes. Downloads and unpacks the requested version (or
-the account's latest) into the cache and exits.
+The only command that always talks to Elegant Themes. Downloads and unpacks the requested version
+(or the account's latest) into the cache and exits, using the credentials described above
+(`--keys PATH`, or env `ET_USERNAME`/`ET_API_KEY`, which wins when both are set).
 
 ### Version selection
 
@@ -275,7 +282,7 @@ workflow:
 |---|---|---|
 | A `render`ed file's icons are missing/broken when opened over `file://` | An old/manual build referenced fonts by a relative or `file://` path instead of embedding them. | `preview.py render` always embeds icon fonts (and all local assets) as `data:` URIs in standalone output — it never emits a `file://` URL. If you see this, you're not looking at `preview.py`'s own output; `serve` instead maps assets under `/__divi/…`, which needs the server running. |
 | `--exact` fails with `preview: … --exact needs Node 20+ …` and exits `2` | Node isn't installed, isn't on `PATH`, or is older than 20 (the message then starts `found Node v18…`). | Install Node ≥ 20 from https://nodejs.org/, or drop `--exact` to use the Python preview. `doctor` reports the Node version it finds and flags one that's too old. |
-| `render`/`serve`/`fetch-divi` fails with "Divi is not cached for this version: set ET_USERNAME and ET_API_KEY" | The requested Divi version isn't cached and no credentials are set. | Set `ET_USERNAME`/`ET_API_KEY` (Elegant Themes account → API), or use a version that's already cached (`doctor` lists them). |
+| `render`/`serve`/`fetch-divi` fails with "Divi is not cached for this version: set ET_USERNAME and ET_API_KEY" | The requested Divi version isn't cached and no credentials are set. | Add an `elegant_themes` section to `keys.json` (`--keys PATH` picks the file), set `ET_USERNAME`/`ET_API_KEY` (Elegant Themes account → API), or use a version that's already cached (`doctor` lists them and reports where its credentials come from). |
 | A download fails with `HTTP 429` / "rate-limited" | Elegant Themes' rate limit (~15 calls / 5 min). | Wait a few minutes. A cached version never calls the API, so this only affects fetching a *new* version. |
 | `serve` returns a `500` page with a Python traceback | The `.txt` page failed to render (bad encoding, a renderer bug). | The traceback is printed on the page itself and to stderr; the server keeps running and other pages keep serving. Fix the page (or file a bug) and reload — no restart needed. |
 | The coverage summary says "use `--exact`" for a module | The Python renderer doesn't implement that module (see [§3](#3-supported-modules)). | Add `--exact` to see it rendered by real Divi. |
@@ -295,7 +302,7 @@ Playground:
 | Rendered fonts look slightly different from the live site | Divi's "inline Google Fonts" mode fetches font CSS server-side with a non-browser user agent, which can return TTF instead of the WOFF2 a browser gets. | Already handled: the mu-plugin turns that option off for preview requests. If you still see a difference, check network access — without it, fonts fall back to system fonts entirely. |
 | `npx` seems to hang for ~70 s before failing | `npx` tried to revalidate the pinned CLI version against the npm registry while offline. | Already handled: `preview.mjs` always passes `--prefer-offline`. If you invoke the Playground CLI directly (not through `preview.mjs`), add it yourself. |
 | A stray Playground server keeps a port busy after Ctrl-C or a crash | `serve`'s child process wasn't cleaned up. | `preview.mjs` kills the whole process group on `SIGINT`/`SIGTERM`/exit; if one is still running, find it with `lsof -i :9400` (or your `--port`) and kill it manually. |
-| Credentials show up somewhere they shouldn't | This would be a bug. | `ET_USERNAME`/`ET_API_KEY` are read only from `process.env`, used only in request URLs, and every error message that could echo a URL redacts them first. File an issue if you find a counterexample. |
+| Credentials show up somewhere they shouldn't | This would be a bug. | `preview.mjs` reads `ET_USERNAME`/`ET_API_KEY` only from `process.env` (it never parses `keys.json` itself); `preview.py --exact` resolves them from env or `keys.json` and hands them to the child through its environment. Used only in request URLs, and every error message that could echo a URL redacts them first. File an issue if you find a counterexample. |
 
 **Order: local preview first, WordPress draft second.** The user approves the local preview before anything
 is pushed; only then does the WordPress draft preview (`scripts/publish.py draft`) serve as the final check
