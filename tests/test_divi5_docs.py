@@ -478,6 +478,24 @@ class Divi5RecipesTest(unittest.TestCase):
             self.assertIn("- [ ] contrast:", checklist, name)
             self.assertIn("](../README.md#contrast)", checklist, name)
 
+    def test_markdown_table_rows_match_their_header(self):
+        # A row with a missing or an extra cell loses text in GFM (a hero's fallback column once did).
+        pipe = re.compile(r"(?<!\\)\|")
+        bad = []
+        for page in sorted(RECIPES5.rglob("*.md")):
+            prose = re.sub(r"```.*?```", lambda m: "\n" * m.group(0).count("\n"), page.read_text(), flags=re.S)
+            header = None
+            for n, line in enumerate(prose.splitlines(), 1):
+                if not line.startswith("|"):
+                    header = None
+                    continue
+                cells = len(pipe.split(line.strip().strip("|")))
+                if header is None:
+                    header = cells
+                elif cells != header:
+                    bad.append((page.relative_to(RECIPES5).as_posix(), n, cells, header))
+        self.assertEqual(bad, [])
+
     def test_readme_indexes_every_divi5_recipe_and_the_sample_tokens(self):
         readme = (RECIPES5 / "README.md").read_text()
         self.assertIn("](sample-tokens.json)", readme)
@@ -619,7 +637,7 @@ class PortRecipeTest(unittest.TestCase):
             example = BLOCK5.findall(draft)[0].strip()
             self.assertEqual([f.code for f in validate_source(example, fragment=True) if f.level == "error"], [])
             with contextlib.redirect_stderr(io.StringIO()) as se:
-                self.assertEqual(port_recipe.main(argv), 1)
+                self.assertEqual(port_recipe.main(argv), 2)       # 2: the target exists, no --force
             self.assertIn("--force", se.getvalue())
             self.assertEqual(out.read_text(), draft)
 
@@ -636,7 +654,7 @@ class PortRecipeTest(unittest.TestCase):
             argv = [str(SKILL / "recipes" / "sections" / "hero-split.md"), "--converted", str(converted),
                     "--out", str(out), "--tokens", str(SAMPLE5)]
             with contextlib.redirect_stdout(io.StringIO()) as so:
-                self.assertEqual(port_recipe.main(argv), 1)
+                self.assertEqual(port_recipe.main(argv), 1)       # 1: draft written, with validation errors
             self.assertIn("E5_BAD_VALUE", so.getvalue())
             self.assertIn("1 error(s)", so.getvalue())
             self.assertIn("E5_BAD_VALUE", out.read_text())      # the draft is written, findings in its comment

@@ -52,4 +52,5 @@ Live check: clicking the second control moved `et_pb_tab_active` to it and showe
 - [ ] Only after that approval: `python3 scripts/publish.py draft page.html --site "$SITE" --user "$WP_USER" --title "…"` — review its `preview_url` before publishing ([publishing](../../../reference/publishing.md))
 - [ ] exactly one `h2` above the tabs — no `h1` on this section; every tab's copy reads on its own (all panels are in the page source)
 - [ ] on the draft, clicking each tab control shows its panel
+- [ ] on the draft, the tabs work from the keyboard: Tab reaches every tab control with a visible focus, Enter opens its panel, and check whether the arrow keys move between tabs
 - [ ] contrast: every text color on its background is at least 4.5:1 (3:1 only for text of 24px, or 19px bold, and up), hover and active states included ([README §2](../README.md#contrast)): the navy active label on orange 5.3:1, navy inactive labels on white 14.9:1, `#475569` panel text on white 7.6:1

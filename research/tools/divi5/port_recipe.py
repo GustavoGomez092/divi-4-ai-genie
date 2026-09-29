@@ -16,11 +16,14 @@
    fonts and lengths with the tokens' `$variable()$` reference when a global color or variable has that exact
    value *and* is used in that role (its `roles`); give custom attribute rows fresh ids,
    uuid5(NAMESPACE_URL, "divi-genie/recipes/divi5/<recipe>/<n>").
-4. Validate it (validate_source, fragment mode, against the tokens) and print the findings; any error makes the
-   exit status 1 (the draft is still written, the findings in its comment, for the human pass to fix).
+4. Validate it (validate_source, fragment mode, against the tokens) and print the findings.
 5. Write a draft recipes/divi5/sections/<name>.md: pointer to the shared recipe, structure tree, field-mapping
    and responsive stubs listing what the example sets, the canonical worked example, the Divi 5 checklist.
    An existing file is never overwritten without --force (it has had its human pass).
+
+Exit status: 0 = draft written, no validation errors; 1 = draft written, but the port has validation errors (the
+findings are in the draft's comment, for the human pass to fix); 2 = nothing written, the target exists and
+--force was not given.
 
 The draft is a starting point. The human pass then fixes awkward converter output, keeps only the attributes a
 person would set, fills in the field mapping (token path per attribute) and checks the render.
@@ -364,7 +367,7 @@ def main(argv=None) -> int:
     out = Path(a.out) if a.out else recipe.parent.parent / "divi5" / recipe.parent.name / recipe.name
     if out.exists() and not a.force:
         print(f"{out} exists (it may have had its human pass); pass --force to overwrite it", file=sys.stderr)
-        return 1
+        return 2
     text = recipe.read_text(encoding="utf-8")
     title = (re.search(r"^# (.+)$", text, re.M) or [None, name])[1]
     tokens = json.loads(Path(a.tokens).read_text(encoding="utf-8"))
