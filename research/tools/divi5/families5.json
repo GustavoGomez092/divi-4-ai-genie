@@ -4,7 +4,7 @@
   "text": "a string (plain text, CSS text, an id, a date, a CSS value Divi passes through verbatim)",
   "html": "a string of HTML; innerContent rich text/code, stored JSON-escaped (\\u003c...) in the block comment",
   "color": "hex (#rgb/#rrggbb/#rrggbbaa), rgb()/rgba()/hsl()/hsla() (any case), transparent, or a $variable({\"type\":\"color\",...})$ global color reference",
-  "length": "a CSS length: number + unit (one of units when given), a bare 0, auto/none/inherit/initial, calc()/clamp()/min()/max()/var(), a $variable({\"type\":\"content\",...})$ number variable, or \"\" (unset)",
+  "length": "a CSS length: number + unit (one of units when given), a unitless number (as Divi 4 accepts; Divi 5 writes lineHeight/letterSpacing verbatim, Font.php:689-695), auto/none/inherit/initial/unset/normal/fit-content/min-content/max-content, calc()/clamp()/min()/max()/var(), a $variable({\"type\":\"content\",...})$ number variable, or \"\" (unset)",
   "number": "a number or a numeric string (unitless), or a $variable number reference",
   "enum": "one of options (strings); with multiple: true, a list of options",
   "onoff": "\"on\" or \"off\"",
@@ -16,7 +16,7 @@
   "gradient": "a list of gradient stops [{position: number|string, color: color}]",
   "object": "a JSON object whose keys are not validated (opaque)",
   "font-family": "a font family name string, or a $variable({\"type\":\"content\",...})$ global font reference",
-  "font-weight": "100..900 as a string/number, normal/bold/lighter/bolder, a Divi global-font weight token (\"<Font>_weight\", written by Divi AI), or a $variable reference",
+  "font-weight": "1..1000 as a string/number (Divi writes it into CSS verbatim; off the hundreds is only a warning), normal/bold/lighter/bolder, \"variable\" (Divi 5.13 variable-font mode, Font.php:360), a Divi global-font weight token (\"<Font>_weight\", written by Divi AI), or a $variable reference",
   "json": "any JSON value (list, object or scalar); structure not validated"
  },
  "leaves": {
@@ -245,7 +245,7 @@
  },
  "fragments": {
   "font": {
-   "_notes": "divi/font field configs (JS): range fields are lengths (units Hu = CSS length units); columnCount/weightFineTune use allowedUnits [\"\"] (unitless); capitalization/style options from JS Ju subsets; lineStyle JS Qu; opticalSizing literal; writingMode JS td; textAlign JS Zu() plus D4 justify. headingLevel/textAlign are hover:false sticky:false.",
+   "_notes": "divi/font field configs (JS): range fields are lengths (units Hu = CSS length units); columnCount/weightFineTune use allowedUnits [\"\"] (unitless); capitalization/style options from JS Ju subsets; lineStyle JS Qu; opticalSizing literal; writingMode JS td; textAlign JS Zu() plus D4 justify. headingLevel/textAlign are hover:false sticky:false. variationSettings (object, \"add\") and weight \"variable\": Divi 5.13 variable fonts, evidence Font.php:340-360 + module.js (Task 5 fix round 1).",
    "capitalization": {
     "type": "enum",
     "options": [
@@ -312,6 +312,11 @@
    "underlineOffset": "length",
    "weight": "font-weight",
    "weightFineTune": "number",
+   "variationSettings": {
+    "type": "object",
+    "add": "Divi 5.13 variable fonts: {axisTag: value} (e.g. {\"wght\": 650}); read by StyleLibrary/Declarations/Font/Font.php:342-360 (keys upper-cased to font-variation-settings axes) and VB module.js getAttrSubnameValue subname variationSettings; not declared by the 5.13.1 union dump",
+    "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)"
+   },
    "writingMode": {
     "type": "enum",
     "options": [

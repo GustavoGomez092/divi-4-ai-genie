@@ -126,10 +126,18 @@ class ValueProblemsTest(unittest.TestCase):
         self.ok(leaf, "10px", "-12px", "1.4em", "100%", "0", "0px", "auto", "none", "600ms", "0deg", "",
                 "calc(100% - 20px)", "clamp(48px, 8vw, 96px)", "min(10px, 2vw)", "var(--gvid-x)",
                 var("gvid-r6radius01", "content"), 0)
-        self.bad(leaf, "10pz", "12", "px", "ten", "10 px", 12, [], var("gcid-a", "color"))
+        self.bad(leaf, "10pz", "px", "ten", "10 px", True, [], var("gcid-a", "color"))
         units = {"type": "length", "units": ["px", "em"]}
         self.ok(units, "10px", "2em", "0", "auto")
         self.bad(units, "10%", "3vw")
+
+    def test_length_parity_with_divi4(self):
+        """Divi 5 writes lineHeight/letterSpacing/sizes verbatim into CSS (Font.php); like Divi 4's _length_ok, a
+        unitless number and the CSS keywords are fine, plus the intrinsic sizing keywords."""
+        for leaf in ({"type": "length"}, {"type": "length", "units": ["px", "em"]}):
+            self.ok(leaf, "1.5", "12", "-2", 12, 1.7, "normal", "unset", "Normal", "inherit", "initial",
+                    "fit-content", "min-content", "max-content")
+        self.bad({"type": "length"}, "wide", "1.5.2", "fit-contents")
 
     def test_number(self):
         leaf = {"type": "number"}
@@ -191,8 +199,9 @@ class ValueProblemsTest(unittest.TestCase):
         self.ok({"type": "font-family"}, "Montserrat", "Open Sans", var("gvid-font", "content"),
                 var("--et_global_heading_font", "content"))
         self.bad({"type": "font-family"}, 12, ["Lato"])
-        self.ok({"type": "font-weight"}, "700", 400, "normal", "bold", "Montserrat_weight", "Open Sans_weight", "")
-        self.bad({"type": "font-weight"}, "heavy", "750", 1000)
+        self.ok({"type": "font-weight"}, "700", 400, "normal", "bold", "Montserrat_weight", "Open Sans_weight", "",
+                "variable", "750", 750, "1", "1000", 1000)
+        self.bad({"type": "font-weight"}, "heavy", "0", "1001", 1001, 0, True, "Variable")
 
     def test_object_and_json(self):
         self.ok({"type": "object"}, {"x": "0deg"}, [], "")
@@ -236,6 +245,27 @@ class CheckAttributesTest(unittest.TestCase):
         attrs["content"]["desktop"] = {"value": "x"}
         f = [(f.code, f.attr) for f in run(page(block("text", attrs))) if f.level == "error"]
         self.assertEqual(f, [("E5_UNKNOWN_ATTR", "content.desktop.value")])
+
+    def body_font(self, value):
+        font = {"desktop": {"value": value}}
+        return page(block("text", text_attrs(content={"innerContent": {"desktop": {"value": "<p>x</p>"}},
+                                                      "decoration": {"bodyFont": {"body": {"font": font}}}})))
+
+    def test_variable_font_weight(self):
+        """Divi 5.13 variable fonts: weight "variable" with weightFineTune or variationSettings (Font.php:340-360)."""
+        for value in ({"weight": "variable", "weightFineTune": "650"},
+                      {"weight": "variable", "variationSettings": {"wght": 650}},
+                      {"family": "Inter", "weight": "variable", "variationSettings": {"wght": 650, "opsz": "14"},
+                       "opticalSizing": "auto"}):
+            with self.subTest(value=value):
+                self.assertEqual([(f.code, f.attr) for f in run(self.body_font(value)) if f.level == "error"], [])
+
+    def test_font_weight_off_the_hundreds_warns(self):
+        found = [(f.level, f.code, f.value) for f in run(self.body_font({"weight": "750"}))
+                 if f.code in ("W_FONT_WEIGHT", "E5_BAD_VALUE")]
+        self.assertEqual(found, [("warning", "W_FONT_WEIGHT", "750")])
+        for weight in ("700", "variable", "Montserrat_weight", "bold"):
+            self.assertNotIn("W_FONT_WEIGHT", codes(self.body_font({"weight": weight})))
 
     def test_bp_false_leaf_on_tablet(self):
         font = {"desktop": {"value": {"headingLevel": "h2"}}, "tablet": {"value": {"headingLevel": "h3"}}}
@@ -352,7 +382,8 @@ class CheckAttributesTest(unittest.TestCase):
         bg = {"tablet": {"value": {"color": "#fff"}}}
         self.assertIn("W5_HOVER_WITHOUT_DESKTOP",
                       codes(page(block("text", text_attrs(module={"decoration": {"background": bg}})))))
-        bg = {"desktop": {"value": {"color": "#000"}, "hover": {"color": "#fff"}}, "phone": {"value": {"color": "#111"}}}
+        bg = {"desktop": {"value": {"color": "#000"}, "hover": {"color": "#fff"}},
+              "phone": {"value": {"color": "#111"}}}
         self.assertNotIn("W5_HOVER_WITHOUT_DESKTOP",
                          codes(page(block("text", text_attrs(module={"decoration": {"background": bg}})))))
 
@@ -404,7 +435,9 @@ class TokensWiringTest(unittest.TestCase):
 
     def test_malformed_tokens_do_not_crash(self):
         for tokens in ({"presets": [1, 2]}, {"presets": {"x": "y"}, "colors": [], "variables": "v", "site": None},
-                       {"colors": {"global": ["gcid-a"]}}):
+                       {"colors": {"global": ["gcid-a"]}}, {"colors": {"palette": 5}},
+                       {"colors": {"palette": True}}, {"colors": {"palette": {"a": 1}}}, {"colors": {"palette": "x"}},
+                       {"colors": {"palette": [None, 1, {"global": 3}]}}, {"site": {"url": 5, "divi_version": 5}}):
             with self.subTest(tokens=tokens):
                 self.found(tokens=tokens)
 

@@ -111,7 +111,8 @@ def _tokens5(tokens: Optional[dict], site_url: Optional[str]) -> dict:
     known_vars = None
     if t:
         names = set(_dict(colors.get("global")))
-        names |= {p["global"] for p in colors.get("palette") or [] if isinstance(p, dict)
+        palette = colors.get("palette")
+        names |= {p["global"] for p in (palette if isinstance(palette, list) else ()) if isinstance(p, dict)
                   and isinstance(p.get("global"), str)}
         for key, value in _dict(t.get("variables")).items():
             names.add(key)

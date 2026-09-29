@@ -32,7 +32,9 @@ _VAR_FUNC = re.compile(r"var\(--[\w-]+(?:\s*,.*)?\)", re.S)
 _LENGTH_FUNC = re.compile(r"(?i:calc|clamp|min|max|var)\(.+\)", re.S)
 _NUMBER = re.compile(r"-?(?:\d+\.?\d*|\.\d+)")
 _NUM_UNIT = re.compile(r"(-?(?:\d+\.?\d*|\.\d+))([a-zA-Z%]*)")
-_LENGTH_KEYWORDS = frozenset({"auto", "none", "inherit", "initial"})
+# Divi 4 CSS_KEYWORDS (divi_checks_values.py) plus the intrinsic sizing keywords.
+_LENGTH_KEYWORDS = frozenset({"auto", "none", "inherit", "initial", "unset", "normal", "fit-content", "min-content",
+                              "max-content"})
 _GENERIC_UNITS = frozenset({"px", "%", "em", "rem", "ex", "ch", "vw", "vh", "vmin", "vmax", "cm", "mm", "in", "pt",
                             "pc", "deg", "rad", "turn", "ms", "s", "fr"})
 _FONT_WEIGHT_WORDS = frozenset({"normal", "bold", "lighter", "bolder"})
@@ -142,17 +144,17 @@ def _length_problem(value, units=None) -> Optional[str]:
     if isinstance(value, bool) or not isinstance(value, (str, int, float)):
         return "expected a CSS length string such as 10px"
     if not isinstance(value, str):
-        return None if value == 0 else f"{value} has no unit (write e.g. {value}px)"
-    if value == "" or value in _LENGTH_KEYWORDS:
+        return None  # a unitless number, as Divi 4 accepts (Divi 5 writes it into the CSS verbatim)
+    if value == "" or value.lower() in _LENGTH_KEYWORDS:
         return None
     if _LENGTH_FUNC.fullmatch(value):
         return None if _balanced(value) else "unbalanced parentheses"
     m = _NUM_UNIT.fullmatch(value)
     if not m:
         return "not a number with a CSS unit"
-    number, unit = m.group(1), m.group(2).lower()
+    unit = m.group(2).lower()
     if unit == "":
-        return None if float(number) == 0 else f"'{value}' has no unit (write e.g. {value}px)"
+        return None  # unitless (line-height 1.5, a 0), as Divi 4's _length_ok accepts whatever the units
     allowed = [u.lower() for u in units] if units else _GENERIC_UNITS
     if unit not in allowed:
         return f"unit '{m.group(2)}' is not one of {', '.join(units) if units else 'the CSS length units'}"
@@ -160,15 +162,25 @@ def _length_problem(value, units=None) -> Optional[str]:
 
 
 def _font_weight_ok(value) -> bool:
+    """1..1000 (Divi writes a numeric weight into the CSS verbatim; off the hundreds is W_FONT_WEIGHT), a CSS weight
+    keyword, "variable" (Divi 5.13 variable-font mode, Font.php:360) or a global-font "<Font>_weight" token."""
     if isinstance(value, bool):
         return False
     if isinstance(value, int):
-        return 100 <= value <= 900 and value % 100 == 0
+        return 1 <= value <= 1000
     if not isinstance(value, str):
         return False
     if value.isdigit():
         return _font_weight_ok(int(value))
-    return value in _FONT_WEIGHT_WORDS or (value.endswith("_weight") and len(value) > len("_weight"))
+    return value in _FONT_WEIGHT_WORDS or value == "variable" or (value.endswith("_weight")
+                                                                  and len(value) > len("_weight"))
+
+
+def _off_hundreds(value) -> bool:
+    """A valid numeric weight that is not 100, 200 … 900 (Divi 4's W_FONT_WEIGHT)."""
+    n = value if isinstance(value, int) and not isinstance(value, bool) else \
+        int(value) if isinstance(value, str) and value.isdigit() else None
+    return n is not None and 1 <= n <= 1000 and not (n % 100 == 0 and n <= 900)
 
 
 def _url_ok(value) -> bool:
@@ -278,7 +290,7 @@ _EXPECT = {
     "text": "a string",
     "html": "an HTML string",
     "font-family": "a font family name string",
-    "font-weight": "a font weight (100-900, normal, bold, lighter, bolder or a <Font>_weight token)",
+    "font-weight": "a font weight (1-1000, normal, bold, lighter, bolder, variable or a <Font>_weight token)",
     "object": "a JSON object",
 }
 
@@ -552,6 +564,10 @@ def _check_leaf(block, path, full, bp, leaf, value, report, site_host) -> None:
     for msg in value_problems5(leaf, value):
         report("error", "E5_BAD_VALUE", f"{full}: {msg}", node=block, path=path, attr=full, value=_show(value)[:200])
     t = leaf.get("type")
+    if t == "font-weight" and _off_hundreds(value):
+        report("warning", "W_FONT_WEIGHT", f"{full}: font weight '{value}' is not 100–900 in steps of 100",
+               node=block, path=path, attr=full, value=str(value),
+               hint="Use 100…900; fonts rarely ship other static weights.")
     if t == "image" and site_host and isinstance(value, str) and _VAR_MARK not in value:
         host = urlparse(value).hostname
         if host and host.lower() != site_host.lower():

@@ -325,6 +325,19 @@
       "active"
      ],
      "type": "color"
+    },
+    "variationSettings": {
+     "bp": true,
+     "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "object"
     }
    }
   },
@@ -401,6 +414,19 @@
       "active"
      ],
      "type": "color"
+    },
+    "variationSettings": {
+     "bp": true,
+     "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "object"
     }
    }
   },
@@ -878,6 +904,19 @@
       "active"
      ],
      "type": "color"
+    },
+    "variationSettings": {
+     "bp": true,
+     "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "object"
     }
    }
   },
@@ -954,6 +993,19 @@
       "active"
      ],
      "type": "color"
+    },
+    "variationSettings": {
+     "bp": true,
+     "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "object"
     }
    }
   },
@@ -1674,6 +1726,19 @@
       "active"
      ],
      "type": "color"
+    },
+    "variationSettings": {
+     "bp": true,
+     "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "object"
     }
    }
   },
@@ -1750,6 +1815,19 @@
       "active"
      ],
      "type": "color"
+    },
+    "variationSettings": {
+     "bp": true,
+     "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "object"
     }
    }
   },

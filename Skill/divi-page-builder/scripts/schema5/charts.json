@@ -275,6 +275,16 @@
      ],
      "type": "length"
     },
+    "variationSettings": {
+     "bp": true,
+     "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "object"
+    },
     "weight": {
      "bp": true,
      "states": [
@@ -883,6 +893,16 @@
      ],
      "type": "length"
     },
+    "variationSettings": {
+     "bp": true,
+     "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "object"
+    },
     "weight": {
      "bp": true,
      "states": [
@@ -1398,6 +1418,16 @@
       "sticky"
      ],
      "type": "length"
+    },
+    "variationSettings": {
+     "bp": true,
+     "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "object"
     },
     "weight": {
      "bp": true,
@@ -1994,6 +2024,16 @@
       "sticky"
      ],
      "type": "length"
+    },
+    "variationSettings": {
+     "bp": true,
+     "note": "variable-font axis settings; weight \"variable\" selects variable-weight mode (Font.php:360)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "object"
     },
     "weight": {
      "bp": true,
