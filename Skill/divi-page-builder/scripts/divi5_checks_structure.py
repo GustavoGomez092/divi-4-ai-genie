@@ -33,6 +33,11 @@ def _section_type(section: Block) -> str:
     return "regular" if t in (None, "") else t
 
 
+def _is_specialty_column(col: Block) -> bool:
+    """The column of a specialty section that holds the inner rows (Divi 4 specialty_columns)."""
+    return get_attr(col, "module.advanced.specialtyColumns") not in (None, "")
+
+
 def _col_type(col: Block):
     return get_attr(col, "module.advanced.type")
 
@@ -108,12 +113,13 @@ def _check_section(section: Block, path: str, schema5, paths: Dict[int, str], re
                        node=c, path=paths[id(c)])
         cols = [c for c in kids if c.name == "divi/column"]
         _check_columns5(section, path, cols, paths, report, None)
-        special = [c for c in cols if get_attr(c, "module.advanced.specialtyColumns") not in (None, "")
-                   or any(g.name == "divi/row-inner" for g in c.blocks)]
-        if len(special) > 1:
-            report("error", "E5_SECTION_TYPE",
-                   f"A specialty section holds inner rows in at most one column, not {len(special)}",
-                   node=section, path=path, hint="Put every divi/row-inner in the one specialty column.")
+        special = [c for c in cols if _is_specialty_column(c)]
+        if len(special) != 1:
+            report("error", "E5_SPECIALTY_COLUMN",
+                   f"A specialty section needs exactly one column with specialtyColumns, not {len(special)}",
+                   node=section, path=path, attr="module.advanced.specialtyColumns",
+                   hint='Set module.advanced.specialtyColumns (desktop value "2" or "3") on the one column that '
+                        "holds the divi/row-inner blocks.")
         for c in special:
             for g in c.blocks:
                 if g.name != "divi/row-inner":
@@ -135,10 +141,13 @@ def _check_parent(block: Block, mod, parent: Block, grandparent: Optional[Block]
         report("error", "E5_BAD_PARENT", f"[{block.name}] must be a direct child of {' or '.join(mod.parents)}",
                node=block, path=path)
     elif block.name == "divi/row-inner" and parent.name == "divi/column" and not (
-            grandparent is not None and grandparent.name == "divi/section"
+            _is_specialty_column(parent) and grandparent is not None and grandparent.name == "divi/section"
             and _section_type(grandparent) == "specialty"):
-        report("error", "E5_BAD_PARENT", "[divi/row-inner] is only allowed in a specialty section's column",
-               node=block, path=path, hint='Set the section\'s module.advanced.type to "specialty".')
+        report("error", "E5_INNER_ROW_PLACEMENT",
+               "[divi/row-inner] is only allowed in a specialty section's specialty column",
+               node=block, path=path,
+               hint='Use a section with module.advanced.type "specialty" and put the inner rows in its one column '
+                    "that sets module.advanced.specialtyColumns.")
 
 
 def check_structure5(doc, schema5, report, fragment: bool = False) -> None:

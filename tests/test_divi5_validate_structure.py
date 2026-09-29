@@ -12,8 +12,10 @@ EXPECT = {
     "unknown-block.html": "E5_UNKNOWN_BLOCK", "text-in-section.html": "E5_BAD_PARENT",
     "row-at-top.html": "E5_TOPLEVEL", "fullwidth-with-row.html": "E5_SECTION_TYPE",
     "columns-mismatch.html": "E5_COLUMNS", "two-h1.html": "E5_MULTIPLE_H1", "freeform.html": "E5_NOT_DIVI",
+    "specialty-no-specialty-column.html": "E5_SPECIALTY_COLUMN", "inner-row-misplaced.html": "E5_INNER_ROW_PLACEMENT",
 }
 STRUCTURE_CODES = {"E5_BAD_PARENT", "E5_TOPLEVEL", "E5_SECTION_TYPE", "E5_COLUMNS",
+                   "E5_SPECIALTY_COLUMN", "E5_INNER_ROW_PLACEMENT",
                    "E5_UNKNOWN_BLOCK", "E5_BAD_JSON", "E5_MISNESTED", "E5_UNCLOSED"}
 HEADING_CODES = {"E5_MULTIPLE_H1", "W_NO_H1", "W_HEADING_SKIP"}
 
@@ -201,18 +203,35 @@ class SectionType5Test(unittest.TestCase):
         inner = row(inner_col(H1, "1_2") + inner_col(text("<p>x</p>"), "1_2"), "1_2,1_2", "divi/row-inner")
         self.assertEqual(codes(self.specialty(text("<p>a</p>"), inner)), [])
 
-    def test_specialty_rejects_rows_and_two_inner_row_columns(self):
+    def test_specialty_rejects_rows(self):
+        self.assertEqual(sorted(codes(page(section(row(column(H1)), stype="specialty")))),
+                         ["E5_SECTION_TYPE", "E5_SPECIALTY_COLUMN"])
+
+    def test_specialty_needs_exactly_one_specialty_column(self):
+        # Divi 4 E_SPECIALTY_COLUMN: exactly one column carries specialtyColumns
+        plain = page(section(column(text("<p>a</p>"), "1_3") + column(H1, "2_3"), stype="specialty"))
+        self.assertEqual(codes(plain), ["E5_SPECIALTY_COLUMN"])
+        sc = ',"specialtyColumns":{"desktop":{"value":"2"}}'
+        inner = row(inner_col(text("<p>a</p>")), None, "divi/row-inner")
+        two = page(section(column(inner, "1_3", sc) + column(inner, "2_3", sc), stype="specialty"))
+        self.assertEqual(codes(two), ["E5_SPECIALTY_COLUMN"])
+
+    def test_inner_row_needs_the_specialty_column(self):
+        # Divi 4 E_INNER_ROW_PLACEMENT: a row-inner in a specialty-section column without specialtyColumns
         inner = row(inner_col(H1), None, "divi/row-inner")
-        self.assertEqual(codes(page(section(row(column(H1)), stype="specialty"))), ["E5_SECTION_TYPE"])
-        self.assertEqual(codes(self.specialty(inner, inner.replace("h1", "h2"), "")), ["E5_SECTION_TYPE"])
+        src = self.specialty(text("<p>a</p>"), inner, "")
+        self.assertEqual(sorted(codes(src)), ["E5_INNER_ROW_PLACEMENT", "E5_SPECIALTY_COLUMN"])
+        found = [f for f in validate_source(src) if f.code == "E5_INNER_ROW_PLACEMENT"]
+        self.assertEqual([(f.tag, f.path) for f in found],
+                         [("divi/row-inner", "placeholder[0] > section[0] > column[1] > row-inner[0]")])
 
     def test_specialty_column_holds_only_inner_rows(self):
         inner = row(inner_col(H1), None, "divi/row-inner")
         self.assertEqual(codes(self.specialty(text("<p>a</p>"), inner + text("<p>b</p>"))), ["E5_SECTION_TYPE"])
 
-    def test_inner_row_outside_specialty_column(self):
+    def test_inner_row_outside_specialty_section(self):
         src = simple(H1, row(inner_col(text("<p>x</p>")), None, "divi/row-inner"))
-        self.assertEqual(codes(src), ["E5_BAD_PARENT"])
+        self.assertEqual(codes(src), ["E5_INNER_ROW_PLACEMENT"])
 
 
 class Columns5Test(unittest.TestCase):

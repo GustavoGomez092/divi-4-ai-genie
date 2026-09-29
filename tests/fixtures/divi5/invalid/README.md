@@ -16,3 +16,11 @@ inside `divi/placeholder`) and changed so that exactly one validator error appea
 | `columns-mismatch.html` | `E5_COLUMNS` | row `columnStructure` `1_2,1_2` over columns `1_3`, `2_3` |
 | `two-h1.html` | `E5_MULTIPLE_H1` | second section with another `headingLevel: h1` heading |
 | `freeform.html` | `E5_NOT_DIVI` | plain text between the section and the placeholder close |
+| `specialty-no-specialty-column.html` | `E5_SPECIALTY_COLUMN` | specialty section of two module columns, none with `module.advanced.specialtyColumns` |
+| `inner-row-misplaced.html` | `E5_INNER_ROW_PLACEMENT` | a `divi/row-inner` inside a regular row's column |
+
+Specialty sections follow the Divi 4 rules exactly, with codes named after Divi 4's:
+`E5_SPECIALTY_COLUMN` (Divi 4 `E_SPECIALTY_COLUMN`) = a specialty section needs exactly one column with
+`module.advanced.specialtyColumns`; `E5_INNER_ROW_PLACEMENT` (Divi 4 `E_INNER_ROW_PLACEMENT`) = `divi/row-inner`
+only inside that column of a specialty section. Other content in the specialty column, and non-column children
+of a specialty section, are `E5_SECTION_TYPE`.
