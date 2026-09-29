@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Download + unpack a specific Divi 4 version from the Elegant Themes API into a local cache.
+"""Download + unpack a specific Divi version (4.x or 5.x) from the Elegant Themes API into a local cache.
 
-  ET_USERNAME=... ET_API_KEY=... python3 fetch_divi.py [version|latest]
-  python3 fetch_divi.py [--keys PATH] [version|latest]
+  ET_USERNAME=... ET_API_KEY=... python3 fetch_divi.py [version|latest|latest5]
+  python3 fetch_divi.py [--keys PATH] [version|latest|latest5]
+
+`latest` is the newest Divi 4 (the account's Divi 4 line, as always); `latest5` the newest Divi 5
+(check_theme_updates with divi_5=on). A 5.x version number downloads through the same endpoint.
 
 Credentials: env ET_USERNAME/ET_API_KEY win if both are set; otherwise the keys.json file's
 "elegant_themes" section (--keys PATH, else env DIVI_KEYS_FILE, else
@@ -17,7 +20,7 @@ Endpoints (from Divi core/components/api/ElegantThemes.php + core/components/Upd
   version check : GET https://www.elegantthemes.com/api/api.php?api_update=1&action=check_version_status&product=Divi&version=V&username=U&api_key=K
                   -> PHP-serialized a:1:{s:6:"status";s:9:"available"|"not_available"|"blocklisted"}
   latest        : POST https://www.elegantthemes.com/api/api.php  action=check_theme_updates installed_themes[Divi]=4.0.0 automatic_updates=on username api_key
-                  -> serialized array; ['Divi']['new_version'].
+                  -> serialized array; ['Divi']['new_version']. latest5: installed_themes[Divi]=5.0.0 + divi_5=on.
   download      : GET https://www.elegantthemes.com/api/api_downloads.php?api_update=1&theme=Divi&version=V&username=U&api_key=K
                   -> 200 application/zip (top-level dir "Divi/"); omit `version` for latest.
                   bad api key -> 200 text/html "API key is not valid"; bad user -> "Subscription is not active";
@@ -85,8 +88,9 @@ def theme_dir(version: str, cache_dir: Optional[Path] = None) -> Optional[Path]:
     return d if (d / "style.css").is_file() else None
 
 
-def list_cached(cache_dir: Optional[Path] = None) -> list:
-    """All cached Divi versions (those with a readable style.css), oldest first."""
+def list_cached(cache_dir: Optional[Path] = None, major: Optional[int] = None) -> list:
+    """All cached Divi versions (those with a readable style.css), oldest first; only those of Divi
+    `major` (4 or 5) when given."""
     cache_dir = Path(cache_dir) if cache_dir is not None else default_cache_dir()
     if not cache_dir.exists():
         return []
@@ -94,14 +98,26 @@ def list_cached(cache_dir: Optional[Path] = None) -> list:
     for entry in cache_dir.iterdir():
         m = re.match(r"^Divi-(\d+(?:\.\d+)*)$", entry.name)
         if m and (entry / "Divi" / "style.css").is_file():
-            out.append(m.group(1))
+            if major is None or int(m.group(1).split(".")[0]) == major:
+                out.append(m.group(1))
     out.sort(key=lambda v: tuple(int(x) for x in v.split(".")))
     return out
 
 
-def newest_cached(cache_dir: Optional[Path] = None) -> Optional[str]:
-    versions = list_cached(cache_dir)
+def newest_cached(cache_dir: Optional[Path] = None, major: Optional[int] = None) -> Optional[str]:
+    """The newest cached version (of Divi `major` when given). Callers choosing a version for a page pass
+    the page's major: Divi 4 shortcode must never silently render on a cached Divi 5, or the reverse."""
+    versions = list_cached(cache_dir, major)
     return versions[-1] if versions else None
+
+
+# "latest" is the Divi 4 line (what it always meant); "latest4"/"latest5" name the line explicitly.
+LATEST_ALIASES = {"latest": 4, "latest4": 4, "latest5": 5}
+
+
+def latest_major(version: str) -> Optional[int]:
+    """4/5 for a latest alias, None for a concrete version."""
+    return LATEST_ALIASES.get(version)
 
 
 def _creds(keys_path=None):
@@ -152,11 +168,16 @@ def _et_get(endpoint: str, params: dict) -> dict:
     return {"status": status, "type": ctype, "body": body, "url": url, "redacted_url": _redacted_url(endpoint, params)}
 
 
-def latest_version(keys_path=None) -> str:
+def latest_version(keys_path=None, major: int = 4) -> str:
+    """The newest Divi of the `major` line. The server picks the line from the installed version it is told
+    about; Divi 5 is only offered with divi_5=on (what Divi 5's own updater adds,
+    et_core_maybe_add_divi5_api_parameter in core/functions.php)."""
     c = _creds(keys_path)
-    body = urllib.parse.urlencode(
-        {"action": "check_theme_updates", "installed_themes[Divi]": "4.0.0", "class_version": "1.2", "automatic_updates": "on", **c}
-    ).encode()
+    form = {"action": "check_theme_updates", "installed_themes[Divi]": "5.0.0" if major == 5 else "4.0.0",
+            "class_version": "1.2", "automatic_updates": "on"}
+    if major == 5:
+        form["divi_5"] = "on"
+    body = urllib.parse.urlencode({**form, **c}).encode()
     req = urllib.request.Request(
         _api_base() + "api.php", data=body, headers={"User-Agent": UA, "Content-Type": "application/x-www-form-urlencoded"}
     )
@@ -186,8 +207,8 @@ def ensure_divi(version: str = "latest", cache_dir: Optional[Path] = None, log=N
     cache_dir = Path(cache_dir) if cache_dir is not None else default_cache_dir()
     log = log or (lambda msg: print(msg, file=sys.stderr))
 
-    if version == "latest":
-        version = latest_version(keys_path)
+    if latest_major(version):
+        version = latest_version(keys_path, major=latest_major(version))
 
     cached = theme_dir(version, cache_dir)
     if cached is not None:
@@ -235,8 +256,9 @@ VERSION_ARG = re.compile(r"\d+(?:\.\d+)+")
 
 
 def valid_version_arg(version: str) -> bool:
-    """`latest` or a dotted number such as 4.27.9 (anything else is a usage error, e.g. --help)."""
-    return version == "latest" or VERSION_ARG.fullmatch(version) is not None
+    """`latest` (Divi 4), `latest4`, `latest5` or a dotted number such as 4.27.9 or 5.13.1 (anything else
+    is a usage error, e.g. --help)."""
+    return version in LATEST_ALIASES or VERSION_ARG.fullmatch(version) is not None
 
 
 def main(argv=None) -> int:
@@ -255,7 +277,7 @@ def main(argv=None) -> int:
             positional.append(tok)
     version = positional[0] if positional else "latest"
     if not valid_version_arg(version):
-        print(f"fetch_divi: usage: fetch_divi.py [--keys PATH] [latest | VERSION like 4.27.9] "
+        print(f"fetch_divi: usage: fetch_divi.py [--keys PATH] [latest | latest5 | VERSION like 4.27.9 or 5.13.1] "
               f"(got {version!r})", file=sys.stderr)
         return 2
     try:

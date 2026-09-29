@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Post Pusher Divi preview (spike)
- * Description: GET /?pp_preview=<name> renders <PP_PAGES_DIR>/<name>.txt (a Divi 4 shortcode layout)
- *              as a full front-end page through the real Divi theme, without creating a post.
+ * Plugin Name: Post Pusher Divi preview
+ * Description: GET /?pp_preview=<name> renders <PP_PAGES_DIR>/<name>.txt (a Divi 4 shortcode layout or
+ *              Divi 5 block markup) as a full front-end page through the real Divi theme, without creating a post.
  *
  * Same technique as research/render-prototype/render.php (repo only), but inside a real HTTP request
  * (WordPress Playground has no WP-CLI eval-file loop we want to pay for on every render):
@@ -16,15 +16,57 @@
  * the DB for the fake ID.
  *
  * Query args: pp_preview=<name> (required, [A-Za-z0-9_-]+), title=..., layout=et_no_sidebar|et_full_width_page|..., inline=1 (self-contained HTML)
+ *
+ * Divi 5 (research/divi5/playground.md, repo only). The same fake-post technique renders block markup; three
+ * Divi 5-only fixes, each gated on the mounted theme being Divi 5 so Divi 4 output is unchanged:
+ *   - Divi 5 always caches per-post CSS in wp-content/et-cache/<post id>/ (static CSS is forced on; the Divi 4
+ *     _et_pb_static_css_file=off meta is ignored), so a reused fake ID served another page's (or the pre-edit)
+ *     CSS. Each request drops that dir first, and `serve` pages (not inline=1) get their own fake ID per page
+ *     name, so two tabs on different pages never purge each other's late-loaded CSS file.
+ *   - inline=1 also embeds the icon fonts Divi 5 references by protocol-relative URL inside <style> blocks.
+ *   - "Open Sans" is dropped from builder Google Fonts URLs when the theme already loads it (what a warm live
+ *     Divi 5 page does; the preview is always a cold render).
+ * Token seeding (any Divi): <name>.seed.css next to the page (written by preview.py --tokens) is added as
+ * <style id="pp-token-seed"> at the end of <head>.
  */
 
 if ( ! defined( 'ABSPATH' ) || empty( $_GET['pp_preview'] ) ) {
 	return;
 }
 
-const PP_PREVIEW_FAKE_ID = 990000001;
-
 $pp_name = preg_replace( '/[^A-Za-z0-9_-]/', '', (string) $_GET['pp_preview'] );
+
+/**
+ * Major version of the mounted Divi theme (read from its style.css header: the theme isn't loaded yet).
+ */
+function pp_preview_divi_major() {
+	static $major = null;
+	if ( null === $major ) {
+		$css   = @file_get_contents( WP_CONTENT_DIR . '/themes/Divi/style.css', false, null, 0, 4096 );
+		$major = ( $css && preg_match( '/^\s*Version:\s*(\d+)\./mi', $css, $m ) ) ? (int) $m[1] : 0;
+	}
+	return $major;
+}
+
+// Divi 4, and every inline=1 render: the fixed fake ID (Divi 4 output is unchanged). Divi 5 `serve`: one fake
+// ID per page name (stable across reloads, so et-cache stays bounded by the number of pages).
+define(
+	'PP_PREVIEW_FAKE_ID',
+	( pp_preview_divi_major() >= 5 && empty( $_GET['inline'] ) ) ? 990000002 + ( crc32( $pp_name ) % 999998 ) : 990000001
+);
+
+if ( pp_preview_divi_major() >= 5 ) {
+	// Divi 5 finds wp-content/et-cache/<id>/*.css from an earlier render and reuses it (StaticCSS::
+	// setup_styles_manager). Measured without this: page b served with page a's CSS (+334/-169 declarations).
+	$pp_cache = WP_CONTENT_DIR . '/et-cache/' . PP_PREVIEW_FAKE_ID;
+	if ( is_dir( $pp_cache ) ) {
+		$pp_it = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $pp_cache, FilesystemIterator::SKIP_DOTS ), RecursiveIteratorIterator::CHILD_FIRST );
+		foreach ( $pp_it as $pp_f ) {
+			$pp_f->isDir() ? @rmdir( $pp_f->getPathname() ) : @unlink( $pp_f->getPathname() );
+		}
+		@rmdir( $pp_cache );
+	}
+}
 $pp_dir  = defined( 'PP_PAGES_DIR' ) ? PP_PAGES_DIR : '/pp-pages';
 $pp_file = $pp_dir . '/' . $pp_name . '.txt';
 
@@ -42,6 +84,9 @@ $pp_title     = isset( $_GET['title'] ) ? wp_unslash( (string) $_GET['title'] ) 
 // Page-level meta sidecar (optional): <name>.meta.json, flat {"meta_key": "value"} (e.g. _et_pb_custom_css).
 $pp_meta_file = $pp_dir . '/' . $pp_name . '.meta.json';
 $pp_meta_in   = is_readable( $pp_meta_file ) ? (array) json_decode( file_get_contents( $pp_meta_file ), true ) : array();
+// Token-seeding sidecar (optional): <name>.seed.css, the client's recovered global colors/variables/preset CSS.
+$pp_seed_file = $pp_dir . '/' . $pp_name . '.seed.css';
+$pp_seed_css  = is_readable( $pp_seed_file ) ? (string) file_get_contents( $pp_seed_file ) : '';
 
 /**
  * Prime the fake post + meta. Called early and again on `wp` in case anything flushed the cache.
@@ -130,6 +175,54 @@ add_filter(
 	2
 );
 
+// Divi 5 cold/warm font asymmetry: a warmed live page prints the builder Google Fonts from post meta
+// (et_builder_preprint_font), which DROPS "Open Sans" when the theme already enqueues it; the cold path
+// (et_builder_print_font, footer) keeps it. The preview can never be warm (no meta writes for the fake
+// ID), so apply the same filter to the builder font URLs. Measured without this: the variable
+// Open Sans (wdth axis) replaced the theme's static Open Sans, re-wrapping a 390px heading (+22px).
+// Divi 5 only: Divi 4's preprint path has no such filter (4.27.9 prints Open Sans both ways).
+if ( pp_preview_divi_major() >= 5 ) {
+	add_filter(
+		'style_loader_src',
+		function ( $src, $handle ) {
+			if ( 0 !== strpos( $handle, 'et-builder-googlefonts' ) || ! function_exists( 'et_divi_fonts_url' ) ) {
+				return $src;
+			}
+			$body = et_get_option( 'body_font', 'none' );
+			if ( '' === et_divi_fonts_url() || ! ( 'none' === $body || '' === $body ) ) {
+				return $src;
+			}
+			$p = wp_parse_url( $src );
+			if ( empty( $p['query'] ) ) {
+				return $src;
+			}
+			$parts = array();
+			foreach ( explode( '&', str_replace( '&#038;', '&', $p['query'] ) ) as $kv ) {
+				if ( 0 === strpos( $kv, 'family=' ) ) {
+					// css2: one family per param; css (v1): pipe-separated list.
+					$fams = array_filter(
+						explode( '|', str_replace( '%7C', '|', substr( $kv, 7 ) ) ),
+						function ( $f ) {
+							return 0 !== strcasecmp( trim( str_replace( array( '+', '%20' ), ' ', explode( ':', $f )[0] ) ), 'Open Sans' );
+						}
+					);
+					if ( ! $fams ) {
+						continue;
+					}
+					$kv = 'family=' . implode( '|', $fams );
+				}
+				$parts[] = $kv;
+			}
+			if ( ! preg_grep( '/^family=/', $parts ) ) {
+				return false; // nothing left to load
+			}
+			return $p['scheme'] . '://' . $p['host'] . ( isset( $p['port'] ) ? ':' . $p['port'] : '' ) . $p['path'] . '?' . implode( '&', $parts );
+		},
+		10,
+		2
+	);
+}
+
 // Point the main query at the fake page and hand it the fake post.
 add_filter(
 	'request',
@@ -172,12 +265,27 @@ add_action(
 					$html
 				);
 				$html = preg_replace( '#</head>#i', $moved . '</head>', $html, 1 );
+				$html = pp_preview_seed( $html );
 				return empty( $_GET['inline'] ) ? $html : pp_preview_inline_assets( $html );
 			}
 		);
 	},
 	0
 );
+
+/**
+ * Token seeding: the <name>.seed.css sidecar as the last <style> of <head> (its :root:root block outranks the
+ * stock :root values Divi prints; preset rules precede the builder CSS, as on the live site). No sidecar: no-op.
+ */
+function pp_preview_seed( $html ) {
+	global $pp_seed_css;
+	$at = '' === trim( $pp_seed_css ) ? false : stripos( $html, '</head>' );
+	if ( false === $at ) {
+		return $html;
+	}
+	$style = '<style id="pp-token-seed">' . str_ireplace( '</style', '<\/style', $pp_seed_css ) . "</style>\n";
+	return substr_replace( $html, $style, $at, 0 );
+}
 
 /**
  * &inline=1: make the page self-contained (same as render.php step 4) - local stylesheets
@@ -239,6 +347,9 @@ function pp_preview_inline_assets( $html ) {
 		},
 		$html
 	);
+	if ( pp_preview_divi_major() >= 5 ) {
+		$html = pp_preview_embed_style_fonts( $html, $url_to_path );
+	}
 	return preg_replace_callback(
 		'/<script\b([^>]*)\bsrc=[\'"]([^\'"]+)[\'"]([^>]*)>\s*<\/script>/i',
 		function ( $m ) use ( $url_to_path ) {
@@ -251,4 +362,47 @@ function pp_preview_inline_assets( $html ) {
 		},
 		$html
 	);
+}
+
+/**
+ * Divi 5 (inline=1): its Dynamic CSS and inline styles reference the icon fonts (ETmodules, Font Awesome) by
+ * PROTOCOL-RELATIVE URL (//host/wp-content/themes/Divi/core/admin/fonts/...) inside <style> blocks. Opened
+ * from disk, //127.0.0.1:9400/... resolves to file://127.0.0.1:9400/... and every icon falls back to a text
+ * glyph (measured: blurb icons 48px -> 54px wide, re-wrapping headings). Embeds any local woff/woff2/ttf
+ * referenced by an absolute or protocol-relative site URL in any <style> block.
+ */
+function pp_preview_embed_style_fonts( $html, $url_to_path ) {
+	$site  = wp_parse_url( site_url() );
+	$embed = function ( $css ) use ( $url_to_path, $site ) {
+		return preg_replace_callback(
+			'/url\(\s*([\'"]?)((?:https?:)?\/\/[^\'")\s]+\.(woff2?|ttf)(?:[?#][^\'")\s]*)?)\1\s*\)/i',
+			function ( $m ) use ( $url_to_path, $site ) {
+				$u    = 0 === strpos( $m[2], '//' ) ? $site['scheme'] . ':' . $m[2] : $m[2];
+				$path = $url_to_path( $u );
+				if ( ! $path || filesize( $path ) >= 2 * 1024 * 1024 ) {
+					return $m[0];
+				}
+				$mime = array( 'woff2' => 'font/woff2', 'woff' => 'font/woff', 'ttf' => 'font/ttf' )[ strtolower( $m[3] ) ];
+				return 'url(data:' . $mime . ';base64,' . base64_encode( file_get_contents( $path ) ) . ')';
+			},
+			$css
+		);
+	};
+	// A strpos walk, not one big /<style>(.*?)<\/style>/s: that regex hits pcre.backtrack_limit on
+	// megabyte-sized inlined stylesheets and preg_replace_callback() then returns NULL (an empty page).
+	$out = '';
+	$pos = 0;
+	while ( false !== ( $open = stripos( $html, '<style', $pos ) ) ) {
+		$gt    = strpos( $html, '>', $open );
+		$close = false === $gt ? false : stripos( $html, '</style>', $gt );
+		if ( false === $close ) {
+			break;
+		}
+		$out .= substr( $html, $pos, $gt + 1 - $pos );
+		$css  = substr( $html, $gt + 1, $close - $gt - 1 );
+		$new  = false !== strpos( $css, '//' ) ? $embed( $css ) : $css;
+		$out .= null === $new ? $css : $new;
+		$pos  = $close;
+	}
+	return $out . substr( $html, $pos );
 }

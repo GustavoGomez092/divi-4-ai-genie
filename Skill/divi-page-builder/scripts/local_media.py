@@ -9,7 +9,8 @@ set_image5 rewrites one leaf (only that key: the image value has no `id` in Divi
 attachment from the URL), and the block is re-serialized because set_attr marks it dirty.
 
 publish.py's `draft`/`publish` upload every local reference this module finds; preview.py's
-`render` embeds them as `data:` URIs and `serve` routes them through a per-request allowlist —
+`render` embeds them as `data:` URIs and `serve` routes them through a per-request allowlist (Divi 5
+block pages, which Playground renders, get `data:` URIs in both) —
 neither preview ever uploads anything or contacts WordPress.
 """
 from __future__ import annotations
@@ -149,13 +150,47 @@ def _default_warn(message: str) -> None:
     print(message, file=sys.stderr)
 
 
+def _is_blocks(source: str) -> bool:
+    """Divi 5 block content (`blocks`, or blocks mixed with stray shortcode): its images live in block JSON."""
+    from divi_format import detect_content
+    return detect_content(source) in ("blocks", "mixed")
+
+
+def _embed5(source: str, base_dir: Path, warn: Callable[[str], None]) -> str:
+    doc = divi5_blocks.parse(source)
+    changed = False
+    for block, ref, local in list(iter_local_images(doc, base_dir)):
+        uri = data_uri(local) if local.is_file() else None
+        if uri is None:
+            why = "local image not found" if not local.is_file() else "not a recognized image type"
+            warn(f"{block.name} {ref.label}: {why}: {local}")
+            continue
+        set_image5(block, ref, uri)
+        changed = True
+    return divi5_blocks.serialize(doc) if changed else source
+
+
+def _rewrite5(source: str, base_dir: Path, route_prefix: str) -> Tuple[str, Dict[str, Path]]:
+    doc = divi5_blocks.parse(source)
+    allowed: Dict[str, Path] = {}
+    for block, ref, local in list(iter_local_images(doc, base_dir)):
+        if not local.is_file() or image_mime_type(local) is None:
+            continue
+        token = route_token(local)
+        allowed[token] = local
+        set_image5(block, ref, route_prefix + token)
+    return (divi5_blocks.serialize(doc) if allowed else source), allowed
+
+
 def embed_local_images(source: str, base_dir: Path, warn: Optional[Callable[[str], None]] = None) -> str:
     """Replace every local image reference in *source* that exists on disk (and is a recognized
     image type) with a data: URI, so the rendered page is standalone. A local reference that's
     missing, or whose extension isn't recognized, is left as-is and reported via *warn* (default:
     a one-line stderr message naming the attr and path) -- this never raises, so the preview still
-    renders."""
+    renders. Divi 5 block content: the block image leaves (iter_local_images), everything else kept."""
     warn = warn or _default_warn
+    if _is_blocks(source):
+        return _embed5(source, base_dir, warn)
     doc = parse(source)
     for node, attr, local in iter_local_images(doc, base_dir):
         if not local.is_file():
@@ -178,7 +213,10 @@ def rewrite_for_serve(source: str, base_dir: Path, route_prefix: str) -> Tuple[s
     """Rewrite local image references in *source* to `route_prefix + token` URLs, and return the
     rewritten source plus a {token: resolved path} allowlist -- exactly (and only) the local,
     existing, image-mime files this page's own attributes reference, for the caller to serve from.
-    A missing (or non-image) local reference is left as-is: nothing new is served for it."""
+    A missing (or non-image) local reference is left as-is: nothing new is served for it.
+    Divi 5 block content: the block image leaves, as in embed_local_images."""
+    if _is_blocks(source):
+        return _rewrite5(source, base_dir, route_prefix)
     doc = parse(source)
     allowed: Dict[str, Path] = {}
     for node, attr, local in iter_local_images(doc, base_dir):

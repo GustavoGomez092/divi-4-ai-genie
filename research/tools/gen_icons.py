@@ -3,7 +3,7 @@
 
 Usage: gen_icons.py [--divi THEME_DIR] [--out PATH]
 
-THEME_DIR defaults to the newest cached Divi (…/Divi-<version>/Divi, see scripts/fetch_divi.py).
+THEME_DIR defaults to the newest cached Divi 4 (…/Divi-<version>/Divi, see scripts/fetch_divi.py).
 Reads includes/builder/feature/icon-manager/full_icons_list.json (read-only; the Divi build itself is
 never copied into the repo) and writes one list line per icon with the exact value Divi stores and
 validate.py accepts: `<unicode entity>||divi|fa||<weight>` (et_pb_build_extended_font_icon_value()).
@@ -135,7 +135,7 @@ def main(argv=None) -> int:
     if a.divi:
         theme = Path(a.divi)
     else:
-        version = fetch_divi.newest_cached()
+        version = fetch_divi.newest_cached(major=4)  # the Divi 4 icon list
         theme = fetch_divi.theme_dir(version) if version else None
         if theme is None:
             print("gen_icons.py: no Divi build cached; run scripts/preview.py fetch-divi VERSION", file=sys.stderr)

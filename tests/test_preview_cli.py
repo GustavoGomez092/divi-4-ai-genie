@@ -29,7 +29,7 @@ from _paths import FIXTURES, SCRIPTS
 import fetch_divi
 
 PREVIEW = SCRIPTS / "preview.py"
-VERSION = fetch_divi.newest_cached()
+VERSION = fetch_divi.newest_cached(major=4)  # the Python preview renders Divi 4 only
 LANDING = FIXTURES / "valid" / "handwritten-landing.txt"
 # et_pb_sidebar needs WordPress widgets: it always renders as the fallback in the Python preview, and
 # neither preview has the site's widgets. et_pb_search isn't ported to Python but --exact renders it.
@@ -119,6 +119,20 @@ class DoctorAndExactTest(unittest.TestCase):
         self.assertIn("python:", r.stdout)
         self.assertIn("cached Divi versions:", r.stdout)
         self.assertIn("node", r.stdout.lower())
+
+    def test_doctor_reports_divi_5_cache_status(self):
+        with tempfile.TemporaryDirectory() as cache:
+            (Path(cache) / "Divi-4.27.9" / "Divi").mkdir(parents=True)
+            (Path(cache) / "Divi-4.27.9" / "Divi" / "style.css").write_text("/* */")
+            r = run("doctor", env={**os.environ, "PP_DIVI_CACHE": cache})
+            self.assertIn("Divi 5 (block pages): not cached", r.stdout)
+            self.assertIn("fetch-divi latest5", r.stdout)
+            (Path(cache) / "Divi-5.13.1" / "Divi").mkdir(parents=True)
+            (Path(cache) / "Divi-5.13.1" / "Divi" / "style.css").write_text("/* */")
+            r = run("doctor", env={**os.environ, "PP_DIVI_CACHE": cache})
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("Divi 5 (block pages): cached 5.13.1", r.stdout)
+        self.assertIn("cached Divi versions: 4.27.9, 5.13.1", r.stdout)
 
     def test_exact_without_node_exits_2_with_guidance(self):
         with tempfile.TemporaryDirectory() as empty:
@@ -267,6 +281,355 @@ class FetchDiviAndRenderKeysFlagTest(unittest.TestCase):
             self.assertNotIn("filesecret2", stream)
 
 
+TOKENS5 = {
+    "site": {"divi_version": "5.13.1", "divi_major": 5},
+    "colors": {
+        "global": {
+            "gcid-navy": {"value": "#0B2A3C", "uses": 1},
+            "gcid-unknown": {"value": None, "uses": 2},
+            "gcid-light": {"value": "#fdcdab", "raw": "hsl(from var(--gcid-navy) calc(h + 0) s l)", "base": "gcid-navy",
+                           "uses": 1},
+            "gcid-evil": {"value": "red}</style><script>alert(1)</script>", "uses": 1},
+        },
+        "customizer": {"primary": {"id": "gcid-primary-color", "value": "#7C3AED", "overridden": True},
+                       "link": {"id": "gcid-link-color", "value": None}},
+        "palette": [{"hex": "#0b2a3c", "count": 1}],
+    },
+    "variables": {
+        "gvid-pad": {"value": "clamp(48px, 8vw, 96px)", "kind": "numbers", "uses": 2},
+        "gvid-font": {"value": "Poppins", "kind": "fonts", "uses": 0},
+        "gvid-img": {"value": "https://example.com/hero.jpg", "kind": "images", "uses": 0},
+        "gvid-grad": {"value": "linear-gradient(90deg, #fff 0%, #000 100%)", "kind": "gradients", "uses": 0},
+        "gvid-link": {"value": None, "kind": "links", "uses": 1},
+        "gvid-text": {"value": None, "kind": "strings", "uses": 1},
+    },
+    "presets": {"divi/button": [
+        {"id": "btn1", "uses": 1, "css": {
+            "selector": "body #page-container .et_pb_section .preset--module--divi-button--btn1",
+            "declarations": {"background-color": "var(--gcid-navy)", "color": "#ffffff"},
+            "rules": [
+                {"selector": "body #page-container .et_pb_section .preset--module--divi-button--btn1",
+                 "declarations": {"background-color": "var(--gcid-navy)", "color": "#ffffff"}},
+                {"selector": "body #page-container .et_pb_section .preset--module--divi-button--btn1:hover",
+                 "declarations": {"color": "#000000"}},
+                {"selector": ".preset--module--divi-button--btn1", "declarations": {"font-size": "14px"},
+                 "media": "only screen and (max-width: 980px)"},
+            ]}},
+        {"id": "btn2", "uses": 1, "css": None},
+    ]},
+    "group_presets": {"divi/font": [
+        {"id": "f1", "uses": 1, "module": "divi/heading", "group_id": "designTitleText", "css": {
+            "selector": ".preset--group--divi-heading--divi-font--designtitletext--f1 h2",
+            "declarations": {"font-weight": "700"},
+            "rules": [{"selector": ".preset--group--divi-heading--divi-font--designtitletext--f1 h2",
+                       "declarations": {"font-weight": "700"}}]}},
+    ]},
+    "preset_defaults": {"divi/text": {
+        "selector": ".preset--module--divi-text--default", "declarations": {"line-height": "1.9em"},
+        "rules": [{"selector": ".preset--module--divi-text--default", "declarations": {"line-height": "1.9em"}}]}},
+}
+
+
+class SeedCssTest(unittest.TestCase):
+    """seed_css(tokens): the recovered Divi 5 design system as CSS, so var(--gcid-*)/var(--gvid-*) and preset
+    classes render with the client's values in the (otherwise stock) Playground preview."""
+
+    def setUp(self):
+        sys.path.insert(0, str(SCRIPTS))
+        import preview
+        self.css = preview.seed_css(TOKENS5)
+
+    def root(self):
+        m = re.match(r":root:root\{(.*?)\}", self.css)
+        self.assertIsNotNone(m, self.css[:200])
+        return m.group(1)
+
+    def test_root_block_comes_first_and_beats_divis_own_root(self):
+        self.assertTrue(self.css.startswith(":root:root{"), self.css[:80])
+
+    def test_colors_and_customizer_colors_are_seeded(self):
+        root = self.root()
+        self.assertIn("--gcid-navy:#0B2A3C;", root)
+        self.assertIn("--gcid-light:#fdcdab;", root)  # a derived color uses its resolved value
+        self.assertIn("--gcid-primary-color:#7C3AED;", root)
+
+    def test_null_values_and_unsafe_values_are_skipped(self):
+        for name in ("gcid-unknown", "gcid-link-color", "gvid-link", "gvid-text", "gcid-evil"):
+            self.assertNotIn(f"--{name}:", self.css)
+        self.assertNotIn("</style", self.css)
+        self.assertNotIn("<script", self.css)
+
+    def test_variables_are_seeded_in_css_form(self):
+        root = self.root()
+        self.assertIn("--gvid-pad:clamp(48px, 8vw, 96px);", root)
+        self.assertIn("--gvid-font:'Poppins';", root)
+        self.assertIn("--gvid-img:url(\"https://example.com/hero.jpg\");", root)
+        self.assertIn("--gvid-grad:linear-gradient(90deg, #fff 0%, #000 100%);", root)
+
+    def test_preset_rules_are_emitted_with_media(self):
+        css = self.css
+        self.assertIn("body #page-container .et_pb_section .preset--module--divi-button--btn1{"
+                      "background-color:var(--gcid-navy);color:#ffffff}", css)
+        self.assertIn("body #page-container .et_pb_section .preset--module--divi-button--btn1:hover{color:#000000}", css)
+        self.assertIn("@media only screen and (max-width: 980px){.preset--module--divi-button--btn1{font-size:14px}}", css)
+        self.assertIn(".preset--group--divi-heading--divi-font--designtitletext--f1 h2{font-weight:700}", css)
+        self.assertIn(".preset--module--divi-text--default{line-height:1.9em}", css)
+        self.assertLess(css.index(":root:root"), css.index(".preset--"))
+
+    def test_nothing_to_seed_is_empty(self):
+        import preview
+        self.assertEqual(preview.seed_css({}), "")
+        self.assertEqual(preview.seed_css({"site": {"divi_version": "4.27.9"}, "colors": {"palette": []}}), "")
+
+
+BLOCK_PAGE = ('<!-- wp:divi/placeholder --><!-- wp:divi/section {"builderVersion":"5.13.1"} -->'
+              '<!-- wp:divi/row {"builderVersion":"5.13.1"} --><!-- wp:divi/column {"builderVersion":"5.13.1"} -->'
+              '<!-- wp:divi/image {"image":{"innerContent":{"desktop":{"value":{"src":"./img/a.png"}}}},'
+              '"builderVersion":"5.13.1"} /-->'
+              '<!-- /wp:divi/column --><!-- /wp:divi/row --><!-- /wp:divi/section --><!-- /wp:divi/placeholder -->')
+
+# A stand-in `node`: reports its version, logs its argv plus the staged page / seed sidecar it was handed to
+# $FAKE_NODE_LOG, writes --out, and for `serve` prints the ready URLs the way preview.mjs does, then waits.
+FAKE_NODE = r"""#!/bin/sh
+if [ "$1" = --version ]; then echo v20.11.1; exit 0; fi
+log="$FAKE_NODE_LOG"
+echo "ARGS $*" >> "$log"
+out=""; pages=""; port=""; prev=""
+for a in "$@"; do
+  case "$prev" in --out) out="$a";; --pages) pages="$a";; --port) port="$a";; esac
+  case "$a" in *.txt) echo "PAGE $(cat "$a")" >> "$log"; s="${a%.txt}.seed.css"
+    [ -f "$s" ] && echo "SEED $(cat "$s")" >> "$log";; esac
+  prev="$a"
+done
+if [ "$2" = render ]; then echo "<html>fake</html>" > "$out"; exit 0; fi
+if [ "$2" = serve ]; then
+  echo "PID $$" >> "$log"
+  for f in "$pages"/*.txt; do n=$(basename "$f" .txt); echo "http://127.0.0.1:$port/?pp_preview=$n"; done
+  exec sleep 60
+fi
+exit 0
+"""
+
+
+class BlocksRoutingTest(unittest.TestCase):
+    """A Divi 5 block page always goes to Playground (preview.mjs) with a Divi 5 version, local images inlined
+    and the tokens seed as a sidecar; the Python renderer is never used for it."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        d = Path(self.tmp.name)
+        self.cache = d / "cache"
+        for v in ("4.27.10", "5.13.1"):
+            (self.cache / f"Divi-{v}" / "Divi").mkdir(parents=True)
+            (self.cache / f"Divi-{v}" / "Divi" / "style.css").write_text(f"/*\nVersion: {v}\n*/")
+        self.bin = d / "bin"
+        self.bin.mkdir()
+        node = self.bin / "node"
+        node.write_text(FAKE_NODE)
+        node.chmod(0o755)
+        self.log = d / "node.log"
+        self.pages = d / "pages"
+        (self.pages / "img").mkdir(parents=True)
+        (self.pages / "img" / "a.png").write_bytes(b"\x89PNG\r\n")
+        self.page = self.pages / "home.html"
+        self.page.write_text(BLOCK_PAGE)
+        self.env = {k: v for k, v in os.environ.items() if k not in ("ET_USERNAME", "ET_API_KEY")}
+        self.env.update(PATH=f"{self.bin}:/bin:/usr/bin", PP_DIVI_CACHE=str(self.cache), FAKE_NODE_LOG=str(self.log))
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def logged(self):
+        return self.log.read_text() if self.log.exists() else ""
+
+    def test_render_routes_to_playground_with_newest_cached_5x(self):
+        out = Path(self.tmp.name) / "o.html"
+        r = run("render", self.page, "--out", out, env=self.env)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        args = self.logged().splitlines()[0].split()
+        self.assertEqual(args[1:3], [str(SCRIPTS / "preview" / "preview.mjs"), "render"])
+        self.assertTrue(args[3].endswith("/home.txt"), args)
+        self.assertEqual(args[args.index("--out") + 1], str(out.resolve()))
+        self.assertEqual(args[args.index("--divi") + 1], "5.13.1")
+        self.assertNotIn("--tokens", args)
+        self.assertTrue(out.exists())
+
+    def test_render_inlines_local_images_in_the_staged_page(self):
+        r = run("render", self.page, "--out", Path(self.tmp.name) / "o.html", env=self.env)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        page = next(l for l in self.logged().splitlines() if l.startswith("PAGE "))
+        self.assertIn('"src":"data:image/png;base64,', page)
+        self.assertNotIn("./img/a.png", page)
+        self.assertEqual(self.page.read_text(), BLOCK_PAGE)  # the source page is untouched
+
+    def test_render_with_exact_takes_the_same_route(self):
+        r = run("render", self.page, "--out", Path(self.tmp.name) / "o.html", "--exact", env=self.env)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("--divi 5.13.1", self.logged())
+
+    def test_tokens_pick_the_version_and_seed_the_page(self):
+        tokens = Path(self.tmp.name) / "tokens.json"
+        tokens.write_text(json.dumps(dict(TOKENS5, site={"divi_version": "5.9.0", "divi_major": 5})))
+        r = run("render", self.page, "--out", Path(self.tmp.name) / "o.html", "--tokens", tokens, env=self.env)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        log = self.logged()
+        self.assertIn("--divi 5.9.0", log)
+        seed = log[log.index("SEED "):]
+        self.assertIn("--gcid-navy:#0B2A3C", seed)
+        self.assertIn("preset--module--divi-button--btn1", seed)
+
+    def test_no_seed_sidecar_without_tokens(self):
+        run("render", self.page, "--out", Path(self.tmp.name) / "o.html", env=self.env)
+        self.assertNotIn("SEED ", self.logged())
+
+    def test_a_divi_4_version_for_a_block_page_is_refused(self):
+        r = run("render", self.page, "--divi", "4.27.10", "--out", Path(self.tmp.name) / "o.html", env=self.env)
+        self.assertEqual(r.returncode, 2, r.stdout + r.stderr)
+        self.assertIn("Divi 5", r.stderr)
+        self.assertEqual(self.logged(), "")
+
+    def test_default_out_never_overwrites_an_html_source_page(self):
+        r = run("render", self.page, env=self.env, cwd=self.pages)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertEqual(self.page.read_text(), BLOCK_PAGE)
+        args = self.logged().splitlines()[0].split()
+        self.assertEqual(args[args.index("--out") + 1], str((self.pages / "home.preview.html").resolve()))
+
+    def test_block_page_without_node_explains(self):
+        env = dict(self.env, PATH="/nonexistent")
+        r = run("render", self.page, "--out", Path(self.tmp.name) / "o.html", env=env)
+        self.assertEqual(r.returncode, 2, r.stdout + r.stderr)
+        self.assertIn("Node 20+", r.stderr)
+        self.assertIn("Divi 5", r.stderr)
+
+    def test_shortcode_page_with_exact_is_unchanged(self):
+        r = run("render", LANDING, "--exact", "--out", Path(self.tmp.name) / "o.html", env=self.env)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        args = self.logged().splitlines()[0].split()
+        self.assertEqual(args[2:], ["render", str(LANDING.resolve()), "--out",
+                                    str((Path(self.tmp.name) / "o.html").resolve())])
+
+
+class BlocksServeTest(unittest.TestCase):
+    """serve: shortcode pages stay on the Python preview; block pages are staged (images inlined, tokens seed)
+    for one warm Playground and redirected to it; edits are re-staged."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.t = BlocksRoutingTest("setUp")
+        cls.t.setUp()
+        (cls.t.pages / "landing.txt").write_text(LANDING.read_text())
+        (cls.t.pages / "odd name.html").write_text(BLOCK_PAGE)
+        (cls.t.pages / "rendered.html").write_text("<html><body>not a page</body></html>")
+        cls.port = free_port()
+        cls.proc = subprocess.Popen([sys.executable, str(PREVIEW), "serve", "--pages", str(cls.t.pages),
+                                     "--port", str(cls.port)], env=cls.t.env,
+                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        deadline = time.time() + 30
+        while time.time() < deadline:
+            try:
+                socket.create_connection(("127.0.0.1", cls.port), timeout=0.5).close()
+                return
+            except OSError:
+                if cls.proc.poll() is not None:
+                    break
+                time.sleep(0.1)
+        cls.tearDownClass()
+        raise RuntimeError("preview.py serve did not start")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.proc.terminate()
+        try:
+            cls.proc.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            cls.proc.kill()
+        cls.t.tearDown()
+
+    def wait_ready(self, path):
+        deadline = time.time() + 20
+        while time.time() < deadline:
+            status, body, headers = get(self.port, path)
+            if status != 503:
+                return status, body, headers
+            time.sleep(0.2)
+        self.fail("Playground never became ready")
+
+    def serve_args(self):
+        line = next(l for l in self.t.logged().splitlines() if l.startswith("ARGS ") and " serve " in l)
+        return line.split()
+
+    def test_block_page_redirects_to_the_warm_playground(self):
+        status, _, headers = self.wait_ready("/home")
+        self.assertEqual(status, 302)
+        args = self.serve_args()
+        pg_port = args[args.index("--port") + 1]
+        self.assertEqual(headers["Location"], f"http://127.0.0.1:{pg_port}/?pp_preview=home")
+        self.assertEqual(args[args.index("--divi") + 1], "5.13.1")
+        self.assertNotEqual(pg_port, str(self.port))
+
+    def test_page_names_are_made_safe_for_playground(self):
+        status, _, headers = self.wait_ready("/odd%20name")
+        self.assertEqual(status, 302)
+        self.assertTrue(headers["Location"].endswith("?pp_preview=odd-name"), headers["Location"])
+
+    def test_staged_pages_inline_images_and_follow_edits(self):
+        self.wait_ready("/home")
+        stage = Path(self.serve_args()[self.serve_args().index("--pages") + 1])
+        staged = stage / "home.txt"
+        self.assertIn('"src":"data:image/png;base64,', staged.read_text())
+        edited = BLOCK_PAGE.replace('"builderVersion":"5.13.1"} -->', '"builderVersion":"5.13.1","x":1} -->', 1)
+        (self.t.pages / "home.html").write_text(edited)
+        deadline = time.time() + 5
+        while time.time() < deadline and '"x":1' not in staged.read_text():
+            time.sleep(0.1)
+        self.assertIn('"x":1', staged.read_text())
+        (self.t.pages / "home.html").write_text(BLOCK_PAGE)
+
+    def test_shortcode_page_is_still_rendered_by_python(self):
+        status, body, headers = get(self.port, "/landing")
+        self.assertEqual(status, 200)
+        self.assertIn('class="et-l et-l--post"', body.decode("utf-8"))
+        self.assertIn("X-Render-Ms", headers)
+
+    def test_index_lists_both_formats_but_not_rendered_html(self):
+        status, body, _ = get(self.port, "/")
+        html = body.decode("utf-8")
+        self.assertEqual(status, 200)
+        for name in ("home", "landing", "odd name"):
+            self.assertIn(f">{name}<", html)
+        self.assertNotIn("rendered", html)
+        self.assertEqual(get(self.port, "/rendered")[0], 404)
+
+
+class BlocksServeStopTest(unittest.TestCase):
+    def test_terminating_serve_stops_the_playground_child(self):
+        t = BlocksRoutingTest("setUp")
+        t.setUp()
+        self.addCleanup(t.tearDown)
+        port = free_port()
+        proc = subprocess.Popen([sys.executable, str(PREVIEW), "serve", "--pages", str(t.pages), "--port", str(port)],
+                                env=t.env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        try:
+            deadline = time.time() + 20
+            while time.time() < deadline and "PID " not in t.logged():
+                time.sleep(0.1)
+            pid = int(t.logged().split("PID ")[1].split()[0])
+            os.kill(pid, 0)  # running
+        finally:
+            proc.terminate()
+            proc.wait(timeout=15)
+        deadline = time.time() + 10
+        while time.time() < deadline:
+            try:
+                os.kill(pid, 0)
+            except ProcessLookupError:
+                return
+            time.sleep(0.1)
+        os.kill(pid, 9)
+        self.fail("the Playground child outlived serve")
+
+
 class ExactArgsTest(unittest.TestCase):
     """--exact hands the parsed command to preview.mjs, so Node gets the same page/port/flags."""
 
@@ -346,7 +709,8 @@ class VersionResolutionTest(unittest.TestCase):
         self.preview = preview
         self.tmp = tempfile.TemporaryDirectory()
         self.cache = Path(self.tmp.name)
-        for v in ("4.27.3", "4.27.10"):
+        # A cached Divi 5 must never be picked for Divi 4 shortcode (the default major).
+        for v in ("4.27.3", "4.27.10", "5.13.1"):
             (self.cache / f"Divi-{v}" / "Divi").mkdir(parents=True)
             (self.cache / f"Divi-{v}" / "Divi" / "style.css").write_text("/* Version: x */")
         self.env = mock.patch.dict(os.environ, {"PP_DIVI_CACHE": str(self.cache)})
@@ -402,6 +766,38 @@ class VersionResolutionTest(unittest.TestCase):
         self.assertEqual(self.preview.resolve_divi_version(None, None), "4.27.10")
         with mock.patch.dict(os.environ, {"PP_DIVI_CACHE": str(self.cache / "none")}):
             self.assertEqual(self.preview.resolve_divi_version(None, None), "latest")
+
+    def test_major_5_picks_newest_cached_5x(self):
+        self.assertEqual(self.preview.resolve_divi_version(None, None, major=5), "5.13.1")
+        with mock.patch.dict(os.environ, {"PP_DIVI_CACHE": str(self.cache / "none")}):
+            self.assertEqual(self.preview.resolve_divi_version(None, None, major=5), "latest5")
+
+    def test_tokens_with_empty_version_falls_through_to_newest_cached_of_the_major(self):
+        tokens = self.cache / "tokens.json"
+        tokens.write_text(json.dumps({"site": {"divi_version": ""}}))
+        with contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(self.preview.resolve_divi_version(None, str(tokens), major=5), "5.13.1")
+            self.assertEqual(self.preview.resolve_divi_version(None, str(tokens), major=4), "4.27.10")
+
+    def test_explicit_versions_still_win_for_either_major(self):
+        self.assertEqual(self.preview.resolve_divi_version("4.27.3", None, major=5), "4.27.3")
+        tokens = self.cache / "tokens.json"
+        tokens.write_text(json.dumps({"site": {"divi_version": "5.13.1"}}))
+        self.assertEqual(self.preview.resolve_divi_version(None, str(tokens), major=4), "5.13.1")
+
+    def test_python_renderer_theme_default_is_newest_4x(self):
+        from divi_render.assets import Theme
+        self.assertEqual(Theme.for_version(None).version, "4.27.10")
+
+    def test_shortcode_page_with_a_divi_5_version_is_refused_without_exact(self):
+        env = {k: v for k, v in os.environ.items() if k not in ("ET_USERNAME", "ET_API_KEY")}
+        env["PP_DIVI_CACHE"] = str(self.cache)
+        with tempfile.TemporaryDirectory() as d:
+            r = run("render", LANDING, "--divi", "5.13.1", "--out", Path(d) / "x.html", env=env)
+            self.assertFalse((Path(d) / "x.html").exists())
+        self.assertEqual(r.returncode, 2, r.stdout + r.stderr)
+        self.assertIn("Divi 4", r.stderr)
+        self.assertIn("--exact", r.stderr)
 
     def test_uncached_version_without_credentials_fails_cleanly(self):
         env = {k: v for k, v in os.environ.items() if k not in ("ET_USERNAME", "ET_API_KEY")}

@@ -71,8 +71,9 @@ class Theme:
     @classmethod
     def for_version(cls, version: Optional[str], keys_path: Optional[str] = None, **kw) -> "Theme":
         """Cache-first: an already cached version never touches the Elegant Themes API. keys_path
-        is only used if a download is actually needed (see fetch_divi.ensure_divi)."""
-        version = version or fetch_divi.newest_cached() or "latest"
+        is only used if a download is actually needed (see fetch_divi.ensure_divi). The default is the newest
+        cached Divi 4: this renderer reproduces Divi 4 only, so a cached Divi 5 is never picked."""
+        version = version or fetch_divi.newest_cached(major=4) or "latest"
         path = fetch_divi.theme_dir(version) if version != "latest" else None
         return cls(path or fetch_divi.ensure_divi(version, keys_path=keys_path), **kw)
 

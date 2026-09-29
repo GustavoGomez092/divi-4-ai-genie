@@ -193,5 +193,65 @@ class IterLocalImages5Test(unittest.TestCase):
         self.assertEqual(local_media.image_alt5(*found["divi/blurb"]), "")
 
 
+
+class BlocksEmbedAndServeTest(unittest.TestCase):
+    """embed_local_images / rewrite_for_serve on Divi 5 block content (preview of block pages): the same image
+    leaves publish.py uploads become data: URIs / serve routes; every other byte of the page is kept."""
+    SOURCE = IterLocalImages5Test.SOURCE
+
+    def _setup(self, base):
+        (base / "img").mkdir()
+        (base / "img" / "a.png").write_bytes(b"\x89PNG\r\n")
+        (base / "b.gif").write_bytes(b"GIF89a")
+        return self.SOURCE.replace("__FILE__", str(base / "b.gif"))
+
+    def test_embed_makes_data_uris_and_warns_for_missing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            source = self._setup(base)  # ./img/bg.jpg is missing
+            err = io.StringIO()
+            with redirect_stderr(err):
+                out = local_media.embed_local_images(source, base)
+        self.assertIn('"src":"data:image/png;base64,', out)
+        self.assertIn('"src":"data:image/gif;base64,', out)
+        self.assertNotIn("./img/a.png", out)
+        self.assertNotIn("file://", out)
+        self.assertIn('"url":"./img/bg.jpg"', out)  # missing: left as-is
+        warning = err.getvalue()
+        self.assertEqual(len(warning.strip().splitlines()), 1, warning)
+        self.assertIn("divi/section module.decoration.background.desktop.value.image.url", warning)
+        self.assertIn(str((base / "img" / "bg.jpg").resolve()), warning)
+        # only the image leaves changed
+        from divi5_blocks import parse as parse5
+        self.assertEqual(len(list(parse5(out).walk())), len(list(parse5(source).walk())))
+        self.assertIn('"builderVersion":"5.0.0-public-beta.1"', out)
+
+    def test_embed_leaves_blocks_without_local_images_byte_identical(self):
+        source = ('<!-- wp:divi/placeholder --><!-- wp:divi/section {"builderVersion":"5.13.1"} -->'
+                  '<!-- /wp:divi/section --><!-- /wp:divi/placeholder -->')
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual(local_media.embed_local_images(source, Path(tmp)), source)
+
+    def test_rewrite_for_serve_routes_block_images(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            source = self._setup(base)
+            rewritten, allowed = local_media.rewrite_for_serve(source, base, "/__local/p/")
+        self.assertEqual(sorted(allowed.values()), sorted([(base / "img" / "a.png").resolve(), base / "b.gif"]))
+        for token in allowed:
+            self.assertIn(f'"/__local/p/{token}"', rewritten)
+        self.assertIn('"url":"./img/bg.jpg"', rewritten)
+        self.assertNotIn("./img/a.png", rewritten)
+
+    def test_shortcode_path_is_unchanged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            (base / "a.png").write_bytes(b"\x89PNG")
+            src = '[et_pb_section][et_pb_row][et_pb_column type="4_4"][et_pb_image src="./a.png"][/et_pb_image]' \
+                  '[/et_pb_column][/et_pb_row][/et_pb_section]'
+            out = local_media.embed_local_images(src, base)
+        self.assertEqual(out, src.replace("./a.png", "data:image/png;base64,iVBORw=="))
+
+
 if __name__ == "__main__":
     unittest.main()

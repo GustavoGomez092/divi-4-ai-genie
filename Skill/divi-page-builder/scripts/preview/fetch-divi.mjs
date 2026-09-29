@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// Download + unpack a specific Divi 4 version from the Elegant Themes API into a local cache.
+// Download + unpack a specific Divi version (4.x or 5.x) from the Elegant Themes API into a local cache.
 //
-//   ET_USERNAME=... ET_API_KEY=... node fetch-divi.mjs [version|latest] [--cache DIR]
+//   ET_USERNAME=... ET_API_KEY=... node fetch-divi.mjs [version|latest|latest5] [--cache DIR]
+//   (latest = newest Divi 4, as always; latest5 = newest Divi 5)
 //
 // Endpoints (from Divi core/components/api/ElegantThemes.php + core/components/Updates.php):
 //   version check : GET https://www.elegantthemes.com/api/api.php?api_update=1&action=check_version_status&product=Divi&version=V&username=U&api_key=K
@@ -9,7 +10,8 @@
 //   latest        : POST https://www.elegantthemes.com/api/api.php  action=check_theme_updates installed_themes[Divi]=4.0.0 automatic_updates=on username api_key
 //                   -> serialized array; ['Divi']['new_version'] + ['Divi']['package']. The server picks the upgrade line
 //                   from the installed version: installed 0 -> 2.3.6 (!), 4.0.0 -> newest Divi 4 (4.27.9 on 2026-09-24).
-//                   Divi 5 is only offered when the divi_5 parameter is sent (et_core_maybe_add_divi5_api_parameter); we never send it.
+//                   Divi 5 is only offered when the divi_5 parameter is sent (et_core_maybe_add_divi5_api_parameter):
+//                   `latest5` sends divi_5=on with installed_themes[Divi]=5.0.0; `latest` never sends it.
 //   download      : GET https://www.elegantthemes.com/api/api_downloads.php?api_update=1&theme=Divi&version=V&username=U&api_key=K
 //                   -> 200 application/zip (top-level dir "Divi/"); omit `version` for latest.
 //                   bad api key -> 200 text/html "API key is not valid"; bad user -> "Subscription is not active";
@@ -68,9 +70,16 @@ async function etGet(endpoint, params) {
 	return { status: r.status, type: r.headers.get('content-type') || '', body: Buffer.from(await r.arrayBuffer()), url, redactedUrl: redactedUrl(endpoint, params) };
 }
 
-export async function latestVersion() {
+// "latest" is the Divi 4 line (what it always meant); "latest4"/"latest5" name the line explicitly.
+export const LATEST_ALIASES = { latest: 4, latest4: 4, latest5: 5 };
+
+// The newest Divi of the `major` line. Divi 5 is only offered with divi_5=on (what Divi 5's own updater adds,
+// et_core_maybe_add_divi5_api_parameter) and an installed 5.x.
+export async function latestVersion(major = 4) {
 	const c = creds();
-	const body = new URLSearchParams({ action: 'check_theme_updates', 'installed_themes[Divi]': '4.0.0', class_version: '1.2', automatic_updates: 'on', ...c });
+	const form = { action: 'check_theme_updates', 'installed_themes[Divi]': major === 5 ? '5.0.0' : '4.0.0', class_version: '1.2', automatic_updates: 'on' };
+	if (major === 5) form.divi_5 = 'on';
+	const body = new URLSearchParams({ ...form, ...c });
 	const r = await fetch(API + 'api.php', { method: 'POST', body, headers: { 'User-Agent': UA, 'Content-Type': 'application/x-www-form-urlencoded' } });
 	const text = await r.text();
 	const m = text.match(/s:11:"new_version";s:\d+:"([^"]+)"/);
@@ -90,7 +99,7 @@ export function unzip(zip, dest) {
 
 /** Returns the absolute path of an unpacked Divi theme dir (…/Divi-<version>/Divi) for `version`. */
 export async function ensureDivi(version = 'latest', cacheDir = defaultCacheDir(), log = console.error) {
-	if (version === 'latest') version = await latestVersion();
+	if (LATEST_ALIASES[version]) version = await latestVersion(LATEST_ALIASES[version]);
 	const themeDir = path.join(cacheDir, `Divi-${version}`, 'Divi');
 	const styleCss = path.join(themeDir, 'style.css');
 	if (fs.existsSync(styleCss)) return { version, themeDir, cached: true };
@@ -117,6 +126,45 @@ export async function ensureDivi(version = 'latest', cacheDir = defaultCacheDir(
 	if (got !== version) throw new Error(`Downloaded zip has Divi ${got}, expected ${version}`);
 	log(`Fetched Divi ${version} (${(dl.body.length / 1048576).toFixed(1)} MB) in ${Date.now() - t0} ms -> ${themeDir}`);
 	return { version, themeDir, cached: false };
+}
+
+// ---- version selection (shared by preview.mjs) --------------------------------------------------------------
+const cmpVersions = (a, b) => a.split('.').map(Number).reduce((r, x, i) => r || x - (b.split('.').map(Number)[i] || 0), 0);
+
+/** Cached Divi versions (those with a readable style.css), oldest first; only Divi `major` when given. */
+export function listCachedDivi(cacheDir = defaultCacheDir(), major = null) {
+	if (!fs.existsSync(cacheDir)) return [];
+	return fs.readdirSync(cacheDir).map((d) => (d.match(/^Divi-(\d+(?:\.\d+)*)$/) || [])[1]).filter(Boolean)
+		.filter((ver) => fs.existsSync(path.join(cacheDir, `Divi-${ver}`, 'Divi', 'style.css')))
+		.filter((ver) => major == null || Number(ver.split('.')[0]) === major)
+		.sort(cmpVersions);
+}
+
+export function newestCached(cacheDir = defaultCacheDir(), major = null) {
+	return listCachedDivi(cacheDir, major).pop() || null;
+}
+
+/** 5 for Divi 5 block markup (a `<!-- wp:divi/` block), else 4 (shortcode, or nothing to go on). */
+export function contentMajor(text) {
+	return /<!--\s+wp:divi\/[a-z0-9-]+/.test(text || '') ? 5 : 4;
+}
+
+// --divi, else --tokens (site.divi_version), else the newest cached version OF THE CONTENT'S MAJOR, else
+// "latest" / "latest5" (network). Never resolves to a network call when a version of that major is cached.
+export function resolveDiviVersion(o, diviCache = defaultCacheDir(), major = 4) {
+	const fallback = () => newestCached(diviCache, major) || (major === 5 ? 'latest5' : 'latest');
+	if (o.divi) return o.divi;
+	if (o.tokens) {
+		const tokens = JSON.parse(fs.readFileSync(path.resolve(o.tokens), 'utf8'));
+		const site = (tokens && tokens.site) || {};
+		if (!('divi_version' in site)) throw new Error(`No site.divi_version in ${o.tokens}`);
+		if (site.divi_version) return site.divi_version;
+		// Empty version (not detected when the tokens were extracted): fall through to the next rule.
+		const v = fallback();
+		console.error(`note: site.divi_version is empty in ${o.tokens}; using ${v.startsWith('latest') ? v : 'the newest cached Divi ' + major + ', ' + v}`);
+		return v;
+	}
+	return fallback();
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {

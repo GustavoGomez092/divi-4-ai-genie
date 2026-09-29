@@ -80,6 +80,60 @@ class CompareTest(unittest.TestCase):
         self.assertEqual(result["markup"]["tag_class_seq_ratio"], 1.0)
 
 
+def _d5(css_blocks, marker=True):
+    """A Divi 5 page: its builder CSS sits in Divi 5 style ids (or a flattened et-cache file)."""
+    return ('<html><head>'
+            + ('<script src="http://x.test/wp-content/themes/Divi/includes/builder-5/visual-builder/x.js"></script>'
+               if marker else '')
+            + css_blocks + '</head><body><div class="et-l et-l--post"><div class="et_pb_section et_pb_section_0">'
+            '<div class="et_pb_text et_pb_text_0"><p>Hi</p></div></div></div></body></html>')
+
+
+class Divi5CompareTest(unittest.TestCase):
+    """Divi 5 builder CSS lives under different style ids (compare_d5.py, R5): critical inline CSS, the unified
+    (deferred) cached-inline styles of a first render, and et-cache files a flattened live page inlines."""
+
+    LIVE = ('<style id="et-critical-inline-css">.et_pb_text_0{color:red}</style>'
+            '<style data-href="http://x.test/wp-content/et-cache/12/et-core-unified-deferred-12.min.css">'
+            '@media only screen and (max-width:980px){.et_pb_text_0{font-size:12px}}</style>')
+    PREVIEW = ('<style id="et-core-unified-990000001-cached-inline-styles">.et_pb_text_0{color:red}</style>'
+               '<style id="et-core-unified-deferred-990000001-cached-inline-styles-2">'
+               '@media only screen and (max-width:980px){.et_pb_text_0{font-size:12px}}</style>')
+
+    def test_divi_5_builder_css_is_found_on_both_sides(self):
+        result = fidelity.compare(_d5(self.LIVE), _d5(self.PREVIEW))
+        self.assertEqual(result["css"]["truth_decls"], 2)
+        self.assertEqual(result["css"]["candidate_decls"], 2)
+        self.assertEqual(result["css"]["common"], 2)
+        self.assertTrue(result["markup"]["tag_class_sequence_equal"])
+        self.assertTrue(result["markup"]["et_l_identical"])
+
+    def test_a_missing_divi_5_declaration_is_reported(self):
+        result = fidelity.compare(_d5(self.LIVE), _d5(self.PREVIEW.replace("font-size:12px", "")))
+        self.assertEqual(result["css"]["missing"], 1)
+
+    def test_divi_4_pages_keep_the_divi_4_style_ids_only(self):
+        # The same Divi 5 ids on a page without Divi 5 markers are not builder CSS (Divi 4 behaviour unchanged).
+        page = _d5(self.LIVE + '<style id="et-builder-module-design-990000001-cached-inline-styles">'
+                   '.et_pb_text_0{margin:0}</style>', marker=False)
+        self.assertEqual(fidelity.compare(page, page)["css"]["truth_decls"], 1)
+
+    def test_flatten_inlines_same_origin_stylesheets_and_preloads(self):
+        pages = {
+            "http://x.test/p/": ('<link rel="stylesheet" href="http://x.test/a.css?ver=1">'
+                                 '<link rel="preload" as="style" href="http://x.test/wp-content/et-cache/1/b.css">'
+                                 '<link rel="preload" as="font" href="http://x.test/f.woff2">'
+                                 '<link rel="stylesheet" href="https://fonts.example/c.css">'),
+            "http://x.test/a.css?ver=1": ".a{color:red}",
+            "http://x.test/wp-content/et-cache/1/b.css": ".b{color:blue}",
+        }
+        out = fidelity.flatten("http://x.test/p/", fetch=lambda u: pages[u])
+        self.assertIn('<style data-href="http://x.test/a.css?ver=1">\n.a{color:red}\n</style>', out)
+        self.assertIn('<style data-href="http://x.test/wp-content/et-cache/1/b.css">\n.b{color:blue}\n</style>', out)
+        self.assertIn('as="font"', out)
+        self.assertIn("https://fonts.example/c.css", out)
+
+
 @unittest.skipUnless(shutil.which("node"), "node not installed")
 class GroundTruthTest(unittest.TestCase):
     FIXTURE = FIXTURES / "valid" / "handwritten-landing.txt"

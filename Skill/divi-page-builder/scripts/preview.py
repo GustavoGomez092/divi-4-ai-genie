@@ -1,22 +1,30 @@
 #!/usr/bin/env python3
-"""Divi 4 page preview with the pure-Python renderer (stdlib only, no Node, PHP or WordPress).
+"""Divi page preview: Divi 4 shortcode pages with the pure-Python renderer (stdlib only, no Node, PHP or
+WordPress); Divi 5 block pages on the real Divi 5 theme in WordPress Playground (needs Node 20+).
 
   python3 preview.py render PAGE [--out FILE] [--tokens tokens.json | --divi VER] [--no-js] [--exact] [--keys PATH]
       Writes one standalone HTML file (Divi's CSS/JS inlined, icon fonts and theme images as data:
       URIs, so it works opened from disk or over HTTP) and prints the coverage summary: modules the
       Python renderer doesn't support (--exact renders them), content that needs the live site's
       data (posts, menus, media, comments, widgets: neither preview has it, so check the WordPress
-      draft preview) and attributes it ignored. Default --out: <page name>.html.
+      draft preview) and attributes it ignored. Default --out: <page name>.html (<page name>.preview.html
+      when that is the page itself).
+      A Divi 5 block page (<!-- wp:divi/... --> markup, in a .txt or .html file) always renders in
+      Playground, like --exact: local images inlined, and with --tokens the site's recovered global
+      colors, variables and preset CSS seeded into the page (see seed_css).
   python3 preview.py serve [--pages DIR] [--port 8765] [--tokens tokens.json | --divi VER] [--no-js] [--exact] [--keys PATH]
-      Serves http://127.0.0.1:PORT/<name> for every DIR/<name>.txt, re-rendered on each request.
-      The page polls for edits and reloads itself. Divi's fonts/images/JS come from /__divi/...
-      Pages with unsupported modules or site-data content show a banner saying which preview can show them.
+      Serves http://127.0.0.1:PORT/<name> for every DIR/<name>.txt (and every DIR/<name>.html holding
+      Divi 5 blocks). Shortcode pages are re-rendered on each request, poll for edits and reload
+      themselves; Divi's fonts/images/JS come from /__divi/... Pages with unsupported modules or
+      site-data content show a banner saying which preview can show them. Block pages redirect to one
+      warm Divi 5 Playground that re-renders them on every reload (edits are picked up within ~0.5 s).
   python3 preview.py doctor [--keys PATH]
-      Reports Python, the cache dir, cached Divi versions, whether Node is present (only needed
-      for --exact) and whether Elegant Themes credentials are available and from where (env /
-      keys.json / none).
+      Reports Python, the cache dir, cached Divi versions (and whether a Divi 5 is cached), whether
+      Node is present (only needed for --exact and Divi 5 block pages) and whether Elegant Themes
+      credentials are available and from where (env / keys.json / none).
   python3 preview.py fetch-divi VER [--keys PATH]
       Downloads and caches a Divi version (the only command that always needs ET credentials).
+      VER: 4.27.9, 5.13.1, latest (the newest Divi 4) or latest5 (the newest Divi 5).
 
 Elegant Themes credentials, wherever a version isn't cached and must be downloaded (fetch-divi,
 and render/serve/doctor when they fall through to a download): env ET_USERNAME + ET_API_KEY win
@@ -28,8 +36,9 @@ DIVI_KEYS_FILE, else ~/.config/divi-page-builder/keys.json) -- see wp_keys.resol
 WordPress Playground) for pages the Python renderer can't reproduce. It needs Node 20+.
 
 Divi version (render/serve): --divi, else --tokens (site.divi_version), else the newest cached
-version, else "latest". An empty site.divi_version falls through to the next rule (with a note).
-A cached version never triggers an Elegant Themes API call.
+version of the page's major (Divi 4 for shortcode, Divi 5 for blocks: a cached Divi 5 is never
+used for a shortcode page, or the reverse), else "latest" / "latest5". An empty site.divi_version
+falls through to the next rule (with a note). A cached version never triggers an Elegant Themes API call.
 """
 from __future__ import annotations
 
@@ -38,9 +47,13 @@ import html
 import json
 import os
 import platform
+import re
 import shutil
+import signal
 import subprocess
 import sys
+import tempfile
+import threading
 import time
 import traceback
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -51,6 +64,7 @@ HERE = Path(__file__).resolve().parent
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
+import divi_format  # noqa: E402
 import fetch_divi  # noqa: E402
 import local_media  # noqa: E402
 import wp_keys  # noqa: E402
@@ -82,8 +96,13 @@ class UsageError(Exception):
 
 
 # ----------------------------------------------------------------------------- shared
-def resolve_divi_version(divi: str | None, tokens: str | None) -> str:
-    """--divi, else --tokens (site.divi_version), else the newest cached version, else 'latest'."""
+def resolve_divi_version(divi: str | None, tokens: str | None, major: int = 4) -> str:
+    """--divi, else --tokens (site.divi_version), else the newest cached version of Divi `major` (the page's
+    format: 4 for shortcode, 5 for blocks), else 'latest' / 'latest5'. A cached Divi 5 is never picked for
+    Divi 4 content, or the reverse; explicit --divi/--tokens always win (callers check the major)."""
+    def fallback() -> str:
+        return fetch_divi.newest_cached(major=major) or ("latest5" if major == 5 else "latest")
+
     if divi:
         return divi
     if tokens:
@@ -97,11 +116,111 @@ def resolve_divi_version(divi: str | None, tokens: str | None) -> str:
         version = site.get("divi_version")
         if version:
             return version
-        fallback = fetch_divi.newest_cached() or "latest"
+        version = fallback()
         print(f"note: site.divi_version is empty in {tokens}; using "
-              f"{'the newest cached Divi, ' + fallback if fallback != 'latest' else 'latest'}", file=sys.stderr)
-        return fallback
-    return fetch_divi.newest_cached() or "latest"
+              f"{version if version.startswith('latest') else f'the newest cached Divi {major}, ' + version}",
+              file=sys.stderr)
+        return version
+    return fallback()
+
+
+def version_major(version: str) -> int | None:
+    """4/5 for a version or latest alias; None when unknown."""
+    alias = fetch_divi.latest_major(version)
+    if alias:
+        return alias
+    head = version.split(".")[0]
+    return int(head) if head.isdigit() else None
+
+
+def is_blocks(text: str) -> bool:
+    """Divi 5 block content (Playground renders it; the Python renderer is Divi 4 only)."""
+    return divi_format.detect_content(text) in ("blocks", "mixed")
+
+
+D4_ONLY = ("the Python preview renders Divi 4 only, and this page is Divi 4 shortcode but the Divi version is "
+           "{v}. Preview it with --divi 4.x (or no --divi/--tokens), add --exact to render it through Divi 5's "
+           "shortcode compatibility layer, or convert the page to Divi 5 blocks (what a Divi 5 site stores)")
+D5_ONLY = ("this page is Divi 5 block markup, which needs a Divi 5 theme, but the Divi version is {v}. Use "
+           "--divi 5.x, tokens from the Divi 5 site, or no --divi/--tokens (the newest cached Divi 5)")
+
+
+# ----------------------------------------------------------------------------- Divi 5 token seeding
+_UNSAFE_CSS = re.compile(r"[<>{}]|/\*|\*/")
+
+
+def _css_safe(text) -> bool:
+    return isinstance(text, str) and text.strip() != "" and not _UNSAFE_CSS.search(text)
+
+
+def _var_css(entry: dict) -> str | None:
+    """A tokens.json color/variable entry as the CSS value Divi prints for it (images and fonts were unwrapped
+    by the extractor); None when unknown (value null) or unsafe to put in a <style>."""
+    value = entry.get("value") if isinstance(entry, dict) else None
+    if not _css_safe(value):
+        return None
+    kind = entry.get("kind")
+    if kind in ("strings", "links"):
+        return None  # resolved inline by Divi, never CSS
+    if kind == "images":
+        return 'url("' + value.replace('"', '%22') + '")'
+    if kind == "fonts":
+        return "'" + value.strip("'\"").replace("'", "\\'") + "'"
+    return value.strip()
+
+
+def _rules_css(css) -> list:
+    """The rules of one recovered preset css object ({selector, declarations, rules}) as CSS text."""
+    if not isinstance(css, dict):
+        return []
+    rules = css.get("rules") or ([{"selector": css.get("selector"), "declarations": css.get("declarations")}]
+                                 if css.get("selector") else [])
+    out = []
+    for rule in rules:
+        sel, decls, media = rule.get("selector"), rule.get("declarations") or {}, rule.get("media")
+        body = ";".join(f"{k}:{v}" for k, v in decls.items() if _css_safe(k) and _css_safe(v))
+        if not _css_safe(sel) or not body:
+            continue
+        text = f"{sel}{{{body}}}"
+        if media:
+            if not _css_safe(media):
+                continue
+            text = f"@media {media}{{{text}}}"
+        out.append(text)
+    return out
+
+
+def seed_css(tokens: dict) -> str:
+    """The client's recovered Divi 5 design system as CSS for the (stock) Playground preview: one
+    `:root:root{--gcid-…;--gvid-…}` block (colors.global, colors.customizer, variables; null and string/link
+    values skipped; `:root:root` outranks the stock `:root` Divi prints) followed by every recovered preset
+    rule (presets, group_presets, preset_defaults). Only what the extractor recovered: a preset with
+    `css: null` and unknown values stay stock. Empty string when there is nothing to seed."""
+    if not isinstance(tokens, dict):
+        return ""
+    colors = tokens.get("colors") or {}
+    root = []
+    for name, entry in (colors.get("global") or {}).items():
+        v = _var_css({k: x for k, x in (entry or {}).items() if k != "kind"})
+        if v is not None and re.fullmatch(r"gcid-[A-Za-z0-9_-]+", name):
+            root.append(f"--{name}:{v};")
+    for entry in (colors.get("customizer") or {}).values():
+        name = (entry or {}).get("id") or ""
+        v = _var_css({"value": (entry or {}).get("value")})
+        if v is not None and re.fullmatch(r"gcid-[A-Za-z0-9_-]+", name):
+            root.append(f"--{name}:{v};")
+    for name, entry in (tokens.get("variables") or {}).items():
+        v = _var_css(entry)
+        if v is not None and re.fullmatch(r"gvid-[A-Za-z0-9_-]+", name):
+            root.append(f"--{name}:{v};")
+    parts = [":root:root{" + "".join(root) + "}"] if root else []
+    for group in ("presets", "group_presets"):
+        for entries in (tokens.get(group) or {}).values():
+            for entry in entries or []:
+                parts += _rules_css((entry or {}).get("css"))
+    for css in (tokens.get("preset_defaults") or {}).values():
+        parts += _rules_css(css)
+    return "\n".join(dict.fromkeys(parts))
 
 
 def unsupported_items(coverage: dict) -> dict:
@@ -200,15 +319,30 @@ def exact_env(keys_path=None) -> dict:
     return env
 
 
+def usable_node(purpose: str = "", quiet: bool = False) -> str:
+    """The `node` binary when it is Node 20+; otherwise prints the guidance (unless quiet) and raises
+    NodeMissing (whose message is that guidance)."""
+    node = shutil.which("node")
+    message = f"{purpose}{NODE_GUIDANCE}"
+    if node:
+        major, version = node_major(node)
+        if major is not None and major >= NODE_MIN_MAJOR:
+            return node
+        message = f"{purpose}found Node {version} at {node}. {NODE_GUIDANCE}"
+    if not quiet:
+        print(f"preview: {message}", file=sys.stderr)
+    raise NodeMissing(message)
+
+
+class NodeMissing(Exception):
+    pass
+
+
 def run_exact(a) -> int:
     """Hands the command to the real-Divi preview (Playground)."""
-    node = shutil.which("node")
-    if not node:
-        print(f"preview: {NODE_GUIDANCE}", file=sys.stderr)
-        return 2
-    major, version = node_major(node)
-    if major is None or major < NODE_MIN_MAJOR:
-        print(f"preview: found Node {version} at {node}. {NODE_GUIDANCE}", file=sys.stderr)
+    try:
+        node = usable_node()
+    except NodeMissing:
         return 2
     try:
         env = exact_env(getattr(a, "keys", None))
@@ -223,17 +357,203 @@ def _renderer():
     return divi_render
 
 
+def default_out(page: Path) -> Path:
+    """<page name>.html in the current directory, or <page name>.preview.html when that is the page itself
+    (a Divi 5 page kept as .html)."""
+    out = Path.cwd() / (page.stem + ".html")
+    return Path.cwd() / (page.stem + ".preview.html") if out.resolve() == page.resolve() else out
+
+
+# ----------------------------------------------------------------------------- Divi 5 blocks (Playground)
+D5_NODE = "Divi 5 block pages render on the real Divi 5 theme in WordPress Playground: "
+
+
+def blocks_version(a) -> str:
+    """The Divi 5 version for block pages (--divi/--tokens, else the newest cached 5.x, else latest5)."""
+    version = resolve_divi_version(a.divi, a.tokens, major=5)
+    if version_major(version) not in (5, None):
+        raise UsageError(D5_ONLY.format(v=version))
+    return version
+
+
+def load_seed(tokens_path) -> str:
+    """seed_css() of --tokens (empty without tokens, or for Divi 4 tokens that have no Divi 5 ids)."""
+    if not tokens_path:
+        return ""
+    try:
+        return seed_css(json.loads(Path(tokens_path).read_text(encoding="utf-8")))
+    except (OSError, ValueError) as e:
+        raise UsageError(f"cannot read {tokens_path}: {e}") from None
+
+
+def safe_name(name: str) -> str:
+    """The pp-preview mu-plugin only serves [A-Za-z0-9_-] page names."""
+    return re.sub(r"[^A-Za-z0-9_-]", "-", name) or "page"
+
+
+def stage_block_page(page: Path, stage: Path, seed: str, name: str | None = None) -> Path:
+    """Writes <stage>/<name>.txt (the page with its local images inlined as data: URIs), plus the page's
+    <stem>.meta.json and a <name>.seed.css sidecar (token seeding), for preview.mjs / the mu-plugin."""
+    name = name or safe_name(page.stem)
+    staged = stage / f"{name}.txt"
+    text = local_media.embed_local_images(page.read_text(encoding="utf-8"), page.resolve().parent)
+    tmp = staged.with_suffix(".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    os.replace(tmp, staged)  # atomic: a render in flight never reads half a file
+    meta = page.with_name(page.stem + ".meta.json")
+    if meta.is_file():
+        shutil.copyfile(meta, stage / f"{name}.meta.json")
+    seed_file = stage / f"{name}.seed.css"
+    if seed:
+        seed_file.write_text(seed, encoding="utf-8")
+    elif seed_file.exists():
+        seed_file.unlink()
+    return staged
+
+
+def render_blocks(a, page: Path) -> int:
+    """render for a Divi 5 block page: Playground (preview.mjs render) on a Divi 5 theme, with local images
+    inlined and the --tokens seed, writing the same standalone HTML file as --exact."""
+    version = blocks_version(a)
+    seed = load_seed(a.tokens)
+    try:
+        node = usable_node(D5_NODE)
+        env = exact_env(getattr(a, "keys", None))
+    except NodeMissing:
+        return 2
+    except wp_keys.KeysError as e:
+        print(f"preview: {e}", file=sys.stderr)
+        return 2
+    out = Path(a.out).resolve() if a.out else default_out(page).resolve()
+    with tempfile.TemporaryDirectory(prefix="pp-d5-render-") as stage:
+        staged = stage_block_page(page, Path(stage), seed)
+        code = subprocess.call([node, str(PREVIEW_MJS), "render", str(staged), "--out", str(out),
+                                "--divi", version], env=env)
+    if code == 0:
+        print(f"Divi 5 block page rendered on Divi {version} (WordPress Playground)"
+              + ("; tokens seeded: global colors, variables and preset CSS from tokens.json" if seed else "")
+              + ". The WordPress draft preview stays the authoritative check.")
+    return code
+
+
+class PlaygroundPages:
+    """One warm Playground (preview.mjs serve on a Divi 5 theme) for the block pages of a pages dir. The pages
+    are staged into a private dir (local images inlined, tokens seed sidecar) and re-staged within ~0.5 s of
+    an edit; the Playground re-renders on every request, so reloading shows the change."""
+
+    def __init__(self, pages: Path, version: str, seed: str, node: str, env: dict):
+        self.pages, self.version, self.seed, self.node, self.env = pages, version, seed, node, env
+        self.stage = None
+        self.base = None
+        self.error = None
+        self.proc = None
+        self._mtimes: dict = {}
+        self._lock = threading.Lock()
+        self._stop = threading.Event()
+
+    def names(self) -> dict:
+        return {safe_name(n): f for n, f in page_files(self.pages).items() if page_is_blocks(f)}
+
+    def sync(self) -> None:
+        if self.stage is None:
+            return
+        with self._lock:
+            current = self.names()
+            for name, f in current.items():
+                try:
+                    stamp = (f.stat().st_mtime_ns, f.stat().st_size)
+                    if self._mtimes.get(name) != stamp:
+                        stage_block_page(f, self.stage, self.seed, name)
+                        self._mtimes[name] = stamp
+                except (OSError, UnicodeDecodeError) as e:
+                    sys.stderr.write(f"preview: cannot stage {f}: {e}\n")
+            for name in set(self._mtimes) - set(current):
+                for ext in (".txt", ".meta.json", ".seed.css"):
+                    (self.stage / f"{name}{ext}").unlink(missing_ok=True)
+                self._mtimes.pop(name, None)
+
+    def start(self) -> None:
+        with self._lock:
+            if self.proc is not None:
+                return
+            self.stage = Path(tempfile.mkdtemp(prefix="pp-d5-serve-"))
+        self.sync()
+        port = free_port()
+        self.proc = subprocess.Popen([self.node, str(PREVIEW_MJS), "serve", "--pages", str(self.stage),
+                                      "--port", str(port), "--divi", self.version],
+                                     env=self.env, stdout=subprocess.PIPE, text=True)
+        threading.Thread(target=self._read, daemon=True).start()
+        threading.Thread(target=self._watch, daemon=True).start()
+
+    def _read(self) -> None:
+        for line in self.proc.stdout:
+            if self.base is None and line.startswith("http://") and "/?pp_preview=" in line:
+                self.base = line.split("/?pp_preview=")[0]
+                sys.stderr.write(f"Divi 5 block pages: WordPress Playground (Divi {self.version}) ready at "
+                                 f"{self.base}\n")
+        code = self.proc.wait()
+        if not self._stop.is_set():
+            self.error = f"the Divi 5 Playground (preview.mjs serve) exited with code {code}; see the log above"
+
+    def _watch(self) -> None:
+        while not self._stop.wait(0.5):
+            self.sync()
+
+    def url(self, name: str) -> str:
+        return f"{self.base}/?pp_preview={safe_name(name)}"
+
+    def stop(self) -> None:
+        self._stop.set()
+        if self.proc is not None and self.proc.poll() is None:
+            self.proc.terminate()
+            try:
+                self.proc.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                self.proc.kill()
+        if self.stage:
+            shutil.rmtree(self.stage, ignore_errors=True)
+
+
+def free_port() -> int:
+    """A free local TCP port for the Playground behind serve."""
+    import socket
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
+
+
+def page_files(pages: Path) -> dict:
+    """name -> file for a pages dir: every <name>.txt, plus every <name>.html that holds Divi 5 blocks (a
+    rendered preview .html has none, so it is not a page); a .txt wins over an .html of the same name."""
+    found = {p.stem: p for p in pages.glob("*.html") if page_is_blocks(p)}
+    found.update({p.stem: p for p in pages.glob("*.txt")})
+    return dict(sorted(found.items()))
+
+
+def page_is_blocks(path: Path) -> bool:
+    try:
+        return is_blocks(path.read_text(encoding="utf-8", errors="replace"))
+    except OSError:
+        return False
+
+
 # ----------------------------------------------------------------------------- render
 def cmd_render(a) -> int:
     page = Path(a.page)
     if not page.is_file():
         raise UsageError(f"no such page: {page}")
+    if page_is_blocks(page):
+        return render_blocks(a, page)
+    if a.exact:
+        return run_exact(a)
     version = resolve_divi_version(a.divi, a.tokens)
+    if version_major(version) == 5:
+        raise UsageError(D4_ONLY.format(v=version))
     dr = _renderer()
     source = local_media.embed_local_images(page.read_text(encoding="utf-8"), page.resolve().parent)
     result = dr.render_page(source, divi_version=version, title=page.stem,
                             with_js=not a.no_js, embed_assets=True, keys_path=a.keys)
-    out = Path(a.out) if a.out else Path.cwd() / (page.stem + ".html")
+    out = Path(a.out) if a.out else default_out(page)
     out.write_text(result.html, encoding="utf-8")
     print(f"wrote {out} ({len(result.html) / 1024:.0f} KB)")
     print(coverage_summary(result.coverage))
@@ -241,10 +561,19 @@ def cmd_render(a) -> int:
 
 
 # ----------------------------------------------------------------------------- serve
-def make_handler(pages: Path, version: str, with_js: bool, keys_path=None):
+STARTING = ("<!DOCTYPE html><meta http-equiv=refresh content=2><title>Starting Divi 5 preview</title>"
+            "<p>Starting WordPress Playground with Divi {v} for the Divi 5 block pages (a few seconds; about 30 s "
+            "the very first time). This page reloads itself.</p>")
+
+
+def make_handler(pages: Path, version: str | None, with_js: bool, keys_path=None, blocks=None,
+                 version_error: str | None = None, blocks_error: str | None = None):
+    """The serve handler. Divi 4 shortcode pages render in Python on `version` (None: they can't, and show
+    `version_error`); Divi 5 block pages redirect to the warm Playground `blocks` (PlaygroundPages; None:
+    they show `blocks_error`)."""
     dr = _renderer()
     from divi_render.assets import mime_type, resolve_asset
-    theme = dr.theme_for(version, DIVI_ROUTE, False, keys_path=keys_path)
+    theme = dr.theme_for(version, DIVI_ROUTE, False, keys_path=keys_path) if version else None
     # Per-page allowlist of the local image files that page's own attributes reference, rebuilt
     # on every render of that page: name -> {token: resolved Path}. /__local/<name>/<token> only
     # ever serves a path that's in here -- never a path built from the request itself, which is
@@ -265,17 +594,20 @@ def make_handler(pages: Path, version: str, with_js: bool, keys_path=None):
             self.end_headers()
             self.wfile.write(body)
 
+        def error_page(self, code, message):
+            return self.send(code, f"<!DOCTYPE html><title>Preview</title><p>{html.escape(message)}</p>".encode())
+
         def do_GET(self):
             path = unquote(urlparse(self.path).path)
             if path == "/":
-                names = sorted(p.stem for p in pages.glob("*.txt"))
+                names = list(page_files(pages))
                 items = "".join(f'<li><a href="/{html.escape(n)}">{html.escape(n)}</a></li>' for n in names)
                 return self.send(200, f"<h1>Divi pages in {html.escape(str(pages))}</h1><ul>{items}</ul>".encode())
             if path.startswith("/__mtime/"):
                 f = pages / (Path(path[len("/__mtime/"):]).name + ".txt")
                 return self.send(200, str(f.stat().st_mtime_ns if f.is_file() else 0).encode(), "text/plain")
             if path.startswith(DIVI_ROUTE):
-                f = resolve_asset(theme.path, path[len(DIVI_ROUTE):]) if theme.path else None
+                f = resolve_asset(theme.path, path[len(DIVI_ROUTE):]) if theme and theme.path else None
                 if f is None:
                     return self.send(404, b"not found", "text/plain")
                 return self.send(200, f.read_bytes(), mime_type(f), {"Cache-Control": "max-age=3600"})
@@ -291,9 +623,22 @@ def make_handler(pages: Path, version: str, with_js: bool, keys_path=None):
                     return self.send(404, b"not found", "text/plain")
                 return self.send(200, local.read_bytes(), mime, {"Cache-Control": "no-store"})
             name = path.strip("/")
-            f = pages / f"{name}.txt"
-            if not name or "/" in name or not f.is_file():
+            f = page_files(pages).get(name) if name and "/" not in name else None
+            if f is None:
                 return self.send(404, b"no such page", "text/plain")
+            if page_is_blocks(f):
+                if blocks is None:
+                    return self.error_page(500, blocks_error or "Divi 5 block pages can't be previewed here.")
+                blocks.start()
+                if blocks.error:
+                    return self.error_page(500, blocks.error)
+                if blocks.base is None:
+                    return self.send(503, STARTING.format(v=html.escape(blocks.version)).encode(),
+                                     extra={"Retry-After": "2"})
+                blocks.sync()
+                return self.send(302, b"", "text/plain", {"Location": blocks.url(name)})
+            if theme is None:
+                return self.error_page(500, version_error or "Divi 4 pages can't be previewed here.")
             t0 = time.perf_counter()
             try:
                 source, local_allow[name] = local_media.rewrite_for_serve(
@@ -326,22 +671,66 @@ def cmd_serve(a) -> int:
     pages = Path(a.pages).resolve()
     if not pages.is_dir():
         raise UsageError(f"no such pages dir: {pages}")
-    version = resolve_divi_version(a.divi, a.tokens)
-    handler = make_handler(pages, version, not a.no_js, keys_path=a.keys)
+    files = page_files(pages)
+    block_names = {n for n, f in files.items() if page_is_blocks(f)}
+    shortcode_names = set(files) - block_names
+    if a.exact:
+        if not block_names:
+            return run_exact(a)  # Divi 4 --exact: unchanged
+        if shortcode_names:
+            raise UsageError("--exact serve runs one Divi theme, but this dir mixes Divi 4 shortcode and Divi 5 "
+                             "block pages: drop --exact (shortcode pages then use the Python preview and block "
+                             "pages the Divi 5 Playground), or split the dir")
+    # Divi 4 shortcode pages: the Python renderer, on the newest cached 4.x (or --divi/--tokens). Its theme
+    # is only loaded when there are shortcode pages (a Divi 5-only dir never needs a Divi 4 download).
+    version = None
+    version_error = "this Divi 4 page was added after serve started with only Divi 5 pages: restart serve"
+    v4 = resolve_divi_version(a.divi, a.tokens)
+    if version_major(v4) == 5:
+        version_error = D4_ONLY.format(v=v4)
+        if shortcode_names and not block_names:
+            raise UsageError(version_error)
+    elif shortcode_names or not block_names:
+        version = v4
+    # Divi 5 block pages: one warm Playground, started now when there are any (else on the first request).
+    blocks = blocks_error = None
+    try:
+        blocks = PlaygroundPages(pages, blocks_version(a), load_seed(a.tokens),
+                                 usable_node(D5_NODE, quiet=True), exact_env(a.keys))
+    except (UsageError, NodeMissing, wp_keys.KeysError) as e:
+        blocks_error = str(e)
+    if block_names:
+        if blocks_error and not shortcode_names:
+            print(f"preview: {blocks_error}", file=sys.stderr)
+            return 2
+        if blocks_error:
+            print(f"preview: Divi 5 block pages won't render: {blocks_error}", file=sys.stderr)
+        else:
+            blocks.start()
+    handler = make_handler(pages, version, not a.no_js, keys_path=a.keys, blocks=blocks,
+                           version_error=version_error, blocks_error=blocks_error)
     server = ThreadingHTTPServer(("127.0.0.1", a.port), handler)
     base = f"http://127.0.0.1:{server.server_address[1]}"
-    names = sorted(p.stem for p in pages.glob("*.txt"))
-    for n in names:
+    for n in files:
         print(f"{base}/{n}", flush=True)
-    if not names:
+    if not files:
         print(f"(no *.txt in {pages}; add one and open {base}/<name>)", flush=True)
-    print("Serving (Python preview); Ctrl-C to stop.", file=sys.stderr, flush=True)
+    kinds = (["Python preview for Divi 4 shortcode"] if shortcode_names or not block_names else []) + \
+            ([f"Divi {blocks.version} Playground for block pages"] if blocks and block_names else [])
+    print(f"Serving ({', '.join(kinds)}); Ctrl-C to stop.", file=sys.stderr, flush=True)
+
+    def on_term(*_):
+        raise KeyboardInterrupt  # SIGTERM stops like Ctrl-C: the Playground child is stopped too
+
+    signal.signal(signal.SIGTERM, on_term)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         pass
     finally:
         server.server_close()
+        if blocks:
+            blocks.stop()
     return 0
 
 
@@ -370,12 +759,15 @@ def cmd_doctor(a) -> int:
         if major is None or major < NODE_MIN_MAJOR:
             node_version += f" (too old for --exact: need Node {NODE_MIN_MAJOR}+)"
     jq = find_jquery()
+    d5 = fetch_divi.list_cached(major=5)
     lines = [
         f"python: {platform.python_version()} ({sys.executable})",
         f"cache dir: {fetch_divi.cache_root()}",
         f"cached Divi versions: {', '.join(cached) if cached else '(none: python3 preview.py fetch-divi VER)'}",
+        "Divi 5 (block pages): " + ("cached " + ", ".join(d5) if d5 else
+                                    "not cached (python3 preview.py fetch-divi latest5, or a 5.x version)"),
         f"jQuery: {jq if jq else 'CDN (no cached WordPress copy)'}",
-        f"node: {node + ' ' + node_version if node else 'not found'} (only needed for --exact)",
+        f"node: {node + ' ' + node_version if node else 'not found'} (only needed for --exact and Divi 5 block pages)",
         f"Elegant Themes credentials: {et_credential_source(getattr(a, 'keys', None))}",
     ]
     print("\n".join(lines))
@@ -399,7 +791,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     def version_flags(p):
         g = p.add_mutually_exclusive_group()
-        g.add_argument("--divi", help="Divi version (default: --tokens, else newest cached, else latest)")
+        g.add_argument("--divi", help="Divi version (default: --tokens, else the newest cached version of the page's "
+                                     "Divi major, else latest / latest5)")
         g.add_argument("--tokens", help="tokens.json whose site.divi_version picks the Divi version")
         p.add_argument("--no-js", action="store_true", help="leave out Divi's front-end JS")
         p.add_argument("--exact", action="store_true", help="use the real-Divi Playground preview (needs Node)")
@@ -416,7 +809,7 @@ def build_parser() -> argparse.ArgumentParser:
     d = sub.add_parser("doctor", help="report what the preview can use")
     d.add_argument("--keys", help=keys_help)
     f = sub.add_parser("fetch-divi", help="download and cache a Divi version")
-    f.add_argument("version")
+    f.add_argument("version", help="4.27.9, 5.13.1, latest (newest Divi 4) or latest5 (newest Divi 5)")
     f.add_argument("--keys", help=keys_help)
     return ap
 
@@ -428,8 +821,6 @@ def main(argv=None) -> int:
         ap.print_help(sys.stderr)
         return 2
     a = ap.parse_args(argv)
-    if getattr(a, "exact", False):
-        return run_exact(a)
     commands = {"render": cmd_render, "serve": cmd_serve, "doctor": cmd_doctor, "fetch-divi": cmd_fetch_divi}
     try:
         return commands[a.cmd](a)

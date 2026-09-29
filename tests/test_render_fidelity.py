@@ -114,7 +114,7 @@ class RecordMetricsTest(unittest.TestCase):
 class RenderFidelityTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.version = fetch_divi.newest_cached()
+        cls.version = fetch_divi.newest_cached(major=4)  # the Python renderer is Divi 4 only
         if cls.version is None:
             raise unittest.SkipTest("no Divi build cached (python3 scripts/preview.py fetch-divi VER)")
         cls.fixtures = load_manifest()

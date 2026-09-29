@@ -350,6 +350,147 @@ class VersionArgTest(unittest.TestCase):
             self.assertTrue(fetch_divi.valid_version_arg(good), good)
 
 
+def _latest_handler(received, version="5.13.1"):
+    """A fake check_theme_updates endpoint (POST api.php) recording each form body it gets."""
+    class Handler(http.server.BaseHTTPRequestHandler):
+        def do_POST(self):
+            n = int(self.headers.get("Content-Length") or 0)
+            received.append(urllib.parse.parse_qs(self.rfile.read(n).decode()))
+            body = ('a:1:{s:4:"Divi";a:2:{s:11:"new_version";s:%d:"%s";s:7:"package";s:3:"zip";}}'
+                    % (len(version), version)).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *_a):
+            pass
+
+    return Handler
+
+
+class MajorAwareCacheTest(unittest.TestCase):
+    """Version selection is per Divi major: a cached Divi 5 must never be picked for Divi 4 content."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.cache = self.tmp.name
+        for v in ("4.27.3", "4.27.10", "5.0.0", "5.13.1"):
+            _seed_cached(self.cache, v)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_list_cached_filters_by_major(self):
+        self.assertEqual(fetch_divi.list_cached(self.cache, major=4), ["4.27.3", "4.27.10"])
+        self.assertEqual(fetch_divi.list_cached(self.cache, major=5), ["5.0.0", "5.13.1"])
+        self.assertEqual(fetch_divi.list_cached(self.cache, major=6), [])
+
+    def test_newest_cached_of_major_4_ignores_a_newer_5(self):
+        self.assertEqual(fetch_divi.newest_cached(self.cache, major=4), "4.27.10")
+        self.assertEqual(fetch_divi.newest_cached(self.cache, major=5), "5.13.1")
+
+    def test_latest_aliases_are_valid_version_args(self):
+        for good in ("latest4", "latest5"):
+            self.assertTrue(fetch_divi.valid_version_arg(good), good)
+        self.assertFalse(fetch_divi.valid_version_arg("latest6"))
+
+    def test_latest_major_of_alias(self):
+        self.assertEqual(fetch_divi.latest_major("latest"), 4)
+        self.assertEqual(fetch_divi.latest_major("latest4"), 4)
+        self.assertEqual(fetch_divi.latest_major("latest5"), 5)
+        self.assertIsNone(fetch_divi.latest_major("5.13.1"))
+
+
+class LatestVersionTest(unittest.TestCase):
+    """`latest` asks for the Divi 4 line exactly as before; `latest5` adds divi_5=on (what Divi 5's own
+    updater sends, et_core_maybe_add_divi5_api_parameter) and reports an installed 5.0.0."""
+
+    def _latest(self, major):
+        received = []
+        with _server(_latest_handler(received)) as base:
+            env = {"ET_USERNAME": "someone", "ET_API_KEY": "secretkey", "PP_ET_ENDPOINT": base}
+            with mock.patch.dict(os.environ, env, clear=True):
+                got = fetch_divi.latest_version(major=major) if major else fetch_divi.latest_version()
+        return got, received[0]
+
+    def test_default_latest_asks_for_divi_4_without_divi_5(self):
+        got, form = self._latest(None)
+        self.assertEqual(got, "5.13.1")  # whatever the server answers
+        self.assertEqual(form["installed_themes[Divi]"], ["4.0.0"])
+        self.assertNotIn("divi_5", form)
+
+    def test_latest_5_sends_divi_5_on(self):
+        _got, form = self._latest(5)
+        self.assertEqual(form["divi_5"], ["on"])
+        self.assertEqual(form["installed_themes[Divi]"], ["5.0.0"])
+
+    def test_ensure_divi_latest5_resolves_through_the_divi_5_line(self):
+        received = []
+        with _server(_latest_handler(received)) as base, tempfile.TemporaryDirectory() as cache:
+            _seed_cached(cache, "5.13.1")
+            env = {"ET_USERNAME": "someone", "ET_API_KEY": "secretkey", "PP_ET_ENDPOINT": base}
+            with mock.patch.dict(os.environ, env, clear=True):
+                got = fetch_divi.ensure_divi("latest5", cache)
+        self.assertEqual(got, Path(cache) / "Divi-5.13.1" / "Divi")
+        self.assertEqual(received[0]["divi_5"], ["on"])
+
+
+@unittest.skipUnless(shutil.which("node"), "node not installed")
+class NodeMajorAwareTest(unittest.TestCase):
+    """fetch-divi.mjs: the same per-major selection preview.mjs uses (listCachedDivi/newestCached/contentMajor/
+    resolveDiviVersion) and latest5 -> divi_5=on."""
+
+    def node(self, expr, env=None):
+        script = f"import({FETCH_MJS.as_uri()!r}).then(async m => console.log(JSON.stringify(await ({expr}))));"
+        proc = subprocess.run(["node", "--input-type=module", "-e", script], capture_output=True, text=True,
+                              timeout=30, env=env)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        return json.loads(proc.stdout), proc.stderr
+
+    def test_newest_cached_per_major(self):
+        with tempfile.TemporaryDirectory() as cache:
+            for v in ("4.27.3", "4.27.10", "5.13.1"):
+                _seed_cached(cache, v)
+            got, _ = self.node(f"[m.newestCached({cache!r}, 4), m.newestCached({cache!r}, 5), "
+                               f"m.listCachedDivi({cache!r})]")
+        self.assertEqual(got, ["4.27.10", "5.13.1", ["4.27.3", "4.27.10", "5.13.1"]])
+
+    def test_content_major(self):
+        got, _ = self.node("[m.contentMajor('<!-- wp:divi/placeholder --><!-- /wp:divi/placeholder -->'), "
+                           "m.contentMajor('[et_pb_section][/et_pb_section]'), m.contentMajor('')]")
+        self.assertEqual(got, [5, 4, 4])
+
+    def test_resolve_divi_version_is_major_aware(self):
+        with tempfile.TemporaryDirectory() as cache:
+            for v in ("4.27.10", "5.13.1"):
+                _seed_cached(cache, v)
+            tokens = Path(cache) / "t.json"
+            tokens.write_text(json.dumps({"site": {"divi_version": ""}}))
+            got, err = self.node(
+                f"[m.resolveDiviVersion({{}}, {cache!r}, 4), m.resolveDiviVersion({{}}, {cache!r}, 5), "
+                f"m.resolveDiviVersion({{divi: '4.20.0'}}, {cache!r}, 5), "
+                f"m.resolveDiviVersion({{tokens: {str(tokens)!r}}}, {cache!r}, 5), "
+                f"m.resolveDiviVersion({{}}, {str(Path(cache) / 'none')!r}, 5), "
+                f"m.resolveDiviVersion({{}}, {str(Path(cache) / 'none')!r}, 4)]")
+        self.assertEqual(got, ["4.27.10", "5.13.1", "4.20.0", "5.13.1", "latest5", "latest"])
+        self.assertIn("5.13.1", err)  # the empty-version note
+
+    def test_latest5_sends_divi_5_on(self):
+        received = []
+        with _server(_latest_handler(received)) as base:
+            env = {"PATH": os.environ["PATH"], "ET_USERNAME": "someone", "ET_API_KEY": "secretkey",
+                   "PP_ET_ENDPOINT": base}
+            got, _ = self.node("m.latestVersion(5)", env=env)
+            got4, _ = self.node("m.latestVersion()", env=env)
+        self.assertEqual(got, "5.13.1")
+        self.assertEqual(received[0]["divi_5"], ["on"])
+        self.assertEqual(received[0]["installed_themes[Divi]"], ["5.0.0"])
+        self.assertNotIn("divi_5", received[1])
+        self.assertEqual(received[1]["installed_themes[Divi]"], ["4.0.0"])
+
+
 @unittest.skipUnless(shutil.which("node"), "node not installed")
 class PlaygroundEnvTest(unittest.TestCase):
     def test_secrets_are_stripped_from_the_playground_environment(self):
