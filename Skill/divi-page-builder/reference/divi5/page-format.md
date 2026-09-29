@@ -115,14 +115,14 @@ Write the block JSON exactly as WordPress's `serialize_block_attributes()` does 
 
 | character in a value | written as | note |
 |---|---|---|
-| `"` | `"` | never `\"` |
-| `<` | `<` | |
-| `>` | `>` | |
-| `&` | `&` | also inside URLs and HTML entities: `&amp;` → `&amp;` |
-| `--` | `--` | so the value can't close the comment |
-| `\` | `\` | a backslash in the value (JSON `\\`) |
-| non-ASCII (`ü`, `€`, `😀`) | raw UTF-8 | not `ü` |
-| `/` | `/` | not escaped |
+| `"` | `\u0022` | never `\"` |
+| `<` | `\u003c` | |
+| `>` | `\u003e` | |
+| `&` | `\u0026` | also inside URLs and HTML entities: `&amp;` → `\u0026amp;` |
+| `--` | `\u002d\u002d` | so the value can't close the comment |
+| `\` | `\u005c` | a backslash in the value (JSON `\\`) |
+| non-ASCII (`ü`, `€`, `😀`) | raw UTF-8 | not `\u00fc` |
+| `/` | unchanged | never `\/` |
 | newline, tab | `\n`, `\t` | ordinary JSON escapes |
 
 Also: no spaces in the JSON, keys in the order you build them, and an empty object `{}` written as `[]` (PHP's

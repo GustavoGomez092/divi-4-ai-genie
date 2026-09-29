@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -307,7 +308,8 @@ def is_legacy(path: str, raw_module: dict, d4map: dict) -> bool:
 
 
 def _legacy_note(path: str) -> str:
-    column = path.startswith("columns") or "Column" in path or "column" in path or path[-1:].isdigit()
+    column = (path.startswith("columns") or "Column" in path or "column" in path
+              or re.search(r"\d(Phone|Tablet|LastEdited)?$", path) is not None)
     return LEGACY_COLUMN_NOTE if column else LEGACY_NOTE
 
 

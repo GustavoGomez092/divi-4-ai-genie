@@ -224,7 +224,7 @@ Common mistake: a number or object where a string is expected (`"title": {"inner
 
 Grammar: a string of HTML, in `innerContent` (text bodies, blurb and toggle content, code modules). Write normal
 HTML: tags, entities (`&amp;`, `&copy;`), links. Canonical escaping turns every `<`, `>`, `&` and `"` into
-`<`… in the stored JSON; `divi5_blocks` does that for you. Text content gets `wpautop` (paragraphs from line
+`\u003c`… in the stored JSON; `divi5_blocks` does that for you. Text content gets `wpautop` (paragraphs from line
 breaks) and `do_shortcode`.
 
 ```divi5
@@ -370,7 +370,7 @@ reference is a string: `$variable(` + a JSON object + `)$`.
 - `settings` can adjust a color: `{"hue": …, "saturation": …, "lightness": …, "opacity": …}` renders an
   `hsl(from var(--gcid-…) …)` derived color. Leave it `{}` unless the site's tokens use one.
 - The reference is JSON inside a JSON string, so its quotes are escaped: in canonical markup every `"` in it is
-  `"` (`divi5_blocks` handles this).
+  `\u0022` (`divi5_blocks` handles this).
 - When `tokens.json` maps a role to a global (the site's buttons all use `gcid-…`), write the reference, not the hex:
   the page then follows the client's palette.
 
@@ -427,7 +427,7 @@ An icon is an object `{"unicode", "type", "weight"}` wherever it appears: `image
   (`IconFont/Utils.php:60-81`). Keep the weight from icons.md: Divi icons are `400`; Font Awesome solid `900`,
   regular and brands `400`.
 - `unicode` is the HTML entity text (`&#xf095;`), not the glyph. Canonical escaping stores it as
-  `&#xf095;`.
+  `\u0026#xf095;`.
 - A blurb shows its icon only with `useIcon: "on"`; a button shows a styled icon with
   `button.decoration.button` → `{"enable": "on", "icon": {"enable": "on", "settings": {…}}}`.
 

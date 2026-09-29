@@ -26,7 +26,7 @@ was shared with a concurrent spike, whose pages `R5 …` were left alone).
    and the nonce endpoint hands out nonces for user 0). Working options: WP-CLI, or a 10-line mu-plugin that
    registers the meta early (verified), or ask a human to toggle the builder once.
 5. **Encoding:** attribute JSON must use WordPress's `serialize_block_attributes()` escaping
-   (`" < > & -- \`). Any valid JSON parses (raw `<`, `&`, `\"` included),
+   (`\u0022 \u003c \u003e \u0026 \u002d\u002d \u005c`). Any valid JSON parses (raw `<`, `&`, `\"` included),
    but for users **without `unfiltered_html`** kses re-parses the block comments and raw `<`/`"` in the JSON
    **destroy the page**; canonical escaping survives. Every PHP path (converter, migrations, kses, REST
    `content.raw`) emits the WP canonical form; the builder's JS serializer differs only in writing `\\` instead
@@ -216,10 +216,10 @@ Writers:
 
 WordPress 7.1 `serialize_block_attributes()` (`wp-includes/blocks.php:1705-1719`):
 `wp_json_encode($attrs, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE)` then `strtr` with
-`\\`→`\`, `--`→`--`, `<`→`<`, `>`→`>`, `&`→`&`, `\"`→`"`.
+`\\`→`\u005c`, `--`→`\u002d\u002d`, `<`→`\u003c`, `>`→`\u003e`, `&`→`\u0026`, `\"`→`\u0022`.
 Non-ASCII stays raw UTF-8 (`ü € 😀`), `/` is not escaped, control characters use JSON escapes (`\n`);
-PHP's encoder still escapes U+2028/U+2029 as ` `/` `. The Divi converter output confirms this
-form (`unicode.html`: `content: "a\b\c";`, `&#91;VIP&#93;`, `<p>`).
+PHP's encoder still escapes U+2028/U+2029 as `\u2028`/`\u2029`. The Divi converter output confirms this
+form (`unicode.html`: `content: \u0022a\u005cb\u005cc\u0022;`, `\u0026#91;VIP\u0026#93;`, `\u003cp\u003e`).
 
 ### 4.3 Where content lives
 
@@ -267,7 +267,7 @@ Across the 35 fixtures: breakpoints desktop 9364 / tablet 405 / phone 357; state
   `S/Packages/GlobalData/GlobalData.php:547-561`); font objects (`family`, `weight`, `size`, `lineHeight`,
   `letterSpacing`, `color`, `headingLevel`); spacing objects with `syncVertical`/`syncHorizontal` `"on"|"off"`;
   border `{"styles":{"all":{"width","color","style"}},"radius":{…,"sync"}}`; icons
-  `{"unicode":"&#xe03b;","type":"divi","weight":"400"}` (HTML entity string, JSON-escaped as `&#xe03b;`);
+  `{"unicode":"&#xe03b;","type":"divi","weight":"400"}` (HTML entity string, JSON-escaped as `\u0026#xe03b;`);
   links `linkUrl`, `linkTarget:"on"`; images `{"src":…}` / `{"url":…}`; backgrounds
   `{"color":…,"image":{"url":…},"gradient":{"enabled":"on",…}}`; yes/no stays `"on"|"off"`; numbers are strings
   with units except map coordinates (`"lat":34.01` numbers).
@@ -386,7 +386,7 @@ Results (`tests/fixtures/divi5/converted/*.html`, 35 files from `tests/fixtures/
 - Don't expect D4 percent escapes in D5; `&#91;`/`&#93;` inside HTML values are real content.
 
 **Serializer (write side)**
-- Emit WP canonical form byte-for-byte: `serialize_block_attributes()` escaping (including `\\`→`\`),
+- Emit WP canonical form byte-for-byte: `serialize_block_attributes()` escaping (including `\\`→`\u005c`),
   `<!-- wp:divi/x {json} -->` with single spaces, self-closing leaves `<!-- wp:divi/x {json} /-->`, no
   whitespace between blocks, whole page wrapped in `<!-- wp:divi/placeholder -->`…`<!-- /wp:divi/placeholder -->`.
   That form is a fixed point of every PHP path (kses, REST read, migrations), so edits diff cleanly.

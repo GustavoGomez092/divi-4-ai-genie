@@ -77,7 +77,7 @@ All 32 example sections of the three references (page-format, structure, value-f
 - `transform` `{rotate: {x,y,z}, scale: {x,y}}` → `transform:scaleX(1.05) scaleY(1.05) rotateX(0deg) rotateY(0deg) rotateZ(-3deg)`.
 - Border `radius` object on `image.decoration.border` → the four `border-*-radius` declarations on `.et_pb_image_wrap`.
 - Button `button.decoration.button.icon.settings` `{"unicode":"&#xf095;","type":"fa","weight":"900"}` →
-  `data-icon=""` and `font-family:"FontAwesome"; font-weight:900`.
+  a `data-icon` attribute holding the glyph U+F095 (written as the raw character) and `font-family:"FontAwesome"; font-weight:900`.
 - Links: button `linkTarget: "on"` → `target="_blank"`; blurb `title.innerContent.url` wraps the title and the icon in
   `<a>`; `module.advanced.link.url` adds `et_clickable`; icon `icon.innerContent.url` renders the icon as `<a>`.
 - An accordion with `title.decoration.font.font` `headingLevel: "h3"` and items that set none: both items rendered

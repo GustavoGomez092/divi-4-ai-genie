@@ -170,6 +170,10 @@ class GeneratedDocsTest(unittest.TestCase):
         for keep in ("| `css` |", "| `adminLabel` |", "| `locked` |"):
             for l in (l for l in lines if l.startswith(keep)):
                 self.assertNotIn("legacy", l)
+        for name in ("padding1Phone", "padding2Tablet", "padding3LastEdited", "customCssMain1"):
+            rows = [l for l in lines if l.startswith(f"| `{name}` |")]
+            self.assertTrue(rows, name)
+            self.assertIn("style each column on its own `divi/column` block", rows[0], name)
         section = (MODULES5 / "section.md").read_text()
         self.assertTrue(any(l.startswith("| `columnsPadding` |") and "legacy (D4 conversion)" in l
                             for l in section.splitlines()))
@@ -233,6 +237,26 @@ class HandWrittenReferencesTest(unittest.TestCase):
                 elif anchor and path.suffix == ".md" and anchor not in _anchors(path):
                     broken.append((page.name, link))
         self.assertEqual(broken, [])
+
+    def test_escaping_table_shows_the_escapes(self):
+        # Regression: an earlier write decoded the \\uXXXX sequences, so the table said `"` -> `"`.
+        B = chr(92)
+        text = (REF5 / "page-format.md").read_text()
+        table = text.split("## Canonical JSON escaping, and why", 1)[1].split("\n\n|", 1)[1].split("\n\n", 1)[0]
+        rows = [r for r in ("|" + table).splitlines() if r.startswith("| `")]
+        self.assertGreaterEqual(len(rows), 7)
+        for code in ("0022", "003c", "003e", "0026", "002d" + B + "u002d", "005c"):
+            self.assertIn(f"`{B}u{code}`", table, code)
+        for row in rows:
+            cells = [c.strip() for c in row.strip("|").split("|")]
+            self.assertNotEqual(cells[0], cells[1], row)
+        values = (REF5 / "value-formats.md").read_text()
+        for escape in ("0022", "003c", "0026#xf095;"):
+            self.assertIn(f"`{B}u{escape}`", values, escape)
+        for name in HAND_WRITTEN + ("design-families.md",):
+            prose = BLOCK5.sub("", (REF5 / name).read_text())
+            stray = [hex(ord(c)) for c in prose if 0xE000 <= ord(c) <= 0xF8FF or ord(c) in (0x2028, 0x2029)]
+            self.assertEqual(stray, [], name)
 
     def test_cited_validator_codes_exist(self):
         scripts = SKILL / "scripts"

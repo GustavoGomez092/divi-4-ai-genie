@@ -230,24 +230,24 @@ Legacy, from Divi's Divi 4 conversion map only. The validator accepts them so th
 | `customCssMain5` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `custom_css_main_5` |
 | `customCssMain6` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `custom_css_main_6` |
 | `customPaddingLastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `custom_padding_last_edited` |
-| `padding1LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_1_last_edited` |
-| `padding1Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_1_phone` |
-| `padding1Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_1_tablet` |
-| `padding2LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_2_last_edited` |
-| `padding2Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_2_phone` |
-| `padding2Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_2_tablet` |
-| `padding3LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_3_last_edited` |
-| `padding3Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_3_phone` |
-| `padding3Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_3_tablet` |
-| `padding4LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_4_last_edited` |
-| `padding4Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_4_phone` |
-| `padding4Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_4_tablet` |
-| `padding5LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_5_last_edited` |
-| `padding5Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_5_phone` |
-| `padding5Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_5_tablet` |
-| `padding6LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_6_last_edited` |
-| `padding6Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_6_phone` |
-| `padding6Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `padding_6_tablet` |
+| `padding1LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_1_last_edited` |
+| `padding1Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_1_phone` |
+| `padding1Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_1_tablet` |
+| `padding2LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_2_last_edited` |
+| `padding2Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_2_phone` |
+| `padding2Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_2_tablet` |
+| `padding3LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_3_last_edited` |
+| `padding3Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_3_phone` |
+| `padding3Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_3_tablet` |
+| `padding4LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_4_last_edited` |
+| `padding4Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_4_phone` |
+| `padding4Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_4_tablet` |
+| `padding5LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_5_last_edited` |
+| `padding5Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_5_phone` |
+| `padding5Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_5_tablet` |
+| `padding6LastEdited` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_6_last_edited` |
+| `padding6Phone` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_6_phone` |
+| `padding6Tablet` | — | text |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_6_tablet` |
 | `paddingBottom4` | — | length |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_bottom_4` |
 | `paddingBottom5` | — | length |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_bottom_5` |
 | `paddingBottom6` | — | length |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `padding_bottom_6` |
