@@ -65,13 +65,16 @@ python3 scripts/extract_tokens.py --key "Client A" --page 12 --page 34 --out tok
   fetch fails, extraction still proceeds with a warning on stderr — you just don't get the
   Customizer-derived tokens.
 
-**Offline** (no network access; parses a shortcode file you already have — useful for testing, or
+**Offline** (no network access; parses a content file you already have — useful for testing, or
 when you only have an export of the page content and no live site to fetch CSS from):
 
 ```bash
 python3 scripts/extract_tokens.py \
-  --shortcode-file page.txt --url https://client.example/page/ --out tokens.json
+  --content-file page.txt --url https://client.example/page/ --out tokens.json
 ```
+
+`--content-file` takes Divi 4 shortcode or Divi 5 blocks (`--shortcode-file` is the old name and still works).
+The rest of this section, and §3–§6, describe the Divi 4 output; Divi 5 sites are covered in §7.
 
 `--url` is optional in offline mode. If given, the extractor will still try to fetch that URL's
 HTML (for Customizer/fonts/version); if omitted, `tokens.json` will have `colors.customizer`,
@@ -230,3 +233,183 @@ actually match the rest of the site.
   instead of expecting a gcid to resolve to anything.
 - **Child-theme/plugin CSS is not captured at all** (§1). If a client's site relies on such CSS for
   part of its look, `tokens.json` will not reflect it.
+
+## 7. Divi 5 sites
+
+Divi 5 keeps the same idea (learn the site's look from its own pages), but its design system is far more visible
+from outside, and it can be *referenced* by id instead of copied. The research behind this section is
+`research/divi5/tokens-and-detection.md` (repo only).
+
+### 7.1 Detection
+
+`extract_tokens.py` decides the format before anything else:
+
+- **Online**, it asks `divi_format.detect_site`: the `Version:` header of `/wp-content/themes/Divi/style.css`,
+  else the most common `?ver=` on `/themes/Divi/` assets, else Divi 5 HTML markers.
+- **Every page's content** is classified with `detect_content` (`shortcode`, `blocks`, `mixed`).
+- A site that reports Divi 5, or any page holding `<!-- wp:divi/… -->` blocks, gets the Divi 5 extractor. Anything
+  else gets the Divi 4 extractor, whose output is unchanged (§2–§6).
+- A Divi 4 shortcode page sampled on a Divi 5 site is listed in `site.source_pages` with `format: "shortcode"` and
+  a warning; it adds no module styles. Sample block pages, or have the page converted in the Visual Builder first.
+
+### 7.2 Where the style lives, and what is recovered
+
+| Data | Stored in (site options) | Recovered from content (`tokens5_from_blocks.py`) | Recovered from public HTML/CSS (`tokens5_from_html.py`) |
+|---|---|---|---|
+| Global colors (`gcid-…`) | `et_divi[et_global_data]` | ids a page references, with use counts and roles | values from `:root{--gcid-…}`: only colors the page uses (all of them when Dynamic Assets is off). A derived color (`hsl(from var(--gcid-base) …)`) is resolved to a hex/rgba value |
+| The 5 Customizer colors | `et_divi[accent_color]` … | ids if referenced | **always**, from `:root` (defaults included) |
+| Customizer fonts, weights, body size | `et_divi[heading_font]` … | — | **always**, from `:root{--et_global_…}` |
+| Design variables (`gvid-…`) | `et_divi_global_variables` | ids a page references (every kind) | number, font, image and gradient values from `:root{--gvid-…}`: the ones the page uses, or **all active ones** on a page that uses none |
+| String and link variables | same | ids only | never (resolved inline into text / `href`) |
+| Module presets | `et_divi_builder_global_presets_d5` | ids (`modulePreset`) and use counts | the **rendered CSS** under `.preset--module--<module>--<id>` |
+| Option-group presets | same | ids, group name, host module, group id | the rendered CSS under `.preset--group--<module>--<group>--<hash>--<id>` |
+| A module type's default preset | same | — (implicit) | its CSS under `…--default`; its real id never appears |
+| Labels (color names, preset names), preset attribute JSON, unused anything | options | no | no |
+
+Online, the extractor fetches each sampled page's public URL **and the site's home page** (a page that references no
+variable prints every active number/font/image variable), and follows each page's same-origin
+`/wp-content/et-cache/…css` stylesheets, where static CSS generation or a cache plugin moves this CSS. Offline,
+`--content-file` plus `--url` fetches that URL and the site's home page the same way.
+
+### 7.3 `tokens.json` on Divi 5
+
+Top-level keys: `site`, `colors`, `variables`, `typography`, `spacing`, `shapes`, `presets`, `group_presets`,
+`preset_defaults`, `module_styles`, `section_exemplars`. A trimmed real extraction from the local Divi 5 test site:
+
+```json
+{
+ "site": {"url": "http://divi-5-test.local", "divi_version": "5.13.1", "divi_major": 5, "content_format": "blocks",
+          "source_pages": [{"id": 658, "url": "http://divi-5-test.local/r6-tokens-trace/", "format": "blocks"}],
+          "extracted_at": "2026-09-29T07:00:24+00:00"},
+ "colors": {
+  "global": {
+   "gcid-r6navy0001": {"value": "#0B2A3C", "uses": 1, "roles": ["content.decoration.bodyFont.body.font.color"]},
+   "gcid-r6orange001": {"value": "#F97316", "uses": 0},
+   "gcid-r6orangelt1": {"value": "#fdcdab", "raw": "hsl(from var(--gcid-r6orange001) calc(h + 0) calc(s + 0) calc(l + 30))",
+                        "base": "gcid-r6orange001", "uses": 1, "roles": ["module.decoration.background.color"]}
+  },
+  "customizer": {
+   "primary": {"id": "gcid-primary-color", "value": "#7C3AED", "overridden": true},
+   "heading": {"id": "gcid-heading-color", "value": "#666666", "overridden": false}
+  },
+  "palette": []
+ },
+ "variables": {
+  "gvid-r6secpad01": {"value": "clamp(48px, 8vw, 96px)", "kind": "numbers", "uses": 2,
+                      "roles": ["module.decoration.spacing.padding"]},
+  "gvid-r6font0001": {"value": "Poppins", "kind": "fonts", "uses": 0},
+  "gvid-r6image001": {"value": "https://example.com/r6-hero.jpg", "kind": "images", "uses": 0},
+  "gvid-r6ctalink1": {"value": null, "kind": "links", "uses": 1, "roles": ["button.innerContent.linkUrl"]}
+ },
+ "typography": {
+  "heading_font": "Open Sans", "body_font": "Open Sans", "scale": {},
+  "customizer": {"heading_font": {"id": "--et_global_heading_font", "value": "Open Sans", "weight": "500"},
+                 "body_size": "14px", "body_line_height": "1.7em"},
+  "loaded_fonts": ["Open Sans", "Poppins"]
+ },
+ "presets": {
+  "divi/button": [{"id": "r6btnpreset1", "uses": 1, "css": {
+   "selector": "body #page-container .et_pb_section .preset--module--divi-button--r6btnpreset1",
+   "declarations": {"background-color": "var(--gcid-r6orange001)", "color": "#ffffff",
+                    "border-top-left-radius": "var(--gvid-r6radius01)"},
+   "rules": ["… every rule naming the class, with its selector, declarations and media query …"]}}]
+ },
+ "group_presets": {
+  "divi/font": [{"id": "r6fontpreset1", "uses": 1, "module": "divi/heading", "group_id": "designTitleText",
+                 "css": {"declarations": {"font-family": "var(--gvid-r6font0001)", "font-weight": "700",
+                                          "color": "var(--gcid-r6navy0001)", "font-size": "52px"}}}]
+ }
+}
+```
+
+- `site.divi_major` is `5`; `site.divi_version` is the version for `builderVersion` on every block you write.
+  `site.content_format` is the sampled pages' format (`blocks`, or `mixed` when they differ); each source page
+  carries its own `format`.
+- `colors.global` — `{gcid: {value, uses, roles?, raw?, base?}}`. It merges the `:root` values with the ids the
+  sampled content references. A referenced id whose value the public HTML never showed has `"value": null`: it is
+  still a real id, safe to reference. `uses: 0` means the value was seen (a preset or another page uses it) but the
+  sampled content never references it directly. `raw`/`base` describe a derived color.
+- `colors.customizer` — the five Customizer colors `{role: {id, value, overridden}}` (`primary`, `secondary`,
+  `heading`, `body`, `link`). `overridden: false` means Divi's default; at the default, the rendered heading color
+  actually comes from Divi's base CSS, not this value.
+- `colors.palette` — literal colors in the content, as on Divi 4, plus `global: "<gcid>"` when a literal equals a
+  known global or Customizer color (a hint that the site meant that color).
+- `variables` — `{gvid: {value, kind, uses, roles?}}`, `kind` being `numbers`, `fonts`, `images`, `gradients`,
+  `strings` or `links`. String and link values are always `null`.
+- `typography` — the Divi 4 keys, computed from Divi 5 font objects (`scale` entries and `body` may hold
+  `$variable()$` strings), plus `customizer` (heading/body fonts with their `--et_global_…` ids and weights, body
+  size and line height) and `loaded_fonts` (Google Font links and inlined `@font-face` families, icon fonts left
+  out). `heading_font`/`body_font` fall back to the Customizer fonts when the content sets none.
+- `spacing`, `shapes` — Divi 5 value objects with counts: `section_padding` `[{top, right, bottom, left}, n]`,
+  `row.width`/`row.max_width`, `gutters`, `gaps`, `radii`, `shadows`. Values may be `$variable()$` strings.
+- `presets` — `{module: [{id, uses, css}]}`. `group_presets` — `{group name: [{id, uses, module, group_id, css}]}`.
+  `css` is the preset's recovered CSS, `null` when no sampled page rendered it. `css.declarations` is the merged
+  base rule (no pseudo-elements, no media query); `css.rules` lists every rule. A preset seen only in the HTML (not
+  in the sampled content) is listed with `uses: 0` and, for a group preset, `group_id: null`.
+- `preset_defaults` — `{module: css}`: what an un-preset module of that type looks like (its `…--default` CSS).
+- `module_styles` — `{module: [bundle]}`, bundles holding `attrs` (design-only Divi 5 attribute JSON, `$variable()$`
+  strings verbatim), `module_preset`, `group_presets`, `html_attributes`, `custom_css_slots` (which custom CSS slots
+  are filled, never the CSS text), `media`, `uses` and `contexts` (as on Divi 4, capped at 5).
+- `section_exemplars` — one design-only `{name, attrs, media, children}` tree per section.
+
+### 7.4 References versus literals
+
+When `tokens.json` has an id for the role, write the **reference**, not the value. The page then stays linked to the
+client's design system, and it follows a later re-theme. Otherwise write the value inline.
+
+| Situation | Write |
+|---|---|
+| The color is a `colors.global` entry used in that role (its `roles`), or a palette entry with `global` | `$variable({"type":"color","value":{"name":"<gcid>","settings":{}}})$`, not the hex |
+| Accent, secondary, heading, body or link color | the Customizer ids (`gcid-primary-color` …): they always exist |
+| A number, font, image or gradient the site uses through a variable in that role (section padding, radius, display font) | `$variable({"type":"content","value":{"name":"<gvid>","settings":{}}})$` |
+| A module that should look like an existing preset | `"modulePreset": ["<id>"]`, or `"groupPreset": {"<group_id>": {"presetId": ["<id>"], "groupName": "<group name>"}}` with the exact ids from tokens, and no inline attrs fighting it |
+| A module that should just look like the site's default for its type | nothing: omit `modulePreset` (or write `["default"]`) and the default preset applies |
+| String and link variables | only when the user asks for that site-wide text or URL |
+| Anything with no matching token | the inline value, under the fidelity rule (§5): say it is a guess |
+
+These strings go inside the block's attribute JSON as ordinary strings; the serializer escapes the inner quotes.
+Use only ids that appear in `tokens.json` — never invent one, and never guess a label.
+
+### 7.5 The design system is read-only
+
+Divi 5 global colors, variables and presets cannot be created or read over REST with an Application Password (every
+`divi/v1` writer needs a Visual Builder nonce). The skill can only **reuse** what the sampled public pages reveal.
+If a page needs a new site-wide color, variable or preset, write the value inline and tell the user to create the
+token in the Visual Builder; a later extraction will then pick it up.
+
+### 7.6 Unknown preset ids
+
+An unknown `modulePreset` id is not harmless: Divi renders the module with that id's (empty) preset class **and drops
+the module type's default preset styling**. An unknown `gcid-`/`gvid-` id renders as nothing. So:
+
+- only reference preset, color and variable ids that are in `tokens.json`;
+- to inherit the site default, omit `modulePreset`;
+- `presets[...]` entries with `css: null` are still real ids (the content uses them); their look is just unknown.
+
+### 7.7 How `validate.py --tokens` uses the ids
+
+`validate.py PAGE --tokens tokens.json` on block content reads:
+
+- **Known presets**: every `id` under `presets` and `group_presets`. Any other `modulePreset`/`groupPreset` id is
+  `W5_UNKNOWN_PRESET`.
+- **Known variables**: the keys of `colors.global` and `variables` (plus palette `global` links). The five Customizer
+  color ids are always known. Any other `gcid-`/`gvid-` reference is `W5_UNKNOWN_VARIABLE`.
+- **Palette**: `colors.global` and `colors.customizer` values plus `colors.palette` hexes. A literal color outside it is
+  `W_OFF_PALETTE_COLOR`; a `$variable()$` reference never is.
+- **Fonts**: `typography` heading/body/scale fonts, the Customizer fonts, font variables and every literal
+  `family` in `module_styles`. Any other literal family is `W_OFF_BRAND_FONT`.
+- **Section padding**: `spacing.section_padding` top/bottom pairs (`W_OFF_SCALE_SPACING`); a variable is never off-scale.
+- `site.divi_version` is checked against each block's `builderVersion` (`W5_BUILDER_VERSION`), and `site.url` names
+  the site's own host for image URLs.
+
+A page validated against tokens extracted from itself produces none of these warnings.
+
+### 7.8 Limits (Divi 5)
+
+- Values of colors and variables the sampled pages never print are unknown (`value: null`); sample more pages that
+  use them. Labels and preset names are never recoverable.
+- A preset's attribute JSON is never recoverable, only its rendered CSS: reuse the preset by id, don't rebuild it
+  from `css`.
+- The id behind a module type's default preset never appears; `preset_defaults` shows only its CSS.
+- CSS from cache or optimization plugins that combine stylesheets into non-`et-cache` files is not followed; child-theme
+  and plugin CSS is not captured (§1).

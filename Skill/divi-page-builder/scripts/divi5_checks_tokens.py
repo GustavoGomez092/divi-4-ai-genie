@@ -22,14 +22,41 @@ def _safe(fn, tokens):
         return set()
 
 
+def _value(entry):
+    return entry.get("value") if isinstance(entry, dict) else entry
+
+
+def _palette5(tokens: dict) -> set:
+    """Colors in the Divi 5 tokens shape, where colors.global and colors.customizer hold {value, …} objects (the
+    Divi 4 reader expects plain strings there)."""
+    colors = tokens.get("colors")
+    colors = colors if isinstance(colors, dict) else {}
+    values = []
+    for key in ("global", "customizer"):
+        group = colors.get(key)
+        values += [_value(v) for v in (group.values() if isinstance(group, dict) else ())]
+    palette = colors.get("palette")
+    values += [p.get("hex") for p in (palette if isinstance(palette, list) else ()) if isinstance(p, dict)]
+    return {normalize_color(v) for v in values if isinstance(v, str) and v}
+
+
 def _fonts5(tokens: dict) -> set:
-    """Font families in Divi 5 tokens that the Divi 4 reader misses: typography.body.font and every literal `family`
-    inside module_styles attrs (nested Divi 5 attribute JSON)."""
+    """Font families in Divi 5 tokens that the Divi 4 reader misses: typography.body.font, the Customizer fonts
+    (typography.customizer), font design variables (variables kind "fonts") and every literal `family` inside
+    module_styles attrs (nested Divi 5 attribute JSON)."""
     out = set()
     typo = tokens.get("typography")
     body = typo.get("body") if isinstance(typo, dict) else None
     if isinstance(body, dict) and isinstance(body.get("font"), str):
         out.add(body["font"])
+    custom = typo.get("customizer") if isinstance(typo, dict) else None
+    for entry in custom.values() if isinstance(custom, dict) else ():
+        if isinstance(entry, dict) and isinstance(entry.get("value"), str):
+            out.add(entry["value"])
+    variables = tokens.get("variables")
+    for entry in variables.values() if isinstance(variables, dict) else ():
+        if isinstance(entry, dict) and entry.get("kind") == "fonts" and isinstance(entry.get("value"), str):
+            out.add(entry["value"])
 
     def walk(node):
         if isinstance(node, dict):
@@ -70,7 +97,8 @@ def _paddings(tokens: dict) -> set:
 def check_tokens5(doc, schema5, tokens: dict, report) -> None:
     if not isinstance(tokens, dict) or not tokens:
         return
-    palette, fonts = _safe(_palette, tokens), _safe(_fonts, tokens) | _safe(_fonts5, tokens)
+    palette = _safe(_palette, tokens) | _safe(_palette5, tokens)
+    fonts = _safe(_fonts, tokens) | _safe(_fonts5, tokens)
     paddings = _paddings(tokens)
     for block, path, _parent in doc.walk():
         if not isinstance(block, Block) or not block.name.startswith("divi/") or not isinstance(block.attrs, dict):

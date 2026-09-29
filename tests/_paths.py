@@ -25,9 +25,9 @@ SITE5_URL = "http://divi-5-test.local"
 
 
 def d5_fixtures():
-    """All valid Divi 5 block fixtures (excludes anything under divi5/invalid/)."""
-    invalid = FIXTURES5 / "invalid"
-    return sorted(p for p in FIXTURES5.rglob("*.html") if invalid not in p.parents)
+    """All valid Divi 5 block fixtures (excludes divi5/invalid/, and divi5/html/: public HTML pages, not blocks)."""
+    skip = (FIXTURES5 / "invalid", FIXTURES5 / "html")
+    return sorted(p for p in FIXTURES5.rglob("*.html") if not any(d in p.parents for d in skip))
 
 
 def d5_invalid_fixtures():
