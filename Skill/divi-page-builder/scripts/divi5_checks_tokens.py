@@ -22,6 +22,33 @@ def _safe(fn, tokens):
         return set()
 
 
+def _fonts5(tokens: dict) -> set:
+    """Font families in Divi 5 tokens that the Divi 4 reader misses: typography.body.font and every literal `family`
+    inside module_styles attrs (nested Divi 5 attribute JSON)."""
+    out = set()
+    typo = tokens.get("typography")
+    body = typo.get("body") if isinstance(typo, dict) else None
+    if isinstance(body, dict) and isinstance(body.get("font"), str):
+        out.add(body["font"])
+
+    def walk(node):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if k == "family" and isinstance(v, str):
+                    out.add(v)
+                else:
+                    walk(v)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v)
+    styles = tokens.get("module_styles")
+    for entries in styles.values() if isinstance(styles, dict) else ():
+        for entry in entries if isinstance(entries, list) else ():
+            if isinstance(entry, dict):
+                walk(entry.get("attrs"))
+    return {f.split("|")[0].lower() for f in out if f and "$variable(" not in f}
+
+
 def _paddings(tokens: dict) -> set:
     """Section paddings the site uses as (top, bottom) pairs, from tokens spacing.section_padding: Divi 4 entries
     "top|right|bottom|left|syncV|syncH" (or [that, count]), or Divi 5 {top, bottom} objects."""
@@ -43,7 +70,7 @@ def _paddings(tokens: dict) -> set:
 def check_tokens5(doc, schema5, tokens: dict, report) -> None:
     if not isinstance(tokens, dict) or not tokens:
         return
-    palette, fonts = _safe(_palette, tokens), _safe(_fonts, tokens)
+    palette, fonts = _safe(_palette, tokens), _safe(_fonts, tokens) | _safe(_fonts5, tokens)
     paddings = _paddings(tokens)
     for block, path, _parent in doc.walk():
         if not isinstance(block, Block) or not block.name.startswith("divi/") or not isinstance(block.attrs, dict):

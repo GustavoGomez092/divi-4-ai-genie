@@ -106,7 +106,8 @@ def _preset_ids(node) -> set:
 
 def _tokens5(tokens: Optional[dict], site_url: Optional[str]) -> dict:
     """check_attributes5 keyword arguments from tokens.json, read defensively (the D5 tokens shape is still settling:
-    presets ids, colors.global keys, variables keys at either depth, site.divi_version). known_vars stays None
+    presets ids, colors.global and colors.global_refs keys, variables keys at either depth, variables_refs keys,
+    site.divi_version). known_vars stays None
     without tokens, so unknown gcid-/gvid- ids are only reported against a real token list."""
     t = _dict(tokens)
     site = _dict(t.get("site"))
@@ -120,6 +121,8 @@ def _tokens5(tokens: Optional[dict], site_url: Optional[str]) -> dict:
         for key, value in _dict(t.get("variables")).items():
             names.add(key)
             names |= set(_dict(value))
+        # ids a sampled page references (tokens5_from_blocks), known even before their values are
+        names |= set(_dict(colors.get("global_refs"))) | set(_dict(t.get("variables_refs")))
         known_vars = frozenset(names)
     version = site.get("divi_version")
     return {"known_presets": frozenset(_preset_ids(t.get("presets")) | _preset_ids(t.get("group_presets"))),

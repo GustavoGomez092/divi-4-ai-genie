@@ -690,11 +690,22 @@ class TokensWiringTest(unittest.TestCase):
         self.assertNotIn("W5_UNKNOWN_PRESET", c)
         self.assertNotIn("W5_UNKNOWN_VARIABLE", c)
 
+    def test_block_token_refs(self):
+        """tokens5_from_blocks records the ids a page uses under colors.global_refs and variables_refs."""
+        tokens = {"presets": {"divi/text": [{"id": "p-mod"}]}, "group_presets": {"divi/font": [{"id": "p-grp"}]},
+                  "colors": {"global_refs": {"gcid-brand": {"uses": 1, "roles": []}}}}
+        self.assertNotIn("W5_UNKNOWN_VARIABLE", self.found(tokens=tokens))
+        tokens["colors"] = {"global_refs": {}}
+        self.assertIn("W5_UNKNOWN_VARIABLE", self.found(tokens=tokens))
+        tokens["variables_refs"] = {"gcid-brand": {"uses": 1}}
+        self.assertNotIn("W5_UNKNOWN_VARIABLE", self.found(tokens=tokens))
+
     def test_malformed_tokens_do_not_crash(self):
         for tokens in ({"presets": [1, 2]}, {"presets": {"x": "y"}, "colors": [], "variables": "v", "site": None},
                        {"colors": {"global": ["gcid-a"]}}, {"colors": {"palette": 5}},
                        {"colors": {"palette": True}}, {"colors": {"palette": {"a": 1}}}, {"colors": {"palette": "x"}},
-                       {"colors": {"palette": [None, 1, {"global": 3}]}}, {"site": {"url": 5, "divi_version": 5}}):
+                       {"colors": {"palette": [None, 1, {"global": 3}]}}, {"site": {"url": 5, "divi_version": 5}},
+                       {"colors": {"global_refs": ["x"]}, "variables_refs": 3}):
             with self.subTest(tokens=tokens):
                 self.found(tokens=tokens)
 

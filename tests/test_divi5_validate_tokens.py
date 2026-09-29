@@ -44,6 +44,22 @@ class TokenChecksTest(unittest.TestCase):
         self.assertNotIn("W_OFF_BRAND_FONT", codes(page(block("text", font("montserrat")))))
         self.assertNotIn("W_OFF_BRAND_FONT", codes(page(block("text", font(var("gvid-font", "content"))))))
 
+    def test_fonts_from_d5_module_styles_and_body(self):
+        """Divi 5 module_styles hold nested attribute JSON: a font family used there is on-brand."""
+        def font(family):
+            return text_attrs(content={"innerContent": {"desktop": {"value": "<p>x</p>"}},
+                                       "decoration": {"bodyFont": {"body": {"font": {"desktop": {
+                                           "value": {"family": family}}}}}}})
+        tokens = dict(TOKENS, module_styles={"divi/button": [{"uses": 1, "attrs": {"button": {"decoration": {
+            "font": {"font": {"desktop": {"value": {"family": "Karla"}}}}}}}}]},
+                      typography=dict(TOKENS["typography"], body={"font": "Nunito"}))
+        for family in ("Karla", "nunito"):
+            with self.subTest(family=family):
+                self.assertNotIn("W_OFF_BRAND_FONT",
+                                 [f.code for f in validate_source(page(block("text", font(family))), tokens=tokens)])
+        self.assertIn("W_OFF_BRAND_FONT",
+                      [f.code for f in validate_source(page(block("text", font("Comic Sans MS"))), tokens=tokens)])
+
     def test_off_scale_section_padding(self):
         def section(top, bottom):
             wrap = {"builderVersion": V, "module": {"decoration": {"spacing": {"desktop": {"value": {
