@@ -1,0 +1,4 @@
+# Rendered HTML, truth renders and screenshots contain Divi's licensed CSS: never commit them.
+out/
+*.png
+__pycache__/

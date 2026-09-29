@@ -1187,6 +1187,42 @@ Mirror `research/python-renderer-spike.md` (D4).
 
 ---
 
+### Tasks 21-R5a … 21-R5f: Divi 5 Python renderer (added 2026-09-29, spec Addendum A)
+
+Source: `research/divi5/python-renderer-spike.md` §7–§8 (GO, scoped). Prototype: `research/divi5/python-renderer-spike/`. Gate after 21-R5b: held-out page ≥95 % of declarations, no layout shift, every other miss named by coverage — else stop and keep Playground as the only Divi 5 preview.
+
+- **Task 21-R5a: Divi 5 render fidelity harness.**
+  - A Divi 5 truth corpus via `ground_truth.py` with `--divi 5.x` (and `--tokens` for recipe pages).
+  - A tuned/held-out split per batch.
+  - `tests/test_render5_fidelity.py`: exact on tuned, numbers recorded on held-out, skipped without Node or a cached Divi 5.
+  - A `research/divi5/render-fidelity.md` template.
+  - Reuses `fidelity.py`, which is already D5-aware.
+- **Task 21-R5b: `scripts/divi5_render/` engine and structural modules.**
+  - Port the spike to a package:
+    - `meta` (module.json and default JSON from the cached theme);
+    - `values` (variables, relative colours);
+    - `css` (sheet, media queries, hover/sticky);
+    - `options` (generic ElementStyle groups);
+    - `structure` (section, row, column, and their inner versions);
+    - `modules/basic` (text, heading, button, image);
+    - `page` (shell, fonts, assets shared with `divi_render/assets.py`);
+    - `coverage` (key-level).
+  - Presets and group presets from `tokens.json`, with preset classes on every element.
+  - The button `:hover` padding copy.
+  - **Gate:** the batch's held-out page must reach 95 % or more of declarations, with no layout shift and every other miss named by coverage.
+- **Task 21-R5c: content and conversion modules.** blurb, cta, divider, number-counter, accordion (plus item), toggle, code, video, testimonial, team-member, gallery (fallback when it needs media data), fullwidth-header. One tuned fixture per module and a held-out page.
+- **Task 21-R5d: interactive and form modules.** slider (plus slide), tabs (plus tab), pricing-tables (plus table), contact-form (plus field), map (plus pin), signup, and the JSON that `divi-script-library` needs. Site-data and WooCommerce modules become fallback blocks.
+- **Task 21-R5e: `preview.py` integration.**
+  - Divi 5 pages render in Python by default in `render` and `serve`, with the Divi 4 serve behaviour (re-render per request, mtime reload, `/__divi/`).
+  - `--exact` means Playground.
+  - Auto-escalation to Playground on coverage misses, or a banner when Node is missing.
+  - The per-Divi-version parity check: a recorded pass file per cached 5.x version, and Playground when it is absent.
+  - `doctor` reports which Divi 5 path will be used.
+  - Tests.
+- **Task 21-R5f: documentation.** The `preview.md` §8 rewrite (Python default, `--exact`, escalation, fidelity numbers), SKILL.md/README one-liners, and a regeneration/parity checklist for new Divi 5 versions.
+
+---
+
 ### Task 22: Final verification
 
 - [ ] Run the full offline suite: `python3 -m unittest discover -s tests`. All pass.

@@ -238,7 +238,7 @@ The fidelity requirement is the same as the D4 spec's §4.10.
 `preview.py render|serve --exact` for Divi 5 content runs `scripts/preview/preview.mjs` with the Divi version
 from `tokens.json`. It uses the same fetch/cache (`fetch_divi.py`) and the same blueprint and mu-plugin, made
 version-aware. Content is injected as block markup. The default (non-`--exact`) path on Divi 5 is Playground
-until the Python-renderer spike says otherwise, so `render`/`serve` work without `--exact`, and `doctor` checks
+until the Python-renderer spike says otherwise (it said GO: see Addendum A), so `render`/`serve` work without `--exact`, and `doctor` checks
 Node. Findings and numbers: `research/divi5/playground.md` (§7 below records the outcome).
 
 ### 4.9 `page_edit.py` and `publish.py`
@@ -291,3 +291,30 @@ Live tests use a separate gate: `@live5_only` and `PP_LIVE_TESTS=1`, against `di
 - **Weekly Divi 5 releases.** Mitigation: regeneration commands, a deterministic dump, and `builderVersion` taken
   from tokens.
 - **Converted-form layout versus native flex.** Mitigation: documented. Revisit when VB fixtures exist.
+
+## Addendum A: Python renderer for Divi 5 previews (decided 2026-09-29)
+
+**Evidence:** `research/divi5/python-renderer-spike.md`, measured against real Divi 5.13.1 (Playground truth).
+- **Reusing the Divi 4 renderer through a D5→D4 conversion was rejected.** A perfect back-conversion still matches only 23–52 % of Divi 5's builder CSS declarations.
+- **A native renderer driven by the theme's `module.json` metadata** gave, for 6 modules:
+  - byte-identical markup and 343/343 declarations on the tuned page, with a 0.000 % pixel diff at 1440 px;
+  - untuned held-out pages at 89.7 % and 96.7 % of declarations with 0 wrong;
+  - 5–7 ms per render, against 1–5 s in Playground.
+
+**Decision:**
+- `preview.py render|serve` renders Divi 5 block pages with a stdlib Python renderer (`scripts/divi5_render/`) by default.
+- `--exact` keeps the Playground preview.
+- When the coverage report lists an unsupported module or option on a page, `preview.py` renders that page in Playground automatically if Node 20+ is available. Otherwise it shows the Divi 4-style banner naming what is missing.
+- When the page's Divi version has not passed the Divi 5 parity corpus, the Playground path is used for that version.
+
+**Scope:** the ~28 module types the Divi 5 recipes emit. Site-data and WooCommerce modules render fallback blocks.
+Flex/grid layout, interactions, sticky/scroll and loop content are unsupported and escalate.
+
+**Acceptance:**
+- Every module has a tuned D5 fixture whose builder markup (tag and class sequence) and builder-CSS declaration set match Playground truth exactly.
+- Each batch records a held-out page's pre-fix numbers in `research/divi5/render-fidelity.md`.
+- Batch 1 must reach 95 % or more of declarations with no layout shift, with every other miss named by coverage. Otherwise the work stops and Playground stays the only Divi 5 preview.
+
+**Unchanged:** Divi assets are never committed. The WordPress draft is still the authoritative visual check. The
+`.seed.css`/options seeding stays for the Playground path. The Python path reads the same `tokens.json` (global
+colours, variables, presets).
