@@ -459,6 +459,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/audio",
  "parents": [
   "divi/column",

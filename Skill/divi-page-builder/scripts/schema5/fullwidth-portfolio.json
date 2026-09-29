@@ -537,6 +537,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/fullwidth-portfolio",
  "parents": [
   "divi/section"

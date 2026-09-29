@@ -621,6 +621,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/image",
  "parents": [
   "divi/column",

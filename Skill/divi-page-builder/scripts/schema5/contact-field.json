@@ -1961,6 +1961,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/contact-field",
  "parents": [
   "divi/contact-form"

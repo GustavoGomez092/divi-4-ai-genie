@@ -408,6 +408,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/circle-counter",
  "parents": [
   "divi/column",

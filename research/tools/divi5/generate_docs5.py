@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -22,11 +21,10 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[3] / "Skill" / "divi-page-builder" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 from divi5_blocks import new_block, render_block  # noqa: E402
-from divi5_schema import load_schema5  # noqa: E402
+from divi5_schema import GROUPS, is_legacy_attr, is_legacy_column_attr, load_schema5  # noqa: E402
 from validate import validate_source  # noqa: E402
 
 BEGIN, END = "<!-- BEGIN GENERATED -->", "<!-- END GENERATED -->"
-GROUPS = ("innerContent", "decoration", "advanced", "meta")
 GROUP_TITLES = {"innerContent": "Content", "decoration": "Design", "advanced": "Advanced",
                 "meta": "Meta and block-level attributes"}
 CATEGORY_TITLES = {"structure": "Structure blocks", "module": "Modules", "fullwidth-module": "Fullwidth modules",
@@ -43,14 +41,9 @@ FAMILY_TITLES = {"box-shadow": "Box shadow", "disabled-on": "Disabled on", "emai
 CONTAINER_NOTES = {
     ("font", ""): "Container only: write the text styles (size, color, weight, family, headingLevel, …) under "
                   "`….decoration.font.font`. Divi 5.13.1 styles text from `….font.font`, `.textShadow` and "
-                  "`.textEffects` only; keys written directly here are accepted by the validator but render "
-                  "nothing (live check: a blurb and a heading title, and a toggle's `openToggle`).",
+                  "`.textEffects` only; keys written directly here render nothing (live check: a blurb and a "
+                  "heading title, and a toggle's `openToggle`), and the validator warns `W5_BARE_FONT`.",
 }
-# Block-level attributes Divi's converter writes on every block (Conversion::getAttrMap, schema.md §1.2) plus
-# `css`: real Divi 5 attributes even though module.json does not declare them.
-BLOCK_LEVEL = frozenset({"adminLabel", "builderVersion", "css", "globalColorsInfo", "globalModule", "globalParent",
-                         "groupPreset", "locked", "modulePreset", "nonconvertible", "on", "open", "shortcodeName",
-                         "themeBuilderArea", "unknownAttributes"})
 LEGACY_NOTE = "**legacy (D4 conversion) — don't author**"
 LEGACY_COLUMN_NOTE = ("**legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block "
                       "(`module.decoration.*`, `css`)")
@@ -295,22 +288,8 @@ def d4_field_map(raw_module: dict) -> dict:
     return {k: sorted(v)[:3] for k, v in out.items()}
 
 
-def is_legacy(path: str, raw_module: dict, d4map: dict) -> bool:
-    """An attribute only Divi's D4 -> D5 conversion map produces: no group segment, not a block-level attr, its root
-    not declared in module.json, and a Divi 4 field converts to it. In Divi 5.13.1 these names occur only in the
-    conversion outlines (_all_modules_conversion_outline.php, module-library.js), never in module code."""
-    root = path.split(".")[0]
-    if any(seg in GROUPS for seg in path.split(".")) or root in BLOCK_LEVEL:
-        return False
-    if root in (raw_module.get("attributes") or {}):
-        return False
-    return any(attr == path for attr, _sub in d4map)
-
-
 def _legacy_note(path: str) -> str:
-    column = (path.startswith("columns") or "Column" in path or "column" in path
-              or re.search(r"\d(Phone|Tablet|LastEdited)?$", path) is not None)
-    return LEGACY_COLUMN_NOTE if column else LEGACY_NOTE
+    return LEGACY_COLUMN_NOTE if is_legacy_column_attr(path) else LEGACY_NOTE
 
 
 def group_of(path: str) -> str:
@@ -408,7 +387,7 @@ def render_module(short: str, schema, raw_module: dict, notes_dir) -> str:
         if not rows:
             lines += ["None on this block.", ""]
             continue
-        legacy = [p for p in rows["inline"] if is_legacy(p, raw_module, d4map)]
+        legacy = [p for p in rows["inline"] if is_legacy_attr(p, raw_module)]
         current = [p for p in rows["inline"] if p not in legacy]
         if current:
             if rows["family"] or legacy:
@@ -430,9 +409,9 @@ def render_module(short: str, schema, raw_module: dict, notes_dir) -> str:
                 lines.append(f"| `{path}` | [{family_title(fam)}](../design-families.md#{fam}){extra}{container} |")
             lines.append("")
         if legacy:
-            lines += ["Legacy, from Divi's Divi 4 conversion map only. The validator accepts them so that converted "
-                      "pages validate, but they appear only in Divi's conversion outlines: no Divi 5 module code "
-                      "reads them. Don't write them.", "", ROW_HEADER]
+            lines += ["Legacy, from Divi's Divi 4 conversion map only. They appear only in Divi's conversion "
+                      "outlines: no Divi 5 module code reads them. The validator warns `W5_LEGACY_ATTR` on them "
+                      "(a warning, so that converted pages still validate). Don't write them.", "", ROW_HEADER]
             for path in legacy:
                 for sub, leaf in sorted(schema.leaf_spec(mod.attrs[path]).items()):
                     note = "; ".join(x for x in (_legacy_note(path), _note(leaf, d4map.get((path, sub)))) if x)

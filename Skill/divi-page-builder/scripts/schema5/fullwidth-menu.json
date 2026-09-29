@@ -664,6 +664,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/fullwidth-menu",
  "parents": [
   "divi/section"

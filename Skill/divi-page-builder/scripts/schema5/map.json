@@ -396,6 +396,11 @@
    }
   }
  },
+ "legacy": [
+  "content",
+  "googleMapsScriptNotice",
+  "mapCenterMap"
+ ],
  "name": "divi/map",
  "parents": [
   "divi/column",

@@ -110,7 +110,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.meta.meta.forceVisible` | [Meta](../design-families.md#meta) |
 | `module.meta.meta.tocListHeading` | [Meta](../design-families.md#meta) |
 
-Legacy, from Divi's Divi 4 conversion map only. The validator accepts them so that converted pages validate, but they appear only in Divi's conversion outlines: no Divi 5 module code reads them. Don't write them.
+Legacy, from Divi's Divi 4 conversion map only. They appear only in Divi's conversion outlines: no Divi 5 module code reads them. The validator warns `W5_LEGACY_ATTR` on them (a warning, so that converted pages still validate). Don't write them.
 
 | attribute | key | type | values | R | states | notes |
 |---|---|---|---|---|---|---|

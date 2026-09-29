@@ -689,6 +689,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/menu",
  "parents": [
   "divi/column",

@@ -5,7 +5,7 @@ inside `divi/placeholder`) and changed so that exactly one validator error appea
 `tests/test_divi5_validate_structure.py` checks the structure and heading codes below, and
 `tests/test_divi5_validate_values.py` the attribute/value ones (the rows from `unknown-attr.html` on). The
 attribute/value pages were written with `divi5_blocks.canonical_json`, so the JSON is WordPress-canonical
-except where the change is the point (`noncanonical-lt.html`). The last two rows are warnings: those pages have
+except where the change is the point (`noncanonical-lt.html`). The last four rows are warnings: those pages have
 no error at all.
 
 | File | Expected code | What was changed |
@@ -30,8 +30,13 @@ no error at all.
 | `bad-enum.html` | `E5_BAD_VALUE` | heading title font `headingLevel` `h7` |
 | `bad-variable.html` | `E5_BAD_VARIABLE` | text body font color `$variable({"type":"color","value":{"settings":{}}})$` (no `value.name`) |
 | `noncanonical-lt.html` | `E5_NONCANONICAL` | text innerContent JSON with raw `<` / `>` instead of `\u003c` / `\u003e` |
+| `unitless-length.html` | `E5_UNITLESS_LENGTH` | text `module.decoration.spacing` padding `{"top": 41, "bottom": "42px"}` (a JSON number: Divi prints `padding-top:41`) |
+| `gradient-disabled.html` | `E5_GRADIENT_DISABLED` | section background `gradient` with type, direction and stops but no `"enabled": "on"` |
+| `gradient-stop-position.html` | `E5_GRADIENT_STOP_POSITION` | section background gradient (enabled) with stop positions `"0%"` / `"100%"` |
 | `unknown-preset.html` | `W5_UNKNOWN_PRESET` | heading `modulePreset` `["doesnotexist"]` |
 | `shortcode-brackets.html` | `W5_SHORTCODE_BRACKETS` | text innerContent `<p>See [gallery] for photos.</p>` |
+| `bare-font.html` | `W5_BARE_FONT` | heading title font (`headingLevel`, `size`, `color`) written on the bare `title.decoration.font` instead of `title.decoration.font.font` |
+| `legacy-attr.html` | `W5_LEGACY_ATTR` | row gets the Divi 4 conversion attribute `columns.column-1.spacing` |
 
 Specialty sections follow the Divi 4 rules exactly, with codes named after Divi 4's:
 `E5_SPECIALTY_COLUMN` (Divi 4 `E_SPECIALTY_COLUMN`) = a specialty section needs exactly one column with

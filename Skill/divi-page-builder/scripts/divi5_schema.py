@@ -11,9 +11,10 @@ families5.json `_types`. breakpoints_extra lists pseudo-breakpoints a leaf accep
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Iterator, List, Optional, Tuple
+from typing import Dict, Iterator, List, Optional, Set, Tuple
 
 SCHEMA5_DIR = Path(__file__).resolve().parent / "schema5"
 # Block-level bookkeeping keys that are not responsive module settings.
@@ -22,6 +23,45 @@ NONRESPONSIVE = frozenset({"builderVersion", "modulePreset", "groupPreset", "loc
 # Leaf types whose value is a structure of its own: a deeper key inside the value belongs to that leaf.
 STRUCTURED = frozenset({"object", "json", "icon", "spacing", "radius", "gradient"})
 OPAQUE = frozenset({"object", "json"})
+# The attribute groups of a Divi 5 module path (innerContent / decoration / advanced / meta).
+GROUPS = ("innerContent", "decoration", "advanced", "meta")
+# Block-level attributes Divi's converter writes on every block (Conversion::getAttrMap, schema.md §1.2) plus
+# `css`: real Divi 5 attributes even though module.json does not declare them.
+BLOCK_LEVEL = frozenset({"adminLabel", "builderVersion", "css", "globalColorsInfo", "globalModule", "globalParent",
+                         "groupPreset", "locked", "modulePreset", "nonconvertible", "on", "open", "shortcodeName",
+                         "themeBuilderArea", "unknownAttributes"})
+_LEGACY_COLUMN = re.compile(r"\d(Phone|Tablet|LastEdited)?$")
+
+
+def conversion_targets(raw_module: dict) -> Set[str]:
+    """Attribute paths Divi's D4 -> D5 conversion attributeMap writes (`a.b.*.key` -> `a.b`), from a raw
+    research/divi5-schema/modules/<slug>.json."""
+    out = set()
+    for target in ((raw_module.get("conversion") or {}).get("attributeMap") or {}).values():
+        if isinstance(target, str):
+            out.add(target.partition(".*")[0])
+    return out
+
+
+def is_legacy_attr(path: str, raw_module: dict) -> bool:
+    """An attribute only Divi's D4 -> D5 conversion map produces: no group segment, not a block-level attr, its root
+    not declared in module.json, and a Divi 4 field converts to it. In Divi 5.13.1 these names occur only in the
+    conversion outlines (_all_modules_conversion_outline.php, module-library.js), never in module code
+    (research/divi5/doc-experiments.md §7). Shared by build_schema5.py (which compiles the result into each
+    module's `legacy` list) and generate_docs5.py."""
+    root = path.split(".")[0]
+    if any(seg in GROUPS for seg in path.split(".")) or root in BLOCK_LEVEL:
+        return False
+    if root in (raw_module.get("attributes") or {}):
+        return False
+    return path in conversion_targets(raw_module)
+
+
+def is_legacy_column_attr(path: str) -> bool:
+    """A legacy attribute that styles one of a row's/section's columns (`columns.column-N.*`, `padding1Phone`,
+    `customCssMain1`, `backgroundImageHeight1`, …): the fix is to style that `divi/column` block itself."""
+    return (path.startswith("columns") or "Column" in path or "column" in path
+            or _LEGACY_COLUMN.search(path) is not None)
 
 
 @dataclass(frozen=True)
@@ -100,6 +140,7 @@ class ModuleSchema5:
         self.attrs: Dict[str, dict] = data["attrs"]
         self.css: List[str] = data.get("css") or []
         self.defaults: Dict[str, dict] = data.get("defaults") or {}
+        self.legacy: frozenset = frozenset(data.get("legacy") or ())  # is_legacy_attr paths, compiled by build_schema5
         self._schema = schema
 
     def _find(self, path: str) -> Optional[Tuple[str, Optional[str], str, dict, Optional[str]]]:

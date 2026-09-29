@@ -542,6 +542,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/filterable-portfolio",
  "parents": [
   "divi/column",

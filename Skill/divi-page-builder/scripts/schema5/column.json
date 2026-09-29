@@ -355,6 +355,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/column",
  "parents": [
   "divi/row",

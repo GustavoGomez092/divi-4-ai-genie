@@ -370,6 +370,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/post-nav",
  "parents": [
   "divi/column",

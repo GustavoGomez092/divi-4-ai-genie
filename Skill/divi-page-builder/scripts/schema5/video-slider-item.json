@@ -410,6 +410,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/video-slider-item",
  "parents": [
   "divi/video-slider"

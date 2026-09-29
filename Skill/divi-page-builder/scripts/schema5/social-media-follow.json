@@ -467,6 +467,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/social-media-follow",
  "parents": [
   "divi/column",

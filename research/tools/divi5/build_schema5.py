@@ -15,7 +15,8 @@ families5.json rule types. --report lists every untyped leaf (in and out of scop
 leaves without evidence compile as opaque objects.
 
 Also reads the Divi 4 dump next to the Divi 5 one (<dump>/../divi-schema/modules) for D4 field types. Writes
-<out_dir>/<short>.json per module, families5.json and _meta.json (sorted keys, indent 1, trailing newline) and
+<out_dir>/<short>.json per module (with `legacy`: the attrs divi5_schema.is_legacy_attr marks as Divi 4
+conversion-only), families5.json and _meta.json (sorted keys, indent 1, trailing newline) and
 removes any other *.json in out_dir.
 """
 import json
@@ -24,6 +25,9 @@ import sys
 from fnmatch import fnmatchcase
 from collections import defaultdict
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "Skill" / "divi-page-builder" / "scripts"))
+from divi5_schema import is_legacy_attr  # noqa: E402
 
 BREAKPOINTS_ALL = ["desktop", "tablet", "phone", "phoneWide", "tabletWide", "widescreen", "ultraWide"]
 BREAKPOINTS_DEFAULT = ["desktop", "tablet", "phone"]
@@ -605,6 +609,9 @@ def build(dump_dir, families_path, out_dir, report=False):
             "children": children[slug] or None, "parents": sorted(parents[slug]), "attrs": attrs,
             "css": [c for c in css if c], "defaults": defaults,
         }
+        legacy = sorted(a for a in attrs if is_legacy_attr(a, data))
+        if legacy:
+            modules_out[slug]["legacy"] = legacy
 
     for key in sorted(used_keys_in_scope):
         if key not in fam.by_key:

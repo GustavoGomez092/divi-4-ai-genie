@@ -506,6 +506,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/post-title",
  "parents": [
   "divi/column",

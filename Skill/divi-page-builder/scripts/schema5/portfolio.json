@@ -509,6 +509,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/portfolio",
  "parents": [
   "divi/column",

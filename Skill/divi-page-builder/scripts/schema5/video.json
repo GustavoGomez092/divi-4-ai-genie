@@ -295,6 +295,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/video",
  "parents": [
   "divi/column",

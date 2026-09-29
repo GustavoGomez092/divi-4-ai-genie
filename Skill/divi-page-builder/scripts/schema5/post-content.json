@@ -394,6 +394,9 @@
  ],
  "d4": "et_pb_post_content",
  "defaults": {},
+ "legacy": [
+  "content"
+ ],
  "name": "divi/post-content",
  "parents": [
   "divi/column",

@@ -492,6 +492,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/icon",
  "parents": [
   "divi/column",

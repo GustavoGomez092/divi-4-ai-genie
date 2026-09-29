@@ -91,7 +91,7 @@ Every `type` in the module pages and the tables below is one of these value gram
 | `icon` | an icon object {unicode, type (divi\|fa), weight} |
 | `image` | an image URL string (src/url leaves); id/alt/titleText are sibling leaves, not part of this value |
 | `json` | any JSON value (list, object or scalar); structure not validated |
-| `length` | a CSS length: number + unit (one of units when given), a unitless number (as Divi 4 accepts; Divi 5 writes lineHeight/letterSpacing verbatim, Font.php:689-695), auto/none/inherit/initial/unset/normal/fit-content/min-content/max-content, calc()/clamp()/min()/max()/var(), a $variable({"type":"content",...})$ number variable, or "" (unset) |
+| `length` | a CSS length: number + unit (one of units when given), a unitless number only where CSS takes one (lineHeight; Divi 5 writes lengths into the CSS verbatim, Font.php:689-695, so a non-zero unitless spacing/sizing/border/gap/offset/font-size/letter-spacing/shadow length is E5_UNITLESS_LENGTH), auto/none/inherit/initial/unset/normal/fit-content/min-content/max-content, calc()/clamp()/min()/max()/var(), a $variable({"type":"content",...})$ number variable, or "" (unset) |
 | `number` | a number or a numeric string (unitless), or a $variable number reference |
 | `object` | a JSON object whose keys are not validated (opaque) |
 | `onoff` | "on" or "off" |
@@ -689,7 +689,7 @@ Group key `decoration.font` · used by 41 module(s) · e.g. `tab.decoration.font
 
 ### `….decoration.font`
 
-> **Container only: write the text styles (size, color, weight, family, headingLevel, …) under `….decoration.font.font`. Divi 5.13.1 styles text from `….font.font`, `.textShadow` and `.textEffects` only; keys written directly here are accepted by the validator but render nothing (live check: a blurb and a heading title, and a toggle's `openToggle`).**
+> **Container only: write the text styles (size, color, weight, family, headingLevel, …) under `….decoration.font.font`. Divi 5.13.1 styles text from `….font.font`, `.textShadow` and `.textEffects` only; keys written directly here render nothing (live check: a blurb and a heading title, and a toggle's `openToggle`), and the validator warns `W5_BARE_FONT`.**
 
 | key | type | values | R | states | notes |
 |---|---|---|---|---|---|

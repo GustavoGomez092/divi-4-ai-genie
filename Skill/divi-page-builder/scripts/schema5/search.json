@@ -880,6 +880,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/search",
  "parents": [
   "divi/column",

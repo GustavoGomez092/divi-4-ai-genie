@@ -382,6 +382,9 @@
  ],
  "d4": "et_pb_fullwidth_post_content",
  "defaults": {},
+ "legacy": [
+  "content"
+ ],
  "name": "divi/fullwidth-post-content",
  "parents": [
   "divi/section"

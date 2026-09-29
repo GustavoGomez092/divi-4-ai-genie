@@ -330,6 +330,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/group",
  "parents": [
   "divi/column",

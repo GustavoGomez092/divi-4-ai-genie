@@ -531,6 +531,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/video-slider",
  "parents": [
   "divi/column",

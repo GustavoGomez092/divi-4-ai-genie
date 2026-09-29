@@ -349,6 +349,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/number-counter",
  "parents": [
   "divi/column",

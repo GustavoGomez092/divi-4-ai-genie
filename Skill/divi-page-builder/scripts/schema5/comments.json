@@ -1354,6 +1354,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/comments",
  "parents": [
   "divi/column",

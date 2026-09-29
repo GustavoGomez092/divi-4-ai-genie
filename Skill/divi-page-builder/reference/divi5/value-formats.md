@@ -62,7 +62,8 @@ Rules:
   its type is `E5_BAD_VALUE`.
 - Styles go under the element's family sub-table, not on the family root: a title's size is
   `title.decoration.font.font`, **not** `title.decoration.font` (Divi styles text only from `….font.font`; keys
-  written on the bare `….decoration.font` validate but render nothing: `doc-experiments.md` §1).
+  written on the bare `….decoration.font` render nothing, `doc-experiments.md` §1, and the validator warns
+  `W5_BARE_FONT`).
 
 ## Breakpoints
 
@@ -142,7 +143,7 @@ Common mistake: a CSS color name (`"red"`, `"navy"`) or `oklch()`: `E5_BAD_VALUE
 
 Grammar: a number with a CSS unit (`px`, `%`, `em`, `rem`, `vw`, `vh`, `vmin`, `vmax`, `ch`, `ex`, `cm`, `mm`, `in`,
 `pt`, `pc`, `deg`, `rad`, `turn`, `ms`, `s`, `fr`; restricted to the leaf's own `units` where a table lists them),
-a unitless number (`lineHeight: "1.4"`), a keyword (`auto`, `none`, `inherit`, `initial`, `unset`, `normal`,
+a unitless number only where CSS takes one (`lineHeight: "1.4"`; see below), a keyword (`auto`, `none`, `inherit`, `initial`, `unset`, `normal`,
 `fit-content`, `min-content`, `max-content`), a CSS function (`calc()`, `clamp()`, `min()`, `max()`, `var()`), or a
 number variable (`$variable({"type":"content",…})$`). Always a **string**: `"24px"`, not `24`.
 
@@ -151,8 +152,12 @@ number variable (`$variable({"type":"content",…})$`). Always a **string**: `"2
 ```
 
 Common mistake: CSS shorthand in one leaf (`"padding": "20px 10px"`, `E5_BAD_VALUE`); spacing is an object, see
-[spacing](#spacing). And a bare JSON number (`"top": 40`) passes the validator, but Divi prints it without a unit
-(`padding-top:40`), which browsers ignore: the padding silently disappears (live check, `doc-experiments.md` §8).
+[spacing](#spacing). And a number without a unit (`"top": 40` or `"top": "40"`): Divi prints it as is
+(`padding-top:40`), which browsers ignore, so the padding silently disappears (live check, `doc-experiments.md` §8).
+The validator reports `E5_UNITLESS_LENGTH` for a non-zero unitless value on spacing (padding/margin sides), sizing
+(`width`, `height`, `min…`/`max…`), border widths and radii, gaps (`columnGap`, `rowGap`), offsets and background
+positions, font `size`, `letterSpacing` and text/box-shadow lengths. `0` is always fine, and so is a unitless
+`lineHeight` (a CSS number) or a `number` leaf (`zIndex`, flex grow/shrink).
 
 ### number
 
@@ -182,7 +187,8 @@ Common mistake: a unit on a number leaf (`"zIndex": "10px"`) is `E5_BAD_VALUE`.
 
 The second heading uses the site's Customizer heading font; it rendered `font-family:var(--et_global_heading_font)`
 (live check). Common mistakes: a Divi 4 font string (`"Montserrat|700|||||||"`, which is not a family name), and
-putting the font on the bare `title.decoration.font` instead of `title.decoration.font.font` (renders nothing). With
+putting the font on the bare `title.decoration.font` instead of `title.decoration.font.font` (renders nothing;
+`W5_BARE_FONT`). With
 `--tokens`, a family the site doesn't use warns `W_OFF_BRAND_FONT`.
 
 ### enum
@@ -283,7 +289,8 @@ Grammar: an object with any of `top`, `right`, `bottom`, `left` (each a [length]
   (`syncHorizontal`). Divi's CSS ignores them (`Spacing.php` reads only the four sides; `doc-experiments.md` §5),
   like Divi 4's `true|false` spacing parts. Set them `"on"` when the linked pair is equal and `"off"` otherwise, so
   the builder shows the page as written; Divi's converter always writes both.
-- Each side is a length **string** (`"40px"`); a bare number renders no padding (see [length](#length)).
+- Each side is a length **string** with a unit (`"40px"`); a bare number renders no padding (`E5_UNITLESS_LENGTH`,
+  see [length](#length)).
 
 ```divi5
 <!-- wp:divi/section {"module":{"decoration":{"layout":{"desktop":{"value":{"display":"block"}}},"spacing":{"desktop":{"value":{"padding":{"top":"80px","right":"0px","bottom":"80px","left":"0px","syncVertical":"on","syncHorizontal":"on"}}},"phone":{"value":{"padding":{"top":"40px","right":"0px","bottom":"40px","left":"0px","syncVertical":"on","syncHorizontal":"on"}}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/row {"module":{"advanced":{"columnStructure":{"desktop":{"value":"4_4"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/column {"module":{"advanced":{"type":{"desktop":{"value":"4_4"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/text {"content":{"innerContent":{"desktop":{"value":"\u003cp\u003eSection with symmetric padding.\u003c/p\u003e"}}},"module":{"decoration":{"spacing":{"desktop":{"value":{"margin":{"top":"0px","bottom":"24px","syncVertical":"off","syncHorizontal":"off"}}}}}},"builderVersion":"5.13.1"} /--><!-- /wp:divi/column --><!-- /wp:divi/row --><!-- /wp:divi/section -->
@@ -318,8 +325,10 @@ object in the [Background](design-families.md#background) family:
 ```
 
 Common mistakes (live check, `doc-experiments.md` §8): Divi 4's `"#fff 0%|#000 100%"` string (`E5_BAD_VALUE`);
-leaving out `"enabled": "on"` (no gradient renders); and positions with a unit (`"position": "0%"`), which the
-validator accepts but which rendered no gradient at all. `0` and `"0"` both work.
+leaving out `"enabled": "on"` (no gradient renders; `E5_GRADIENT_DISABLED`, unless the desktop value it inherits
+from sets `enabled`); and positions with a unit (`"position": "0%"`), which rendered no gradient at all
+(`E5_GRADIENT_STOP_POSITION`). `0` and `"0"` both work. An explicit `"enabled": "off"` is a deliberate switch-off
+(Divi writes it itself) and is not reported.
 
 ### object
 
@@ -480,6 +489,11 @@ icon module as an `<a href="tel:…">` (live check).
 | `E5_BAD_STATE` | error | a state the leaf doesn't allow | drop it, or use a leaf that has it |
 | `E5_BAD_VALUE` | error | the value doesn't fit the leaf type or options | see the type's section above |
 | `E5_BAD_VARIABLE` | error | a malformed `$variable(…)$` | follow the reference grammar |
+| `E5_UNITLESS_LENGTH` | error | a non-zero number without a unit on a length CSS needs a unit for (spacing, sizing, border, gaps, offsets, font size, letter spacing, shadows) | add a unit, e.g. `41px` |
+| `E5_GRADIENT_DISABLED` | error | a background gradient with stops/type/direction but no `"enabled"` (here or on its desktop value) | add `"enabled": "on"` |
+| `E5_GRADIENT_STOP_POSITION` | error | a gradient stop `position` with a unit (`"0%"`) | write a plain number: `0`, `100` |
+| `W5_BARE_FONT` | warning | text styles written directly on `….decoration.font` | move them to `….decoration.font.font` |
+| `W5_LEGACY_ATTR` | warning | an attribute only Divi's Divi 4 conversion writes (a module page's Legacy table) | style each column on its own `divi/column`, or use the module's own attributes |
 | `W5_BREAKPOINT_DISABLED` | warning | a value for `phoneWide`, `tabletWide`, `widescreen` or `ultraWide` | use `desktop`/`tablet`/`phone` |
 | `W5_HOVER_WITHOUT_DESKTOP` | warning | tablet, phone, hover or sticky set without a `desktop.value` | set the desktop value too |
 | `W5_UNKNOWN_VARIABLE` | warning | a `gcid-`/`gvid-` id not in `tokens.json` (with `--tokens`) | use an id from the tokens, or a literal |

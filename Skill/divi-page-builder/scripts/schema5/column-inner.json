@@ -343,6 +343,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/column-inner",
  "parents": [
   "divi/row-inner"

@@ -150,7 +150,8 @@ A text whose HTML has quotes, `&`, tags and `--`:
 
 - Set `"builderVersion"` on **every block you create** to the site's Divi version: `tokens.json` →
   `site.divi_version`, else the schema's version (`scripts/schema5/_meta.json` → `divi_version`, `5.13.1`).
-  `validate.py` warns `W5_BUILDER_VERSION` when it is missing (and, with `--tokens`, when it differs from the site's).
+  `validate.py` warns `W5_BUILDER_VERSION` when it is missing (and, with `--tokens`, when it differs from the site's;
+  on existing blocks you edit that warning is expected: leave their version as it is).
 - It is not bookkeeping. Divi upgrades content stored with an older `builderVersion` in memory on every render,
   running each migration whose release is newer (`storage-and-serialization.md` §6.4). A block with no
   `builderVersion` rendered with Divi 4's block layout (`et_block_section`), the same block with `5.13.1` with Divi 5's
@@ -158,7 +159,8 @@ A text whose HTML has quotes, `&`, tags and `--`:
   it wants explicitly: see [structure.md → layout form](structure.md#the-layout-form-display-block-on-structure-blocks).
 - **Blocks you don't create keep theirs.** Converter output carries `5.0.0-public-alpha.*`, `5.0.0-public-beta.1`,
   `5.1.1` or even `4.27.9` (`tokens-and-detection.md` §5), and relies on the migrations that version triggers.
-  When you edit such a page, change only the blocks you mean to change; don't bump the others.
+  When you edit such a page, change only the blocks you mean to change, and don't change `builderVersion` on the
+  blocks you edit either: Divi's render-time migrations depend on it.
 - `modulePreset` sits next to it; see [value-formats.md → presets](value-formats.md#presets-modulepreset-and-grouppreset).
 
 ## Post meta
@@ -249,6 +251,11 @@ output as-is and the browser shows `[20%]` (live check):
   default preset styling (`tokens-and-detection.md` §3.5).
 - **Divi 4 escapes** (`%22`, `%91`, `%93`) or Divi 4 value strings (`||`-separated icons, `|`-separated spacing);
   Divi 5 values are JSON ([value-formats.md](value-formats.md)).
+- **Values Divi accepts but silently ignores** (live checks, `doc-experiments.md` §1, §7, §8): a length without a
+  unit where CSS needs one (`"top": 40`; `E5_UNITLESS_LENGTH`), a gradient without `"enabled": "on"`
+  (`E5_GRADIENT_DISABLED`) or with stop positions like `"0%"` (`E5_GRADIENT_STOP_POSITION`), text styles on the bare
+  `….decoration.font` instead of `….decoration.font.font` (`W5_BARE_FONT`), and Divi 4 conversion-only attributes such
+  as a row's `columns.column-1.*` or `padding1Phone` (`W5_LEGACY_ATTR`). See [value-formats.md](value-formats.md).
 - **Attribute-row ids copied from another page.** Custom attribute rows (`module.decoration.attributes`) carry a
   UUIDv4 `id`; generate a new one per row.
 

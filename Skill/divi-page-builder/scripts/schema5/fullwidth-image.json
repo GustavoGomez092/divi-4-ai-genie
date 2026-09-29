@@ -355,6 +355,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/fullwidth-image",
  "parents": [
   "divi/section"

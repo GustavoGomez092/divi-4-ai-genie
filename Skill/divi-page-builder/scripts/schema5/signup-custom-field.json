@@ -1964,6 +1964,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/signup-custom-field",
  "parents": [
   "divi/signup"

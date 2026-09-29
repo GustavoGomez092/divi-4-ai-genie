@@ -376,6 +376,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/button",
  "parents": [
   "divi/column",

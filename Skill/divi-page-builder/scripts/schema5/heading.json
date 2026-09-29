@@ -278,6 +278,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/heading",
  "parents": [
   "divi/column",

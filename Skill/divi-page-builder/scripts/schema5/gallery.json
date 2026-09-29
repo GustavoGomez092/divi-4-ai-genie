@@ -558,6 +558,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/gallery",
  "parents": [
   "divi/column",

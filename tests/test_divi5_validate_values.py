@@ -21,11 +21,17 @@ EXPECT = {
     "noncanonical-lt.html": ("E5_NONCANONICAL", "error"),
     "unknown-preset.html": ("W5_UNKNOWN_PRESET", "warning"),
     "shortcode-brackets.html": ("W5_SHORTCODE_BRACKETS", "warning"),
+    "unitless-length.html": ("E5_UNITLESS_LENGTH", "error"),
+    "gradient-disabled.html": ("E5_GRADIENT_DISABLED", "error"),
+    "gradient-stop-position.html": ("E5_GRADIENT_STOP_POSITION", "error"),
+    "bare-font.html": ("W5_BARE_FONT", "warning"),
+    "legacy-attr.html": ("W5_LEGACY_ATTR", "warning"),
 }
 VALUE_CODES = {"E5_UNKNOWN_ATTR", "E5_BAD_BREAKPOINT", "W5_BREAKPOINT_DISABLED", "E5_BAD_STATE", "E5_BAD_VALUE",
                "E5_BAD_VARIABLE", "W5_UNKNOWN_VARIABLE", "W5_UNKNOWN_PRESET", "E5_NONCANONICAL",
                "W5_SHORTCODE_BRACKETS", "W_EXTERNAL_IMAGE", "W5_NO_ALT", "W5_BUILDER_VERSION",
-               "W5_HOVER_WITHOUT_DESKTOP"}
+               "W5_HOVER_WITHOUT_DESKTOP", "E5_UNITLESS_LENGTH", "E5_GRADIENT_DISABLED", "E5_GRADIENT_STOP_POSITION",
+               "W5_BARE_FONT", "W5_LEGACY_ATTR"}
 LAYOUT = {"decoration": {"layout": {"desktop": {"value": {"display": "block"}}}}}
 V = "5.13.1"
 
@@ -101,6 +107,14 @@ class ValidCorpusTest(unittest.TestCase):
                 if f.level == "error" and not _signup_quirk(f) and f.code not in PAGE_CONTENT_CODES:
                     bad.append((p.name, f.code, f.tag, f.attr, f.value[:80], f.message))
         self.assertEqual(bad, [])
+
+    def test_valid_fixtures_only_warn_legacy_among_the_silent_value_checks(self):
+        """Of the Task 9b checks, real Divi 5 content may only warn W5_LEGACY_ATTR (converter output keeps them)."""
+        found = [(p.name, f.code, f.attr) for p in d5_fixtures()
+                 for f in validate_source(p.read_text(), fragment=True)
+                 if f.code in ("E5_UNITLESS_LENGTH", "E5_GRADIENT_DISABLED", "E5_GRADIENT_STOP_POSITION",
+                               "W5_BARE_FONT")]
+        self.assertEqual(found, [])
 
 
 class ValueProblemsTest(unittest.TestCase):
@@ -187,7 +201,8 @@ class ValueProblemsTest(unittest.TestCase):
     def test_gradient(self):
         leaf = {"type": "gradient"}
         self.ok(leaf, [{"position": 0, "color": "#2b87da"}, {"position": "100", "color": "rgba(0,0,0,0.4)"}],
-                [{"position": "40%", "color": var("gcid-a")}], [], var("gvid-g", "gradient"))
+                [{"position": "40%", "color": var("gcid-a")}], [{"position": "4em", "color": "#fff"}], [],
+                var("gvid-g", "gradient"))
         self.bad(leaf, [{"position": 0, "color": "nope"}], [{"position": "x", "color": "#fff"}],
                  [{"color": "#fff"}], "linear-gradient(#fff,#000)", {"stops": []})
 
@@ -386,6 +401,200 @@ class CheckAttributesTest(unittest.TestCase):
               "phone": {"value": {"color": "#111"}}}
         self.assertNotIn("W5_HOVER_WITHOUT_DESKTOP",
                          codes(page(block("text", text_attrs(module={"decoration": {"background": bg}})))))
+
+
+def module_attrs(**decoration):
+    return text_attrs(module={"decoration": {k: {"desktop": {"value": v}} for k, v in decoration.items()}})
+
+
+def found(src, *wanted, **kw):
+    return [(f.level, f.code, f.attr) for f in run(src, **kw) if f.code in wanted]
+
+
+class UnitlessLengthTest(unittest.TestCase):
+    """doc-experiments.md §8: Divi prints a unitless length verbatim (padding-top:41!important), browsers drop it."""
+    CODES = ("E5_UNITLESS_LENGTH", "E5_BAD_VALUE")
+
+    def check(self, **decoration):
+        return found(page(block("text", module_attrs(**decoration))), *self.CODES)
+
+    def test_spacing_number_and_numeric_string(self):
+        f = run(page(block("text", module_attrs(spacing={"padding": {"top": 41, "bottom": "42px", "left": "43"}}))))
+        f = [x for x in f if x.code in self.CODES]
+        self.assertEqual([(x.level, x.code, x.attr) for x in f],
+                         [("error", "E5_UNITLESS_LENGTH", "module.decoration.spacing.padding.top:desktop:value"),
+                          ("error", "E5_UNITLESS_LENGTH", "module.decoration.spacing.padding.left:desktop:value")])
+        self.assertIn("41px", f[0].hint)
+
+    def test_zero_is_fine(self):
+        self.assertEqual(self.check(spacing={"margin": {"top": 0, "bottom": "0", "left": "0.0", "right": ""}}), [])
+
+    def test_sizing_border_radius_and_shadow(self):
+        self.assertEqual(
+            self.check(sizing={"maxWidth": 720, "width": "90%"},
+                       border={"styles": {"all": {"width": "2"}}, "radius": {"topLeft": 8, "topRight": "8px"}},
+                       boxShadow={"horizontal": "4", "vertical": "4px", "blur": 10, "spread": "0"}),
+            [("error", "E5_UNITLESS_LENGTH", "module.decoration.sizing.maxWidth:desktop:value"),
+             ("error", "E5_UNITLESS_LENGTH", "module.decoration.border.styles.all.width:desktop:value"),
+             ("error", "E5_UNITLESS_LENGTH", "module.decoration.border.radius.topLeft:desktop:value"),
+             ("error", "E5_UNITLESS_LENGTH", "module.decoration.boxShadow.horizontal:desktop:value"),
+             ("error", "E5_UNITLESS_LENGTH", "module.decoration.boxShadow.blur:desktop:value")])
+        self.assertEqual(self.check(border={"radius": "8"}),
+                         [("error", "E5_UNITLESS_LENGTH", "module.decoration.border.radius:desktop:value")])
+
+    def test_position_offsets(self):
+        self.assertEqual(self.check(position={"offset": {"horizontal": 10, "vertical": "10px"}}),
+                         [("error", "E5_UNITLESS_LENGTH", "module.decoration.position.offset.horizontal:desktop:value")])
+
+    def heading(self, font):
+        attrs = {"builderVersion": V, "title": {"innerContent": {"desktop": {"value": "Hi"}},
+                                                "decoration": {"font": {"font": {"desktop": {"value": font}}}}}}
+        return found(page(block("heading", attrs)), *self.CODES)
+
+    def test_font_size_and_letter_spacing_need_units(self):
+        self.assertEqual(self.heading({"size": 40, "letterSpacing": "2", "headingLevel": "h2"}),
+                         [("error", "E5_UNITLESS_LENGTH", "title.decoration.font.font.size:desktop:value"),
+                          ("error", "E5_UNITLESS_LENGTH", "title.decoration.font.font.letterSpacing:desktop:value")])
+
+    def test_unitless_allowed_where_css_takes_a_number(self):
+        """lineHeight (CSS <number>), zIndex, flex grow/shrink, weights: unitless stays valid."""
+        self.assertEqual(self.heading({"lineHeight": "1.5", "weight": "700", "headingLevel": "h2"}), [])
+        self.assertEqual(self.heading({"lineHeight": 1.2}), [])
+        self.assertEqual(self.check(zIndex="10", sizing={"flexGrow": "1", "flexShrink": 0}), [])
+
+    def test_leaf_units_listing_empty_string_allows_unitless(self):
+        from divi5_checks_values import unitless_lengths5
+        self.assertEqual(unitless_lengths5("module.decoration.sizing.width", {"type": "length"}, "12"),
+                         [("module.decoration.sizing.width", "12")])
+        self.assertEqual(unitless_lengths5("module.decoration.sizing.width",
+                                           {"type": "length", "units": ["", "px"]}, "12"), [])
+        self.assertEqual(unitless_lengths5("title.decoration.font.font.lineHeight", {"type": "length"}, "12"), [])
+
+
+class GradientTest(unittest.TestCase):
+    """doc-experiments.md §8: a gradient without "enabled": "on", or with "0%" stop positions, renders nothing."""
+    CODES = ("E5_GRADIENT_DISABLED", "E5_GRADIENT_STOP_POSITION", "E5_BAD_VALUE")
+    STOPS = [{"position": 0, "color": "#1e3a8a"}, {"position": 100, "color": "#3b82f6"}]
+
+    def bg(self, background):
+        return found(page(block("text", text_attrs(module={"decoration": {"background": background}}))), *self.CODES)
+
+    def test_missing_enabled(self):
+        f = self.bg({"desktop": {"value": {"gradient": {"type": "linear", "direction": "90deg", "stops": self.STOPS}}}})
+        self.assertEqual(f, [("error", "E5_GRADIENT_DISABLED", "module.decoration.background.gradient:desktop:value")])
+
+    def test_enabled_on_and_explicit_off_are_fine(self):
+        for enabled in ("on", "off"):  # Divi writes "off" with stops itself (divi-ai fixtures): a deliberate choice
+            with self.subTest(enabled=enabled):
+                self.assertEqual(self.bg({"desktop": {"value": {"gradient": {"enabled": enabled,
+                                                                             "stops": self.STOPS}}}}), [])
+
+    def test_state_inherits_enabled_from_desktop(self):
+        bg = {"desktop": {"value": {"gradient": {"enabled": "on", "stops": self.STOPS}},
+                          "hover": {"gradient": {"stops": self.STOPS[::-1]}}},
+              "phone": {"value": {"gradient": {"direction": "180deg"}}}}
+        self.assertEqual(self.bg(bg), [])
+        bg = {"desktop": {"value": {"color": "#000"}, "hover": {"gradient": {"stops": self.STOPS}}}}
+        self.assertEqual(self.bg(bg),
+                         [("error", "E5_GRADIENT_DISABLED", "module.decoration.background.gradient:desktop:hover")])
+
+    def test_stop_position_with_unit(self):
+        stops = [{"position": "0%", "color": "#1e3a8a"}, {"position": "100px", "color": "#3b82f6"}]
+        f = self.bg({"desktop": {"value": {"gradient": {"enabled": "on", "stops": stops}}}})
+        self.assertEqual(f, [("error", "E5_GRADIENT_STOP_POSITION",
+                              "module.decoration.background.gradient.stops:desktop:value")])
+
+    def test_plain_positions_are_fine(self):
+        for stops in (self.STOPS, [{"position": "0", "color": "#fff"}, {"position": "100", "color": "#000"}]):
+            self.assertEqual(self.bg({"desktop": {"value": {"gradient": {"enabled": "on", "stops": stops}}}}), [])
+
+    def test_text_effects_gradient_has_no_enabled_flag(self):
+        """textEffects gradients have no `enabled` key in Divi's schema, so they are not E5_GRADIENT_DISABLED."""
+        attrs = {"builderVersion": V, "title": {"innerContent": {"desktop": {"value": "Hi"}}, "decoration": {"font": {
+            "textEffects": {"desktop": {"value": {"gradient": {"type": "linear", "stops": self.STOPS}}}}}}}}
+        self.assertEqual(found(page(block("heading", attrs)), *self.CODES), [])
+
+
+class BareFontTest(unittest.TestCase):
+    """doc-experiments.md §1: keys written directly under ….decoration.font render nothing."""
+
+    def blurb(self, font):
+        attrs = {"builderVersion": V, "title": {"innerContent": {"desktop": {"value": {"text": "Fast"}}},
+                                                "decoration": {"font": font}}}
+        return run(page(block("blurb", attrs)))
+
+    def test_bare_font_warns(self):
+        f = [x for x in self.blurb({"desktop": {"value": {"size": "51px", "color": "#ff0001"}}})
+             if x.code == "W5_BARE_FONT"]
+        self.assertEqual([(x.level, x.attr) for x in f], [("warning", "title.decoration.font:desktop:value")])
+        self.assertIn("title.decoration.font.font", f[0].hint)
+        self.assertIn("size", f[0].message)
+
+    def test_font_font_text_shadow_and_text_effects_are_fine(self):
+        f = self.blurb({"font": {"desktop": {"value": {"size": "52px"}}},
+                        "textShadow": {"desktop": {"value": {"style": "preset1", "horizontal": "2px"}}},
+                        "textEffects": {"desktop": {"value": {"strokeWidth": "1px"}}}})
+        self.assertEqual([x.code for x in f if x.level == "error" or x.code == "W5_BARE_FONT"], [])
+
+
+class LegacyAttrTest(unittest.TestCase):
+    """doc-experiments.md §7: attributes only Divi's Divi 4 conversion map writes; no Divi 5 module code reads them."""
+
+    def row(self, **attrs):
+        return page().replace('<!-- wp:divi/row {', '<!-- wp:divi/row {' + canonical_json(attrs)[1:-1] + ',', 1)
+
+    def test_row_column_attrs_warn_once_with_column_hint(self):
+        src = self.row(**{"columns": {"column-1": {"spacing": {"desktop": {"value": {"padding": {"top": "10px"}}},
+                                                               "phone": {"value": {"padding": {"top": "5px"}}}}}},
+                          "padding1Phone": {"desktop": {"value": "10px|10px|10px|10px"}}})
+        f = [x for x in run(src) if x.code == "W5_LEGACY_ATTR"]
+        self.assertEqual(sorted((x.level, x.attr) for x in f),
+                         [("warning", "columns.column-1.spacing"), ("warning", "padding1Phone")])
+        self.assertTrue(all("divi/column" in x.hint for x in f))
+
+    def test_non_column_legacy_attr_hint(self):
+        attrs = text_attrs()
+        attrs["content"]["desktop"] = {"value": "x"}  # not legacy: an unknown key
+        self.assertNotIn("W5_LEGACY_ATTR", codes(page(block("text", attrs))))
+        src = page().replace('<!-- wp:divi/section {', '<!-- wp:divi/section {"nextBackgroundColor":{"desktop":'
+                                                         '{"value":"#ffffff"}},', 1)
+        f = [x for x in run(src) if x.code == "W5_LEGACY_ATTR"]
+        self.assertEqual([x.attr for x in f], ["nextBackgroundColor"])
+        self.assertNotIn("divi/column", f[0].hint)
+
+    def test_current_attrs_are_not_legacy(self):
+        self.assertNotIn("W5_LEGACY_ATTR", codes(page(block("text", module_attrs(spacing={"padding": {"top": "1px"}})))))
+
+    def test_compiled_legacy_lists_match_the_shared_predicate(self):
+        """The docs generator and the validator share divi5_schema.is_legacy_attr; the compiled schema5 carries its
+        result per module."""
+        from _paths import SCHEMA5_RAW
+        from divi5_schema import is_legacy_attr
+        schema = load_schema5()
+        for name in schema.names():
+            raw = json.loads((SCHEMA5_RAW / "modules" / f"{name[5:]}.json").read_text())
+            mod = schema.module(name)
+            with self.subTest(name):
+                self.assertEqual(sorted(mod.legacy), sorted(p for p in mod.attrs if is_legacy_attr(p, raw)))
+        self.assertIn("padding1Phone", schema.module("row").legacy)
+        self.assertNotIn("content", schema.module("accordion").legacy)  # module.json declares a `content` root
+
+    def test_generator_uses_the_shared_predicate(self):
+        import sys
+        from _paths import TOOLS5
+        sys.path.insert(0, str(TOOLS5))
+        import generate_docs5
+        import divi5_schema
+        self.assertIs(generate_docs5.is_legacy_attr, divi5_schema.is_legacy_attr)
+        self.assertIs(generate_docs5.is_legacy_column_attr, divi5_schema.is_legacy_column_attr)
+
+
+class BuilderVersionHintTest(unittest.TestCase):
+    def test_hint_distinguishes_new_and_edited_blocks(self):
+        f = [x for x in run(page(block("text", text_attrs())), site_version="5.14.0") if x.code == "W5_BUILDER_VERSION"]
+        self.assertTrue(f)
+        self.assertIn("Blocks you create: set builderVersion to the site's Divi version.", f[0].hint)
+        self.assertIn("Don't change builderVersion on existing blocks you edit", f[0].hint)
 
 
 class TokensWiringTest(unittest.TestCase):

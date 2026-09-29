@@ -364,6 +364,11 @@
    }
   }
  },
+ "legacy": [
+  "content",
+  "googleMapsScriptNotice",
+  "mapCenterMap"
+ ],
  "name": "divi/fullwidth-map",
  "parents": [
   "divi/section"

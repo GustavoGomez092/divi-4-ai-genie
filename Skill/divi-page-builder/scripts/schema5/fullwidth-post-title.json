@@ -477,6 +477,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/fullwidth-post-title",
  "parents": [
   "divi/section"

@@ -2094,6 +2094,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/contact-form",
  "parents": [
   "divi/column",

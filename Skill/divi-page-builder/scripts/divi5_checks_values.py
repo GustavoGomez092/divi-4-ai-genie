@@ -15,6 +15,7 @@ from typing import Dict, Iterator, List, Optional, Set, Tuple
 from urllib.parse import urlparse
 
 from divi5_blocks import BREAKPOINTS, DISABLED_ON_BREAKPOINTS, STATES, Block, get_attr
+from divi5_schema import is_legacy_column_attr
 
 PLACEHOLDER = "divi/placeholder"
 # Breakpoints Divi 5 ships switched off (Settings > Breakpoints); values there apply only once the site enables them.
@@ -50,6 +51,18 @@ _VARIABLE_TYPES = {
     "length": {"content"}, "number": {"content"}, "text": {"content"}, "html": {"content"}, "url": {"content"},
     "image": {"content"}, "font-family": {"content"}, "font-weight": {"content"},
 }
+
+# Length leaves whose CSS property needs a unit (doc-experiments.md §8: Divi prints a unitless value verbatim, e.g.
+# padding-top:41!important, and the browser drops the declaration). Matched on the leaf's last key; lineHeight,
+# durations, delays, filters, opacities, gradient directions and stroke widths are not listed, so a unitless number
+# stays valid there (CSS takes <number> for line-height, and Divi feeds the others to JS or adds its own unit).
+_UNIT_KEYS = frozenset({"width", "height", "minWidth", "maxWidth", "minHeight", "maxHeight", "letterSpacing",
+                        "columnGap", "rowGap", "horizontalOffset", "verticalOffset"})
+_SHADOW_KEYS = frozenset({"horizontal", "vertical", "blur", "spread"})  # under a …Shadow (textShadow, boxShadow)
+_OFFSET_KEYS = frozenset({"horizontal", "vertical"})                    # position family offset.*
+_SIDE_PARENTS = frozenset({"padding", "margin"})                         # per-side lengths (legacy column spacing)
+_NO_UNIT_PARENTS = frozenset({"stroke"})                                 # SVG stroke width takes a number
+_FONT_STYLE_HINT = "size, color, weight, family, lineHeight, letterSpacing, headingLevel, style, …"
 
 _VAR_MARK = "$variable("
 _DECODER = json.JSONDecoder()
@@ -264,13 +277,58 @@ def _gradient_problems(value) -> List[str]:
             out.append(f"stop {i} needs position and color")
             continue
         pos = stop["position"]
-        if not (_is_number(pos) or (isinstance(pos, str) and _NUM_UNIT.fullmatch(pos)
-                                    and _NUM_UNIT.fullmatch(pos).group(2) in ("%", "px"))):
-            out.append(f"stop {i} position {pos!r} is not a number")
+        if not (_is_number(pos) or (isinstance(pos, str) and _NUM_UNIT.fullmatch(pos))):
+            out.append(f"stop {i} position {pos!r} is not a number")  # a unit is E5_GRADIENT_STOP_POSITION
         color = stop["color"]
         if not _color_value_ok(color):
             out.append(f"stop {i} color {color!r} is not a color")
     return out
+
+
+def _unit_positions(value) -> List[str]:
+    """Stop positions written with a unit ("0%", "10px"): Divi renders no gradient at all (doc-experiments.md §8)."""
+    return [stop["position"] for stop in (value if isinstance(value, list) else ())
+            if isinstance(stop, dict) and isinstance(stop.get("position"), str)
+            and _NUM_UNIT.fullmatch(stop["position"]) and _NUM_UNIT.fullmatch(stop["position"]).group(2)]
+
+
+def _unitless_nonzero(value) -> bool:
+    if isinstance(value, bool):
+        return False
+    if isinstance(value, (int, float)):
+        return value != 0
+    return isinstance(value, str) and bool(_NUMBER.fullmatch(value)) and float(value) != 0
+
+
+def _needs_unit(path: str) -> bool:
+    parts = path.split(".")
+    key, parent = parts[-1], (parts[-2] if len(parts) > 1 else "")
+    if parent in _NO_UNIT_PARENTS:
+        return False
+    if key in _UNIT_KEYS or (key == "size" and parent == "font"):
+        return True
+    if key in _SHADOW_KEYS and any(p.endswith("Shadow") for p in parts[:-1]):
+        return True
+    if key in _OFFSET_KEYS and parent == "offset":
+        return True
+    return key in _SPACING_SIDES and parent in _SIDE_PARENTS
+
+
+def unitless_lengths5(path: str, leaf: dict, value) -> List[Tuple[str, object]]:
+    """(path, value) for every non-zero unitless number (JSON number or numeric string) in a length, spacing or
+    radius leaf value where CSS requires a unit (E5_UNITLESS_LENGTH). 0 is fine; so is a leaf whose `units` list
+    includes "" (unitless allowed there)."""
+    if "" in (leaf.get("units") or ()):
+        return []
+    t = leaf.get("type")
+    if t == "length":
+        return [(path, value)] if _needs_unit(path) and _unitless_nonzero(value) else []
+    if t in ("spacing", "radius") and isinstance(value, dict):
+        keys = _SPACING_SIDES if t == "spacing" else _RADIUS_CORNERS
+        return [(f"{path}.{k}", v) for k, v in value.items() if k in keys and _unitless_nonzero(v)]
+    if t == "radius":
+        return [(path, value)] if _unitless_nonzero(value) else []
+    return []
 
 
 def _color_value_ok(value) -> bool:
@@ -469,16 +527,20 @@ def check_attributes5(doc, schema5, report, known_presets=frozenset(), known_var
         _check_block(block, path, mod, schema5, report, known_presets, known_vars, site_host, site_version)
 
 
+_BUILDER_VERSION_HINT = ("Blocks you create: set builderVersion to the site's Divi version. Don't change builderVersion "
+                         "on existing blocks you edit — Divi's render-time migrations depend on it.")
+
+
 def _check_block(block, path, mod, schema5, report, known_presets, known_vars, site_host, site_version) -> None:
     attrs = block.attrs
     version = attrs.get("builderVersion")
     if not isinstance(version, str) or not version:
         report("warning", "W5_BUILDER_VERSION", f"[{block.name}] has no builderVersion", node=block, path=path,
-               attr="builderVersion", hint=f"Add \"builderVersion\":\"{site_version or '<the site Divi version>'}\".")
+               attr="builderVersion", hint=_BUILDER_VERSION_HINT + (f" (site: {site_version})" if site_version else ""))
     elif site_version and version != site_version:
         report("warning", "W5_BUILDER_VERSION", f"[{block.name}] builderVersion {version} is not the site's Divi "
                                                 f"{site_version}", node=block, path=path, attr="builderVersion",
-               value=version, hint=f"New or edited blocks carry \"builderVersion\":\"{site_version}\".")
+               value=version, hint=_BUILDER_VERSION_HINT)
     for label, pid in _preset_ids(attrs):
         if pid != "default" and pid not in known_presets:
             report("warning", "W5_UNKNOWN_PRESET",
@@ -494,6 +556,7 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
     seen: Dict[str, Set[Tuple[str, str]]] = defaultdict(set)
     unknown: Set[str] = set()
     warned_bp: Set[Tuple[str, str]] = set()
+    warned_legacy: Set[str] = set()
     for attr, bp, st, value in _leaves(attrs):
         rep = _scoped(report, bp, st)
         for s in _strings(value):
@@ -512,6 +575,10 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
                        hint='Divi 5 values are stored as {"desktop":{"value":…}}.')
             continue
         seen[attr].add((bp, st))
+        if attr in mod.legacy and attr not in warned_legacy:
+            warned_legacy.add(attr)
+            _legacy(block, path, attr, report)
+        _check_whole_value(block, path, mod, schema5, attr, bp, st, value, rep)
         if bp in DISABLED_BREAKPOINTS and (attr, bp) not in warned_bp:
             warned_bp.add((attr, bp))
             rep("warning", "W5_BREAKPOINT_DISABLED",
@@ -551,6 +618,40 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
                    value=",".join(extra), hint="Set the desktop value too; the other breakpoints and states vary it.")
 
 
+def _legacy(block, path, attr, report) -> None:
+    if is_legacy_column_attr(attr):
+        hint = ("Style each column on its own divi/column block (its module.decoration.* attributes and css) instead "
+                "of the parent's per-column attributes.")
+    else:
+        hint = (f"Use the block's own Divi 5 attributes instead (reference/divi5/modules/{block.name[5:]}.md lists "
+                "them; this one is in its Legacy table).")
+    report("warning", "W5_LEGACY_ATTR", f"[{block.name}] {attr} exists only for Divi 4 conversion: no Divi 5 module "
+                                        "code reads it", node=block, path=path, attr=attr, hint=hint)
+
+
+def _check_whole_value(block, path, mod, schema5, attr, bp, st, value, report) -> None:
+    """Checks that need a whole attribute value (one breakpoint/state) rather than one leaf of it."""
+    if not isinstance(value, dict) or not value:
+        return
+    spec = mod.attrs.get(attr) or {}
+    if spec.get("family") == "font" and not spec.get("prefix"):
+        report("warning", "W5_BARE_FONT",
+               f"{attr} sets {', '.join(sorted(value))} directly on the font container: Divi styles text only from "
+               f"{attr}.font, .textShadow and .textEffects, so these render nothing", node=block, path=path,
+               attr=attr, value=_show(value)[:200],
+               hint=f"Move them to {attr}.font ({_FONT_STYLE_HINT} all go there).")
+    gradient = value.get("gradient")
+    if isinstance(gradient, dict) and "enabled" not in gradient and gradient.keys() & {"stops", "type", "direction"} \
+            and "gradient.enabled" in schema5.leaf_spec(spec):
+        base = get_attr(block, attr)
+        inherited = base.get("gradient") if isinstance(base, dict) and (bp, st) != ("desktop", "value") else None
+        if not (isinstance(inherited, dict) and "enabled" in inherited):
+            report("error", "E5_GRADIENT_DISABLED",
+                   f"{attr}.gradient has stops/type/direction but no \"enabled\": \"on\": Divi renders no gradient",
+                   node=block, path=path, attr=f"{attr}.gradient", value=_show(gradient)[:200],
+                   hint='Add "enabled": "on" to the gradient object.')
+
+
 def _scoped(report, bp, st):
     """report, but every finding's attr gets ':<breakpoint>:<state>' appended (the baseline key of a block finding:
     dotted path + ':' + breakpoint + ':' + state). Non-responsive values keep the bare path."""
@@ -576,7 +677,18 @@ def _check_leaf(block, path, full, bp, leaf, value, report, site_host) -> None:
         return
     for msg in value_problems5(leaf, value):
         report("error", "E5_BAD_VALUE", f"{full}: {msg}", node=block, path=path, attr=full, value=_show(value)[:200])
+    for where, v in unitless_lengths5(full, leaf, value):
+        report("error", "E5_UNITLESS_LENGTH",
+               f"{where}: {_show(v)} has no unit: Divi writes it into the CSS as is and the browser ignores it",
+               node=block, path=path, attr=where, value=_show(v), hint=f"add a unit, e.g. {_show(v)}px")
     t = leaf.get("type")
+    if t == "gradient":
+        bad = _unit_positions(value)
+        if bad:
+            report("error", "E5_GRADIENT_STOP_POSITION",
+                   f"{full}: stop position {', '.join(_show(b) for b in bad)} has a unit: Divi renders no gradient",
+                   node=block, path=path, attr=full, value=", ".join(_show(b) for b in bad),
+                   hint='Write positions as plain numbers (percent of the gradient length): 0, 100 or "0", "100".')
     if t == "font-weight" and _off_hundreds(value):
         report("warning", "W_FONT_WEIGHT", f"{full}: font weight '{value}' is not 100–900 in steps of 100",
                node=block, path=path, attr=full, value=str(value),

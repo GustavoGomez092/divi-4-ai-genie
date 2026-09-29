@@ -361,6 +361,9 @@
    }
   }
  },
+ "legacy": [
+  "content"
+ ],
  "name": "divi/sidebar",
  "parents": [
   "divi/column",
