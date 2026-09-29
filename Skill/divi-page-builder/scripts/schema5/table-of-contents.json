@@ -1,0 +1,534 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "emptyState": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "link": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "list": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "marker": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "title": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "emptyState.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "emptyState.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "emptyState.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "emptyState.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "emptyState.innerContent": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "text"
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "list.advanced.interaction": {
+   "sub": {
+    "scrollOffsetPx": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "length"
+    },
+    "smoothScroll": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    }
+   }
+  },
+  "list.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "list.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "list.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "list.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "list.innerContent": {
+   "sub": {
+    "includeOwnTitle": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    },
+    "includedHeadings": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "json"
+    }
+   }
+  },
+  "list1.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "list1.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "list1.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "list1.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "list2.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "list2.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "list2.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "list2.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "list3.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "list3.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "list3.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "list3.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "list4.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "list4.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "list4.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "list4.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "list5.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "list5.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "list5.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "list5.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "list6.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "list6.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "list6.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "list6.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "marker.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "marker.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "marker.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "marker.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "title.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "title.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "title.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "title.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "title.innerContent": {
+   "sub": {
+    "": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "text": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "emptyState",
+  "freeForm",
+  "link",
+  "list",
+  "mainElement",
+  "marker",
+  "title"
+ ],
+ "d4": "et_pb_table_of_contents",
+ "defaults": {
+  "emptyState.innerContent": {
+   "desktop": {
+    "value": "No headings found in this post."
+   }
+  },
+  "list.advanced.interaction": {
+   "desktop": {
+    "value": {
+     "scrollOffsetPx": "0",
+     "smoothScroll": "on"
+    }
+   }
+  },
+  "list.advanced.layout": {
+   "desktop": {
+    "value": {
+     "markerStyle": "ordered"
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Table of Contents"
+   }
+  },
+  "title.decoration.font.font": {
+   "desktop": {
+    "value": {
+     "headingLevel": "h2"
+    }
+   }
+  },
+  "title.innerContent": {
+   "desktop": {
+    "value": "Table of Contents"
+   }
+  }
+ },
+ "name": "divi/table-of-contents",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "d5-extra"
+}

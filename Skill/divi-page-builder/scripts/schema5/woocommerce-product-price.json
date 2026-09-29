@@ -1,0 +1,320 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "content.advanced.product": {
+   "bp": true,
+   "note": "untyped: out-of-scope module, no evidence",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "object"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "beforeSalePrice": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "price": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "salePrice": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "price.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "price.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "price.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "price.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "saleNewPrice.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "saleNewPrice.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "saleNewPrice.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "saleNewPrice.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "saleOldPrice.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "saleOldPrice.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "saleOldPrice.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "saleOldPrice.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "beforeSalePrice",
+  "freeForm",
+  "mainElement",
+  "price",
+  "salePrice"
+ ],
+ "d4": "et_pb_wc_price",
+ "defaults": {
+  "content.advanced.product": {
+   "desktop": {
+    "value": "dynamic"
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Woo Product Price"
+   }
+  }
+ },
+ "name": "divi/woocommerce-product-price",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "woocommerce"
+}

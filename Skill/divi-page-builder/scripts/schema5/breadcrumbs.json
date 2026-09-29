@@ -1,0 +1,487 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "breadcrumb.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "breadcrumb.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "breadcrumb.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "breadcrumb.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "breadcrumb.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "breadcrumb.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "breadcrumb.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "breadcrumb.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "breadcrumb.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "breadcrumbLink.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "breadcrumbLink.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "breadcrumbLink.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "breadcrumbLink.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "breadcrumbLink.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "breadcrumbLink.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "breadcrumbLink.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "breadcrumbLink.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "breadcrumbLink.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "breadcrumb": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "breadcrumbLink": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "breadcrumbWrapper": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "homeLink": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "separator": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "home.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "home.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "home.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "home.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "home.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "home.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "home.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "home.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "home.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "home.innerContent": {
+   "sub": {
+    "text": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "text"
+    },
+    "url": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "url"
+    }
+   }
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "separator.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "separator.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "separator.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "separator.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "separator.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "separator.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "separator.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "separator.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "separator.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "separator.innerContent": {
+   "sub": {
+    "text": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "breadcrumb",
+  "breadcrumbLink",
+  "breadcrumbWrapper",
+  "freeForm",
+  "homeLink",
+  "mainElement",
+  "separator"
+ ],
+ "d4": null,
+ "defaults": {
+  "home.innerContent": {
+   "desktop": {
+    "value": {
+     "text": "Home",
+     "url": ""
+    }
+   }
+  },
+  "module.decoration.layout": {
+   "desktop": {
+    "value": {
+     "flexDirection": "row"
+    }
+   }
+  },
+  "module.decoration.spacing": {
+   "desktop": {
+    "value": {
+     "margin": {
+      "bottom": "0px"
+     }
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Breadcrumbs"
+   }
+  },
+  "separator.innerContent": {
+   "desktop": {
+    "value": {
+     "text": "/"
+    }
+   }
+  },
+  "trail.advanced.htmlTag": {
+   "desktop": {
+    "value": "nav"
+   }
+  }
+ },
+ "name": "divi/breadcrumbs",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "theme-builder"
+}

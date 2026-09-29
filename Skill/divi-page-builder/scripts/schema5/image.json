@@ -1,0 +1,622 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "content": {
+   "bp": true,
+   "note": "D4 shortcode content converted to the content attr",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "html"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "image": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "image.advanced.lightbox": {
+   "bp": false,
+   "note": "typed from Divi 4 show_in_lightbox (yes_no_button)",
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "image.advanced.overlay": {
+   "sub": {
+    "backgroundColor": {
+     "bp": true,
+     "note": "typed from Divi 4 hover_overlay_color (color-alpha)",
+     "states": [
+      "value",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "use": {
+     "bp": false,
+     "note": "typed from Divi 4 use_overlay (yes_no_button)",
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    }
+   }
+  },
+  "image.advanced.overlayIcon": {
+   "sub": {
+    "hoverIcon": {
+     "bp": true,
+     "note": "typed from Divi 4 hover_icon (select_icon)",
+     "states": [
+      "value",
+      "sticky"
+     ],
+     "type": "icon"
+    },
+    "iconColor": {
+     "bp": true,
+     "note": "typed from Divi 4 overlay_icon_color (color-alpha)",
+     "states": [
+      "value",
+      "sticky"
+     ],
+     "type": "color"
+    }
+   }
+  },
+  "image.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "image.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "image.decoration.fit": {
+   "family": "fit",
+   "prefix": ""
+  },
+  "image.innerContent": {
+   "sub": {
+    "alt": {
+     "bp": false,
+     "note": "typed from Divi 4 alt (text)",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "linkTarget": {
+     "bp": false,
+     "note": "typed from Divi 4 url_new_window (select)",
+     "options": [
+      "off",
+      "on"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "linkUrl": {
+     "bp": false,
+     "note": "typed from Divi 4 url (text)",
+     "states": [
+      "value"
+     ],
+     "type": "url"
+    },
+    "rel": {
+     "bp": false,
+     "note": "link rel values (list); options not dumped",
+     "states": [
+      "value"
+     ],
+     "type": "json"
+    },
+    "src": {
+     "bp": true,
+     "note": "typed from Divi 4 src (upload)",
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "image"
+    },
+    "titleText": {
+     "bp": false,
+     "note": "typed from Divi 4 title_text (text)",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.align": {
+   "bp": true,
+   "note": "typed from Divi 4 align (text_align)",
+   "options": [
+    "left",
+    "center",
+    "right"
+   ],
+   "states": [
+    "value"
+   ],
+   "type": "enum"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.sizing": {
+   "sub": {
+    "alignSelf": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "alignment": {
+     "bp": true,
+     "note": "typed from Divi 4 module_alignment (align)",
+     "options": [
+      "left",
+      "center",
+      "right"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "aspectRatio": {
+     "bp": true,
+     "note": "JS divi/aspect-ratio: a ratio like 16/9 or auto",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "flexGrow": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    },
+    "flexShrink": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    },
+    "flexType": {
+     "bp": true,
+     "note": "JS divi/select-column-class, e.g. 24_24, 12_24",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "forceFullwidth": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    },
+    "gridAlignSelf": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "gridColumnEnd": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gridColumnSpan": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gridColumnStart": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gridJustifySelf": {
+     "bp": false,
+     "options": [
+      "start",
+      "center",
+      "end",
+      "stretch",
+      "baseline"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "gridRowEnd": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gridRowSpan": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gridRowStart": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "height": {
+     "bp": true,
+     "note": "typed from Divi 4 height (range)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "maxHeight": {
+     "bp": true,
+     "note": "typed from Divi 4 max_height (range)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "maxWidth": {
+     "bp": true,
+     "note": "typed from Divi 4 max_width (range)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "minHeight": {
+     "bp": true,
+     "note": "typed from Divi 4 min_height (range)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "size": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "width": {
+     "bp": true,
+     "note": "typed from Divi 4 width (range)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "module.advanced.spacing": {
+   "sub": {
+    "margin": {
+     "bp": true,
+     "note": "typed from Divi 4 custom_margin (custom_margin)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "spacing"
+    },
+    "padding": {
+     "bp": true,
+     "note": "typed from Divi 4 custom_padding (custom_padding)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "spacing"
+    },
+    "showBottomSpace": {
+     "bp": true,
+     "note": "typed from Divi 4 show_bottom_space (yes_no_button)",
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    }
+   }
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "freeForm",
+  "image",
+  "mainElement"
+ ],
+ "d4": "et_pb_image",
+ "defaults": {
+  "image.advanced.lightbox": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "image.advanced.overlay": {
+   "desktop": {
+    "value": {
+     "use": "off"
+    }
+   }
+  },
+  "image.innerContent": {
+   "desktop": {
+    "value": {
+     "linkTarget": "off"
+    }
+   }
+  },
+  "module.advanced.forceFullwidth": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "module.advanced.spacing": {
+   "desktop": {
+    "value": {
+     "showBottomSpace": "on"
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Image"
+   }
+  }
+ },
+ "name": "divi/image",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "core"
+}

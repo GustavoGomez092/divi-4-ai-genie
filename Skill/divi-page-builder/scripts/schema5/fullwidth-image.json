@@ -1,0 +1,363 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "content": {
+   "bp": true,
+   "note": "D4 shortcode content converted to the content attr",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "html"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "image": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "image.advanced.lightbox": {
+   "bp": false,
+   "note": "typed from Divi 4 show_in_lightbox (yes_no_button)",
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "image.advanced.overlay": {
+   "sub": {
+    "backgroundColor": {
+     "bp": true,
+     "note": "typed from Divi 4 hover_overlay_color (color-alpha)",
+     "states": [
+      "value",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "use": {
+     "bp": false,
+     "note": "typed from Divi 4 use_overlay (yes_no_button)",
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    }
+   }
+  },
+  "image.advanced.overlayIcon": {
+   "sub": {
+    "hoverIcon": {
+     "bp": true,
+     "note": "typed from Divi 4 hover_icon (select_icon)",
+     "states": [
+      "value",
+      "sticky"
+     ],
+     "type": "icon"
+    },
+    "iconColor": {
+     "bp": true,
+     "note": "typed from Divi 4 overlay_icon_color (color-alpha)",
+     "states": [
+      "value",
+      "sticky"
+     ],
+     "type": "color"
+    }
+   }
+  },
+  "image.innerContent": {
+   "sub": {
+    "alt": {
+     "bp": false,
+     "note": "typed from Divi 4 alt (text)",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "linkTarget": {
+     "bp": false,
+     "note": "typed from Divi 4 url_new_window (select)",
+     "options": [
+      "off",
+      "on"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "linkUrl": {
+     "bp": false,
+     "note": "typed from Divi 4 url (text)",
+     "states": [
+      "value"
+     ],
+     "type": "url"
+    },
+    "src": {
+     "bp": true,
+     "note": "typed from Divi 4 src (upload)",
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "image"
+    },
+    "titleText": {
+     "bp": false,
+     "note": "typed from Divi 4 title_text (text)",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.spacing": {
+   "sub": {
+    "showBottomSpace": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "onoff"
+    }
+   }
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "fullwidth-module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "freeForm",
+  "image",
+  "mainElement"
+ ],
+ "d4": "et_pb_fullwidth_image",
+ "defaults": {
+  "image.advanced.lightbox": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "image.advanced.overlay": {
+   "desktop": {
+    "value": {
+     "use": "off"
+    }
+   }
+  },
+  "image.innerContent": {
+   "desktop": {
+    "value": {
+     "linkTarget": "off"
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Fullwidth Image"
+   }
+  }
+ },
+ "name": "divi/fullwidth-image",
+ "parents": [
+  "divi/section"
+ ],
+ "scope": "core"
+}

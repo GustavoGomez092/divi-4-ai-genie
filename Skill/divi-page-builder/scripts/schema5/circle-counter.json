@@ -1,0 +1,418 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "circle.advanced.background": {
+   "sub": {
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "opacity": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    }
+   }
+  },
+  "circle.advanced.color": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "color"
+  },
+  "content": {
+   "bp": true,
+   "note": "D4 shortcode content converted to the content attr",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "html"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "circleCounterTitle": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "percent": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "percentText": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "number.advanced.percentSign": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "number.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "number.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "number.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "number.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "number.innerContent": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "text"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "title.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "title.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "title.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "title.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "title.innerContent": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "text"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "circleCounterTitle",
+  "freeForm",
+  "mainElement",
+  "percent",
+  "percentText"
+ ],
+ "d4": "et_pb_circle_counter",
+ "defaults": {
+  "circle.advanced.background": {
+   "desktop": {
+    "value": {
+     "color": "",
+     "opacity": "0.1"
+    }
+   }
+  },
+  "circle.advanced.color": {
+   "desktop": {
+    "value": "$variable({\"type\":\"color\",\"value\":{\"name\":\"gcid-primary-color\",\"settings\":{}}})$"
+   }
+  },
+  "module.advanced.text.text": {
+   "desktop": {
+    "value": {
+     "color": "light",
+     "orientation": "center"
+    }
+   }
+  },
+  "module.decoration.spacing": {
+   "desktop": {
+    "value": {
+     "margin": {
+      "bottom": "30px",
+      "left": "auto",
+      "right": "auto",
+      "top": "0px"
+     }
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Circle Counter"
+   }
+  },
+  "number.advanced.percentSign": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "number.innerContent": {
+   "desktop": {
+    "value": "0"
+   }
+  },
+  "title.decoration.font.font": {
+   "desktop": {
+    "value": {
+     "headingLevel": "h3"
+    }
+   }
+  }
+ },
+ "name": "divi/circle-counter",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "core"
+}

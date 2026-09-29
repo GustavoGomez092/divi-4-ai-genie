@@ -1,0 +1,588 @@
+{
+ "attrs": {
+  "activeGroups.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "activeGroups.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "activeGroups.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "activeGroups.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "activeGroups.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "activeGroups.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "activeGroups.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "arrows.advanced.color": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "color"
+  },
+  "arrows.advanced.leftIcon": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "icon"
+  },
+  "arrows.advanced.position": {
+   "bp": true,
+   "options": [
+    "center",
+    "inside",
+    "outside"
+   ],
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "enum"
+  },
+  "arrows.advanced.rightIcon": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "icon"
+  },
+  "arrows.advanced.show": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "onoff"
+  },
+  "arrows.advanced.size": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "length"
+  },
+  "arrows.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "arrows.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "arrows.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "arrows.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "children.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "children.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "children.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "children.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "children.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "children.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "children.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "carouselActiveSlide": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "carouselArrows": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "carouselContainer": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "carouselDots": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "carouselSlide": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "carouselTrack": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "dotNav.advanced.alignment": {
+   "bp": true,
+   "options": [
+    "center",
+    "left",
+    "right"
+   ],
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "enum"
+  },
+  "dotNav.advanced.color": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "color"
+  },
+  "dotNav.advanced.position": {
+   "bp": true,
+   "options": [
+    "above",
+    "below",
+    "overlay"
+   ],
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "enum"
+  },
+  "dotNav.advanced.show": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "onoff"
+  },
+  "dotNav.advanced.size": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "length"
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.auto": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.autoSpeed": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "number"
+  },
+  "module.advanced.centerMode": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.pauseOnHover": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.slidesToScroll": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "number"
+  },
+  "module.advanced.slidesToShow": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "number"
+  },
+  "module.advanced.transitionSpeed": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "length"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": [
+  "divi/group"
+ ],
+ "css": [
+  "after",
+  "before",
+  "carouselActiveSlide",
+  "carouselArrows",
+  "carouselContainer",
+  "carouselDots",
+  "carouselSlide",
+  "carouselTrack",
+  "freeForm",
+  "mainElement"
+ ],
+ "d4": null,
+ "defaults": {
+  "arrows.advanced.leftIcon": {
+   "desktop": {
+    "value": {
+     "target": "off",
+     "type": "divi",
+     "unicode": "&#x34;",
+     "weight": "400"
+    }
+   }
+  },
+  "arrows.advanced.rightIcon": {
+   "desktop": {
+    "value": {
+     "target": "off",
+     "type": "divi",
+     "unicode": "&#x35;",
+     "weight": "400"
+    }
+   }
+  },
+  "arrows.advanced.showArrows": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "dotNav.advanced.showDots": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "module.advanced.auto": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "module.advanced.centerMode": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "module.advanced.pauseOnHover": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "module.advanced.slidesToScroll": {
+   "desktop": {
+    "value": "1"
+   }
+  },
+  "module.advanced.slidesToShow": {
+   "desktop": {
+    "value": "1"
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Carousel"
+   }
+  }
+ },
+ "name": "divi/group-carousel",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "d5-extra"
+}

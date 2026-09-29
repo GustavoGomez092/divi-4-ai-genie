@@ -1,0 +1,2447 @@
+{
+ "_notes": "Curated value types for Divi 5 (5.13.1) option-group families and for module-specific leaves the dump does not type. Paths come from research/divi5-schema (the union model, research/divi5/schema.md §3); this file only types them. build_schema5.py keeps a family entry only when the union declares that path (or the entry says \"add\" with its evidence), so fragments may be supersets. Evidence per family is in its _notes. Sources: JS = the field configs in visual-builder/build/module.js (component, features, option constants); D4 = the Divi 4 field (research/divi-schema) reached through the runtime D4->D5 conversion map; corpus = values in tests/fixtures/divi5 (Divi's converter, Divi AI and VB output). Leaf defaults: bp true, states [value, hover, sticky] (module.json features default {responsive, hover, sticky} = true). When a value's grammar is unclear the leaf is typed text or object rather than given invented options.",
+ "_types": {
+  "text": "a string (plain text, CSS text, an id, a date, a CSS value Divi passes through verbatim)",
+  "html": "a string of HTML; innerContent rich text/code, stored JSON-escaped (\\u003c...) in the block comment",
+  "color": "hex (#rgb/#rrggbb/#rrggbbaa), rgb()/rgba()/hsl()/hsla() (any case), transparent, or a $variable({\"type\":\"color\",...})$ global color reference",
+  "length": "a CSS length: number + unit (one of units when given), a bare 0, auto/none/inherit/initial, calc()/clamp()/min()/max()/var(), a $variable({\"type\":\"content\",...})$ number variable, or \"\" (unset)",
+  "number": "a number or a numeric string (unitless), or a $variable number reference",
+  "enum": "one of options (strings); with multiple: true, a list of options",
+  "onoff": "\"on\" or \"off\"",
+  "url": "a URL string (absolute, relative, #anchor, mailto:, tel:) or a $variable dynamic-content reference",
+  "image": "an image URL string (src/url leaves); id/alt/titleText are sibling leaves, not part of this value",
+  "icon": "an icon object {unicode, type (divi|fa), weight}",
+  "spacing": "an object with keys from top, right, bottom, left (lengths) and syncVertical, syncHorizontal (on/off)",
+  "radius": "an object with keys from topLeft, topRight, bottomRight, bottomLeft (lengths) and sync (on/off); Divi's converter may also write a single length string",
+  "gradient": "a list of gradient stops [{position: number|string, color: color}]",
+  "object": "a JSON object whose keys are not validated (opaque)",
+  "font-family": "a font family name string, or a $variable({\"type\":\"content\",...})$ global font reference",
+  "font-weight": "100..900 as a string/number, normal/bold/lighter/bolder, a Divi global-font weight token (\"<Font>_weight\", written by Divi AI), or a $variable reference",
+  "json": "any JSON value (list, object or scalar); structure not validated"
+ },
+ "leaves": {
+  "text": {
+   "type": "text"
+  },
+  "text-static": {
+   "type": "text",
+   "states": [
+    "value"
+   ]
+  },
+  "text-static-nr": {
+   "type": "text",
+   "bp": false,
+   "states": [
+    "value"
+   ]
+  },
+  "html": {
+   "type": "html"
+  },
+  "color": {
+   "type": "color"
+  },
+  "length": {
+   "type": "length"
+  },
+  "length-static": {
+   "type": "length",
+   "states": [
+    "value"
+   ]
+  },
+  "number": {
+   "type": "number"
+  },
+  "number-static": {
+   "type": "number",
+   "states": [
+    "value"
+   ]
+  },
+  "onoff": {
+   "type": "onoff"
+  },
+  "onoff-static": {
+   "type": "onoff",
+   "states": [
+    "value"
+   ]
+  },
+  "onoff-static-nr": {
+   "type": "onoff",
+   "bp": false,
+   "states": [
+    "value"
+   ]
+  },
+  "url": {
+   "type": "url"
+  },
+  "url-static-nr": {
+   "type": "url",
+   "bp": false,
+   "states": [
+    "value"
+   ]
+  },
+  "image": {
+   "type": "image"
+  },
+  "icon": {
+   "type": "icon"
+  },
+  "object": {
+   "type": "object"
+  },
+  "object-static": {
+   "type": "object",
+   "states": [
+    "value"
+   ]
+  },
+  "json": {
+   "type": "json"
+  },
+  "json-static-nr": {
+   "type": "json",
+   "bp": false,
+   "states": [
+    "value"
+   ]
+  },
+  "spacing": {
+   "type": "spacing"
+  },
+  "radius": {
+   "type": "radius"
+  },
+  "gradient-stops": {
+   "type": "gradient"
+  },
+  "font-family": {
+   "type": "font-family"
+  },
+  "font-weight": {
+   "type": "font-weight"
+  },
+  "blend": {
+   "type": "enum",
+   "options": [
+    "normal",
+    "multiply",
+    "screen",
+    "overlay",
+    "darken",
+    "lighten",
+    "color-dodge",
+    "color-burn",
+    "hard-light",
+    "soft-light",
+    "difference",
+    "exclusion",
+    "hue",
+    "saturation",
+    "color",
+    "luminosity"
+   ]
+  },
+  "blend-static": {
+   "type": "enum",
+   "states": [
+    "value"
+   ],
+   "options": [
+    "normal",
+    "multiply",
+    "screen",
+    "overlay",
+    "darken",
+    "lighten",
+    "color-dodge",
+    "color-burn",
+    "hard-light",
+    "soft-light",
+    "difference",
+    "exclusion",
+    "hue",
+    "saturation",
+    "color",
+    "luminosity"
+   ]
+  },
+  "text-align": {
+   "type": "enum",
+   "states": [
+    "value"
+   ],
+   "options": [
+    "left",
+    "center",
+    "right",
+    "justify",
+    "justified"
+   ],
+   "note": "JS Zu() left/center/right/justify; D4 text orientation also writes justified"
+  },
+  "align-lcr": {
+   "type": "enum",
+   "states": [
+    "value"
+   ],
+   "options": [
+    "left",
+    "center",
+    "right"
+   ]
+  },
+  "border-style": {
+   "type": "enum",
+   "options": [
+    "solid",
+    "dashed",
+    "dotted",
+    "double",
+    "groove",
+    "ridge",
+    "inset",
+    "outset",
+    "none"
+   ]
+  },
+  "shadow-style": {
+   "type": "text",
+   "states": [
+    "value"
+   ],
+   "note": "none or a Divi preset name (preset1..presetN); D4 presets_shadow/select_box_shadow, corpus none/preset1-6; number of presets not pinned"
+  },
+  "speed-curve": {
+   "type": "enum",
+   "states": [
+    "value"
+   ],
+   "options": [
+    "ease-in-out",
+    "ease",
+    "ease-in",
+    "ease-out",
+    "linear",
+    "easeInOut",
+    "easeIn",
+    "easeOut"
+   ],
+   "note": "animation uses CSS names (JS Aa, D4); the transition group's JS options (Bv) are camelCase; both accepted"
+  },
+  "scroll-effect": {
+   "type": "object",
+   "states": [
+    "value"
+   ],
+   "open": true,
+   "note": "{enable, viewport: {bottom, end, start, top}, offset: {start, mid, end}} (AdvancedOptionConversion::convertScroll); open: keys other than the declared enable are accepted untyped"
+  }
+ },
+ "fragments": {
+  "font": {
+   "_notes": "divi/font field configs (JS): range fields are lengths (units Hu = CSS length units); columnCount/weightFineTune use allowedUnits [\"\"] (unitless); capitalization/style options from JS Ju subsets; lineStyle JS Qu; opticalSizing literal; writingMode JS td; textAlign JS Zu() plus D4 justify. headingLevel/textAlign are hover:false sticky:false.",
+   "capitalization": {
+    "type": "enum",
+    "options": [
+     "uppercase",
+     "capitalize",
+     "lowercase",
+     "smallCaps",
+     "allSmallCaps",
+     "none"
+    ],
+    "note": "JS button-options {uppercase,capitalize,lowercase,smallCaps,allSmallCaps}; D4 all_caps converts through convertAllCaps; none = unset"
+   },
+   "color": "color",
+   "columnCount": "number",
+   "columnGap": "length",
+   "family": "font-family",
+   "hyphens": {
+    "type": "text",
+    "note": "JS divi/toggle-like control; CSS hyphens value not pinned"
+   },
+   "letterSpacing": "length",
+   "lineColor": "color",
+   "lineHeight": "length",
+   "lineStyle": {
+    "type": "enum",
+    "options": [
+     "solid",
+     "double",
+     "dotted",
+     "dashed",
+     "wavy"
+    ]
+   },
+   "lineThickness": "length",
+   "opticalSizing": {
+    "type": "enum",
+    "options": [
+     "auto",
+     "none"
+    ]
+   },
+   "size": "length",
+   "style": {
+    "type": "enum",
+    "multiple": true,
+    "options": [
+     "italic",
+     "underline",
+     "overline",
+     "strikethrough",
+     "uppercase",
+     "capitalize",
+     "lowercase",
+     "smallCaps",
+     "allSmallCaps"
+    ],
+    "note": "list of styles; JS options {italic,underline,overline,strikethrough} (+ Ju capitalization keys, which the same Ju constant holds)"
+   },
+   "textAlign": "text-align",
+   "textWrap": {
+    "type": "text",
+    "note": "JS button-options with a computed option list (y); CSS text-wrap keyword"
+   },
+   "underlineOffset": "length",
+   "weight": "font-weight",
+   "weightFineTune": "number",
+   "writingMode": {
+    "type": "enum",
+    "options": [
+     "horizontal-tb",
+     "vertical-rl",
+     "vertical-lr"
+    ]
+   },
+   "headingLevel": {
+    "type": "enum",
+    "bp": false,
+    "states": [
+     "value"
+    ],
+    "options": [
+     "h1",
+     "h2",
+     "h3",
+     "h4",
+     "h5",
+     "h6"
+    ],
+    "note": "JS Ku, D4 multiple_buttons h1..h6"
+   },
+   "dropCapLineSize": "number",
+   "dropCapSpacing": "length"
+  },
+  "list": {
+   "_notes": "divi/font list sub-group (has_list / has_paragraph variants). D4 list type options are the CSS list-style-type keywords (ul: disc/circle/square/none; ol: 19 keywords): typed text because the union spans both.",
+   "itemIndent": "length",
+   "listSpacing": "length",
+   "paragraphSpacing": "length",
+   "position": {
+    "type": "enum",
+    "options": [
+     "inside",
+     "outside"
+    ]
+   },
+   "type": {
+    "type": "text",
+    "note": "CSS list-style-type keyword"
+   }
+  },
+  "text-shadow": {
+   "_notes": "divi/text-shadow (JS ranges in em; D4 range em..vw; style presets_shadow)",
+   "blur": "length",
+   "color": "color",
+   "horizontal": "length",
+   "style": "shadow-style",
+   "vertical": "length"
+  },
+  "gradient": {
+   "_notes": "divi/common-css-gradient value object. type options: D4 background_color_gradient_type + JS; length: D4 wrote the unit select here, so the converter can store a bare unit (corpus \"%\") -> text.",
+   "type": {
+    "type": "enum",
+    "options": [
+     "linear",
+     "circular",
+     "elliptical",
+     "conic",
+     "radial"
+    ],
+    "note": "D4 linear/circular/elliptical/conic; radial kept for native D5 content"
+   },
+   "direction": "length",
+   "directionRadial": {
+    "type": "text",
+    "note": "D4 options center/top left/top/.../left; D5 may store other position keywords"
+   },
+   "enabled": "onoff",
+   "length": {
+    "type": "text",
+    "note": "D4 background_color_gradient_unit (a unit select) converts here; corpus has \"100%\" and \"%\""
+   },
+   "overlaysImage": "onoff",
+   "repeat": "onoff",
+   "stops": "gradient-stops"
+  },
+  "bg-image-layer": {
+   "_notes": "background image / text-effects image fill: D4 background_image_* fields; position goes through convertBackgroundPosition (D4 top_left -> D5 \"center top\" style keywords) -> text",
+   "blend": "blend",
+   "height": "length",
+   "horizontalOffset": "length",
+   "position": {
+    "type": "text",
+    "note": "CSS background-position keywords after convertBackgroundPosition (corpus center, center top)"
+   },
+   "repeat": {
+    "type": "enum",
+    "options": [
+     "repeat",
+     "repeat-x",
+     "repeat-y",
+     "space",
+     "round",
+     "no-repeat"
+    ]
+   },
+   "size": {
+    "type": "enum",
+    "options": [
+     "cover",
+     "contain",
+     "initial",
+     "stretch",
+     "custom"
+    ]
+   },
+   "url": "image",
+   "verticalOffset": "length",
+   "width": "length"
+  },
+  "text-effects": {
+   "_notes": "divi/font textEffects (JS only, no D4 counterpart): fillType JS lv; strokePosition JS uv; strokeWidth range px/em/rem/vh/vw.",
+   "fillType": {
+    "type": "enum",
+    "options": [
+     "none",
+     "gradient",
+     "image",
+     "transparent"
+    ]
+   },
+   "gradient": "object",
+   "@gradient": "gradient",
+   "gradient.stops": {
+    "type": "gradient",
+    "add": "the same divi/common-css-gradient control writes the stops list in text effects as in backgrounds"
+   },
+   "imageFill": "object",
+   "@imageFill": "bg-image-layer",
+   "strokeColor": "color",
+   "strokePosition": {
+    "type": "enum",
+    "options": [
+     "stroke-fill",
+     "fill-stroke"
+    ]
+   },
+   "strokeWidth": "length"
+  },
+  "font-group": {
+   "@font": "font",
+   "@textEffects": "text-effects",
+   "@textShadow": "text-shadow",
+   "@list": "list",
+   "@border": "border"
+  },
+  "background": {
+   "_notes": "divi/background (JS + D4 background_* via the conversion map). enable* flags are non-preset leaves (D4 background_enable_*). mask/pattern style option lists are D4's; transforms go through convertSvgTransform (value shape not pinned -> json). video.width/height are D4 text fields.",
+   "": "object",
+   "backgroundColor": "color",
+   "color": "color",
+   "enableColor": "onoff",
+   "gradient": "object",
+   "@gradient": "gradient",
+   "gradient.stops[0].color": "color",
+   "gradient.stops[0].position": "text",
+   "gradient.stops[1].color": "color",
+   "gradient.stops[1].position": "text",
+   "image": "object",
+   "@image": "bg-image-layer",
+   "image.enabled": "onoff",
+   "image.parallax": "object",
+   "image.parallax.enabled": "onoff",
+   "image.parallax.method": {
+    "type": "enum",
+    "options": [
+     "on",
+     "off"
+    ],
+    "note": "D4 parallax_method on (true parallax) / off (CSS)"
+   },
+   "image.title": "text",
+   "mask": "object",
+   "mask.aspectRatio": {
+    "type": "enum",
+    "options": [
+     "landscape",
+     "square",
+     "portrait"
+    ]
+   },
+   "mask.blend": "blend",
+   "mask.color": "color",
+   "mask.enabled": "onoff",
+   "mask.height": "length",
+   "mask.horizontalOffset": "length",
+   "mask.position": {
+    "type": "text",
+    "note": "D4 top_left..bottom_right; D5 position keywords"
+   },
+   "mask.size": {
+    "type": "enum",
+    "options": [
+     "stretch",
+     "cover",
+     "contain",
+     "custom"
+    ]
+   },
+   "mask.style": {
+    "type": "text",
+    "note": "a mask shape slug (D4 select-mask: layer-blob, arch, ..., wave; corpus diagonal, diagonal-bars, caret)"
+   },
+   "mask.transform": {
+    "type": "json",
+    "note": "D4 multiple_buttons through convertSvgTransform"
+   },
+   "mask.verticalOffset": "length",
+   "mask.width": "length",
+   "pattern": "object",
+   "pattern.blend": "blend",
+   "pattern.color": "color",
+   "pattern.enabled": "onoff",
+   "pattern.height": "length",
+   "pattern.horizontalOffset": "length",
+   "pattern.repeat": {
+    "type": "enum",
+    "options": [
+     "repeat",
+     "repeat-x",
+     "repeat-y",
+     "space",
+     "round",
+     "no-repeat"
+    ]
+   },
+   "pattern.repeatOrigin": {
+    "type": "text",
+    "note": "D4 top_left..bottom_right; corpus \"left top\""
+   },
+   "pattern.size": {
+    "type": "enum",
+    "options": [
+     "initial",
+     "cover",
+     "contain",
+     "stretch",
+     "custom"
+    ]
+   },
+   "pattern.style": {
+    "type": "text",
+    "note": "a pattern slug (D4 select-pattern: polka-dots, 3d-diamonds, ..., zig-zag)"
+   },
+   "pattern.transform": {
+    "type": "json",
+    "note": "D4 multiple_buttons through convertSvgTransform"
+   },
+   "pattern.verticalOffset": "length",
+   "pattern.width": "length",
+   "video": "object",
+   "video.allowPlayerPause": "onoff",
+   "video.enabledMp4": "onoff",
+   "video.enabledWebm": "onoff",
+   "video.height": "text",
+   "video.mp4": "url",
+   "video.pauseOutsideViewport": "onoff",
+   "video.webm": "url",
+   "video.width": "text"
+  },
+  "border": {
+   "_notes": "divi/border: radius = divi/border-radius (D4 border_radii via convertBorderRadii); styles.<side>.{width,style,color} from D4 border_{width,style,color}_<side>",
+   "radius": "radius",
+   "styles": "object",
+   "styles.all": "object",
+   "styles.all.color": "color",
+   "styles.all.style": "border-style",
+   "styles.all.width": "length",
+   "styles.top": "object",
+   "styles.top.color": "color",
+   "styles.top.style": "border-style",
+   "styles.top.width": "length",
+   "styles.right": "object",
+   "styles.right.color": "color",
+   "styles.right.style": "border-style",
+   "styles.right.width": "length",
+   "styles.bottom": "object",
+   "styles.bottom.color": "color",
+   "styles.bottom.style": "border-style",
+   "styles.bottom.width": "length",
+   "styles.left": "object",
+   "styles.left.color": "color",
+   "styles.left.style": "border-style",
+   "styles.left.width": "length"
+  },
+  "box-shadow": {
+   "_notes": "divi/box-shadow (D4 box_shadow_*; position JS Wl outer/inner)",
+   "blur": "length",
+   "color": "color",
+   "horizontal": "length",
+   "position": {
+    "type": "enum",
+    "options": [
+     "outer",
+     "inner"
+    ]
+   },
+   "spread": "length",
+   "style": "shadow-style",
+   "vertical": "length"
+  },
+  "sizing": {
+   "_notes": "divi/sizing (JS). Width/height ranges are lengths (D4 width/max_width/height/min_height/max_height). Flex/grid leaves are D5-only: alignSelf/gridAlignSelf/gridJustifySelf option constants are spread from other objects in the bundle, so they are typed text (CSS keywords); grid line numbers accept auto/span -> text. flexType is a column class like 12_24.",
+   "alignSelf": "text-static",
+   "alignment": "align-lcr",
+   "aspectRatio": {
+    "type": "text",
+    "note": "JS divi/aspect-ratio: a ratio like 16/9 or auto"
+   },
+   "flexGrow": "number",
+   "flexShrink": "number",
+   "flexType": {
+    "type": "text",
+    "bp": true,
+    "states": [
+     "value"
+    ],
+    "note": "JS divi/select-column-class, e.g. 24_24, 12_24"
+   },
+   "gridAlignSelf": {
+    "type": "text",
+    "bp": false,
+    "states": [
+     "value"
+    ]
+   },
+   "gridColumnEnd": "text",
+   "gridColumnSpan": "text",
+   "gridColumnStart": "text",
+   "gridJustifySelf": {
+    "type": "enum",
+    "bp": false,
+    "states": [
+     "value"
+    ],
+    "options": [
+     "start",
+     "center",
+     "end",
+     "stretch",
+     "baseline"
+    ]
+   },
+   "gridRowEnd": "text",
+   "gridRowSpan": "text",
+   "gridRowStart": "text",
+   "height": "length",
+   "iconFontSize": {
+    "type": "length",
+    "note": "blurb BlurbPresetAttrsMap adds imageIcon.decoration.sizing iconFontSize"
+   },
+   "maxHeight": "length",
+   "maxWidth": "length",
+   "minHeight": "length",
+   "size": "length",
+   "width": "length"
+  },
+  "spacing": {
+   "_notes": "divi/spacing: margin/padding are spacing objects (D4 custom_margin/custom_padding via convertSpacing). Deeper keys (padding.top, ...) belong to the spacing value.",
+   "margin": "spacing",
+   "padding": "spacing"
+  },
+  "button-options": {
+   "_notes": "divi/button's own leaves (D4 custom_button, button_icon*, button_alignment)",
+   "alignment": "align-lcr",
+   "enable": "onoff",
+   "icon": "object",
+   "icon.color": "color",
+   "icon.enable": "onoff-static",
+   "icon.onHover": "onoff",
+   "icon.placement": {
+    "type": "enum",
+    "options": [
+     "right",
+     "left"
+    ]
+   },
+   "icon.settings": {
+    "type": "icon",
+    "states": [
+     "value",
+     "hover"
+    ],
+    "note": "JS icon-picker hover:false preset html/style; D4 button_icon through convertButtonIcon"
+   }
+  },
+  "button-inner": {
+   "_notes": "button innerContent (button, cta, pricing-table, ... D4 button_text/button_url/url_new_window/button_rel)",
+   "linkTarget": {
+    "type": "enum",
+    "bp": false,
+    "states": [
+     "value"
+    ],
+    "options": [
+     "on",
+     "off"
+    ],
+    "note": "D4 url_new_window off/on (on = new tab)"
+   },
+   "linkUrl": "url-static-nr",
+   "rel": {
+    "type": "enum",
+    "multiple": true,
+    "bp": false,
+    "states": [
+     "value"
+    ],
+    "options": [
+     "bookmark",
+     "external",
+     "nofollow",
+     "noreferrer",
+     "noopener"
+    ],
+    "note": "D4 button_rel multiple_checkboxes through convertButtonRel"
+   },
+   "text": "text"
+  },
+  "icon-group": {
+   "_notes": "divi/icon group (color/size/useSize/show) plus the icon value itself: D4 font_icon converts into the same attr through convertFontIcon, so {unicode,type,weight} sit beside color/size (corpus testimonial/video/accordion)",
+   "": "object",
+   "color": "color",
+   "show": "onoff",
+   "size": "length",
+   "useSize": {
+    "type": "onoff",
+    "states": [
+     "value",
+     "hover"
+    ]
+   },
+   "unicode": {
+    "type": "text",
+    "add": "convertFontIcon writes the icon object into X.decoration.icon (corpus)"
+   },
+   "type": {
+    "type": "enum",
+    "options": [
+     "divi",
+     "fa"
+    ],
+    "add": "convertFontIcon writes the icon object into X.decoration.icon (corpus)"
+   },
+   "weight": {
+    "type": "font-weight",
+    "add": "convertFontIcon writes the icon object into X.decoration.icon (corpus)"
+   }
+  },
+  "layout": {
+   "_notes": "divi/layout leaves (see family layout)",
+   "alignContent": "text-static",
+   "alignItems": "text-static",
+   "collapseEmptyColumns": "onoff-static",
+   "columnGap": "length-static",
+   "display": {
+    "type": "enum",
+    "states": [
+     "value"
+    ],
+    "options": [
+     "block",
+     "flex",
+     "grid"
+    ]
+   },
+   "flexDirection": {
+    "type": "enum",
+    "states": [
+     "value"
+    ],
+    "options": [
+     "row",
+     "row-reverse",
+     "column",
+     "column-reverse"
+    ]
+   },
+   "flexWrap": "text-static",
+   "gridAutoColumns": "text-static",
+   "gridAutoFlow": {
+    "type": "enum",
+    "states": [
+     "value"
+    ],
+    "options": [
+     "row",
+     "column"
+    ]
+   },
+   "gridAutoRows": "text-static",
+   "gridColumnCount": "number-static",
+   "gridColumnMinWidth": "length-static",
+   "gridColumnWidth": "length-static",
+   "gridColumnWidths": {
+    "type": "enum",
+    "states": [
+     "value"
+    ],
+    "options": [
+     "equal",
+     "equalMinimum",
+     "equalFixed",
+     "auto",
+     "manual"
+    ]
+   },
+   "gridDensity": {
+    "type": "enum",
+    "states": [
+     "value"
+    ],
+    "options": [
+     "dense",
+     "auto"
+    ]
+   },
+   "gridJustifyItems": {
+    "type": "enum",
+    "states": [
+     "value"
+    ],
+    "options": [
+     "start",
+     "center",
+     "end",
+     "stretch",
+     "baseline"
+    ]
+   },
+   "gridOffsetRules": {
+    "type": "json",
+    "states": [
+     "value"
+    ],
+    "note": "JS divi/grid-offset-rules"
+   },
+   "gridRowCount": {
+    "type": "text",
+    "states": [
+     "value"
+    ],
+    "note": "range with default auto"
+   },
+   "gridRowHeight": "length-static",
+   "gridRowHeights": {
+    "type": "enum",
+    "states": [
+     "value"
+    ],
+    "options": [
+     "auto",
+     "equal",
+     "minimum",
+     "fixed",
+     "manual"
+    ]
+   },
+   "gridRowMinHeight": "length-static",
+   "gridTemplateColumns": "text-static",
+   "gridTemplateRows": "text-static",
+   "justifyContent": "text-static",
+   "rowGap": "length-static"
+  }
+ },
+ "families": {
+  "background": {
+   "key": "decoration.background",
+   "_notes": "divi/background; see fragment background",
+   "attrs": {
+    "": "background"
+   }
+  },
+  "font": {
+   "key": "decoration.font",
+   "_notes": "divi/font (all 5 variants: has_heading_level/has_list/has_paragraph/has_border). The bare attr (\"\") also holds color/size/textAlign/headingLevel in some modules (accordion open/closed toggle).",
+   "attrs": {
+    "": {
+     "": "object",
+     "color": "color",
+     "size": "length",
+     "textAlign": "text-align",
+     "headingLevel": {
+      "type": "enum",
+      "bp": false,
+      "states": [
+       "value"
+      ],
+      "options": [
+       "h1",
+       "h2",
+       "h3",
+       "h4",
+       "h5",
+       "h6"
+      ]
+     }
+    },
+    "font": "font",
+    "textEffects": "text-effects",
+    "textShadow": "text-shadow",
+    "list": "list",
+    "border": "border"
+   }
+  },
+  "font-body": {
+   "key": "decoration.bodyFont",
+   "_notes": "divi/font-body: body/link/ul/ol/quote sub-fonts + dropCap; quote.border = blockquote left border (D4 quote_border_*)",
+   "attrs": {
+    "body.font": "font",
+    "body.list": "list",
+    "body.textEffects": "text-effects",
+    "body.textShadow": "text-shadow",
+    "link.font": "font",
+    "link.textEffects": "text-effects",
+    "link.textShadow": "text-shadow",
+    "ul.font": "font",
+    "ul.list": "list",
+    "ul.textEffects": "text-effects",
+    "ul.textShadow": "text-shadow",
+    "ol.font": "font",
+    "ol.list": "list",
+    "ol.textEffects": "text-effects",
+    "ol.textShadow": "text-shadow",
+    "quote.font": "font",
+    "quote.border": "border",
+    "quote.textEffects": "text-effects",
+    "quote.textShadow": "text-shadow",
+    "dropCap.font": "font",
+    "dropCap.textShadow": "text-shadow"
+   }
+  },
+  "font-header": {
+   "key": "decoration.headingFont",
+   "_notes": "divi/font-header: h1..h6 sub-fonts (D4 header_{2..6}_* fonts)",
+   "attrs": {
+    "h1.font": "font",
+    "h1.textEffects": "text-effects",
+    "h1.textShadow": "text-shadow",
+    "h2.font": "font",
+    "h2.textEffects": "text-effects",
+    "h2.textShadow": "text-shadow",
+    "h3.font": "font",
+    "h3.textEffects": "text-effects",
+    "h3.textShadow": "text-shadow",
+    "h4.font": "font",
+    "h4.textEffects": "text-effects",
+    "h4.textShadow": "text-shadow",
+    "h5.font": "font",
+    "h5.textEffects": "text-effects",
+    "h5.textShadow": "text-shadow",
+    "h6.font": "font",
+    "h6.textEffects": "text-effects",
+    "h6.textShadow": "text-shadow"
+   }
+  },
+  "font-label": {
+   "key": "decoration.labelFont",
+   "_notes": "form label font (same divi/font leaves)",
+   "attrs": {
+    "font": "font",
+    "textEffects": "text-effects",
+    "textShadow": "text-shadow"
+   }
+  },
+  "font-placeholder": {
+   "key": "decoration.placeholderFont",
+   "_notes": "form placeholder font (same divi/font leaves)",
+   "attrs": {
+    "font": "font",
+    "textEffects": "text-effects",
+    "textShadow": "text-shadow"
+   }
+  },
+  "inline-font": {
+   "key": "decoration.inlineFont",
+   "_notes": "fonts used inside rich text (D4 inline_fonts through convertInlineFont): a list of family names",
+   "attrs": {
+    "": {
+     "families": {
+      "type": "json",
+      "bp": false,
+      "states": [
+       "value"
+      ],
+      "note": "D4 inline_fonts (comma list) through convertInlineFont"
+     }
+    }
+   }
+  },
+  "border": {
+   "key": "decoration.border",
+   "_notes": "divi/border; see fragment border",
+   "attrs": {
+    "": "border"
+   }
+  },
+  "box-shadow": {
+   "key": "decoration.boxShadow",
+   "_notes": "divi/box-shadow",
+   "attrs": {
+    "": "box-shadow"
+   }
+  },
+  "spacing": {
+   "key": "decoration.spacing",
+   "_notes": "divi/spacing",
+   "attrs": {
+    "": "spacing"
+   }
+  },
+  "sizing": {
+   "key": "decoration.sizing",
+   "_notes": "divi/sizing",
+   "attrs": {
+    "": "sizing"
+   }
+  },
+  "button": {
+   "key": "decoration.button",
+   "_notes": "divi/button. Divi's expander also lists the group's own sub-attrs under the button attr itself (X.decoration.button.decoration.background, ...font.font, .innerContent); they are kept as declared by the dump.",
+   "attrs": {
+    "": "button-options",
+    "decoration.button": "button-options",
+    "decoration.background": "background",
+    "decoration.border": "border",
+    "decoration.boxShadow": "box-shadow",
+    "decoration.font.font": "font",
+    "decoration.font.textEffects": "text-effects",
+    "decoration.font.textShadow": "text-shadow",
+    "decoration.sizing": "sizing",
+    "decoration.spacing": "spacing",
+    "innerContent": "button-inner"
+   }
+  },
+  "icon": {
+   "key": "decoration.icon",
+   "_notes": "divi/icon; see fragment icon-group",
+   "attrs": {
+    "": "icon-group"
+   }
+  },
+  "accent-color": {
+   "key": "decoration.accentColor",
+   "_notes": "form accent color (checkbox/radio) - a single color",
+   "attrs": {
+    "": {
+     "": "color"
+    }
+   }
+  },
+  "animation": {
+   "key": "decoration.animation",
+   "_notes": "divi/animation (JS: all hover:false sticky:false; D4 animation_*; style/direction/repeat/speedCurve option constants JS Ca/Sa/wa/Aa = D4 lists). Durations/delays are ms lengths; intensities and startingOpacity are unitless/% numbers stored as strings.",
+   "attrs": {
+    "": {
+     "delay": "length-static",
+     "direction": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "center",
+       "left",
+       "right",
+       "bottom",
+       "top"
+      ]
+     },
+     "duration": "length-static",
+     "intensity": "object-static",
+     "intensity.flip": "number-static",
+     "intensity.fold": "number-static",
+     "intensity.roll": "number-static",
+     "intensity.slide": "number-static",
+     "intensity.zoom": "number-static",
+     "repeat": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "once",
+       "loop"
+      ]
+     },
+     "speedCurve": "speed-curve",
+     "startingOpacity": "length-static",
+     "style": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "none",
+       "fade",
+       "slide",
+       "bounce",
+       "zoom",
+       "flip",
+       "fold",
+       "roll"
+      ]
+     }
+    }
+   }
+  },
+  "attributes": {
+   "key": "decoration.attributes",
+   "_notes": "custom HTML attributes: a list of {id, name, value, targetElement} objects (corpus)",
+   "attrs": {
+    "": {
+     "": {
+      "type": "json",
+      "states": [
+       "value"
+      ]
+     }
+    }
+   }
+  },
+  "conditions": {
+   "key": "decoration.conditions",
+   "_notes": "display conditions (D4 display_conditions through convert_conditions): a list of condition objects",
+   "attrs": {
+    "": {
+     "": {
+      "type": "json",
+      "bp": false,
+      "states": [
+       "value"
+      ]
+     }
+    }
+   }
+  },
+  "disabled-on": {
+   "key": "decoration.disabledOn",
+   "_notes": "D4 disabled_on through convertDisabledOnBreakpoint: an object keyed by breakpoint/disabledOn item (desktopAbove, tabletOnly, phone, ...) with on/off",
+   "attrs": {
+    "": {
+     "": "object-static"
+    }
+   }
+  },
+  "filters": {
+   "key": "decoration.filters",
+   "_notes": "divi/filters (JS ranges: blur px, hueRotate deg, others %; D4 filter_*). blendMode JS jc = D4 mix_blend_mode list.",
+   "attrs": {
+    "": {
+     "backdropBlur": "length",
+     "backdropInvert": "length",
+     "backdropSepia": "length",
+     "blendMode": "blend-static",
+     "blur": "length",
+     "brightness": "length",
+     "contrast": "length",
+     "hueRotate": "length",
+     "invert": "length",
+     "opacity": "length",
+     "saturate": "length",
+     "sepia": "length"
+    }
+   }
+  },
+  "fit": {
+   "key": "decoration.fit",
+   "_notes": "divi/fit (JS: objectFit literal options, objectPosition divi/object-position)",
+   "attrs": {
+    "": {
+     "objectFit": {
+      "type": "enum",
+      "states": [
+       "value",
+       "hover"
+      ],
+      "options": [
+       "fill",
+       "contain",
+       "cover",
+       "none",
+       "scale-down"
+      ]
+     },
+     "objectPosition": {
+      "type": "text",
+      "states": [
+       "value",
+       "hover"
+      ],
+      "note": "CSS object-position"
+     }
+    }
+   }
+  },
+  "interactions": {
+   "key": "decoration.interactions",
+   "_notes": "D5 interactions (triggers/effects list); structure not dumped",
+   "attrs": {
+    "": {
+     "": {
+      "type": "json",
+      "bp": false,
+      "states": [
+       "value"
+      ]
+     }
+    }
+   }
+  },
+  "layout": {
+   "key": "decoration.layout",
+   "_notes": "divi/layout (JS, D5-only; features hover:false sticky:false). display JS ly (converter writes block); flexDirection JS uy; grid options JS by/hy/vy/fy/gy. justifyContent/alignItems/alignContent/flexWrap build their options elsewhere -> text (CSS keywords). Grid templates/gaps are CSS text/lengths.",
+   "attrs": {
+    "": "layout"
+   }
+  },
+  "overflow": {
+   "key": "decoration.overflow",
+   "_notes": "divi/overflow (JS Nb default/visible/scroll/hidden/auto; D4 overflow-x/y)",
+   "attrs": {
+    "": {
+     "x": {
+      "type": "enum",
+      "options": [
+       "default",
+       "visible",
+       "scroll",
+       "hidden",
+       "auto"
+      ]
+     },
+     "y": {
+      "type": "enum",
+      "options": [
+       "default",
+       "visible",
+       "scroll",
+       "hidden",
+       "auto"
+      ]
+     }
+    }
+   }
+  },
+  "position": {
+   "key": "decoration.position",
+   "_notes": "divi/position (JS mode Mb default/relative/absolute/fixed; D4 positioning none/relative/absolute/fixed; origins are corner keywords like \"top left\" (corpus), D4 top_left)",
+   "attrs": {
+    "": {
+     "mode": {
+      "type": "enum",
+      "options": [
+       "default",
+       "none",
+       "relative",
+       "absolute",
+       "fixed"
+      ]
+     },
+     "offset": "object",
+     "offset.horizontal": "length",
+     "offset.vertical": "length",
+     "origin": "object",
+     "origin.absolute": "text",
+     "origin.fixed": "text",
+     "origin.relative": "text"
+    }
+   }
+  },
+  "scroll": {
+   "key": "decoration.scroll",
+   "_notes": "divi/scroll (D4 scroll_* motion fields through convertScroll): each effect value is {enable, viewport {bottom,end,start,top}, offset {start,mid,end}} (AdvancedOptionConversion.php convertScroll); *.enable toggles are declared, the rest of the effect object is open; motionTriggerStart D4 middle/top/bottom",
+   "attrs": {
+    "": {
+     "blur": "scroll-effect",
+     "blur.enable": "onoff-static",
+     "fade": "scroll-effect",
+     "fade.enable": "onoff-static",
+     "gridMotion": "scroll-effect",
+     "gridMotion.enable": "onoff-static",
+     "horizontalMotion": "scroll-effect",
+     "horizontalMotion.enable": "onoff-static",
+     "motionTriggerStart": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "middle",
+       "top",
+       "bottom"
+      ]
+     },
+     "rotating": "scroll-effect",
+     "rotating.enable": "onoff-static",
+     "scaling": "scroll-effect",
+     "scaling.enable": "onoff-static",
+     "verticalMotion": "scroll-effect",
+     "verticalMotion.enable": "onoff-static"
+    }
+   }
+  },
+  "sticky": {
+   "key": "decoration.sticky",
+   "_notes": "divi/sticky (JS hover:false sticky:false; limits JS Bh = D4; position JS Fh topBottom, D4 top_bottom)",
+   "attrs": {
+    "": {
+     "limit": "object-static",
+     "limit.bottom": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "none",
+       "body",
+       "section",
+       "row",
+       "column"
+      ]
+     },
+     "limit.top": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "none",
+       "body",
+       "section",
+       "row",
+       "column"
+      ]
+     },
+     "offset": "object-static",
+     "offset.bottom": "length-static",
+     "offset.surrounding": "onoff-static",
+     "offset.top": "length-static",
+     "position": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "none",
+       "top",
+       "bottom",
+       "topBottom",
+       "top_bottom"
+      ]
+     },
+     "transition": "onoff-static"
+    }
+   }
+  },
+  "transform": {
+   "key": "decoration.transform",
+   "_notes": "divi/transform (D4 transform_* through convertTransform): rotate {x,y,z}, scale/skew/translate {x,y,linked}, origin {x,y}; values are lengths (deg, %, px) - typed object (opaque) per axis group",
+   "attrs": {
+    "": {
+     "origin": "object",
+     "rotate": "object",
+     "scale": "object",
+     "skew": "object",
+     "translate": "object"
+    }
+   }
+  },
+  "transition": {
+   "key": "decoration.transition",
+   "_notes": "divi/transition (JS hover:false sticky:false; ms lengths; D4 hover_transition_*)",
+   "attrs": {
+    "": {
+     "delay": "length-static",
+     "duration": "length-static",
+     "speedCurve": "speed-curve"
+    }
+   }
+  },
+  "z-index": {
+   "key": "decoration.zIndex",
+   "_notes": "D4 z_index range: an integer (string)",
+   "attrs": {
+    "": {
+     "": "number"
+    }
+   }
+  },
+  "admin-label": {
+   "key": "meta.adminLabel",
+   "_notes": "divi/admin-label: the layer name",
+   "attrs": {
+    "": {
+     "": "text-static-nr"
+    }
+   }
+  },
+  "meta": {
+   "key": "meta.meta",
+   "_notes": "divi/meta (forceVisible toggle, tocListHeading toggle for table-of-contents)",
+   "attrs": {
+    "forceVisible": {
+     "": "onoff-static-nr"
+    },
+    "tocListHeading": {
+     "": "onoff-static-nr"
+    }
+   }
+  },
+  "dividers": {
+   "key": "advanced.dividers",
+   "_notes": "section dividers (D4 {top,bottom}_divider_*): style list D4 divider options; arrangement JS Ac above/below vs D4 above_content/below_content; flip D4 multiple_buttons through dividersFlip -> list",
+   "attrs": {
+    "top": {
+     "arrangement": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "above",
+       "below",
+       "above_content",
+       "below_content"
+      ]
+     },
+     "color": "color",
+     "flip": {
+      "type": "enum",
+      "multiple": true,
+      "states": [
+       "value"
+      ],
+      "options": [
+       "horizontal",
+       "vertical"
+      ]
+     },
+     "height": "length",
+     "repeat": "text",
+     "style": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "none",
+       "slant",
+       "slant2",
+       "arrow",
+       "arrow2",
+       "arrow3",
+       "ramp",
+       "ramp2",
+       "curve",
+       "curve2",
+       "mountains",
+       "mountains2",
+       "wave",
+       "wave2",
+       "waves",
+       "waves2",
+       "asymmetric",
+       "asymmetric2",
+       "asymmetric3",
+       "asymmetric4",
+       "graph",
+       "graph2",
+       "graph3",
+       "graph4",
+       "triangle",
+       "clouds",
+       "clouds2"
+      ]
+     }
+    },
+    "bottom": {
+     "arrangement": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "above",
+       "below",
+       "above_content",
+       "below_content"
+      ]
+     },
+     "color": "color",
+     "flip": {
+      "type": "enum",
+      "multiple": true,
+      "states": [
+       "value"
+      ],
+      "options": [
+       "horizontal",
+       "vertical"
+      ]
+     },
+     "height": "length",
+     "repeat": "text",
+     "style": {
+      "type": "enum",
+      "states": [
+       "value"
+      ],
+      "options": [
+       "none",
+       "slant",
+       "slant2",
+       "arrow",
+       "arrow2",
+       "arrow3",
+       "ramp",
+       "ramp2",
+       "curve",
+       "curve2",
+       "mountains",
+       "mountains2",
+       "wave",
+       "wave2",
+       "waves",
+       "waves2",
+       "asymmetric",
+       "asymmetric2",
+       "asymmetric3",
+       "asymmetric4",
+       "graph",
+       "graph2",
+       "graph3",
+       "graph4",
+       "triangle",
+       "clouds",
+       "clouds2"
+      ]
+     }
+    }
+   }
+  },
+  "elements": {
+   "key": "advanced.elements",
+   "_notes": "divi/elements: structure (opaque)",
+   "attrs": {
+    "structure": {
+     "": "json-static-nr"
+    }
+   }
+  },
+  "email-service": {
+   "key": "advanced.emailService",
+   "_notes": "divi/email-service (D4 provider list; account through convertEmailServiceAccount = \"<name>|<list id>\" strings, corpus)",
+   "attrs": {
+    "": {
+     "account": "text-static-nr",
+     "provider": {
+      "type": "text",
+      "bp": false,
+      "states": [
+       "value"
+      ],
+      "note": "D4 list: activecampaign, aweber, ..., mailchimp, ..., sendinblue; D5 may add providers"
+     }
+    }
+   }
+  },
+  "gutter": {
+   "key": "advanced.gutter",
+   "_notes": "divi/gutter (row gutters; D4 use_custom_gutter/gutter_width/make_equal). width is the gutter number 1..4 (JS range min 1 max 4 unitless); alignColumns JS button-options (flex-start/center/...) -> text",
+   "attrs": {
+    "": {
+     "alignColumns": "text-static",
+     "enable": "onoff-static",
+     "makeEqual": "onoff-static-nr",
+     "width": {
+      "type": "number",
+      "bp": false,
+      "states": [
+       "value"
+      ]
+     }
+    }
+   }
+  },
+  "html": {
+   "key": "advanced.html",
+   "_notes": "divi/html (elementType select of HTML tag names, htmlBefore/After code)",
+   "attrs": {
+    "": {
+     "elementType": {
+      "type": "text",
+      "bp": false,
+      "states": [
+       "value"
+      ],
+      "note": "an HTML tag name from Divi's VALID_HTML_ELEMENT_TYPES"
+     },
+     "htmlAfter": {
+      "type": "html",
+      "bp": false,
+      "states": [
+       "value"
+      ]
+     },
+     "htmlBefore": {
+      "type": "html",
+      "bp": false,
+      "states": [
+       "value"
+      ]
+     }
+    }
+   }
+  },
+  "id-classes": {
+   "key": "advanced.htmlAttributes",
+   "_notes": "divi/id-classes (D4 module_id/module_class)",
+   "attrs": {
+    "": {
+     "class": "text-static-nr",
+     "id": "text-static-nr"
+    }
+   }
+  },
+  "link": {
+   "key": "advanced.link",
+   "_notes": "divi/link (D4 link_option_url / link_option_url_new_window off|on; lightbox toggle)",
+   "attrs": {
+    "": {
+     "lightbox": "onoff-static-nr",
+     "target": {
+      "type": "enum",
+      "bp": false,
+      "states": [
+       "value"
+      ],
+      "options": [
+       "on",
+       "off"
+      ]
+     },
+     "url": "url-static-nr"
+    }
+   }
+  },
+  "loop": {
+   "key": "advanced.loop",
+   "_notes": "divi/loop query builder (JS, D5-only): selects with dynamic options (post types, taxonomies) -> text; tag inputs / meta query -> json",
+   "attrs": {
+    "": {
+     "enable": "onoff-static-nr",
+     "excludeCurrentPost": "onoff-static-nr",
+     "excludePostWithSpecificTerms": "json-static-nr",
+     "excludeSpecificPosts": "json-static-nr",
+     "ignoreStickysPost": "onoff-static-nr",
+     "includePostWithSpecificTerms": "json-static-nr",
+     "includeSpecificPosts": "json-static-nr",
+     "metaQuery": "json-static-nr",
+     "order": {
+      "type": "enum",
+      "bp": false,
+      "states": [
+       "value"
+      ],
+      "options": [
+       "descending",
+       "ascending"
+      ]
+     },
+     "orderBy": "text-static-nr",
+     "postOffset": "text-static-nr",
+     "postPerPage": "text-static-nr",
+     "queryType": "text-static-nr",
+     "subTypes": "json-static-nr"
+    }
+   }
+  },
+  "spam-protection": {
+   "key": "advanced.spamProtection",
+   "_notes": "divi/spam-protection (D4 use_spam_service/spam_provider/recaptcha_min_score)",
+   "attrs": {
+    "": {
+     "account": "text-static-nr",
+     "enabled": "onoff-static-nr",
+     "minScore": {
+      "type": "number",
+      "bp": false,
+      "states": [
+       "value"
+      ]
+     },
+     "provider": "text-static-nr",
+     "secretKey": "text-static-nr",
+     "siteKey": "text-static-nr",
+     "useBasicCaptcha": "onoff-static-nr"
+    }
+   }
+  },
+  "text": {
+   "key": "advanced.text",
+   "_notes": "divi/text: text.color = light/dark text scheme (D4 background_layout), orientation = alignment (D4 text_orientation); textShadow = divi/text-shadow",
+   "attrs": {
+    "": {
+     "orientation": "text-align"
+    },
+    "text": {
+     "color": {
+      "type": "enum",
+      "states": [
+       "value",
+       "hover",
+       "sticky"
+      ],
+      "options": [
+       "light",
+       "dark"
+      ]
+     },
+     "orientation": "text-align"
+    },
+    "textShadow": "text-shadow"
+   }
+  }
+ },
+ "css": {
+  "type": "text",
+  "bp": true,
+  "states": [
+   "value",
+   "hover",
+   "sticky"
+  ],
+  "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)"
+ },
+ "block": {
+  "adminLabel": "text-static-nr",
+  "globalColorsInfo": {
+   "type": "json",
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "note": "D4 global_colors_info (Conversion::getAttrMap)"
+  },
+  "locked": "onoff-static-nr",
+  "on": {
+   "type": "json",
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented"
+  },
+  "open": "onoff-static-nr",
+  "themeBuilderArea": {
+   "type": "json",
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "note": "theme-builder area marker (Conversion::getAttrMap)"
+  }
+ },
+ "components": {
+  "_notes": "module.json field component -> leaf type for module-specific (non-group) leaves. Options come from props.options, units from props.allowedUnits, bp/states from features.",
+  "divi/toggle": {
+   "type": "onoff"
+  },
+  "divi/color-picker": {
+   "type": "color"
+  },
+  "divi/text": {
+   "type": "text",
+   "dynamic": [
+    "url"
+   ]
+  },
+  "divi/textarea": {
+   "type": "text"
+  },
+  "divi/select": {
+   "type": "enum"
+  },
+  "divi/button-options": {
+   "type": "enum"
+  },
+  "divi/range": {
+   "type": "length"
+  },
+  "divi/icon-picker": {
+   "type": "icon"
+  },
+  "divi/upload": {
+   "type": "image"
+  },
+  "divi/richtext": {
+   "type": "html"
+  },
+  "divi/code": {
+   "type": "html"
+  },
+  "divi/checkboxes": {
+   "type": "json"
+  },
+  "divi/sortable-list": {
+   "type": "json"
+  },
+  "divi/map": {
+   "type": "object"
+  },
+  "divi/border-radius": {
+   "type": "radius"
+  },
+  "divi/conditions": {
+   "type": "json"
+  },
+  "divi/google-api-key-field": {
+   "type": "text"
+  },
+  "divi/placement-grid-picker": {
+   "type": "text"
+  },
+  "divi/table-editor": {
+   "type": "json"
+  },
+  "divi/timepicker": {
+   "type": "text"
+  },
+  "divi/upload-gallery": {
+   "type": "text"
+  },
+  "divi/select-column-class": {
+   "type": "text"
+  },
+  "divi/select-menu": {
+   "type": "text"
+  },
+  "divi/select-contact-form-7": {
+   "type": "text"
+  },
+  "divi/select-gravity-forms": {
+   "type": "text"
+  },
+  "divi/select-imagely-gallery": {
+   "type": "text"
+  },
+  "divi/instagram-service-account": {
+   "type": "text"
+  },
+  "divi/payment-provider": {
+   "type": "text"
+  },
+  "divi/payment-resource": {
+   "type": "text"
+  }
+ },
+ "d4_types": {
+  "_notes": "Divi 4 field type -> leaf type, used through the conversion map when module.json has no field item. D4 options are kept only when the D4 attr has no valueExpansionFunction (values copied verbatim).",
+  "text": {
+   "type": "text"
+  },
+  "textarea": {
+   "type": "text"
+  },
+  "tiny_mce": {
+   "type": "html"
+  },
+  "codemirror": {
+   "type": "html"
+  },
+  "custom_css": {
+   "type": "text"
+  },
+  "select": {
+   "type": "enum"
+  },
+  "multiple_buttons": {
+   "type": "enum"
+  },
+  "text_align": {
+   "type": "enum"
+  },
+  "align": {
+   "type": "enum"
+  },
+  "yes_no_button": {
+   "type": "onoff"
+  },
+  "color-alpha": {
+   "type": "color"
+  },
+  "range": {
+   "type": "length"
+  },
+  "upload": {
+   "type": "image"
+  },
+  "select_icon": {
+   "type": "icon"
+  },
+  "custom_padding": {
+   "type": "spacing"
+  },
+  "custom_margin": {
+   "type": "spacing"
+  },
+  "border-radius": {
+   "type": "radius"
+  },
+  "gradient-stops": {
+   "type": "gradient"
+  },
+  "date_picker": {
+   "type": "text"
+  },
+  "categories": {
+   "type": "json"
+  },
+  "sortable_list": {
+   "type": "json"
+  },
+  "multiple_checkboxes": {
+   "type": "json"
+  },
+  "select_with_option_groups": {
+   "type": "text"
+  },
+  "upload-gallery": {
+   "type": "text"
+  },
+  "center_map": {
+   "type": "object"
+  },
+  "hidden": {
+   "type": "text"
+  },
+  "select_sidebar": {
+   "type": "text"
+  },
+  "column-structure": {
+   "type": "text"
+  },
+  "font": {
+   "type": "object"
+  },
+  "presets_shadow": {
+   "type": "text"
+  },
+  "select_box_shadow": {
+   "type": "text"
+  },
+  "conditional_logic": {
+   "type": "json"
+  },
+  "display_conditions": {
+   "type": "json"
+  },
+  "select_animation": {
+   "type": "enum"
+  }
+ },
+ "modules": {
+  "*": {
+   "_notes": "Fallback types for module-specific leaves with no module.json field item and no typed D4 field (applied last; fnmatch patterns on the attrName).",
+   "content": {
+    "": {
+     "type": "html",
+     "note": "D4 shortcode content converted to the content attr"
+    }
+   },
+   "*.advanced.focus.background": {
+    "backgroundColor": "color",
+    "color": "color"
+   },
+   "*.advanced.focus.border": "border",
+   "*.advanced.focus.font.font": {
+    "@": "font",
+    "textColor": "color"
+   },
+   "*.advanced.placeholder.font.font": {
+    "@": "font",
+    "textColor": "color"
+   },
+   "*.advanced.focusUseBorder": {
+    "": "onoff"
+   },
+   "*.advanced.useFocusBorderColor": {
+    "": "onoff"
+   },
+   "button.innerContent": "button-inner",
+   "chart.advanced.*.font": "font",
+   "chart.advanced.*.textEffects": "text-effects",
+   "chart.advanced.*.textShadow": "text-shadow",
+   "chart.advanced.legend": {
+    "color": "color"
+   },
+   "backgroundHorizontalOffset?": {
+    "": {
+     "type": "length",
+     "note": "legacy D4 row per-column background_*_N setting"
+    }
+   },
+   "backgroundVerticalOffset?": {
+    "": {
+     "type": "length",
+     "note": "legacy D4 row per-column setting"
+    }
+   },
+   "backgroundImageHeight?": {
+    "": {
+     "type": "length",
+     "note": "legacy D4 row per-column setting"
+    }
+   },
+   "backgroundImageWidth?": {
+    "": {
+     "type": "length",
+     "note": "legacy D4 row per-column setting"
+    }
+   },
+   "columns.column-?.background": "background",
+   "columns.column-?.spacing": {
+    "padding": "spacing",
+    "padding.top": "length",
+    "padding.right": "length",
+    "padding.bottom": "length",
+    "padding.left": "length",
+    "padding.linkedX": "onoff",
+    "padding.linkedY": "onoff"
+   },
+   "customCssAfter?": {
+    "": "text"
+   },
+   "customCssBefore?": {
+    "": "text"
+   },
+   "customCssMain?": {
+    "": "text"
+   },
+   "*LastEdited": {
+    "": {
+     "type": "text",
+     "note": "D4 <attr>_last_edited marker (\"on|desktop\")"
+    }
+   },
+   "padding?Phone": {
+    "": {
+     "type": "text",
+     "note": "legacy D4 packed padding top|right|bottom|left"
+    }
+   },
+   "padding?Tablet": {
+    "": {
+     "type": "text",
+     "note": "legacy D4 packed padding top|right|bottom|left"
+    }
+   },
+   "paddingTop?": {
+    "": "length"
+   },
+   "paddingRight?": {
+    "": "length"
+   },
+   "paddingBottom?": {
+    "": "length"
+   },
+   "paddingLeft?": {
+    "": "length"
+   },
+   "paddingLeftRightLink?": {
+    "": "onoff"
+   },
+   "paddingTopBottomLink?": {
+    "": "onoff"
+   },
+   "paddingMobile": {
+    "": {
+     "type": "text",
+     "note": "legacy D4 padding_mobile"
+    }
+   },
+   "columnPaddingMobile": {
+    "": {
+     "type": "text",
+     "note": "legacy D4 column_padding_mobile"
+    }
+   },
+   "columnsBackground": {
+    "": {
+     "type": "json",
+     "note": "D4 specialty columns_background (column_settings_background)"
+    }
+   },
+   "columnsCss": {
+    "": {
+     "type": "json",
+     "note": "D4 specialty columns_css"
+    }
+   },
+   "columnsCssFields": {
+    "": {
+     "type": "json",
+     "note": "D4 specialty columns_css_fields"
+    }
+   },
+   "columnsPadding": {
+    "": {
+     "type": "json",
+     "note": "D4 specialty columns_padding"
+    }
+   },
+   "nextBackgroundColor": {
+    "": "color"
+   },
+   "prevBackgroundColor": {
+    "": "color"
+   },
+   "googleMapsScriptNotice": {
+    "": "text-static-nr"
+   },
+   "module.advanced.uniqueId": {
+    "": "text-static-nr"
+   },
+   "module.advanced.type": {
+    "": {
+     "type": "text",
+     "states": [
+      "value"
+     ],
+     "note": "structural: column width (1_2, 4_4, ...), section type (\"\"/regular, fullwidth, specialty), group type; conversion map only"
+    }
+   },
+   "module.advanced.savedSpecialtyColumnType": {
+    "": {
+     "type": "text",
+     "states": [
+      "value"
+     ],
+     "note": "D4 saved_specialty_column_type (e.g. 2_3)"
+    }
+   },
+   "module.advanced.specialtyColumns": {
+    "": {
+     "type": "number",
+     "states": [
+      "value"
+     ],
+     "note": "D4 specialty_columns (2 or 3)"
+    }
+   },
+   "module.advanced.open": {
+    "": "onoff-static"
+   },
+   "module.advanced.spacing": {
+    "showBottomSpace": "onoff"
+   },
+   "module.advanced.sizing": "sizing",
+   "module.advanced.autoSpeed": {
+    "": "number"
+   },
+   "module.advanced.timeline": "layout",
+   "children.advanced.*": {
+    "": {
+     "type": "object",
+     "note": "parent-level defaults for child elements; shape not dumped"
+    }
+   },
+   "*.advanced.show": {
+    "": "onoff"
+   },
+   "icon.advanced.color": {
+    "": "color"
+   },
+   "icon.advanced.size": {
+    "": "length"
+   },
+   "icon.innerContent": {
+    "title": "text"
+   },
+   "image.innerContent": {
+    "alt": "text",
+    "titleText": "text",
+    "rel": {
+     "type": "json",
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "note": "link rel values (list); options not dumped"
+    }
+   },
+   "imageIcon.advanced.width": {
+    "icon": "length",
+    "image": "length"
+   },
+   "galleryGrid.advanced.flexType": {
+    "": "text"
+   },
+   "map.advanced.grayscaleFilterAmount": {
+    "amount": "number"
+   },
+   "map.advanced.warning": {
+    "": "text-static-nr"
+   },
+   "marker.advanced.position": {
+    "position": "text"
+   },
+   "contentOverlay.advanced.useTextOverlay": {
+    "": "onoff"
+   },
+   "slideOverlay.advanced.useBackgroundOverlay": {
+    "": "onoff"
+   },
+   "dotNav.advanced.color": {
+    "color": "color"
+   },
+   "socialNetwork.advanced.followButton": {
+    "": "onoff"
+   },
+   "customFields.advanced.fields": {
+    "": "json"
+   },
+   "customFields.advanced.notice": {
+    "": "text-static-nr"
+   },
+   "fieldItem.advanced.booleanCheckboxOptions": {
+    "": "json"
+   },
+   "overlay.advanced": {
+    "showImageOverlay": "onoff"
+   },
+   "overlay.advanced.showImageOverlay": {
+    "showImageOverlay": "onoff"
+   },
+   "sliderControls.advanced": {
+    "color": {
+     "type": "enum",
+     "options": [
+      "light",
+      "dark"
+     ],
+     "note": "D4 slider_controls_color; corpus light/dark"
+    },
+    "useArrows": "onoff",
+    "useThumbnails": "onoff"
+   },
+   "sliderControls.advanced.color": {
+    "color": {
+     "type": "enum",
+     "options": [
+      "light",
+      "dark"
+     ]
+    }
+   },
+   "sliderControls.advanced.useArrows": {
+    "useArrows": "onoff"
+   },
+   "sliderControls.advanced.useThumbnails": {
+    "useThumbnails": "onoff"
+   },
+   "thumbnail.innerContent": {
+    "src": "image"
+   },
+   "video.innerContent": {
+    "src": "url",
+    "webm": "url"
+   },
+   "title.innerContent": {
+    "text": "text"
+   },
+   "content.innerContent": {
+    "": "text"
+   }
+  },
+  "lottie": {
+   "_notes": "Divi 5-only Lottie module; option lists not dumped -> text",
+   "lottie.innerContent": {
+    "src": "url",
+    "loop": "onoff",
+    "speed": "number",
+    "direction": "text",
+    "mode": "text",
+    "trigger": "text",
+    "uploadNotice": "text-static-nr"
+   }
+  },
+  "svg": {
+   "_notes": "Divi 5-only SVG module",
+   "svg.advanced.fill": {
+    "color": "color",
+    "opacity": "length"
+   },
+   "svg.advanced.stroke": {
+    "color": "color",
+    "opacity": "length",
+    "width": "length"
+   },
+   "svg.innerContent": {
+    "@": "button-inner",
+    "code": "html",
+    "sourceType": "text",
+    "src": "url",
+    "srcNotice": "text-static-nr",
+    "title": "text"
+   }
+  },
+  "icon": {
+   "_notes": "divi/icon: icon.innerContent holds the icon object and the link fields in one value",
+   "icon.innerContent": {
+    "": {
+     "type": "object",
+     "note": "module.json declares a divi/icon-picker for the whole attr; the D4 link fields are sub-leaves of the same value"
+    },
+    "url": "url-static-nr",
+    "unicode": {
+     "type": "text",
+     "bp": true,
+     "states": [
+      "value",
+      "hover"
+     ],
+     "add": "font_icon converts into this attr through convertFontIcon, merging {unicode,type,weight} into the value beside url/target/title (corpus divi/icon)"
+    },
+    "type": {
+     "type": "enum",
+     "options": [
+      "divi",
+      "fa"
+     ],
+     "states": [
+      "value",
+      "hover"
+     ],
+     "add": "icon object part (see unicode)"
+    },
+    "weight": {
+     "type": "font-weight",
+     "states": [
+      "value",
+      "hover"
+     ],
+     "add": "icon object part (see unicode)"
+    }
+   }
+  },
+  "icon-list-item": {
+   "_notes": "icon.innerContent holds the icon object and the title in one value (same shape as divi/icon)",
+   "icon.innerContent": {
+    "": {
+     "type": "object"
+    },
+    "unicode": {
+     "type": "text",
+     "bp": true,
+     "states": [
+      "value",
+      "hover"
+     ],
+     "add": "font_icon converts into this attr through convertFontIcon, merging {unicode,type,weight} into the value beside url/target/title (corpus divi/icon)"
+    },
+    "type": {
+     "type": "enum",
+     "options": [
+      "divi",
+      "fa"
+     ],
+     "states": [
+      "value",
+      "hover"
+     ],
+     "add": "icon object part (see unicode)"
+    },
+    "weight": {
+     "type": "font-weight",
+     "states": [
+      "value",
+      "hover"
+     ],
+     "add": "icon object part (see unicode)"
+    }
+   }
+  },
+  "map": {
+   "_notes": "map center: Divi stores lat/lng/zoom as JSON numbers (corpus), D4 had text fields",
+   "map.innerContent": {
+    "lat": "number",
+    "lng": "number",
+    "zoom": "number"
+   }
+  },
+  "fullwidth-map": {
+   "_notes": "map center: Divi stores lat/lng/zoom as JSON numbers (corpus), D4 had text fields",
+   "map.innerContent": {
+    "lat": "number",
+    "lng": "number",
+    "zoom": "number"
+   }
+  },
+  "map-pin": {
+   "_notes": "pin position: JSON numbers (corpus)",
+   "pin.innerContent": {
+    "lat": "number",
+    "lng": "number"
+   }
+  }
+ },
+ "attr_aliases": {
+  "_notes": "Divi's converter mirrors the D4 form-field settings of field.advanced.* onto the checkbox and radio elements (corpus: forms-heldout contact-form checkbox.advanced.focus.font.font, forms-tuned-signup checkbox/radio.advanced.nameFullwidth); the dump only declares the field.* copy. contact-field and signup-custom-field have the same field/checkbox/radio elements and are mirrored by analogy.",
+  "contact-form": {
+   "checkbox.advanced.": "field.advanced.",
+   "radio.advanced.": "field.advanced."
+  },
+  "signup": {
+   "checkbox.advanced.": "field.advanced.",
+   "radio.advanced.": "field.advanced."
+  },
+  "contact-field": {
+   "checkbox.advanced.": "field.advanced.",
+   "radio.advanced.": "field.advanced."
+  },
+  "signup-custom-field": {
+   "checkbox.advanced.": "field.advanced.",
+   "radio.advanced.": "field.advanced."
+  }
+ }
+}

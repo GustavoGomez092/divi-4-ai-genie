@@ -1,0 +1,981 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "button.decoration.button": {
+   "family": "button",
+   "prefix": ""
+  },
+  "button.decoration.button.decoration.background": {
+   "family": "button",
+   "prefix": "decoration.background"
+  },
+  "button.decoration.button.decoration.border": {
+   "family": "button",
+   "prefix": "decoration.border"
+  },
+  "button.decoration.button.decoration.boxShadow": {
+   "family": "button",
+   "prefix": "decoration.boxShadow"
+  },
+  "button.decoration.button.decoration.button": {
+   "family": "button",
+   "prefix": "decoration.button"
+  },
+  "button.decoration.button.decoration.font.font": {
+   "family": "button",
+   "prefix": "decoration.font.font"
+  },
+  "button.decoration.button.decoration.font.textEffects": {
+   "family": "button",
+   "prefix": "decoration.font.textEffects"
+  },
+  "button.decoration.button.decoration.font.textShadow": {
+   "family": "button",
+   "prefix": "decoration.font.textShadow"
+  },
+  "button.decoration.button.decoration.sizing": {
+   "family": "button",
+   "prefix": "decoration.sizing"
+  },
+  "button.decoration.button.decoration.spacing": {
+   "family": "button",
+   "prefix": "decoration.spacing"
+  },
+  "button.decoration.button.innerContent": {
+   "family": "button",
+   "prefix": "innerContent"
+  },
+  "content.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "content.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "content.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "content.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "content.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "content.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "content.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "content.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "content.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "content.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "content.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "content.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "content.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "content.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "content.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "content.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "content.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "content.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "content.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "content.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "content.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "body": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "bodyAnchor": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "button": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "fields": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "formNotice": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "tooltip": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "formNotice.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "formNotice.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "formNotice.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "formNotice.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "formNotice.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "formNotice.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "formNotice.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "formNotice.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.advanced.warning": {
+   "bp": true,
+   "note": "untyped: out-of-scope module, no evidence",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "object"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "radioButton.decoration.background": {
+   "family": "background",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "radioButton.decoration.border": {
+   "family": "border",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "radioButton.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "radioButton.decoration.font": {
+   "family": "font",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "radioButton.decoration.font.font": {
+   "family": "font",
+   "prefix": "font",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "radioButton.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "radioButton.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "radioButton.decoration.spacing": {
+   "family": "spacing",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "selectedRadioButton.decoration.background": {
+   "family": "background",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "selectedRadioButton.decoration.border": {
+   "family": "border",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "selectedRadioButton.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "selectedRadioButton.decoration.font": {
+   "family": "font",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "selectedRadioButton.decoration.font.font": {
+   "family": "font",
+   "prefix": "font",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "selectedRadioButton.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "selectedRadioButton.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "selectedRadioButton.decoration.spacing": {
+   "family": "spacing",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "tooltip.advanced.focus.border": {
+   "sub": {
+    "radius": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "radius"
+    },
+    "styles": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "object"
+    },
+    "styles.all.color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "styles.all.style": {
+     "bp": true,
+     "options": [
+      "solid",
+      "dashed",
+      "dotted",
+      "double",
+      "groove",
+      "ridge",
+      "inset",
+      "outset",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "enum"
+    },
+    "styles.all.width": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length"
+    },
+    "styles.bottom.color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "styles.bottom.style": {
+     "bp": true,
+     "options": [
+      "solid",
+      "dashed",
+      "dotted",
+      "double",
+      "groove",
+      "ridge",
+      "inset",
+      "outset",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "enum"
+    },
+    "styles.bottom.width": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length"
+    },
+    "styles.left.color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "styles.left.style": {
+     "bp": true,
+     "options": [
+      "solid",
+      "dashed",
+      "dotted",
+      "double",
+      "groove",
+      "ridge",
+      "inset",
+      "outset",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "enum"
+    },
+    "styles.left.width": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length"
+    },
+    "styles.right.color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "styles.right.style": {
+     "bp": true,
+     "options": [
+      "solid",
+      "dashed",
+      "dotted",
+      "double",
+      "groove",
+      "ridge",
+      "inset",
+      "outset",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "enum"
+    },
+    "styles.right.width": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length"
+    },
+    "styles.top.color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "styles.top.style": {
+     "bp": true,
+     "options": [
+      "solid",
+      "dashed",
+      "dotted",
+      "double",
+      "groove",
+      "ridge",
+      "inset",
+      "outset",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "enum"
+    },
+    "styles.top.width": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "tooltip.advanced.focusUseBorder": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky",
+    "focus",
+    "checked",
+    "active"
+   ],
+   "type": "onoff"
+  },
+  "tooltip.decoration.background": {
+   "family": "background",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "tooltip.decoration.border": {
+   "family": "border",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "tooltip.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "tooltip.decoration.font": {
+   "family": "font",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "tooltip.decoration.font.font": {
+   "family": "font",
+   "prefix": "font",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "tooltip.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "tooltip.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "tooltip.decoration.spacing": {
+   "family": "spacing",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "body",
+  "bodyAnchor",
+  "button",
+  "fields",
+  "formNotice",
+  "freeForm",
+  "mainElement",
+  "tooltip"
+ ],
+ "d4": "et_pb_wc_checkout_payment_info",
+ "defaults": {
+  "button.decoration.button": {
+   "desktop": {
+    "value": {
+     "icon": {
+      "enable": "on"
+     }
+    }
+   }
+  },
+  "module.decoration.background": {
+   "desktop": {
+    "value": {
+     "color": "#ebe9eb"
+    }
+   }
+  },
+  "module.decoration.spacing": {
+   "desktop": {
+    "value": {
+     "padding": {
+      "bottom": "1em",
+      "left": "1em",
+      "right": "1em",
+      "syncHorizontal": "off",
+      "syncVertical": "off",
+      "top": "1em"
+     }
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Woo Checkout Payment"
+   }
+  }
+ },
+ "name": "divi/woocommerce-checkout-payment-info",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "woocommerce"
+}

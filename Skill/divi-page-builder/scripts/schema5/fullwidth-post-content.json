@@ -1,0 +1,390 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "content": {
+   "bp": true,
+   "note": "D4 shortcode content converted to the content attr",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "html"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "image.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "image.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "module.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "module.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "module.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "module.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "module.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "module.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "module.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "module.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "module.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "module.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "module.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "module.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "module.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "module.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "module.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "module.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "module.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "module.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "module.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "module.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.headingFont.h1.font": {
+   "family": "font-header",
+   "prefix": "h1.font"
+  },
+  "module.decoration.headingFont.h1.textEffects": {
+   "family": "font-header",
+   "prefix": "h1.textEffects"
+  },
+  "module.decoration.headingFont.h1.textShadow": {
+   "family": "font-header",
+   "prefix": "h1.textShadow"
+  },
+  "module.decoration.headingFont.h2.font": {
+   "family": "font-header",
+   "prefix": "h2.font"
+  },
+  "module.decoration.headingFont.h2.textEffects": {
+   "family": "font-header",
+   "prefix": "h2.textEffects"
+  },
+  "module.decoration.headingFont.h2.textShadow": {
+   "family": "font-header",
+   "prefix": "h2.textShadow"
+  },
+  "module.decoration.headingFont.h3.font": {
+   "family": "font-header",
+   "prefix": "h3.font"
+  },
+  "module.decoration.headingFont.h3.textEffects": {
+   "family": "font-header",
+   "prefix": "h3.textEffects"
+  },
+  "module.decoration.headingFont.h3.textShadow": {
+   "family": "font-header",
+   "prefix": "h3.textShadow"
+  },
+  "module.decoration.headingFont.h4.font": {
+   "family": "font-header",
+   "prefix": "h4.font"
+  },
+  "module.decoration.headingFont.h4.textEffects": {
+   "family": "font-header",
+   "prefix": "h4.textEffects"
+  },
+  "module.decoration.headingFont.h4.textShadow": {
+   "family": "font-header",
+   "prefix": "h4.textShadow"
+  },
+  "module.decoration.headingFont.h5.font": {
+   "family": "font-header",
+   "prefix": "h5.font"
+  },
+  "module.decoration.headingFont.h5.textEffects": {
+   "family": "font-header",
+   "prefix": "h5.textEffects"
+  },
+  "module.decoration.headingFont.h5.textShadow": {
+   "family": "font-header",
+   "prefix": "h5.textShadow"
+  },
+  "module.decoration.headingFont.h6.font": {
+   "family": "font-header",
+   "prefix": "h6.font"
+  },
+  "module.decoration.headingFont.h6.textEffects": {
+   "family": "font-header",
+   "prefix": "h6.textEffects"
+  },
+  "module.decoration.headingFont.h6.textShadow": {
+   "family": "font-header",
+   "prefix": "h6.textShadow"
+  },
+  "module.decoration.inlineFont": {
+   "family": "inline-font",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "fullwidth-module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "freeForm",
+  "mainElement"
+ ],
+ "d4": "et_pb_fullwidth_post_content",
+ "defaults": {},
+ "name": "divi/fullwidth-post-content",
+ "parents": [
+  "divi/section"
+ ],
+ "scope": "theme-builder"
+}

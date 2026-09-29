@@ -1,0 +1,984 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "button.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "button.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "button.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "button.decoration.button": {
+   "family": "button",
+   "prefix": ""
+  },
+  "button.decoration.button.decoration.background": {
+   "family": "button",
+   "prefix": "decoration.background"
+  },
+  "button.decoration.button.decoration.border": {
+   "family": "button",
+   "prefix": "decoration.border"
+  },
+  "button.decoration.button.decoration.boxShadow": {
+   "family": "button",
+   "prefix": "decoration.boxShadow"
+  },
+  "button.decoration.button.decoration.button": {
+   "family": "button",
+   "prefix": "decoration.button"
+  },
+  "button.decoration.button.decoration.font.font": {
+   "family": "button",
+   "prefix": "decoration.font.font"
+  },
+  "button.decoration.button.decoration.font.textEffects": {
+   "family": "button",
+   "prefix": "decoration.font.textEffects"
+  },
+  "button.decoration.button.decoration.font.textShadow": {
+   "family": "button",
+   "prefix": "decoration.font.textShadow"
+  },
+  "button.decoration.button.decoration.sizing": {
+   "family": "button",
+   "prefix": "decoration.sizing"
+  },
+  "button.decoration.button.decoration.spacing": {
+   "family": "button",
+   "prefix": "decoration.spacing"
+  },
+  "button.decoration.button.innerContent": {
+   "family": "button",
+   "prefix": "innerContent"
+  },
+  "button.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "button.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "button.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "button.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "button.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "button.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "button": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "checkbox": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "inputField": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "messageAcceptance": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "messageFailure": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "messageInvalid": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "messageSpam": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "messageSuccess": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "messageValidation": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "radioButton": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "form.advanced.formId": {
+   "bp": false,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "text"
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "messageAcceptance.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "messageAcceptance.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "messageAcceptance.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "messageAcceptance.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "messageAcceptance.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "messageAcceptance.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "messageAcceptance.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "messageAcceptance.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "messageAcceptance.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "messageAcceptance.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "messageAcceptance.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "messageAcceptance.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "messageAcceptance.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "messageAcceptance.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "messageAcceptance.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "messageAcceptance.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "messageAcceptance.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "messageAcceptance.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "messageAcceptance.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "messageAcceptance.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "messageAcceptance.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "messageAcceptance.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "messageAcceptance.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "messageFailure.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "messageFailure.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "messageFailure.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "messageFailure.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "messageFailure.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "messageFailure.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "messageFailure.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "messageFailure.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "messageFailure.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "messageFailure.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "messageFailure.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "messageFailure.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "messageFailure.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "messageFailure.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "messageFailure.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "messageFailure.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "messageFailure.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "messageFailure.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "messageFailure.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "messageFailure.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "messageFailure.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "messageFailure.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "messageFailure.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "messageInvalid.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "messageInvalid.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "messageInvalid.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "messageInvalid.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "messageInvalid.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "messageInvalid.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "messageInvalid.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "messageInvalid.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "messageInvalid.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "messageInvalid.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "messageInvalid.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "messageInvalid.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "messageInvalid.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "messageInvalid.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "messageInvalid.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "messageInvalid.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "messageInvalid.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "messageInvalid.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "messageInvalid.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "messageInvalid.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "messageInvalid.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "messageInvalid.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "messageInvalid.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "messageSpam.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "messageSpam.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "messageSpam.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "messageSpam.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "messageSpam.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "messageSpam.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "messageSpam.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "messageSpam.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "messageSpam.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "messageSpam.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "messageSpam.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "messageSpam.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "messageSpam.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "messageSpam.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "messageSpam.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "messageSpam.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "messageSpam.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "messageSpam.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "messageSpam.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "messageSpam.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "messageSpam.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "messageSpam.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "messageSpam.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "messageSuccess.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "messageSuccess.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "messageSuccess.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "messageSuccess.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "messageSuccess.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "messageSuccess.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "messageSuccess.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "messageSuccess.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "messageSuccess.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "messageSuccess.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "messageSuccess.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "messageSuccess.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "messageSuccess.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "messageSuccess.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "messageSuccess.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "messageSuccess.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "messageSuccess.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "messageSuccess.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "messageSuccess.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "messageSuccess.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "messageSuccess.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "messageSuccess.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "messageSuccess.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "messageValidation.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "messageValidation.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "messageValidation.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "messageValidation.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "messageValidation.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "messageValidation.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "messageValidation.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "messageValidation.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "messageValidation.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "messageValidation.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "messageValidation.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "messageValidation.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "messageValidation.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "messageValidation.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "messageValidation.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "messageValidation.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "messageValidation.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "messageValidation.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "messageValidation.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "messageValidation.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "messageValidation.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "messageValidation.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "messageValidation.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "button",
+  "checkbox",
+  "freeForm",
+  "inputField",
+  "mainElement",
+  "messageAcceptance",
+  "messageFailure",
+  "messageInvalid",
+  "messageSpam",
+  "messageSuccess",
+  "messageValidation",
+  "radioButton"
+ ],
+ "d4": "et_pb_contact_form_7",
+ "defaults": {
+  "button.decoration.button": {
+   "desktop": {
+    "value": {
+     "icon": {
+      "enable": "on"
+     }
+    }
+   }
+  },
+  "module.decoration.spacing": {
+   "desktop": {
+    "value": {
+     "margin": {
+      "bottom": "0px"
+     }
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Contact Form 7 Styler"
+   }
+  }
+ },
+ "name": "divi/contact-form-7",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "integration"
+}

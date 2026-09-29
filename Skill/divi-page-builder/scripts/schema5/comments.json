@@ -1,0 +1,1339 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "button.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "button.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "button.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "button.decoration.button": {
+   "family": "button",
+   "prefix": ""
+  },
+  "button.decoration.button.decoration.background": {
+   "family": "button",
+   "prefix": "decoration.background"
+  },
+  "button.decoration.button.decoration.border": {
+   "family": "button",
+   "prefix": "decoration.border"
+  },
+  "button.decoration.button.decoration.boxShadow": {
+   "family": "button",
+   "prefix": "decoration.boxShadow"
+  },
+  "button.decoration.button.decoration.button": {
+   "family": "button",
+   "prefix": "decoration.button"
+  },
+  "button.decoration.button.decoration.font.font": {
+   "family": "button",
+   "prefix": "decoration.font.font"
+  },
+  "button.decoration.button.decoration.font.textEffects": {
+   "family": "button",
+   "prefix": "decoration.font.textEffects"
+  },
+  "button.decoration.button.decoration.font.textShadow": {
+   "family": "button",
+   "prefix": "decoration.font.textShadow"
+  },
+  "button.decoration.button.decoration.sizing": {
+   "family": "button",
+   "prefix": "decoration.sizing"
+  },
+  "button.decoration.button.decoration.spacing": {
+   "family": "button",
+   "prefix": "decoration.spacing"
+  },
+  "button.decoration.button.innerContent": {
+   "family": "button",
+   "prefix": "innerContent"
+  },
+  "button.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "button.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "button.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "button.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "button.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "button.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "button.innerContent": {
+   "sub": {
+    "linkTarget": {
+     "bp": false,
+     "note": "D4 url_new_window off/on (on = new tab)",
+     "options": [
+      "on",
+      "off"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "linkUrl": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "url"
+    },
+    "rel": {
+     "bp": false,
+     "multiple": true,
+     "note": "D4 button_rel multiple_checkboxes through convertButtonRel",
+     "options": [
+      "bookmark",
+      "external",
+      "nofollow",
+      "noreferrer",
+      "noopener"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "text": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "commentCount.advanced.showCount": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "commentCount.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "commentCount.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "commentCount.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "commentCount.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "commentText.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "commentText.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "commentText.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "commentText.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "content": {
+   "bp": true,
+   "note": "D4 shortcode content converted to the content attr",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "html"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "commentAvatar": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "commentBody": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "commentContent": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "commentMeta": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "emailField": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainHeader": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "messageField": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "nameField": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "newTitle": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "replyButton": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "submitButton": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "websiteField": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "field.advanced.focus.background": {
+   "sub": {
+    "backgroundColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "color": {
+     "bp": true,
+     "note": "typed from Divi 4 form_field_focus_background_color (color-alpha)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    }
+   }
+  },
+  "field.advanced.focus.border": {
+   "sub": {
+    "radius": {
+     "bp": true,
+     "note": "typed from Divi 4 border_radii_fields_focus (border-radius)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "radius"
+    },
+    "styles": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "object"
+    },
+    "styles.all.color": {
+     "bp": true,
+     "note": "typed from Divi 4 border_color_all_fields_focus (color-alpha)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "styles.all.style": {
+     "bp": true,
+     "note": "typed from Divi 4 border_style_all_fields_focus (select)",
+     "options": [
+      "solid",
+      "dashed",
+      "dotted",
+      "double",
+      "groove",
+      "ridge",
+      "inset",
+      "outset",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "enum"
+    },
+    "styles.all.width": {
+     "bp": true,
+     "note": "typed from Divi 4 border_width_all_fields_focus (range)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length",
+     "units": [
+      "em",
+      "rem",
+      "px",
+      "cm",
+      "mm",
+      "in",
+      "pt",
+      "pc",
+      "ex",
+      "vh",
+      "vw"
+     ]
+    },
+    "styles.bottom.color": {
+     "bp": true,
+     "note": "typed from Divi 4 border_color_bottom_fields_focus (color-alpha)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "styles.bottom.style": {
+     "bp": true,
+     "note": "typed from Divi 4 border_style_bottom_fields_focus (select)",
+     "options": [
+      "solid",
+      "dashed",
+      "dotted",
+      "double",
+      "groove",
+      "ridge",
+      "inset",
+      "outset",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "enum"
+    },
+    "styles.bottom.width": {
+     "bp": true,
+     "note": "typed from Divi 4 border_width_bottom_fields_focus (range)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length",
+     "units": [
+      "em",
+      "rem",
+      "px",
+      "cm",
+      "mm",
+      "in",
+      "pt",
+      "pc",
+      "ex",
+      "vh",
+      "vw"
+     ]
+    },
+    "styles.left.color": {
+     "bp": true,
+     "note": "typed from Divi 4 border_color_left_fields_focus (color-alpha)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "styles.left.style": {
+     "bp": true,
+     "note": "typed from Divi 4 border_style_left_fields_focus (select)",
+     "options": [
+      "solid",
+      "dashed",
+      "dotted",
+      "double",
+      "groove",
+      "ridge",
+      "inset",
+      "outset",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "enum"
+    },
+    "styles.left.width": {
+     "bp": true,
+     "note": "typed from Divi 4 border_width_left_fields_focus (range)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length",
+     "units": [
+      "em",
+      "rem",
+      "px",
+      "cm",
+      "mm",
+      "in",
+      "pt",
+      "pc",
+      "ex",
+      "vh",
+      "vw"
+     ]
+    },
+    "styles.right.color": {
+     "bp": true,
+     "note": "typed from Divi 4 border_color_right_fields_focus (color-alpha)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "styles.right.style": {
+     "bp": true,
+     "note": "typed from Divi 4 border_style_right_fields_focus (select)",
+     "options": [
+      "solid",
+      "dashed",
+      "dotted",
+      "double",
+      "groove",
+      "ridge",
+      "inset",
+      "outset",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "enum"
+    },
+    "styles.right.width": {
+     "bp": true,
+     "note": "typed from Divi 4 border_width_right_fields_focus (range)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length",
+     "units": [
+      "em",
+      "rem",
+      "px",
+      "cm",
+      "mm",
+      "in",
+      "pt",
+      "pc",
+      "ex",
+      "vh",
+      "vw"
+     ]
+    },
+    "styles.top.color": {
+     "bp": true,
+     "note": "typed from Divi 4 border_color_top_fields_focus (color-alpha)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "styles.top.style": {
+     "bp": true,
+     "note": "typed from Divi 4 border_style_top_fields_focus (select)",
+     "options": [
+      "solid",
+      "dashed",
+      "dotted",
+      "double",
+      "groove",
+      "ridge",
+      "inset",
+      "outset",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "enum"
+    },
+    "styles.top.width": {
+     "bp": true,
+     "note": "typed from Divi 4 border_width_top_fields_focus (range)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length",
+     "units": [
+      "em",
+      "rem",
+      "px",
+      "cm",
+      "mm",
+      "in",
+      "pt",
+      "pc",
+      "ex",
+      "vh",
+      "vw"
+     ]
+    }
+   }
+  },
+  "field.advanced.focus.font.font": {
+   "sub": {
+    "color": {
+     "bp": true,
+     "note": "typed from Divi 4 form_field_focus_text_color (color-alpha)",
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "textColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    }
+   }
+  },
+  "field.advanced.focusUseBorder": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky",
+    "focus",
+    "checked",
+    "active"
+   ],
+   "type": "onoff"
+  },
+  "field.advanced.placeholder.font.font": {
+   "sub": {
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    },
+    "letterSpacing": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length"
+    },
+    "lineHeight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length"
+    },
+    "size": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "length"
+    },
+    "textColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky",
+      "focus",
+      "checked",
+      "active"
+     ],
+     "type": "color"
+    }
+   }
+  },
+  "field.advanced.useFocusBorderColor": {
+   "bp": false,
+   "note": "typed from Divi 4 use_focus_border_color (yes_no_button)",
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "field.decoration.background": {
+   "family": "background",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.border": {
+   "family": "border",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.font": {
+   "family": "font",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.font.font": {
+   "family": "font",
+   "prefix": "font",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.labelFont.font": {
+   "family": "font-label",
+   "prefix": "font",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.labelFont.textEffects": {
+   "family": "font-label",
+   "prefix": "textEffects",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.labelFont.textShadow": {
+   "family": "font-label",
+   "prefix": "textShadow",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.placeholderFont.font": {
+   "family": "font-placeholder",
+   "prefix": "font",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.placeholderFont.textEffects": {
+   "family": "font-placeholder",
+   "prefix": "textEffects",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.placeholderFont.textShadow": {
+   "family": "font-placeholder",
+   "prefix": "textShadow",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "field.decoration.spacing": {
+   "family": "spacing",
+   "prefix": "",
+   "states_extra": [
+    "focus",
+    "checked",
+    "active"
+   ]
+  },
+  "formTitle.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "formTitle.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "formTitle.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "formTitle.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "image.advanced.showAvatar": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "image.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "image.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "image.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "image.decoration.fit": {
+   "family": "fit",
+   "prefix": ""
+  },
+  "image.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "meta.advanced.showMeta": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "meta.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "meta.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "meta.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "meta.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.showLabels": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.showReply": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "commentAvatar",
+  "commentBody",
+  "commentContent",
+  "commentMeta",
+  "emailField",
+  "freeForm",
+  "mainElement",
+  "mainHeader",
+  "messageField",
+  "nameField",
+  "newTitle",
+  "replyButton",
+  "submitButton",
+  "websiteField"
+ ],
+ "d4": "et_pb_comments",
+ "defaults": {
+  "button.decoration.button": {
+   "desktop": {
+    "value": {
+     "icon": {
+      "enable": "on"
+     }
+    }
+   }
+  },
+  "commentCount.advanced.showCount": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "commentCount.decoration.font.font": {
+   "desktop": {
+    "value": {
+     "headingLevel": "h1"
+    }
+   }
+  },
+  "field.advanced.focus.border": {
+   "desktop": {
+    "value": {
+     "radius": {
+      "bottomLeft": "3px",
+      "bottomRight": "3px",
+      "sync": "on",
+      "topLeft": "3px",
+      "topRight": "3px"
+     },
+     "styles": {
+      "all": {
+       "color": "",
+       "style": "solid"
+      }
+     }
+    }
+   }
+  },
+  "field.advanced.focusUseBorder": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "field.decoration.border": {
+   "desktop": {
+    "value": {
+     "radius": {
+      "bottomLeft": "3px",
+      "bottomRight": "3px",
+      "sync": "on",
+      "topLeft": "3px",
+      "topRight": "3px"
+     },
+     "styles": {
+      "all": {
+       "color": "",
+       "style": "solid"
+      }
+     }
+    }
+   }
+  },
+  "formTitle.decoration.font.font": {
+   "desktop": {
+    "value": {
+     "headingLevel": "h3"
+    }
+   }
+  },
+  "image.advanced.showAvatar": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "meta.advanced.showMeta": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "module.advanced.showLabels": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "module.advanced.showReply": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "module.advanced.text.text": {
+   "desktop": {
+    "value": {
+     "color": "light"
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Comments"
+   }
+  }
+ },
+ "name": "divi/comments",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "theme-builder"
+}

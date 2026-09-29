@@ -1,0 +1,485 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "content": {
+   "bp": true,
+   "note": "D4 shortcode content converted to the content attr",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "html"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "postImage": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "postMeta": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "postTitle": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "featuredImage.advanced.enabled": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "featuredImage.advanced.forceFullwidth": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "featuredImage.advanced.placement": {
+   "bp": false,
+   "options": [
+    "above",
+    "background",
+    "below"
+   ],
+   "states": [
+    "value"
+   ],
+   "type": "enum"
+  },
+  "featuredImage.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "meta.advanced.dateFormat": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "meta.advanced.showAuthor": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "meta.advanced.showCategories": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "meta.advanced.showCommentsCount": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "meta.advanced.showDate": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "meta.advanced.showMeta": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "meta.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "meta.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "meta.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "meta.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "textWrapper.advanced.useBackground": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "textWrapper.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "title.advanced.showTitle": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "title.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "title.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "title.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "title.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  }
+ },
+ "category": "fullwidth-module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "freeForm",
+  "mainElement",
+  "postImage",
+  "postMeta",
+  "postTitle"
+ ],
+ "d4": "et_pb_fullwidth_post_title",
+ "defaults": {
+  "featuredImage.advanced.enabled": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "featuredImage.advanced.forceFullwidth": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "featuredImage.advanced.placement": {
+   "desktop": {
+    "value": "below"
+   }
+  },
+  "featuredImage.decoration.sizing": {
+   "desktop": {
+    "value": {
+     "alignment": "center",
+     "height": "auto",
+     "maxHeight": "none",
+     "maxWidth": "none",
+     "width": "100%"
+    }
+   }
+  },
+  "meta.advanced.dateFormat": {
+   "desktop": {
+    "value": "M j, Y"
+   }
+  },
+  "meta.advanced.showAuthor": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "meta.advanced.showCategories": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "meta.advanced.showCommentsCount": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "meta.advanced.showDate": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "meta.advanced.showMeta": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "module.advanced.text.text": {
+   "desktop": {
+    "value": {
+     "color": "light"
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Post Title"
+   }
+  },
+  "textWrapper.advanced.useBackground": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "textWrapper.decoration.background": {
+   "desktop": {
+    "value": {
+     "color": "rgba(255,255,255,0.9)"
+    }
+   }
+  },
+  "title.advanced.showTitle": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "title.decoration.font.font": {
+   "desktop": {
+    "value": {
+     "headingLevel": "h1"
+    }
+   }
+  }
+ },
+ "name": "divi/fullwidth-post-title",
+ "parents": [
+  "divi/section"
+ ],
+ "scope": "theme-builder"
+}

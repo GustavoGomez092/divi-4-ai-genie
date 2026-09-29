@@ -1,0 +1,552 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "author.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "author.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "author.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "author.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "author.innerContent": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "text"
+  },
+  "company.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "company.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "company.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "company.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "company.innerContent": {
+   "sub": {
+    "linkTarget": {
+     "bp": false,
+     "options": [
+      "off",
+      "on"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "linkUrl": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "url"
+    },
+    "text": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "content.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "content.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "content.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "content.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "content.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "content.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "content.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "content.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "content.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "content.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "content.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "content.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "content.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "content.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "content.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "content.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "content.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "content.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "content.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "content.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "content.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "content.decoration.inlineFont": {
+   "family": "inline-font",
+   "prefix": ""
+  },
+  "content.innerContent": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "html"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "testimonialAuthor": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "testimonialDescription": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "testimonialMeta": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "testimonialPortrait": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "image.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "jobTitle.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "jobTitle.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "jobTitle.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "jobTitle.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "jobTitle.innerContent": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "text"
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "portrait.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "portrait.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "portrait.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "portrait.decoration.fit": {
+   "family": "fit",
+   "prefix": ""
+  },
+  "portrait.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "portrait.innerContent": {
+   "sub": {
+    "src": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "image"
+    },
+    "url": {
+     "bp": true,
+     "note": "typed from Divi 4 portrait_url (upload)",
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "image"
+    }
+   }
+  },
+  "quoteIcon.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "quoteIcon.decoration.icon": {
+   "family": "icon",
+   "prefix": ""
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "freeForm",
+  "mainElement",
+  "testimonialAuthor",
+  "testimonialDescription",
+  "testimonialMeta",
+  "testimonialPortrait"
+ ],
+ "d4": "et_pb_testimonial",
+ "defaults": {
+  "company.innerContent": {
+   "desktop": {
+    "value": {
+     "linkTarget": "off"
+    }
+   }
+  },
+  "module.advanced.text.text": {
+   "desktop": {
+    "value": {
+     "color": "light"
+    }
+   }
+  },
+  "module.decoration.background": {
+   "desktop": {
+    "value": {
+     "color": "#f5f5f5"
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Testimonial"
+   }
+  },
+  "quoteIcon.decoration.icon": {
+   "desktop": {
+    "value": {
+     "show": "on",
+     "useSize": "off"
+    }
+   }
+  }
+ },
+ "name": "divi/testimonial",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "core"
+}

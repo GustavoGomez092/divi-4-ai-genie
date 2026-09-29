@@ -1,0 +1,30 @@
+{
+ "breakpoints_all": [
+  "desktop",
+  "tablet",
+  "phone",
+  "phoneWide",
+  "tabletWide",
+  "widescreen",
+  "ultraWide"
+ ],
+ "breakpoints_default": [
+  "desktop",
+  "tablet",
+  "phone"
+ ],
+ "divi_version": "5.13.1",
+ "generated_by": "build_schema5.py",
+ "scopes_in": [
+  "core",
+  "d5-extra"
+ ],
+ "states": [
+  "value",
+  "hover",
+  "focus",
+  "checked",
+  "active",
+  "sticky"
+ ]
+}

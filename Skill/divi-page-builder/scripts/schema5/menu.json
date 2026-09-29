@@ -1,0 +1,699 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "cartIcon.advanced.show": {
+   "bp": true,
+   "note": "typed from Divi 4 show_cart_icon (yes_no_button)",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "onoff"
+  },
+  "cartIcon.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "cartIcon.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "cartIcon.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "cartIcon.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "cartQuantity.advanced.show": {
+   "bp": false,
+   "note": "typed from Divi 4 show_cart_quantity (yes_no_button)",
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "cartQuantity.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "cartQuantity.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "cartQuantity.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "cartQuantity.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "content": {
+   "bp": true,
+   "note": "D4 shortcode content converted to the content attr",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "html"
+  },
+  "css": {
+   "sub": {
+    "activeMenuLink": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "dropdownContainer": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "dropdownLinks": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "menuLink": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "menuLogo": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "hamburgerMenuIcon.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "hamburgerMenuIcon.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "hamburgerMenuIcon.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "hamburgerMenuIcon.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "logo.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "logo.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "logo.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "logo.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "logo.innerContent": {
+   "sub": {
+    "alt": {
+     "bp": false,
+     "note": "typed from Divi 4 logo_alt (text)",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "linkTarget": {
+     "bp": false,
+     "note": "typed from Divi 4 logo_url_new_window (select)",
+     "options": [
+      "off",
+      "on"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "linkUrl": {
+     "bp": false,
+     "note": "typed from Divi 4 logo_url (text)",
+     "states": [
+      "value"
+     ],
+     "type": "url"
+    },
+    "src": {
+     "bp": true,
+     "note": "typed from Divi 4 logo (upload)",
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "image"
+    }
+   }
+  },
+  "menu.advanced.activeLinkColor": {
+   "bp": true,
+   "note": "typed from Divi 4 active_link_color (color-alpha)",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "color"
+  },
+  "menu.advanced.menuId": {
+   "bp": false,
+   "note": "typed from Divi 4 menu_id (select)",
+   "options": [
+    "none"
+   ],
+   "states": [
+    "value"
+   ],
+   "type": "enum"
+  },
+  "menu.advanced.style": {
+   "bp": false,
+   "note": "typed from Divi 4 menu_style (select)",
+   "options": [
+    "left_aligned",
+    "centered",
+    "inline_centered_logo"
+   ],
+   "states": [
+    "value"
+   ],
+   "type": "enum"
+  },
+  "menu.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "menu.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "menu.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "menu.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "menuDropdown.advanced.activeLinkColor": {
+   "bp": false,
+   "note": "typed from Divi 4 dropdown_menu_active_link_color (color-alpha)",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "color"
+  },
+  "menuDropdown.advanced.animation": {
+   "bp": false,
+   "note": "typed from Divi 4 dropdown_menu_animation (select)",
+   "options": [
+    "fade",
+    "expand",
+    "slide",
+    "flip"
+   ],
+   "states": [
+    "value"
+   ],
+   "type": "enum"
+  },
+  "menuDropdown.advanced.direction": {
+   "bp": false,
+   "note": "typed from Divi 4 submenu_direction (select)",
+   "options": [
+    "downwards",
+    "upwards"
+   ],
+   "states": [
+    "value"
+   ],
+   "type": "enum"
+  },
+  "menuDropdown.advanced.lineColor": {
+   "bp": true,
+   "note": "typed from Divi 4 dropdown_menu_line_color (color-alpha)",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "color"
+  },
+  "menuDropdown.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "menuDropdown.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "menuDropdown.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "menuDropdown.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "menuDropdown.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "menuMobile.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "menuMobile.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "menuMobile.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "menuMobile.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "menuMobile.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "module.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "module.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "module.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "searchIcon.advanced.show": {
+   "bp": true,
+   "note": "typed from Divi 4 show_search_icon (yes_no_button)",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "onoff"
+  },
+  "searchIcon.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "searchIcon.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "searchIcon.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "searchIcon.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "activeMenuLink",
+  "after",
+  "before",
+  "dropdownContainer",
+  "dropdownLinks",
+  "freeForm",
+  "mainElement",
+  "menuLink",
+  "menuLogo"
+ ],
+ "d4": "et_pb_menu",
+ "defaults": {
+  "cartIcon.advanced.show": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "cartIcon.decoration.font.font": {
+   "desktop": {
+    "value": {
+     "color": "$variable({\"type\":\"color\",\"value\":{\"name\":\"gcid-primary-color\",\"settings\":{}}})$",
+     "size": "17px"
+    }
+   }
+  },
+  "cartQuantity.advanced.show": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "hamburgerMenuIcon.decoration.font.font": {
+   "desktop": {
+    "value": {
+     "color": "$variable({\"type\":\"color\",\"value\":{\"name\":\"gcid-primary-color\",\"settings\":{}}})$",
+     "size": "32px"
+    }
+   }
+  },
+  "logo.innerContent": {
+   "desktop": {
+    "value": {
+     "linkTarget": "off"
+    }
+   }
+  },
+  "menu.advanced.style": {
+   "desktop": {
+    "value": "left_aligned"
+   }
+  },
+  "menuDropdown.advanced.animation": {
+   "desktop": {
+    "value": "fade"
+   }
+  },
+  "menuDropdown.advanced.direction": {
+   "desktop": {
+    "value": "downwards"
+   }
+  },
+  "module.advanced.text.text": {
+   "desktop": {
+    "value": {
+     "color": "light"
+    }
+   },
+   "phone": {
+    "value": {
+     "orientation": "right"
+    }
+   },
+   "tablet": {
+    "value": {
+     "orientation": "right"
+    }
+   }
+  },
+  "module.decoration.background": {
+   "desktop": {
+    "value": {
+     "color": "#ffffff"
+    }
+   }
+  },
+  "module.decoration.layout": {
+   "phone": {
+    "value": {
+     "justifyContent": "space-between"
+    }
+   },
+   "tablet": {
+    "value": {
+     "justifyContent": "space-between"
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Menu"
+   }
+  },
+  "searchIcon.advanced.show": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "searchIcon.decoration.font.font": {
+   "desktop": {
+    "value": {
+     "color": "$variable({\"type\":\"color\",\"value\":{\"name\":\"gcid-primary-color\",\"settings\":{}}})$",
+     "size": "17px"
+    }
+   }
+  }
+ },
+ "name": "divi/menu",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "theme-builder"
+}

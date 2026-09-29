@@ -1,0 +1,616 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "content.advanced.columnsNumber": {
+   "bp": false,
+   "options": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "states": [
+    "value"
+   ],
+   "type": "enum"
+  },
+  "content.advanced.includeCategories": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "content.advanced.offsetNumber": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "content.advanced.orderby": {
+   "bp": false,
+   "options": [
+    "date",
+    "date-desc",
+    "default",
+    "menu_order",
+    "popularity",
+    "price",
+    "price-desc"
+   ],
+   "states": [
+    "value"
+   ],
+   "type": "enum"
+  },
+  "content.advanced.postsNumber": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "content.advanced.product": {
+   "bp": true,
+   "note": "untyped: out-of-scope module, no evidence",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "object"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "image": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "onsale": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "overlay": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "price": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "priceOld": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "product": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "rating": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "title": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "elements.advanced.showImage": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "elements.advanced.showName": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "elements.advanced.showPrice": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "elements.advanced.showRating": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "elements.advanced.showSaleBadge": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover"
+   ],
+   "type": "onoff"
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "image.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "image.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "image.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "image.decoration.fit": {
+   "family": "fit",
+   "prefix": ""
+  },
+  "image.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "overlay.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "overlayIcon.decoration.icon": {
+   "family": "icon",
+   "prefix": ""
+  },
+  "price.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "price.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "price.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "price.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "productTitle.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "productTitle.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "productTitle.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "productTitle.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "rating.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "rating.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "rating.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "rating.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "saleBadge.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "saleBadge.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "saleBadge.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "saleBadge.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "saleBadge.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "saleBadge.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "saleBadge.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "saleBadge.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "salePrice.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "salePrice.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "salePrice.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "salePrice.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "title.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "title.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "title.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "title.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "freeForm",
+  "image",
+  "mainElement",
+  "onsale",
+  "overlay",
+  "price",
+  "priceOld",
+  "product",
+  "rating",
+  "title"
+ ],
+ "d4": "et_pb_wc_related_products",
+ "defaults": {
+  "content.advanced.columnsNumber": {
+   "desktop": {
+    "value": "dynamic"
+   }
+  },
+  "content.advanced.offsetNumber": {
+   "desktop": {
+    "value": "0"
+   }
+  },
+  "content.advanced.orderby": {
+   "desktop": {
+    "value": "default"
+   }
+  },
+  "content.advanced.postsNumber": {
+   "desktop": {
+    "value": "dynamic"
+   }
+  },
+  "content.advanced.product": {
+   "desktop": {
+    "value": "dynamic"
+   }
+  },
+  "elements.advanced.showImage": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "elements.advanced.showName": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "elements.advanced.showPrice": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "elements.advanced.showRating": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "elements.advanced.showSaleBadge": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "image.decoration.border": {
+   "desktop": {
+    "value": {
+     "styles": {
+      "all": {
+       "style": "solid",
+       "width": "0px"
+      }
+     }
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Woo Related Products"
+   }
+  }
+ },
+ "name": "divi/woocommerce-related-products",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "woocommerce"
+}

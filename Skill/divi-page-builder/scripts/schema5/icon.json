@@ -1,0 +1,502 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "button.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "button.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "button.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "button.decoration.button": {
+   "family": "button",
+   "prefix": ""
+  },
+  "button.decoration.button.decoration.background": {
+   "family": "button",
+   "prefix": "decoration.background"
+  },
+  "button.decoration.button.decoration.border": {
+   "family": "button",
+   "prefix": "decoration.border"
+  },
+  "button.decoration.button.decoration.boxShadow": {
+   "family": "button",
+   "prefix": "decoration.boxShadow"
+  },
+  "button.decoration.button.decoration.button": {
+   "family": "button",
+   "prefix": "decoration.button"
+  },
+  "button.decoration.button.decoration.font.font": {
+   "family": "button",
+   "prefix": "decoration.font.font"
+  },
+  "button.decoration.button.decoration.font.textEffects": {
+   "family": "button",
+   "prefix": "decoration.font.textEffects"
+  },
+  "button.decoration.button.decoration.font.textShadow": {
+   "family": "button",
+   "prefix": "decoration.font.textShadow"
+  },
+  "button.decoration.button.decoration.sizing": {
+   "family": "button",
+   "prefix": "decoration.sizing"
+  },
+  "button.decoration.button.decoration.spacing": {
+   "family": "button",
+   "prefix": "decoration.spacing"
+  },
+  "button.decoration.button.innerContent": {
+   "family": "button",
+   "prefix": "innerContent"
+  },
+  "button.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "button.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "button.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "button.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "button.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "button.innerContent": {
+   "sub": {
+    "linkUrl": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "url"
+    },
+    "rel": {
+     "bp": false,
+     "multiple": true,
+     "note": "D4 button_rel multiple_checkboxes through convertButtonRel",
+     "options": [
+      "bookmark",
+      "external",
+      "nofollow",
+      "noreferrer",
+      "noopener"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "text": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "content": {
+   "bp": true,
+   "note": "D4 shortcode content converted to the content attr",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "html"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "iconElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "icon.advanced.align": {
+   "bp": true,
+   "note": "typed from Divi 4 align (text_align)",
+   "options": [
+    "left",
+    "center",
+    "right"
+   ],
+   "states": [
+    "value"
+   ],
+   "type": "enum"
+  },
+  "icon.advanced.color": {
+   "bp": true,
+   "note": "typed from Divi 4 icon_color (color-alpha)",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "color"
+  },
+  "icon.advanced.size": {
+   "bp": true,
+   "note": "typed from Divi 4 icon_width (range)",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "length",
+   "units": [
+    "%",
+    "em",
+    "rem",
+    "px",
+    "cm",
+    "mm",
+    "in",
+    "pt",
+    "pc",
+    "ex",
+    "vh",
+    "vw"
+   ]
+  },
+  "icon.innerContent": {
+   "sub": {
+    "": {
+     "bp": true,
+     "note": "module.json declares a divi/icon-picker for the whole attr; the D4 link fields are sub-leaves of the same value",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "object"
+    },
+    "target": {
+     "bp": false,
+     "note": "typed from Divi 4 url_new_window (select)",
+     "options": [
+      "off",
+      "on"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "title": {
+     "bp": false,
+     "note": "typed from Divi 4 title_text (text)",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "type": {
+     "bp": true,
+     "options": [
+      "divi",
+      "fa"
+     ],
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "enum"
+    },
+    "unicode": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "text"
+    },
+    "url": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "url"
+    },
+    "weight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover"
+     ],
+     "type": "font-weight"
+    }
+   }
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "freeForm",
+  "iconElement",
+  "mainElement"
+ ],
+ "d4": "et_pb_icon",
+ "defaults": {
+  "icon.advanced.align": {
+   "desktop": {
+    "value": "center"
+   }
+  },
+  "icon.advanced.color": {
+   "desktop": {
+    "value": "$variable({\"type\":\"color\",\"value\":{\"name\":\"gcid-primary-color\",\"settings\":{}}})$"
+   }
+  },
+  "icon.advanced.size": {
+   "desktop": {
+    "value": "96px"
+   }
+  },
+  "icon.innerContent": {
+   "desktop": {
+    "value": {
+     "target": "off",
+     "type": "divi",
+     "unicode": "&#x21;",
+     "weight": "400"
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Icon"
+   }
+  }
+ },
+ "name": "divi/icon",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "core"
+}

@@ -1,0 +1,485 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "column1.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "column1.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "column1.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "column2.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "column2.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "column2.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "column3.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "column3.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "column3.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "columnsBackground": {
+   "bp": true,
+   "note": "D4 specialty columns_background (column_settings_background)",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "json"
+  },
+  "columnsCss": {
+   "bp": true,
+   "note": "D4 specialty columns_css",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "json"
+  },
+  "columnsCssFields": {
+   "bp": true,
+   "note": "D4 specialty columns_css_fields",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "json"
+  },
+  "columnsPadding": {
+   "bp": true,
+   "note": "D4 specialty columns_padding",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "json"
+  },
+  "content": {
+   "bp": true,
+   "note": "D4 shortcode content converted to the content attr",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "html"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "column_1_after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "column_1_before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "column_1_main": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "column_2_after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "column_2_before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "column_2_main": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "column_3_after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "column_3_before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "column_3_main": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "innerSizing.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.dividers.bottom": {
+   "family": "dividers",
+   "prefix": "bottom"
+  },
+  "module.advanced.dividers.top": {
+   "family": "dividers",
+   "prefix": "top"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.gutter": {
+   "family": "gutter",
+   "prefix": ""
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.htmlAttributes": {
+   "family": "id-classes",
+   "prefix": ""
+  },
+  "module.advanced.innerShadow": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.text": {
+   "family": "text",
+   "prefix": ""
+  },
+  "module.advanced.text.text": {
+   "family": "text",
+   "prefix": "text"
+  },
+  "module.advanced.text.textShadow": {
+   "family": "text",
+   "prefix": "textShadow"
+  },
+  "module.advanced.type": {
+   "bp": false,
+   "note": "typed from Divi 4 fullwidth (hidden)",
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "nextBackgroundColor": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "color"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "prevBackgroundColor": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "color"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "structure",
+ "children": [
+  "divi/column",
+  "divi/fullwidth-code",
+  "divi/fullwidth-header",
+  "divi/fullwidth-image",
+  "divi/fullwidth-map",
+  "divi/fullwidth-menu",
+  "divi/fullwidth-portfolio",
+  "divi/fullwidth-post-content",
+  "divi/fullwidth-post-slider",
+  "divi/fullwidth-post-title",
+  "divi/fullwidth-slider",
+  "divi/row",
+  "divi/row-inner"
+ ],
+ "css": [
+  "after",
+  "before",
+  "column_1_after",
+  "column_1_before",
+  "column_1_main",
+  "column_2_after",
+  "column_2_before",
+  "column_2_main",
+  "column_3_after",
+  "column_3_before",
+  "column_3_main",
+  "freeForm",
+  "mainElement"
+ ],
+ "d4": "et_pb_section",
+ "defaults": {
+  "module.advanced.innerShadow": {
+   "desktop": {
+    "value": "off"
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Section"
+   }
+  }
+ },
+ "name": "divi/section",
+ "parents": [],
+ "scope": "core"
+}

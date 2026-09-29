@@ -1,0 +1,551 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "counter.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "counter.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "counter.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "counter.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "counter": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "description": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "exifMetaData": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "galleryWrapper": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "image": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "navigationArrows": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "pagination": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "slideshowLink": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "tagCloud": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "title": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "description.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "description.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "description.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "description.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "exifMetaData.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "exifMetaData.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "exifMetaData.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "exifMetaData.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "image.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "image.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "image.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "image.decoration.fit": {
+   "family": "fit",
+   "prefix": ""
+  },
+  "image.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "imagelyGallery.innerContent": {
+   "sub": {
+    "galleryId": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "navigationArrows.advanced.color": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "color"
+  },
+  "navigationArrows.advanced.size": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "length"
+  },
+  "navigationArrows.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "navigationArrows.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "navigationArrows.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "navigationArrows.decoration.button": {
+   "family": "button",
+   "prefix": ""
+  },
+  "navigationArrows.decoration.button.decoration.background": {
+   "family": "button",
+   "prefix": "decoration.background"
+  },
+  "navigationArrows.decoration.button.decoration.border": {
+   "family": "button",
+   "prefix": "decoration.border"
+  },
+  "navigationArrows.decoration.button.decoration.boxShadow": {
+   "family": "button",
+   "prefix": "decoration.boxShadow"
+  },
+  "navigationArrows.decoration.button.decoration.button": {
+   "family": "button",
+   "prefix": "decoration.button"
+  },
+  "navigationArrows.decoration.button.decoration.font.font": {
+   "family": "button",
+   "prefix": "decoration.font.font"
+  },
+  "navigationArrows.decoration.button.decoration.font.textEffects": {
+   "family": "button",
+   "prefix": "decoration.font.textEffects"
+  },
+  "navigationArrows.decoration.button.decoration.font.textShadow": {
+   "family": "button",
+   "prefix": "decoration.font.textShadow"
+  },
+  "navigationArrows.decoration.button.decoration.sizing": {
+   "family": "button",
+   "prefix": "decoration.sizing"
+  },
+  "navigationArrows.decoration.button.decoration.spacing": {
+   "family": "button",
+   "prefix": "decoration.spacing"
+  },
+  "navigationArrows.decoration.button.innerContent": {
+   "family": "button",
+   "prefix": "innerContent"
+  },
+  "navigationArrows.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "navigationArrows.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "pagination.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "pagination.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "pagination.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "pagination.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "slideshowLink.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "slideshowLink.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "slideshowLink.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "slideshowLink.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "tagCloud.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "tagCloud.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "tagCloud.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "tagCloud.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "title.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "title.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "title.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "title.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "counter",
+  "description",
+  "exifMetaData",
+  "freeForm",
+  "galleryWrapper",
+  "image",
+  "mainElement",
+  "navigationArrows",
+  "pagination",
+  "slideshowLink",
+  "tagCloud",
+  "title"
+ ],
+ "d4": "",
+ "defaults": {
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Imagely Gallery"
+   }
+  }
+ },
+ "name": "divi/imagely-gallery",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "integration"
+}

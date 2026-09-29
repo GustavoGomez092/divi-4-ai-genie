@@ -1,0 +1,447 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "module": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "feed.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "feed.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "feed.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "feed.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "feed.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "feed.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "feed.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "feed.innerContent": {
+   "sub": {
+    "accountId": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "postCount": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "number"
+    }
+   }
+  },
+  "followButton.advanced.show": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "followButton.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "followButton.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "followButton.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "followButton.decoration.button": {
+   "family": "button",
+   "prefix": ""
+  },
+  "followButton.decoration.button.decoration.background": {
+   "family": "button",
+   "prefix": "decoration.background"
+  },
+  "followButton.decoration.button.decoration.border": {
+   "family": "button",
+   "prefix": "decoration.border"
+  },
+  "followButton.decoration.button.decoration.boxShadow": {
+   "family": "button",
+   "prefix": "decoration.boxShadow"
+  },
+  "followButton.decoration.button.decoration.button": {
+   "family": "button",
+   "prefix": "decoration.button"
+  },
+  "followButton.decoration.button.decoration.font.font": {
+   "family": "button",
+   "prefix": "decoration.font.font"
+  },
+  "followButton.decoration.button.decoration.font.textEffects": {
+   "family": "button",
+   "prefix": "decoration.font.textEffects"
+  },
+  "followButton.decoration.button.decoration.font.textShadow": {
+   "family": "button",
+   "prefix": "decoration.font.textShadow"
+  },
+  "followButton.decoration.button.decoration.sizing": {
+   "family": "button",
+   "prefix": "decoration.sizing"
+  },
+  "followButton.decoration.button.decoration.spacing": {
+   "family": "button",
+   "prefix": "decoration.spacing"
+  },
+  "followButton.decoration.button.innerContent": {
+   "family": "button",
+   "prefix": "innerContent"
+  },
+  "followButton.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "followButton.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "followButton.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "followButton.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "followButton.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "followButton.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "followButton.innerContent": {
+   "sub": {
+    "text": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "item.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "item.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "item.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "item.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "item.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "media.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "media.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "media.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "media.decoration.fit": {
+   "family": "fit",
+   "prefix": ""
+  },
+  "media.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "freeForm",
+  "mainElement",
+  "module"
+ ],
+ "d4": "et_pb_instagram_feed",
+ "defaults": {
+  "feed.advanced.config": {
+   "desktop": {
+    "value": {
+     "lightbox": "on"
+    }
+   }
+  },
+  "feed.decoration.layout": {
+   "desktop": {
+    "value": {
+     "columnGap": "16px",
+     "display": "grid",
+     "gridColumnCount": "3",
+     "gridColumnWidths": "equal",
+     "rowGap": "16px"
+    }
+   }
+  },
+  "feed.innerContent": {
+   "desktop": {
+    "value": {
+     "accountId": "",
+     "postCount": "6"
+    }
+   }
+  },
+  "followButton.advanced.show": {
+   "desktop": {
+    "value": "on"
+   }
+  },
+  "followButton.decoration.button": {
+   "desktop": {
+    "value": {
+     "icon": {
+      "enable": "on"
+     }
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Instagram Feed"
+   }
+  }
+ },
+ "name": "divi/instagram-feed",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "integration"
+}

@@ -1,0 +1,1035 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "card.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "card.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "card.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "card.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "card.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "card.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "cardEven.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "cardEven.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "cardEven.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "cardEven.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "cardEven.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "cardEven.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "children.advanced.spacer": {
+   "bp": true,
+   "note": "parent-level defaults for child elements; shape not dumped",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "object"
+  },
+  "connector.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "connector.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "connector.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "connector.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "connector.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "content.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "content.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "content.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "content.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "content.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "content.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "content.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "content.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "content.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "content.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "content.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "content.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "content.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "content.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "content.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "content.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "content.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "content.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "content.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "content.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "content.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "contentEven.decoration.bodyFont.body.font": {
+   "family": "font-body",
+   "prefix": "body.font"
+  },
+  "contentEven.decoration.bodyFont.body.list": {
+   "family": "font-body",
+   "prefix": "body.list"
+  },
+  "contentEven.decoration.bodyFont.body.textEffects": {
+   "family": "font-body",
+   "prefix": "body.textEffects"
+  },
+  "contentEven.decoration.bodyFont.body.textShadow": {
+   "family": "font-body",
+   "prefix": "body.textShadow"
+  },
+  "contentEven.decoration.bodyFont.dropCap.font": {
+   "family": "font-body",
+   "prefix": "dropCap.font"
+  },
+  "contentEven.decoration.bodyFont.dropCap.textShadow": {
+   "family": "font-body",
+   "prefix": "dropCap.textShadow"
+  },
+  "contentEven.decoration.bodyFont.link.font": {
+   "family": "font-body",
+   "prefix": "link.font"
+  },
+  "contentEven.decoration.bodyFont.link.textEffects": {
+   "family": "font-body",
+   "prefix": "link.textEffects"
+  },
+  "contentEven.decoration.bodyFont.link.textShadow": {
+   "family": "font-body",
+   "prefix": "link.textShadow"
+  },
+  "contentEven.decoration.bodyFont.ol.font": {
+   "family": "font-body",
+   "prefix": "ol.font"
+  },
+  "contentEven.decoration.bodyFont.ol.list": {
+   "family": "font-body",
+   "prefix": "ol.list"
+  },
+  "contentEven.decoration.bodyFont.ol.textEffects": {
+   "family": "font-body",
+   "prefix": "ol.textEffects"
+  },
+  "contentEven.decoration.bodyFont.ol.textShadow": {
+   "family": "font-body",
+   "prefix": "ol.textShadow"
+  },
+  "contentEven.decoration.bodyFont.quote.border": {
+   "family": "font-body",
+   "prefix": "quote.border"
+  },
+  "contentEven.decoration.bodyFont.quote.font": {
+   "family": "font-body",
+   "prefix": "quote.font"
+  },
+  "contentEven.decoration.bodyFont.quote.textEffects": {
+   "family": "font-body",
+   "prefix": "quote.textEffects"
+  },
+  "contentEven.decoration.bodyFont.quote.textShadow": {
+   "family": "font-body",
+   "prefix": "quote.textShadow"
+  },
+  "contentEven.decoration.bodyFont.ul.font": {
+   "family": "font-body",
+   "prefix": "ul.font"
+  },
+  "contentEven.decoration.bodyFont.ul.list": {
+   "family": "font-body",
+   "prefix": "ul.list"
+  },
+  "contentEven.decoration.bodyFont.ul.textEffects": {
+   "family": "font-body",
+   "prefix": "ul.textEffects"
+  },
+  "contentEven.decoration.bodyFont.ul.textShadow": {
+   "family": "font-body",
+   "prefix": "ul.textShadow"
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "card": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "connector": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "content": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "date": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "item": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "marker": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "spacer": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "title": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "track": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "date.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "date.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "date.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "date.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "dateEven.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "dateEven.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "dateEven.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "dateEven.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "item.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "item.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "item.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "item.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "item.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "itemEven.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "itemEven.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "itemEven.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "itemEven.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "itemEven.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "marker.advanced.position": {
+   "sub": {
+    "position": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "marker.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "marker.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "marker.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "marker.decoration.icon": {
+   "family": "icon",
+   "prefix": ""
+  },
+  "marker.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "marker.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.advanced.timeline": {
+   "sub": {
+    "alignContent": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "alignItems": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "collapseEmptyColumns": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    },
+    "columnGap": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "length"
+    },
+    "direction": {
+     "bp": true,
+     "options": [
+      "horizontal",
+      "vertical"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "display": {
+     "bp": true,
+     "options": [
+      "block",
+      "flex",
+      "grid"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "flexDirection": {
+     "bp": true,
+     "options": [
+      "row",
+      "row-reverse",
+      "column",
+      "column-reverse"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "flexWrap": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "gridAutoColumns": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "gridAutoFlow": {
+     "bp": true,
+     "options": [
+      "row",
+      "column"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "gridAutoRows": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "gridColumnCount": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "number"
+    },
+    "gridColumnMinWidth": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "length"
+    },
+    "gridColumnWidth": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "length"
+    },
+    "gridColumnWidths": {
+     "bp": true,
+     "options": [
+      "equal",
+      "equalMinimum",
+      "equalFixed",
+      "auto",
+      "manual"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "gridDensity": {
+     "bp": true,
+     "options": [
+      "dense",
+      "auto"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "gridJustifyItems": {
+     "bp": true,
+     "options": [
+      "start",
+      "center",
+      "end",
+      "stretch",
+      "baseline"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "gridOffsetRules": {
+     "bp": true,
+     "note": "JS divi/grid-offset-rules",
+     "states": [
+      "value"
+     ],
+     "type": "json"
+    },
+    "gridRowCount": {
+     "bp": true,
+     "note": "range with default auto",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "gridRowHeight": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "length"
+    },
+    "gridRowHeights": {
+     "bp": true,
+     "options": [
+      "auto",
+      "equal",
+      "minimum",
+      "fixed",
+      "manual"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "gridRowMinHeight": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "length"
+    },
+    "gridTemplateColumns": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "gridTemplateRows": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "justifyContent": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "position": {
+     "bp": true,
+     "options": [
+      "alternating",
+      "bottom",
+      "top"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "rowGap": {
+     "bp": true,
+     "states": [
+      "value"
+     ],
+     "type": "length"
+    },
+    "startFrom": {
+     "bp": true,
+     "options": [
+      "bottom",
+      "top"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    }
+   }
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "spacer.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "spacer.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "spacer.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "spacer.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "spacer.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "spacer.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "spacerEven.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "spacerEven.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "spacerEven.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "spacerEven.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "spacerEven.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "spacerEven.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "title.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "title.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "title.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "title.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "titleEven.decoration.font": {
+   "family": "font",
+   "prefix": ""
+  },
+  "titleEven.decoration.font.font": {
+   "family": "font",
+   "prefix": "font"
+  },
+  "titleEven.decoration.font.textEffects": {
+   "family": "font",
+   "prefix": "textEffects"
+  },
+  "titleEven.decoration.font.textShadow": {
+   "family": "font",
+   "prefix": "textShadow"
+  },
+  "track.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "track.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "track.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "track.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "track.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  }
+ },
+ "category": "module",
+ "children": [
+  "divi/timeline-item"
+ ],
+ "css": [
+  "after",
+  "before",
+  "card",
+  "connector",
+  "content",
+  "date",
+  "freeForm",
+  "item",
+  "mainElement",
+  "marker",
+  "spacer",
+  "title",
+  "track"
+ ],
+ "d4": "et_pb_timeline",
+ "defaults": {
+  "module.advanced.timeline": {
+   "desktop": {
+    "value": {
+     "direction": "vertical",
+     "position": "right"
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Timeline"
+   }
+  }
+ },
+ "name": "divi/timeline",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "d5-extra"
+}

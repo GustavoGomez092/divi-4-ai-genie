@@ -1,0 +1,2466 @@
+{
+ "attrs": {
+  "adminLabel": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "text"
+  },
+  "chart.advanced.config": {
+   "sub": {
+    "showLegend": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    },
+    "showLegendTitle": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    },
+    "showSubtitle": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    },
+    "showTitle": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    },
+    "showTooltip": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    },
+    "type": {
+     "bp": true,
+     "options": [
+      "area",
+      "bar",
+      "bubble",
+      "doughnut",
+      "line",
+      "pie",
+      "polarArea",
+      "radar",
+      "scatter"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    }
+   }
+  },
+  "chart.advanced.legend": {
+   "sub": {
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    }
+   }
+  },
+  "chart.advanced.legend.font": {
+   "sub": {
+    "capitalization": {
+     "bp": true,
+     "note": "JS button-options {uppercase,capitalize,lowercase,smallCaps,allSmallCaps}; D4 all_caps converts through convertAllCaps; none = unset",
+     "options": [
+      "uppercase",
+      "capitalize",
+      "lowercase",
+      "smallCaps",
+      "allSmallCaps",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "columnCount": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    },
+    "columnGap": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "family": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "font-family"
+    },
+    "hyphens": {
+     "bp": true,
+     "note": "JS divi/toggle-like control; CSS hyphens value not pinned",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "letterSpacing": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "lineColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "lineHeight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "lineStyle": {
+     "bp": true,
+     "options": [
+      "solid",
+      "double",
+      "dotted",
+      "dashed",
+      "wavy"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "lineThickness": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "opticalSizing": {
+     "bp": true,
+     "options": [
+      "auto",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "size": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "style": {
+     "bp": true,
+     "multiple": true,
+     "note": "list of styles; JS options {italic,underline,overline,strikethrough} (+ Ju capitalization keys, which the same Ju constant holds)",
+     "options": [
+      "italic",
+      "underline",
+      "overline",
+      "strikethrough",
+      "uppercase",
+      "capitalize",
+      "lowercase",
+      "smallCaps",
+      "allSmallCaps"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "textAlign": {
+     "bp": true,
+     "note": "JS Zu() left/center/right/justify; D4 text orientation also writes justified",
+     "options": [
+      "left",
+      "center",
+      "right",
+      "justify",
+      "justified"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "textWrap": {
+     "bp": true,
+     "note": "JS button-options with a computed option list (y); CSS text-wrap keyword",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "underlineOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "weight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "font-weight"
+    },
+    "weightFineTune": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    },
+    "writingMode": {
+     "bp": true,
+     "options": [
+      "horizontal-tb",
+      "vertical-rl",
+      "vertical-lr"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    }
+   }
+  },
+  "chart.advanced.legend.textEffects": {
+   "sub": {
+    "fillType": {
+     "bp": true,
+     "options": [
+      "none",
+      "gradient",
+      "image",
+      "transparent"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "gradient": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "object"
+    },
+    "gradient.direction": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "gradient.directionRadial": {
+     "bp": true,
+     "note": "D4 options center/top left/top/.../left; D5 may store other position keywords",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gradient.length": {
+     "bp": true,
+     "note": "D4 background_color_gradient_unit (a unit select) converts here; corpus has \"100%\" and \"%\"",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gradient.repeat": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "onoff"
+    },
+    "gradient.stops": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "gradient"
+    },
+    "gradient.type": {
+     "bp": true,
+     "note": "D4 linear/circular/elliptical/conic; radial kept for native D5 content",
+     "options": [
+      "linear",
+      "circular",
+      "elliptical",
+      "conic",
+      "radial"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.blend": {
+     "bp": true,
+     "options": [
+      "normal",
+      "multiply",
+      "screen",
+      "overlay",
+      "darken",
+      "lighten",
+      "color-dodge",
+      "color-burn",
+      "hard-light",
+      "soft-light",
+      "difference",
+      "exclusion",
+      "hue",
+      "saturation",
+      "color",
+      "luminosity"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.height": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.horizontalOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.position": {
+     "bp": true,
+     "note": "CSS background-position keywords after convertBackgroundPosition (corpus center, center top)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "imageFill.repeat": {
+     "bp": true,
+     "options": [
+      "repeat",
+      "repeat-x",
+      "repeat-y",
+      "space",
+      "round",
+      "no-repeat"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.size": {
+     "bp": true,
+     "options": [
+      "cover",
+      "contain",
+      "initial",
+      "stretch",
+      "custom"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.url": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "image"
+    },
+    "imageFill.verticalOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.width": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "strokeColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "strokePosition": {
+     "bp": true,
+     "options": [
+      "stroke-fill",
+      "fill-stroke"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "strokeWidth": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "chart.advanced.legend.textShadow": {
+   "sub": {
+    "blur": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "horizontal": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "style": {
+     "bp": true,
+     "note": "none or a Divi preset name (preset1..presetN); D4 presets_shadow/select_box_shadow, corpus none/preset1-6; number of presets not pinned",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "vertical": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "chart.advanced.subtitle.font": {
+   "sub": {
+    "capitalization": {
+     "bp": true,
+     "note": "JS button-options {uppercase,capitalize,lowercase,smallCaps,allSmallCaps}; D4 all_caps converts through convertAllCaps; none = unset",
+     "options": [
+      "uppercase",
+      "capitalize",
+      "lowercase",
+      "smallCaps",
+      "allSmallCaps",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "columnCount": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    },
+    "columnGap": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "family": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "font-family"
+    },
+    "hyphens": {
+     "bp": true,
+     "note": "JS divi/toggle-like control; CSS hyphens value not pinned",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "letterSpacing": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "lineColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "lineHeight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "lineStyle": {
+     "bp": true,
+     "options": [
+      "solid",
+      "double",
+      "dotted",
+      "dashed",
+      "wavy"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "lineThickness": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "opticalSizing": {
+     "bp": true,
+     "options": [
+      "auto",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "size": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "style": {
+     "bp": true,
+     "multiple": true,
+     "note": "list of styles; JS options {italic,underline,overline,strikethrough} (+ Ju capitalization keys, which the same Ju constant holds)",
+     "options": [
+      "italic",
+      "underline",
+      "overline",
+      "strikethrough",
+      "uppercase",
+      "capitalize",
+      "lowercase",
+      "smallCaps",
+      "allSmallCaps"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "textAlign": {
+     "bp": true,
+     "note": "JS Zu() left/center/right/justify; D4 text orientation also writes justified",
+     "options": [
+      "left",
+      "center",
+      "right",
+      "justify",
+      "justified"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "textWrap": {
+     "bp": true,
+     "note": "JS button-options with a computed option list (y); CSS text-wrap keyword",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "underlineOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "weight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "font-weight"
+    },
+    "weightFineTune": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    },
+    "writingMode": {
+     "bp": true,
+     "options": [
+      "horizontal-tb",
+      "vertical-rl",
+      "vertical-lr"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    }
+   }
+  },
+  "chart.advanced.subtitle.textEffects": {
+   "sub": {
+    "fillType": {
+     "bp": true,
+     "options": [
+      "none",
+      "gradient",
+      "image",
+      "transparent"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "gradient": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "object"
+    },
+    "gradient.direction": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "gradient.directionRadial": {
+     "bp": true,
+     "note": "D4 options center/top left/top/.../left; D5 may store other position keywords",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gradient.length": {
+     "bp": true,
+     "note": "D4 background_color_gradient_unit (a unit select) converts here; corpus has \"100%\" and \"%\"",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gradient.repeat": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "onoff"
+    },
+    "gradient.stops": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "gradient"
+    },
+    "gradient.type": {
+     "bp": true,
+     "note": "D4 linear/circular/elliptical/conic; radial kept for native D5 content",
+     "options": [
+      "linear",
+      "circular",
+      "elliptical",
+      "conic",
+      "radial"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.blend": {
+     "bp": true,
+     "options": [
+      "normal",
+      "multiply",
+      "screen",
+      "overlay",
+      "darken",
+      "lighten",
+      "color-dodge",
+      "color-burn",
+      "hard-light",
+      "soft-light",
+      "difference",
+      "exclusion",
+      "hue",
+      "saturation",
+      "color",
+      "luminosity"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.height": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.horizontalOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.position": {
+     "bp": true,
+     "note": "CSS background-position keywords after convertBackgroundPosition (corpus center, center top)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "imageFill.repeat": {
+     "bp": true,
+     "options": [
+      "repeat",
+      "repeat-x",
+      "repeat-y",
+      "space",
+      "round",
+      "no-repeat"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.size": {
+     "bp": true,
+     "options": [
+      "cover",
+      "contain",
+      "initial",
+      "stretch",
+      "custom"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.url": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "image"
+    },
+    "imageFill.verticalOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.width": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "strokeColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "strokePosition": {
+     "bp": true,
+     "options": [
+      "stroke-fill",
+      "fill-stroke"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "strokeWidth": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "chart.advanced.subtitle.textShadow": {
+   "sub": {
+    "blur": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "horizontal": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "style": {
+     "bp": true,
+     "note": "none or a Divi preset name (preset1..presetN); D4 presets_shadow/select_box_shadow, corpus none/preset1-6; number of presets not pinned",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "vertical": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "chart.advanced.title.font": {
+   "sub": {
+    "capitalization": {
+     "bp": true,
+     "note": "JS button-options {uppercase,capitalize,lowercase,smallCaps,allSmallCaps}; D4 all_caps converts through convertAllCaps; none = unset",
+     "options": [
+      "uppercase",
+      "capitalize",
+      "lowercase",
+      "smallCaps",
+      "allSmallCaps",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "columnCount": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    },
+    "columnGap": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "family": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "font-family"
+    },
+    "hyphens": {
+     "bp": true,
+     "note": "JS divi/toggle-like control; CSS hyphens value not pinned",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "letterSpacing": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "lineColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "lineHeight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "lineStyle": {
+     "bp": true,
+     "options": [
+      "solid",
+      "double",
+      "dotted",
+      "dashed",
+      "wavy"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "lineThickness": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "opticalSizing": {
+     "bp": true,
+     "options": [
+      "auto",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "size": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "style": {
+     "bp": true,
+     "multiple": true,
+     "note": "list of styles; JS options {italic,underline,overline,strikethrough} (+ Ju capitalization keys, which the same Ju constant holds)",
+     "options": [
+      "italic",
+      "underline",
+      "overline",
+      "strikethrough",
+      "uppercase",
+      "capitalize",
+      "lowercase",
+      "smallCaps",
+      "allSmallCaps"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "textAlign": {
+     "bp": true,
+     "note": "JS Zu() left/center/right/justify; D4 text orientation also writes justified",
+     "options": [
+      "left",
+      "center",
+      "right",
+      "justify",
+      "justified"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "textWrap": {
+     "bp": true,
+     "note": "JS button-options with a computed option list (y); CSS text-wrap keyword",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "underlineOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "weight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "font-weight"
+    },
+    "weightFineTune": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    },
+    "writingMode": {
+     "bp": true,
+     "options": [
+      "horizontal-tb",
+      "vertical-rl",
+      "vertical-lr"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    }
+   }
+  },
+  "chart.advanced.title.textEffects": {
+   "sub": {
+    "fillType": {
+     "bp": true,
+     "options": [
+      "none",
+      "gradient",
+      "image",
+      "transparent"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "gradient": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "object"
+    },
+    "gradient.direction": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "gradient.directionRadial": {
+     "bp": true,
+     "note": "D4 options center/top left/top/.../left; D5 may store other position keywords",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gradient.length": {
+     "bp": true,
+     "note": "D4 background_color_gradient_unit (a unit select) converts here; corpus has \"100%\" and \"%\"",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gradient.repeat": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "onoff"
+    },
+    "gradient.stops": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "gradient"
+    },
+    "gradient.type": {
+     "bp": true,
+     "note": "D4 linear/circular/elliptical/conic; radial kept for native D5 content",
+     "options": [
+      "linear",
+      "circular",
+      "elliptical",
+      "conic",
+      "radial"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.blend": {
+     "bp": true,
+     "options": [
+      "normal",
+      "multiply",
+      "screen",
+      "overlay",
+      "darken",
+      "lighten",
+      "color-dodge",
+      "color-burn",
+      "hard-light",
+      "soft-light",
+      "difference",
+      "exclusion",
+      "hue",
+      "saturation",
+      "color",
+      "luminosity"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.height": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.horizontalOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.position": {
+     "bp": true,
+     "note": "CSS background-position keywords after convertBackgroundPosition (corpus center, center top)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "imageFill.repeat": {
+     "bp": true,
+     "options": [
+      "repeat",
+      "repeat-x",
+      "repeat-y",
+      "space",
+      "round",
+      "no-repeat"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.size": {
+     "bp": true,
+     "options": [
+      "cover",
+      "contain",
+      "initial",
+      "stretch",
+      "custom"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.url": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "image"
+    },
+    "imageFill.verticalOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.width": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "strokeColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "strokePosition": {
+     "bp": true,
+     "options": [
+      "stroke-fill",
+      "fill-stroke"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "strokeWidth": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "chart.advanced.title.textShadow": {
+   "sub": {
+    "blur": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "horizontal": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "style": {
+     "bp": true,
+     "note": "none or a Divi preset name (preset1..presetN); D4 presets_shadow/select_box_shadow, corpus none/preset1-6; number of presets not pinned",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "vertical": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "chart.advanced.tooltip.font": {
+   "sub": {
+    "capitalization": {
+     "bp": true,
+     "note": "JS button-options {uppercase,capitalize,lowercase,smallCaps,allSmallCaps}; D4 all_caps converts through convertAllCaps; none = unset",
+     "options": [
+      "uppercase",
+      "capitalize",
+      "lowercase",
+      "smallCaps",
+      "allSmallCaps",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "columnCount": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    },
+    "columnGap": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "family": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "font-family"
+    },
+    "hyphens": {
+     "bp": true,
+     "note": "JS divi/toggle-like control; CSS hyphens value not pinned",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "letterSpacing": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "lineColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "lineHeight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "lineStyle": {
+     "bp": true,
+     "options": [
+      "solid",
+      "double",
+      "dotted",
+      "dashed",
+      "wavy"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "lineThickness": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "opticalSizing": {
+     "bp": true,
+     "options": [
+      "auto",
+      "none"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "size": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "style": {
+     "bp": true,
+     "multiple": true,
+     "note": "list of styles; JS options {italic,underline,overline,strikethrough} (+ Ju capitalization keys, which the same Ju constant holds)",
+     "options": [
+      "italic",
+      "underline",
+      "overline",
+      "strikethrough",
+      "uppercase",
+      "capitalize",
+      "lowercase",
+      "smallCaps",
+      "allSmallCaps"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "textAlign": {
+     "bp": true,
+     "note": "JS Zu() left/center/right/justify; D4 text orientation also writes justified",
+     "options": [
+      "left",
+      "center",
+      "right",
+      "justify",
+      "justified"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "textWrap": {
+     "bp": true,
+     "note": "JS button-options with a computed option list (y); CSS text-wrap keyword",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "underlineOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "weight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "font-weight"
+    },
+    "weightFineTune": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "number"
+    },
+    "writingMode": {
+     "bp": true,
+     "options": [
+      "horizontal-tb",
+      "vertical-rl",
+      "vertical-lr"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    }
+   }
+  },
+  "chart.advanced.tooltip.textEffects": {
+   "sub": {
+    "fillType": {
+     "bp": true,
+     "options": [
+      "none",
+      "gradient",
+      "image",
+      "transparent"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "gradient": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "object"
+    },
+    "gradient.direction": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "gradient.directionRadial": {
+     "bp": true,
+     "note": "D4 options center/top left/top/.../left; D5 may store other position keywords",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gradient.length": {
+     "bp": true,
+     "note": "D4 background_color_gradient_unit (a unit select) converts here; corpus has \"100%\" and \"%\"",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "gradient.repeat": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "onoff"
+    },
+    "gradient.stops": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "gradient"
+    },
+    "gradient.type": {
+     "bp": true,
+     "note": "D4 linear/circular/elliptical/conic; radial kept for native D5 content",
+     "options": [
+      "linear",
+      "circular",
+      "elliptical",
+      "conic",
+      "radial"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.blend": {
+     "bp": true,
+     "options": [
+      "normal",
+      "multiply",
+      "screen",
+      "overlay",
+      "darken",
+      "lighten",
+      "color-dodge",
+      "color-burn",
+      "hard-light",
+      "soft-light",
+      "difference",
+      "exclusion",
+      "hue",
+      "saturation",
+      "color",
+      "luminosity"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.height": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.horizontalOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.position": {
+     "bp": true,
+     "note": "CSS background-position keywords after convertBackgroundPosition (corpus center, center top)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "imageFill.repeat": {
+     "bp": true,
+     "options": [
+      "repeat",
+      "repeat-x",
+      "repeat-y",
+      "space",
+      "round",
+      "no-repeat"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.size": {
+     "bp": true,
+     "options": [
+      "cover",
+      "contain",
+      "initial",
+      "stretch",
+      "custom"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "imageFill.url": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "image"
+    },
+    "imageFill.verticalOffset": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "imageFill.width": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "strokeColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "strokePosition": {
+     "bp": true,
+     "options": [
+      "stroke-fill",
+      "fill-stroke"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    },
+    "strokeWidth": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "chart.advanced.tooltip.textShadow": {
+   "sub": {
+    "blur": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "color": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "horizontal": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "style": {
+     "bp": true,
+     "note": "none or a Divi preset name (preset1..presetN); D4 presets_shadow/select_box_shadow, corpus none/preset1-6; number of presets not pinned",
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "vertical": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "chart.innerContent": {
+   "sub": {
+    "data": {
+     "bp": false,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "json"
+    },
+    "legendTitle": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "subtitle": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "title": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "css": {
+   "sub": {
+    "after": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "before": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "chartCanvas": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "freeForm": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "mainElement": {
+     "bp": true,
+     "note": "custom CSS declarations for a CSS slot (D4 custom_css_*)",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    }
+   }
+  },
+  "globalColorsInfo": {
+   "bp": false,
+   "note": "D4 global_colors_info (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "locked": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "module.advanced.elements.structure": {
+   "family": "elements",
+   "prefix": "structure"
+  },
+  "module.advanced.html": {
+   "family": "html",
+   "prefix": ""
+  },
+  "module.advanced.link": {
+   "family": "link",
+   "prefix": ""
+  },
+  "module.advanced.loop": {
+   "family": "loop",
+   "prefix": ""
+  },
+  "module.decoration.animation": {
+   "family": "animation",
+   "prefix": ""
+  },
+  "module.decoration.attributes": {
+   "family": "attributes",
+   "prefix": ""
+  },
+  "module.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
+  "module.decoration.border": {
+   "family": "border",
+   "prefix": ""
+  },
+  "module.decoration.boxShadow": {
+   "family": "box-shadow",
+   "prefix": ""
+  },
+  "module.decoration.conditions": {
+   "family": "conditions",
+   "prefix": ""
+  },
+  "module.decoration.disabledOn": {
+   "family": "disabled-on",
+   "prefix": ""
+  },
+  "module.decoration.filters": {
+   "family": "filters",
+   "prefix": ""
+  },
+  "module.decoration.interactions": {
+   "family": "interactions",
+   "prefix": ""
+  },
+  "module.decoration.layout": {
+   "family": "layout",
+   "prefix": ""
+  },
+  "module.decoration.overflow": {
+   "family": "overflow",
+   "prefix": ""
+  },
+  "module.decoration.position": {
+   "family": "position",
+   "prefix": ""
+  },
+  "module.decoration.scroll": {
+   "family": "scroll",
+   "prefix": ""
+  },
+  "module.decoration.sizing": {
+   "family": "sizing",
+   "prefix": ""
+  },
+  "module.decoration.spacing": {
+   "family": "spacing",
+   "prefix": ""
+  },
+  "module.decoration.sticky": {
+   "family": "sticky",
+   "prefix": ""
+  },
+  "module.decoration.transform": {
+   "family": "transform",
+   "prefix": ""
+  },
+  "module.decoration.transition": {
+   "family": "transition",
+   "prefix": ""
+  },
+  "module.decoration.zIndex": {
+   "family": "z-index",
+   "prefix": ""
+  },
+  "module.meta.adminLabel": {
+   "family": "admin-label",
+   "prefix": ""
+  },
+  "module.meta.meta.forceVisible": {
+   "family": "meta",
+   "prefix": "forceVisible"
+  },
+  "module.meta.meta.tocListHeading": {
+   "family": "meta",
+   "prefix": "tocListHeading"
+  },
+  "on": {
+   "bp": false,
+   "note": "block-level attr from Conversion::getAttrMap; value shape not documented",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  },
+  "open": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
+  "themeBuilderArea": {
+   "bp": false,
+   "note": "theme-builder area marker (Conversion::getAttrMap)",
+   "states": [
+    "value"
+   ],
+   "type": "json"
+  }
+ },
+ "category": "module",
+ "children": null,
+ "css": [
+  "after",
+  "before",
+  "chartCanvas",
+  "freeForm",
+  "mainElement"
+ ],
+ "d4": "et_pb_charts",
+ "defaults": {
+  "chart.advanced.config": {
+   "desktop": {
+    "value": {
+     "showLegend": "on",
+     "showLegendTitle": "off",
+     "showSubtitle": "on",
+     "showTitle": "on",
+     "showTooltip": "on",
+     "type": "line"
+    }
+   }
+  },
+  "chart.advanced.legend.layout": {
+   "desktop": {
+    "value": {
+     "align": "center",
+     "position": "top"
+    }
+   }
+  },
+  "chart.advanced.legend.markers": {
+   "desktop": {
+    "value": {
+     "boxHeight": "12px",
+     "boxWidth": "40px",
+     "padding": "10px",
+     "pointStyle": "circle",
+     "usePointStyle": "off"
+    }
+   }
+  },
+  "chart.advanced.subtitle.font": {
+   "desktop": {
+    "value": {
+     "textAlign": "center"
+    }
+   }
+  },
+  "chart.advanced.title.font": {
+   "desktop": {
+    "value": {
+     "textAlign": "center"
+    }
+   }
+  },
+  "chart.advanced.tooltip.box": {
+   "desktop": {
+    "value": {
+     "backgroundColor": "rgba(0, 0, 0, 0.8)",
+     "borderColor": "rgba(0, 0, 0, 0)",
+     "borderWidth": "0px",
+     "cornerRadius": "6px",
+     "padding": "6px"
+    }
+   }
+  },
+  "chart.advanced.tooltip.colorBoxes": {
+   "desktop": {
+    "value": {
+     "boxHeight": "12px",
+     "boxWidth": "12px",
+     "displayColors": "on"
+    }
+   }
+  },
+  "module.meta.adminLabel": {
+   "desktop": {
+    "value": "Chart"
+   }
+  }
+ },
+ "name": "divi/charts",
+ "parents": [
+  "divi/column",
+  "divi/column-inner",
+  "divi/group"
+ ],
+ "scope": "d5-extra"
+}
