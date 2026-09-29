@@ -134,7 +134,9 @@ class PreviewTest(unittest.TestCase):
 
     @live_only
     def test_page11_builder_css_matches_live(self):
-        live = subprocess.run(["curl", "-s", "http://divi-test.local/probe-divi-ai-emergency-plumber/"],
+        # -L: page 11 is the site's static front page (page_on_front=11), so WordPress 301s its slug URL to
+        # "/"; without following the redirect the body is empty and the test silently skipped.
+        live = subprocess.run(["curl", "-sL", "http://divi-test.local/probe-divi-ai-emergency-plumber/"],
                               capture_output=True, text=True).stdout
         if "et_pb_section" not in live:
             self.skipTest("page 11 not reachable")
