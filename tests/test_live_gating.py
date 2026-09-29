@@ -31,6 +31,14 @@ class LiveGatingTest(unittest.TestCase):
             with self.subTest(obj.__qualname__):
                 self.assertIn("PP_LIVE_TESTS=1", _skip_reason(obj))
 
+    def test_live5_gate_skips_without_flag_and_never_probes_site(self):
+        with mock.patch.dict(os.environ, {}, clear=True), \
+                mock.patch("urllib.request.urlopen", side_effect=AssertionError("site must not be probed")):
+            @_paths.live5_only
+            def sample():
+                pass
+        self.assertIn("PP_LIVE_TESTS=1", _skip_reason(sample))
+
     @unittest.skipIf(os.environ.get("PP_LIVE_TESTS") == "1", "live tests enabled; gating not in effect")
     def test_preview_does_not_read_et_credentials_from_local_site(self):
         import test_preview
