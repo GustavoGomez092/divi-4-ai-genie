@@ -616,11 +616,16 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
         FakeWP.divi_version = "5.13.1"
         FakeWP.page_raw = D5
         FakeWP.page_title = "Existing Title"
+        self.cwd = Path(tempfile.mkdtemp()).resolve()  # where a backup lands when no page file is given
+        self.addCleanup(shutil.rmtree, self.cwd, True)
 
     def run_cli(self, *args):
         env = dict(os.environ, WP_APP_PASSWORD=PASSWORD, DIVI_KEYS_FILE=self.empty_keys_path)
         return subprocess.run([sys.executable, str(SCRIPTS / "publish.py"), *args], capture_output=True, text=True,
-                              env=env)
+                              env=env, cwd=self.cwd)
+
+    def backups(self, where):
+        return sorted(Path(where).glob("page-101-before-stub-*.txt"))
 
     def _file(self, text, name="page.html"):
         d = tempfile.mkdtemp()
@@ -921,6 +926,70 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
         self.assertIn("et_pb_pagebuilder_layout", proc.stderr)
         self.assertIn("101", proc.stderr)
         self.assertIn("/?page_id=101", FakeWP.probes)
+
+    def test_publish_backstop_on_an_already_live_page_does_not_say_now_published(self):
+        FakeWP.page_status = "publish"
+        FakeWP.page_meta = {"_et_pb_use_builder": "on"}
+        FakeWP.page_html = '<html><body class="page page-id-101 et_right_sidebar"></body></html>'
+        proc = self.publish(D5)
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn("page 101 is published, but", proc.stderr)
+        self.assertNotIn("now published", proc.stderr)
+
+    # --- the stub: backups, recovery hints, never published -------------------------------------
+    def test_publish_without_content_batch_failure_backs_up_the_page_and_names_the_recovery(self):
+        original = D5.replace("\n", "\r\n")
+        FakeWP.page_raw = original
+        FakeWP.batch_statuses = (200, 400)
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101", "--yes")
+        self.assertEqual(proc.returncode, 2)
+        (backup,) = self.backups(self.cwd)
+        self.assertEqual(backup.read_bytes(), original.encode("utf-8"))
+        self.assertIn(str(backup), proc.stderr)
+        self.assertIn(f"publish.py publish --page-id 101 --content {backup} --yes", proc.stderr)
+        self.assertIn(f"publish.py draft {backup} --page-id 101", proc.stderr)
+        self.assertFalse(any(json.loads(c["body"]).get("status") == "publish" for c in FakeWP.calls
+                             if c["method"] == "POST" and c["path"] == "/wp-json/wp/v2/pages/101"))
+
+    def test_publish_without_content_on_a_stubbed_page_is_refused(self):
+        for raw in (STUB, STUB + "\n", "  " + STUB + "\r\n"):
+            with self.subTest(raw=raw):
+                FakeWP.calls.clear()
+                FakeWP.page_raw, FakeWP.page_meta = raw, {"_et_pb_use_builder": ""}
+                proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101", "--yes")
+                self.assertEqual(proc.returncode, 1, proc.stderr)
+                self.assertIn("stub", proc.stderr)
+                self.assertIn("--content", proc.stderr)
+                self.assertEqual([m for m, _ in self.rest()], ["GET"])
+                self.assertEqual(self.backups(self.cwd), [])
+
+    def test_publish_content_on_a_stubbed_page_goes_through_stub_batch_and_verify(self):
+        FakeWP.page_raw, FakeWP.page_meta = STUB, {"_et_pb_use_builder": ""}
+        page = self._file(D5)
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
+                            "--content", str(page), "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self._assert_stub_then_publish(D5)
+        self.assertEqual(self.backups(page.parent), [])  # the page held only the stub: nothing to back up
+
+    def test_draft_existing_page_is_backed_up_next_to_the_page_file_before_the_stub(self):
+        page = self._file(D5)
+        FakeWP.batch_statuses = (200, 400)
+        proc = self.run_cli("draft", str(page), "--site", self.site, "--user", "editor", "--title", "T",
+                            "--page-id", "101")
+        self.assertEqual(proc.returncode, 2)
+        (backup,) = self.backups(page.parent)
+        self.assertEqual(backup.read_text(encoding="utf-8"), D5)
+        self.assertIn(str(backup), proc.stderr)
+        self.assertIn(f"publish.py draft {page} --page-id 101", proc.stderr)
+
+    def test_meta_not_stored_hint_names_the_retry_command(self):
+        FakeWP.batch_echo = None
+        page = self._file(D5)
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
+                            "--content", str(page), "--yes")
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn(f"publish.py publish --page-id 101 --content {page} --yes", proc.stderr)
 
     def test_publish_backstop_passes_when_the_published_page_has_the_builder_layout(self):
         FakeWP.page_html = ('<html><body class="page-template-default page page-id-101 et_pb_pagebuilder_layout '

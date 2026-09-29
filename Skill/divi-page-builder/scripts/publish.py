@@ -34,7 +34,9 @@ problems are refused. On Divi 5 the builder meta `_et_pb_use_builder=on` cannot 
 one /batch/v1 request (touch the title; set content + meta) and checks the stored meta, exit 2 if it is not
 `on`. `publish` on a page that isn't live yet runs the same stub + batch (with --content, or the page's current
 content) before changing the status; on a live page `--content` sends content only and refuses when the meta is
-known off; a Divi 5 page left published is checked on its public HTML (exit 2 without the builder layout). Page files are
+known off; a Divi 5 page left published is checked on its public HTML (exit 2 without the builder layout). Before
+the stub replaces an existing page's content, that content is saved to page-<ID>-before-stub-<time>.txt (next to the
+page file, else the current directory); `publish` without --content refuses a page holding only the stub. Page files are
 read and written byte-exact (CRLF kept) for block content. See reference/publishing.md, "Divi 5".
 Exit status: 0 ok, 1 validation errors or refused, 2 usage/HTTP/I-O error.
 """
@@ -46,6 +48,7 @@ import json
 import mimetypes
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -338,21 +341,54 @@ def front_end_state(page):
     return "on" if "et_pb_pagebuilder_layout" in classes else "off"
 
 
-def _stub_hint(page_id) -> str:
-    return (f"Page {page_id} is still unpublished and may hold the Divi 4 stub (any earlier content is in its "
-            f"revisions, if revisions are enabled); rerun with --page-id {page_id} to retry.")
+def is_stub(raw) -> bool:
+    """The page holds only the Divi 4 stub an interrupted builder-meta sequence can leave behind."""
+    return isinstance(raw, str) and raw.strip() == D4_STUB
 
 
-def _check_batch(responses, page_id):
+def backup_before_stub(page_id, raw, page_file=None):
+    """Save the page's current content.raw before it is replaced by the stub, next to the input page file (cwd
+    when there is none); print and return the path. None when there is nothing worth keeping."""
+    if not isinstance(raw, str) or not raw.strip() or is_stub(raw):
+        return None
+    folder = Path(page_file).resolve().parent if page_file else Path.cwd()
+    stamp = time.strftime("%Y%m%d-%H%M%S")
+    path, n = folder / f"page-{page_id}-before-stub-{stamp}.txt", 1
+    while path.exists():
+        n += 1
+        path = folder / f"page-{page_id}-before-stub-{stamp}-{n}.txt"
+    with open(path, "x", encoding="utf-8", newline="") as fh:
+        fh.write(raw)
+    print(f"publish.py: saved page {page_id}'s current content to {path} before replacing it with the Divi 4 "
+          f"stub", file=sys.stderr)
+    return path
+
+
+def recovery_hint(page_id, page_file=None, backup=None, title=None) -> str:
+    """The exact commands that finish an interrupted builder-meta sequence."""
+    source = page_file or backup
+    parts = [f"Page {page_id} is not published and may hold only the Divi 4 stub."]
+    if backup:
+        parts.append(f"Its previous content is saved in {backup}.")
+    if source:
+        t = title.replace('"', '\\"') if title else "…"
+        parts.append(f'Retry with `publish.py draft {source} --page-id {page_id} --title "{t}"` (keeps it a draft) '
+                     f"or, once approved, `publish.py publish --page-id {page_id} --content {source} --yes`.")
+    else:
+        parts.append(f"Retry with `publish.py draft PAGE --page-id {page_id} --title …` using your page file.")
+    return " ".join(parts)
+
+
+def _check_batch(responses, page_id, hint=""):
     if len(responses) != 2 or any(r.get("status") != 200 for r in responses):
         detail = "; ".join(f"request {i + 1}: HTTP {r.get('status')} — {(r.get('body') or {}).get('code', '')}: "
                            f"{(r.get('body') or {}).get('message', '')}" for i, r in enumerate(responses)
                            if r.get("status") != 200) or f"{len(responses)} responses"
-        raise PublishError(f"POST /batch/v1 failed ({detail}). {_stub_hint(page_id)}")
+        raise PublishError(f"POST /batch/v1 failed ({detail}). {hint}")
     return responses[1].get("body") or {}
 
 
-def builder_meta_sequence(wp, page_id, title, content):
+def builder_meta_sequence(wp, page_id, title, content, hint=""):
     """The batch that sets content + _et_pb_use_builder (the page must hold D4_STUB), then the read-back.
     Returns the read-back page; raises MetaNotStored when the meta did not stick."""
     item = f"/wp/v2/pages/{page_id}"
@@ -362,8 +398,8 @@ def builder_meta_sequence(wp, page_id, title, content):
             {"method": "POST", "path": item, "body": {"content": content, "meta": {BUILDER_META: "on"}}},
         ])
     except PublishError as exc:
-        raise PublishError(f"{exc}. {_stub_hint(page_id)}") from None
-    written = _check_batch(responses, page_id)
+        raise PublishError(f"{exc}. {hint}") from None
+    written = _check_batch(responses, page_id, hint)
     back = wp.request("GET", f"/pages/{page_id}?context=edit")
     # The batch's own response reads the stored meta right after writing it (the key is registered in that
     # process); a plain GET of Divi 5 content cannot show the key, but when it does, it must agree.
@@ -380,14 +416,17 @@ class MetaNotStored(Exception):
     pass
 
 
-def stub_then_meta(wp, page_id, stub_body, title, content):
-    """Write the Divi 4 stub (stub_body carries it), then builder_meta_sequence. Only for pages that are not live.
-    Returns the read-back page, or None after printing META_NOT_STORED (the caller exits 2)."""
+def stub_then_meta(wp, current, page_id, stub_body, title, content, page_file=None):
+    """Back up the page's current content, write the Divi 4 stub (stub_body carries it), then
+    builder_meta_sequence. Only for pages that are not live. Returns (read-back page or None when the meta did not
+    stick, recovery hint)."""
+    backup = backup_before_stub(page_id, (current.get("content") or {}).get("raw"), page_file)
+    hint = recovery_hint(page_id, page_file, backup, title)
     wp.request("POST", f"/pages/{page_id}", json_body=stub_body)
     try:
-        return builder_meta_sequence(wp, page_id, title, content)
+        return builder_meta_sequence(wp, page_id, title, content, hint), hint
     except MetaNotStored:
-        return None
+        return None, hint
 
 
 def _draft_output(wp, page, uploaded):
@@ -413,15 +452,16 @@ def _divi5_draft(wp, a, content, current, page_fields, uploaded):
     stub.update(page_fields)
     if a.page_id:
         page = dict(current, id=a.page_id)
-        back = stub_then_meta(wp, a.page_id, stub, a.title, content)
+        back, hint = stub_then_meta(wp, current, a.page_id, stub, a.title, content, a.page)
     else:
         page = wp.request("POST", "/pages", json_body=stub)
+        hint = recovery_hint(page["id"], a.page, None, a.title)
         try:
-            back = builder_meta_sequence(wp, page["id"], a.title, content)
+            back = builder_meta_sequence(wp, page["id"], a.title, content, hint)
         except MetaNotStored:
             back = None
     if back is None:
-        print(f"page {page['id']} (draft): {META_NOT_STORED}", file=sys.stderr)
+        print(f"page {page['id']} (draft): {META_NOT_STORED} {hint}", file=sys.stderr)
         return 2
     _draft_output(wp, {**page, **{k: back[k] for k in ("status", "link") if back.get(k)}}, uploaded)
     return 0
@@ -464,11 +504,12 @@ def _page_title(current, page_id) -> str:
     return title
 
 
-def _backstop(page) -> int:
-    """After a Divi 5 page went public: its public HTML must carry the builder layout."""
+def _backstop(page, was_live=False) -> int:
+    """After publish leaves a Divi 5 page public: its public HTML must carry the builder layout."""
     if page.get("status") != "publish" or front_end_state(page) != "off":
         return 0
-    print(f"page {page['id']} is now published, but its public page lacks et_pb_pagebuilder_layout: "
+    state = "is published" if was_live else "is now published"
+    print(f"page {page['id']} {state}, but its public page lacks et_pb_pagebuilder_layout: "
           f"_et_pb_use_builder is not on, so it renders inside the theme's title+sidebar template. Fix it now: open "
           f"the page once in the Divi builder and save, or `wp post meta update {page['id']} _et_pb_use_builder on "
           f"--user=<admin>`, or switch it back to draft. See reference/publishing.md → Divi 5 builder meta.",
@@ -523,6 +564,13 @@ def cmd_publish(wp, a):
     status = current.get("status")
     keep_visibility = status in KEEP_VISIBILITY and a.status != "publish"
     current_raw = (current.get("content") or {}).get("raw") or ""
+    if not a.content and is_stub(current_raw):
+        print(f"page {a.page_id} holds only the Divi 4 stub `{D4_STUB}` left by an interrupted builder-meta "
+              f"sequence; publishing it would put an empty page live. Send the real content with it: "
+              f"`publish.py publish --page-id {a.page_id} --content PAGE --yes` (or `publish.py draft PAGE --page-id "
+              f"{a.page_id} --title …` to keep it a draft), where PAGE is your page file or the "
+              f"page-{a.page_id}-before-stub-*.txt backup publish.py saved.", file=sys.stderr)
+        return 1
     divi5 = kind == "blocks" or (not a.content and divi_format.detect_content(current_raw) == "blocks")
     plan = None
     if a.content:
@@ -551,13 +599,15 @@ def cmd_publish(wp, a):
             plan, content = "stub", current_raw
     if plan == "stub":
         # Not live yet: set the builder meta with the verified sequence, and only then make the page public.
-        if stub_then_meta(wp, a.page_id, {"content": D4_STUB}, _page_title(current, a.page_id), content) is None:
-            print(f"page {a.page_id} ({status}, not published): {META_NOT_STORED}", file=sys.stderr)
+        back, hint = stub_then_meta(wp, current, a.page_id, {"content": D4_STUB}, _page_title(current, a.page_id),
+                                    content, a.content)
+        if back is None:
+            print(f"page {a.page_id} ({status}, not published): {META_NOT_STORED} {hint}", file=sys.stderr)
             return 2
         body = {"status": "publish"}
     page = wp.request("POST", f"/pages/{a.page_id}", json_body=body)
     _print({"id": page["id"], "status": page.get("status", ""), "link": page.get("link", "")})
-    return _backstop(page) if divi5 else 0
+    return _backstop(page, was_live=status == "publish") if divi5 else 0
 
 
 def cmd_keys(a) -> int:

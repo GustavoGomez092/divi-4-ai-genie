@@ -250,15 +250,27 @@ What `publish.py` does with the meta:
 | `publish` without `--content` | live, or a page without Divi 5 blocks | — | unchanged from Divi 4 (status only) |
 
 **Backstop.** Whenever `publish` leaves a Divi 5 page published, it reads the public page. If the body lacks
-`et_pb_pagebuilder_layout` (and carries the page's own `page-id-ID`), it exits 2 and says how to fix it. The page is
-live at that point, so fix it at once: set the meta or switch the page back to draft.
+`et_pb_pagebuilder_layout` (and carries the page's own `page-id-ID`), it exits 2 and says how to fix it ("is now
+published" for a page this command made public, "is published" for one that already was). The page is live at that
+point, so fix it at once: set the meta or switch the page back to draft.
 
-**When the meta doesn't stick** `draft` (and `publish`, before any status change) exits 2 with "WordPress did not store _et_pb_use_builder=on; the page will
-render inside the theme's title+sidebar template. See reference/publishing.md → Divi 5 builder meta." The page is
-still unpublished and holds the real content. A failed batch (exit 2) names the page, which may still hold the stub;
-any earlier content is in its revisions, if revisions are enabled. Either way, rerun `draft … --page-id ID` to retry, or set the meta with WP-CLI
-(`wp post meta update ID _et_pb_use_builder on --user=<admin>`; always pass `--user`, see CSS below). If Divi changes
-how it registers the key, the live test catches it.
+**Before the stub is written** (an existing page, in `draft --page-id` or `publish`), `publish.py` saves the page's
+current `content.raw` to `page-<ID>-before-stub-<timestamp>.txt`, next to the input page file (the current
+directory when `publish` has no `--content`), and prints the path. The stub is the only copy on the site otherwise,
+and revisions may be disabled.
+
+**When the meta doesn't stick** `draft` (and `publish`, before any status change) exits 2 with "WordPress did not
+store _et_pb_use_builder=on; the page will render inside the theme's title+sidebar template. See
+reference/publishing.md → Divi 5 builder meta." The page is still unpublished and holds the real content. A failed
+batch (exit 2) leaves the page unpublished and possibly holding only the stub. Both messages name the backup and the
+exact commands to finish: `publish.py draft PAGE --page-id ID --title "…"` (stays a draft) or, once approved,
+`publish.py publish --page-id ID --content PAGE --yes`, where PAGE is your page file or the backup. Or set the meta
+with WP-CLI (`wp post meta update ID _et_pb_use_builder on --user=<admin>`; always pass `--user`, see CSS below).
+If Divi changes how it registers the key, the live test catches it.
+
+**A page holding only the stub is never published as it is.** `publish --page-id ID --yes` without `--content`
+refuses (exit 1) when the page's `content.raw` is exactly `[et_pb_section][/et_pb_section]` (ignoring surrounding
+whitespace). With `--content` the new content replaces the stub through the verified stub + batch path.
 
 ### Local images in blocks
 

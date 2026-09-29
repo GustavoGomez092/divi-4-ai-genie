@@ -51,6 +51,7 @@ class Divi5PublishLiveTest(unittest.TestCase):
         self.admin = self.wp("user", "list", "--role=administrator", "--field=user_login").splitlines()[0]
         self.password = self.wp("user", "application-password", "create", self.admin, APP_NAME, "--porcelain")
         self.pages, self.media = [], []
+        self.cwd = self.tmpdir()  # stub backups land next to the page file, or here when there is none
         fd, self.keys = tempfile.mkstemp(suffix=".json")
         os.close(fd)
         Path(self.keys).write_text(json.dumps({"keys": []}))
@@ -68,7 +69,8 @@ class Divi5PublishLiveTest(unittest.TestCase):
     def publish_py(self, *args):
         env = dict(os.environ, WP_APP_PASSWORD=self.password, DIVI_KEYS_FILE=self.keys)
         proc = subprocess.run([sys.executable, str(SCRIPTS / "publish.py"), *map(str, args), "--site", SITE5_URL,
-                               "--user", self.admin], capture_output=True, text=True, env=env, timeout=300)
+                               "--user", self.admin], capture_output=True, text=True, env=env, timeout=300,
+                              cwd=self.cwd)
         self.assertNotIn(self.password, proc.stdout + proc.stderr)
         return proc
 
@@ -128,16 +130,20 @@ class Divi5PublishLiveTest(unittest.TestCase):
         self.assertIn("Urgent", self.stored(pid))
 
     def test_existing_draft_without_readable_meta_goes_through_stub_and_batch(self):
-        proc = self.draft(FIXTURE)
+        page = self.tmpdir() / "page.html"
+        shutil.copyfile(FIXTURE, page)  # the stub backup is written next to the page file
+        proc = self.draft(page)
         self.assertEqual(proc.returncode, 0, proc.stderr)
         pid = json.loads(proc.stdout)["id"]
         self.wp("post", "meta", "delete", pid, "_et_pb_use_builder", f"--user={self.admin}")
-        proc = self.draft(FIXTURE, "--page-id", pid)
+        proc = self.draft(page, "--page-id", pid)
         self.assertEqual(proc.returncode, 0, proc.stderr)
         self.assertEqual(json.loads(proc.stdout)["id"], pid)
         self.assertEqual(self.meta(pid), "on")
         self.assertEqual(self.wp("post", "get", pid, "--field=post_status"), "draft")
         self.assertNotIn("[et_pb_section]", self.stored(pid))
+        (backup,) = page.parent.glob(f"page-{pid}-before-stub-*.txt")
+        self.assertIn("wp:divi/placeholder", backup.read_text(encoding="utf-8"))
 
     def test_publish_without_content_sets_the_meta_before_making_a_draft_public(self):
         proc = self.draft(FIXTURE)
@@ -151,6 +157,8 @@ class Divi5PublishLiveTest(unittest.TestCase):
         classes = _body_classes(self.front_end(pid))
         self.assertIn("et_pb_pagebuilder_layout", classes)
         self.assertNotIn("[et_pb_section]", self.stored(pid))
+        (backup,) = self.cwd.glob(f"page-{pid}-before-stub-*.txt")  # content.raw saved before the stub
+        self.assertIn("wp:divi/placeholder", backup.read_text(encoding="utf-8"))
 
     def test_local_block_image_is_uploaded_and_rewritten(self):
         tmp = self.tmpdir()
