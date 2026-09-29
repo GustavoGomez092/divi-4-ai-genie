@@ -1,6 +1,6 @@
 # Divi 5 render fidelity fixtures (tests/test_render5_fidelity.py)
 
-Divi 5 block pages for the Python renderer's parity corpus (`scripts/divi5_render`, Task 21-R5). Their truth is
+Divi 5 block pages for the Python renderer's parity corpus (`research/divi5/python-renderer/divi5_render`, parked, Task 21-R5). Their truth is
 real Divi 5 rendered through Playground by `research/tools/ground_truth.py` and cached outside the repo. The
 manifest lists each page's batch, whether it is tuned, the modules it uses and, for recipe pages, the tokens file
 the truth is rendered with (`--tokens`).

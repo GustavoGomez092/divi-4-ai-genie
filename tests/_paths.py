@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "Skill" / "divi-page-builder"
 SCRIPTS = SKILL / "scripts"
 TOOLS = ROOT / "research" / "tools"
+RENDERER5 = ROOT / "research" / "divi5" / "python-renderer"  # parked Divi 5 Python renderer; NOT on sys.path here
 FIXTURES = ROOT / "tests" / "fixtures"
 RAW_SCHEMA = ROOT / "research" / "divi-schema"
 WP_LOCAL = TOOLS / "wp-local.sh"

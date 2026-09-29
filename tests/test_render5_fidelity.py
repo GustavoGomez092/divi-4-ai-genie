@@ -1,4 +1,4 @@
-"""Fidelity of the Divi 5 Python renderer (scripts/divi5_render) against real Divi 5 (Task 21-R5a).
+"""Fidelity of the Divi 5 Python renderer (research/divi5/python-renderer/divi5_render) against real Divi 5 (Task 21-R5a).
 
 Iterates tests/fixtures/render5/manifest.json. Ground truth is real Divi 5 rendered through Playground
 (research/tools/ground_truth.py with the manifest's Divi 5 version, and `--tokens` for recipe pages; cached
@@ -20,7 +20,9 @@ import re
 import unittest
 from pathlib import Path
 
-from _paths import FIXTURES, ROOT  # noqa: F401  (puts scripts + research/tools on sys.path)
+from _paths import RENDERER5, FIXTURES, ROOT  # noqa: F401  (puts scripts + research/tools on sys.path)
+import sys as _sys
+_sys.path.insert(0, str(RENDERER5))  # the parked renderer, only for these tests
 
 import fetch_divi
 import fidelity
@@ -182,8 +184,8 @@ class RenderFidelity5Test(unittest.TestCase):
     def test_batch1_heldout_meets_the_addendum_a_bar(self):
         """The binding gate of Task 21-R5b, on the pre-fix engine. It missed (research/divi5/render-fidelity.md:
         94.3 % of the declarations, a layout shift from the unported disabledOn, 2 extra declarations the coverage
-        report does not name), so this is an expected failure: the controller keeps Playground as the only Divi 5
-        preview. An unexpected success means the engine changed; re-measure and update the record."""
+        report does not name), so this is an expected failure (NO-GO, engine parked: see research/divi5/render-fidelity.md and
+        research/divi5/python-renderer/README.md); Playground stays the only Divi 5 preview. An unexpected success means the engine changed; re-measure and update the record."""
         for fx in (f for f in self.fixtures if not f["tuned"] and f["batch"] == 1):
             res = self.render(fx)
             m = metrics(self.truth[fx["file"]], res.html, res.coverage)

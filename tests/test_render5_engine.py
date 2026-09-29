@@ -1,4 +1,4 @@
-"""Offline checks of the Divi 5 Python renderer's engine (scripts/divi5_render, Task 21-R5b).
+"""Offline checks of the Divi 5 Python renderer's engine (research/divi5/python-renderer/divi5_render, Task 21-R5b).
 
 The parity with real Divi 5 is tests/test_render5_fidelity.py; these pin the documented behaviour that needs
 no Playground: variables and relative colours, preset class names (checked against a live Divi 5 page),
@@ -9,7 +9,9 @@ import json
 import re
 import unittest
 
-from _paths import FIXTURES5, ROOT  # noqa: F401  (puts scripts on sys.path)
+from _paths import RENDERER5, FIXTURES5, ROOT  # noqa: F401  (puts scripts on sys.path)
+import sys as _sys
+_sys.path.insert(0, str(RENDERER5))  # the parked renderer, only for these tests
 
 import fetch_divi
 from divi5_render import base, css, values

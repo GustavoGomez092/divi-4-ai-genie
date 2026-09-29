@@ -318,3 +318,5 @@ Flex/grid layout, interactions, sticky/scroll and loop content are unsupported a
 **Unchanged:** Divi assets are never committed. The WordPress draft is still the authoritative visual check. The
 `.seed.css`/options seeding stays for the Playground path. The Python path reads the same `tokens.json` (global
 colours, variables, presets).
+
+Outcome (2026-09-29): the batch-1 gate FAILED on the pre-fix engine. The held-out page reached 94.3 % of the builder CSS declarations (982/1041) against the 95 % bar, with 2 extra declarations that coverage did not name and a layout shift from the fourth section (disabledOn not ported). Under the pre-registered gate this is NO-GO: the engine is parked in `research/divi5/python-renderer/` (tests still run there, the gate test is an expected failure), Tasks 21-R5c..f are cancelled, and Playground remains the only Divi 5 preview. It is resumable; see `research/divi5/python-renderer/README.md`.

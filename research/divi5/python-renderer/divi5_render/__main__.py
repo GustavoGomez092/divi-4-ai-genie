@@ -2,7 +2,7 @@
 
     python3 -m divi5_render PAGE.html -o OUT.html [--divi 5.13.1] [--tokens tokens.json] [--coverage cov.json]
 
-(run with Skill/divi-page-builder/scripts on PYTHONPATH, or `python3 scripts/divi5_render PAGE …`).
+(run with research/divi5/python-renderer and Skill/divi-page-builder/scripts on PYTHONPATH).
 """
 import argparse
 import json

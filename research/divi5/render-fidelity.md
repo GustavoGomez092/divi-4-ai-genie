@@ -1,6 +1,8 @@
 # Render fidelity: the Divi 5 Python renderer against real Divi 5
 
-The Divi 5 Python renderer (`Skill/divi-page-builder/scripts/divi5_render/`, spec Addendum A, tasks 21-R5a…f) is
+**Outcome (2026-09-29): NO-GO.** Batch-1 held-out gate missed (94.3 % = 982/1041 declarations vs 95 %, 2 unnamed extras, layout shift from unported disabledOn). Renderer parked in `research/divi5/python-renderer/`; Playground stays the only Divi 5 preview.
+
+The Divi 5 Python renderer (`research/divi5/python-renderer/divi5_render/`, parked, spec Addendum A, tasks 21-R5a…f) is
 checked by `tests/test_render5_fidelity.py` against real Divi 5, rendered through Playground by
 `research/tools/ground_truth.py` (the manifest's Divi 5 version, `--tokens` for recipe pages; cached outside the
 repo because it holds Divi's licensed CSS), for every fixture in `tests/fixtures/render5/manifest.json`.

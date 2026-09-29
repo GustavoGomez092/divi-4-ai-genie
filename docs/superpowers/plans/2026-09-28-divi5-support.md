@@ -1221,6 +1221,14 @@ Source: `research/divi5/python-renderer-spike.md` §7–§8 (GO, scoped). Protot
   - Tests.
 - **Task 21-R5f: documentation.** The `preview.md` §8 rewrite (Python default, `--exact`, escalation, fidelity numbers), SKILL.md/README one-liners, and a regeneration/parity checklist for new Divi 5 versions.
 
+**Status (2026-09-29): gate failed (held-out 94.3 % vs 95 %), NO-GO.**
+- 21-R5a: done, parked (harness and tests stay runnable).
+- 21-R5b: done, parked in `research/divi5/python-renderer/` (gate test is an expected failure).
+- 21-R5c: cancelled.
+- 21-R5d: cancelled.
+- 21-R5e: cancelled.
+- 21-R5f: cancelled.
+
 ---
 
 ### Task 22: Final verification

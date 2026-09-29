@@ -16,6 +16,8 @@ Prototype: `research/divi5/python-renderer-spike/`. Rendered HTML, truth renders
 
 ## TL;DR: GO, scoped, with Playground kept as `--exact`
 
+**Outcome (2026-09-29): the build was NO-GO at its batch-1 gate** (held-out 94.3 % of declarations vs 95 %, layout shift from unported disabledOn). The engine is parked in `research/divi5/python-renderer/`; Playground stays the only Divi 5 preview. See `research/divi5/render-fidelity.md`.
+
 - **Reusing `divi_render` by converting Divi 5 back to Divi 4 does not work (measured).** Even with a perfect
   back-conversion (rendering the original D4 source that Divi's converter turned into each D5 fixture), the D4
   renderer's output matches real Divi 5 on only **23–52 % of builder CSS declarations**. Its (tag, class)
