@@ -2,6 +2,12 @@
 (embeds/serves them locally), so both use exactly the same rule: a value in an image attribute
 that is `file://…`, `./…` or `../…`, resolved against the page file's own directory.
 
+Divi 5 block documents (divi5_blocks.Document): the image attributes are the leaves the compiled Divi 5
+schema types `image` (`image.innerContent` `src`, blurb `imageIcon.innerContent` `src`, background
+`image.url`, team member `image.innerContent` `url`, ...). iter_local_images yields an Image5Ref for them,
+set_image5 rewrites one leaf (only that key: the image value has no `id` in Divi 5, and Divi finds the
+attachment from the URL), and the block is re-serialized because set_attr marks it dirty.
+
 publish.py's `draft`/`publish` upload every local reference this module finds; preview.py's
 `render` embeds them as `data:` URIs and `serve` routes them through a per-request allowlist —
 neither preview ever uploads anything or contacts WordPress.
@@ -9,12 +15,17 @@ neither preview ever uploads anything or contacts WordPress.
 from __future__ import annotations
 
 import base64
+import copy
 import hashlib
 import sys
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Dict, Iterator, Optional, Tuple
+from typing import Callable, Dict, Iterator, Optional, Tuple, Union
 from urllib.parse import unquote, urlparse
 
+import divi5_blocks
+from divi5_checks_values import _alt_text
+from divi5_schema import load_schema5
 from divi_checks_values import IMAGE_ATTRS
 from divi_shortcode import Document, Node, escape_attr_value, parse, serialize
 
@@ -40,9 +51,77 @@ def local_path(value: str, base_dir: Path) -> Optional[Path]:
     return None
 
 
-def iter_local_images(doc: Document, base_dir: Path) -> Iterator[Tuple[Node, str, Path]]:
+@dataclass(frozen=True)
+class Image5Ref:
+    """Where one image leaf sits in a Divi 5 block: attrs[attr][breakpoint][state], then `sub` (a dotted key
+    path inside that value; None when the value itself is the URL string)."""
+    attr: str
+    breakpoint: str
+    state: str
+    sub: Optional[str]
+
+    @property
+    def label(self) -> str:
+        return f"{self.attr}.{self.breakpoint}.{self.state}" + (f".{self.sub}" if self.sub else "")
+
+
+def _iter_local_images5(doc: "divi5_blocks.Document", base_dir: Path,
+                        schema5=None) -> Iterator[Tuple["divi5_blocks.Block", Image5Ref, Path]]:
+    schema5 = schema5 or load_schema5()
+    for block, _path, _parent in doc.walk():
+        mod = schema5.module(block.name)
+        if mod is None:
+            continue
+        for attr, bp, st, value in divi5_blocks.iter_leaves(block.attrs):
+            if bp is None:
+                continue
+            for res, v in mod.walk_value(attr, bp, st, value):
+                if res.status != "ok" or not res.leaf or res.leaf.get("type") != "image" or not isinstance(v, str):
+                    continue
+                local = local_path(v, base_dir)
+                if local is None:
+                    continue
+                yield block, Image5Ref(attr, bp, st, res.sub_path if res.attr_path == attr else None), local
+
+
+def set_image5(block: "divi5_blocks.Block", ref: Image5Ref, url: str) -> None:
+    """Set one image leaf to *url*; nothing else in the block changes (builderVersion included)."""
+    if ref.sub is None:
+        divi5_blocks.set_attr(block, ref.attr, url, ref.breakpoint, ref.state)
+        return
+    value = copy.deepcopy(divi5_blocks.get_attr(block, ref.attr, ref.breakpoint, ref.state))
+    keys = ref.sub.split(".")
+    cur = value
+    for k in keys[:-1]:
+        cur = cur[k]
+    cur[keys[-1]] = url
+    divi5_blocks.set_attr(block, ref.attr, value, ref.breakpoint, ref.state)
+
+
+def image_alt5(block: "divi5_blocks.Block", ref: Image5Ref) -> str:
+    """The alt text the page gives this image: the `alt` (else `titleText`) beside the leaf, else (for the
+    image module) the converter's module.decoration.attributes alt; "" when there is none."""
+    if ref.sub is not None:
+        parent = divi5_blocks.get_attr(block, ref.attr, ref.breakpoint, ref.state)
+        for k in ref.sub.split(".")[:-1]:
+            parent = parent.get(k) if isinstance(parent, dict) else None
+        if isinstance(parent, dict):
+            for key in ("alt", "titleText"):
+                if isinstance(parent.get(key), str) and parent[key].strip():
+                    return parent[key]
+    if ref.attr == "image.innerContent":
+        return _alt_text(block)
+    return ""
+
+
+def iter_local_images(doc: Union[Document, "divi5_blocks.Document"],
+                      base_dir: Path) -> Iterator[Tuple[Union[Node, "divi5_blocks.Block"], Union[str, Image5Ref], Path]]:
     """Every (node, attr, local path) for local image references in *doc*, resolved against
-    base_dir. Does not check whether the file exists -- callers decide what to do about that."""
+    base_dir. Does not check whether the file exists -- callers decide what to do about that.
+    For a Divi 5 block document: (block, Image5Ref, local path)."""
+    if isinstance(doc, divi5_blocks.Document):
+        yield from _iter_local_images5(doc, base_dir)
+        return
     for node, _path, _parent in doc.walk():
         for attr in list(node.attrs):
             if not is_image_attr(attr):

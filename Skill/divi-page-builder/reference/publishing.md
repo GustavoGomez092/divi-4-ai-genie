@@ -46,7 +46,8 @@ false}` when the section is absent, and never the `api_key`.
 
 ## Using publish.py
 
-`scripts/publish.py` wraps the REST flow below into five commands. Credentials come from either
+`scripts/publish.py` wraps the REST flow below into five commands. It handles Divi 5 (block) pages
+too, with a different save sequence and extra refusals: see "Divi 5" below. Credentials come from either
 a `keys.json` file (`--key NAME`) or, for backward compatibility, `--site`/`--user` plus env
 `WP_APP_PASSWORD` — see "Credentials: keys.json" below. Never a flag, never printed.
 
@@ -157,7 +158,8 @@ writing anything and refuse (exit 1 — no uploads, no draft/publish) if there a
 errors, printing each finding to stderr the same way `validate.py` does. Like
 `validate.py --baseline`, they validate against a **baseline**: `--baseline original.txt` if
 given, otherwise — whenever `--page-id` is given — the page's current `content.raw` (read with
-`GET /pages/ID?context=edit`, the only HTTP call made before validation). Errors already present
+`GET /pages/ID?context=edit`, the only REST call made before validation; the Divi version check
+also fetches the theme's public `style.css`, see "Divi 5"). Errors already present
 in the baseline (for example a Divi 3 `use_border_color` on a legacy page, `E_UNKNOWN_ATTR`)
 are pre-existing and don't block; any new error still does. A brand-new page (`draft` without
 `--page-id` or `--baseline`) has no baseline, so every error blocks. Local image
@@ -170,6 +172,144 @@ change a private/scheduled page's visibility · `2` usage error (including a mis
 `WP_APP_PASSWORD`, a malformed `--page-fields`, or a missing local image), HTTP error, or I/O
 error. HTTP error messages include only the method/path and WordPress's own `code`/`message`
 — never the password or a full URL with credentials.
+
+## Divi 5
+
+Everything above describes Divi 4 pages. `publish.py` handles Divi 5 pages with the same commands and the same
+approval rules (preview first, draft first, `publish --yes` only after approval). What differs is below. Evidence:
+`storage-and-serialization.md` §2.2-2.4 and its "Addendum" (research, repo only), re-verified on the local Divi 5
+site (WordPress 7.1.2, Divi 5.13.1) by `tests/test_divi5_publish_live.py`.
+
+### Detection and refusals
+
+`draft` and `publish --content` look at two things before any REST request:
+
+- **The page file's format** (`divi_format.detect_content`): `[et_pb_…` shortcode is Divi 4, `<!-- wp:divi/…`
+  blocks are Divi 5. Mixed content fails validation.
+- **The site's Divi major version**: `tokens.json` `site.divi_major` (or `site.divi_version`) when `draft --tokens`
+  is given, otherwise `divi_format.detect_site` (the theme's `style.css` version, else `?ver=` asset versions and
+  Divi 5 markers on the home page). Detection runs once per command and fetches public files only.
+
+| page file | site | result |
+|---|---|---|
+| Divi 4 shortcode | Divi 5 | **refused**, exit 1: "this is Divi 4 shortcode; the site runs Divi 5 — write Divi 5 blocks (reference/divi5/page-format.md)". A shortcode page on a Divi 5 site renders through a degraded legacy path and is never converted. |
+| Divi 5 blocks | Divi 4 | **refused**, exit 1: "this is Divi 5 block content; the site runs Divi 4 — write Divi 4 shortcode (reference/page-format.md)". |
+| either | unknown | a warning ("could not detect the site's Divi version"), then the request for the file's own format. |
+| Divi 5 blocks with parse problems (bad JSON, unclosed or stray block comments) | any | **refused**, exit 1, each problem listed. Rewriting a block whose JSON doesn't parse would drop its attributes, so nothing is sent. |
+
+The rest of the checks (validation with a baseline, local-image preflight, `--page-fields` rules, live-page
+protection) are the same as for Divi 4. Block page files are read and written byte for byte (CRLF line ends
+survive).
+
+### Divi 5 builder meta
+
+A Divi 5 page needs the post meta `_et_pb_use_builder = "on"`. Without it the modules still render, but inside the
+theme's normal page template: an `<h1 class="entry-title">` with the page title and a sidebar (body class
+`et_right_sidebar`). With it the body has `et_pb_pagebuilder_layout et_no_sidebar` and no title or sidebar.
+
+**A plain REST save can't set it on Divi 5.** Divi registers the key for REST only when its Divi 4 shortcode
+framework loads, and in a REST request that happens while `content.rendered` renders a Divi 4 shortcode, after the
+request's meta was handled (`BlockEditorIntegration.php:1060-1080`). `POST /wp/v2/pages {"meta":
+{"_et_pb_use_builder": "on"}}` returns 201 and stores nothing. Divi's own save routes need an `X-ET-Nonce` that an
+Application Password can't get.
+
+**What works** is `/batch/v1`, which runs several REST requests in one PHP process:
+
+1. The page holds a Divi 4 stub, `[et_pb_section][/et_pb_section]`: a new page is created with it
+   (`POST /wp/v2/pages {title, slug?, status: "draft", content: stub, …page-fields}`), an existing draft is
+   overwritten with it (`POST /wp/v2/pages/ID {content: stub, status: "draft"}`).
+2. One `POST /wp-json/batch/v1` with two requests for the page. The first re-saves the title; rendering its
+   response renders the stub, which loads the framework and registers the key. The second sets the real content
+   and `"meta": {"_et_pb_use_builder": "on"}`. Expect HTTP 207 with two 200s.
+3. The check. The second request's own response lists the meta as read back from the database right after the write
+   (the key is registered in that process). `publish.py` requires `"on"` there, then reads the page with
+   `GET /wp/v2/pages/ID?context=edit`, which must not disagree.
+
+Without the stub the same batch stores nothing, and its second response doesn't list the key at all, which is why
+the check fails loudly instead of passing silently. The cost is one extra revision holding the stub.
+
+**A plain `GET ?context=edit` can't show the key for a Divi 5 page.** It renders Divi 5 blocks, not a Divi 4
+shortcode, so the key isn't registered in that request and `meta` comes back without it (verified: `meta` was
+`{"footnotes": ""}` while `wp post meta get` said `on`). The key shows only while a page still holds Divi 4 content,
+for example the stub. `publish.py` therefore treats a missing key as unknown, not as off.
+
+What `publish.py` does with the meta:
+
+| command | page | builder meta | requests |
+|---|---|---|---|
+| `draft` (new page) | — | — | stub create, batch, read-back |
+| `draft --page-id` | draft or pending | shown as `on` | one `POST /pages/ID {title, content, status: "draft"}` |
+| `draft --page-id` | draft or pending | off, or not shown (the usual case for a Divi 5 page) | stub overwrite, batch, read-back |
+| `draft --page-id` | live (publish, future, private) | — | refused, exit 1, as for Divi 4 (never swap a live page's content) |
+| `publish --content` | any | shown as `on`, or (for a published page) the public page's body has `et_pb_pagebuilder_layout` | one `POST /pages/ID {content}` plus `status: "publish"` unless the page is private or scheduled. No `meta`: a content update leaves it as it is. |
+| `publish --content` | any | off (shown off, or the public page lacks `et_pb_pagebuilder_layout`) | **refused**, exit 1. A live page: set the meta in WordPress (open the page once in the Divi builder and save, or `wp post meta update ID _et_pb_use_builder on --user=<admin>`), or publish a reviewed draft copy instead. A draft: run `publish.py draft PAGE --page-id ID --title …` first. |
+| `publish --content` | any | unknown, and the page holds Divi 5 blocks | proceeds with a note (typical after `draft`, which verified the meta) |
+| `publish --content` | any | unknown, and the page holds no Divi 5 blocks | **refused**, exit 1 (it never had the builder meta) |
+| `publish` without `--content` | any | — | unchanged from Divi 4 (status only) |
+
+**When the meta doesn't stick** `draft` exits 2 with "WordPress did not store _et_pb_use_builder=on; the page will
+render inside the theme's title+sidebar template. See reference/publishing.md → Divi 5 builder meta." The page is
+a draft holding the real content. A failed batch (exit 2) names the page, which may still hold the stub; any earlier
+content is in its revisions. Either way, rerun `draft … --page-id ID` to retry, or set the meta with WP-CLI
+(`wp post meta update ID _et_pb_use_builder on --user=<admin>`; always pass `--user`, see CSS below). If Divi changes
+how it registers the key, the live test catches it.
+
+### Local images in blocks
+
+`draft` and `publish --content` upload local images (`./…`, `../…`, `file://…`) in block content too. An image is
+any leaf the Divi 5 schema types `image`: `image.innerContent` `src` (image, fullwidth image, slide, fullwidth
+header), blurb `imageIcon.innerContent` `src`, team member `image.innerContent` `url`, and every background
+`image.url`. Each distinct file is uploaded once, and only that one key is rewritten to the uploaded `source_url`.
+The block is re-serialized in canonical form with its `builderVersion` unchanged; every other block keeps its
+bytes.
+
+- **No `id`.** Divi 5's image value has no attachment id key (the validator rejects one). Divi finds the attachment
+  from the URL: the rendered `<img>` gets `class="wp-image-<id>"`, `srcset` and size attributes.
+- **Alt text lives in the block.** Divi renders `alt` from the image value's own `alt` key and `title` from
+  `titleText`. It does **not** fall back to the Media Library's alt text (verified: an image module without `alt`
+  rendered no `alt` attribute although the attachment had one). Write `alt` in the block. The upload's `alt_text`
+  comes from that `alt`, else `titleText`, else the converter's `module.decoration.attributes` alt, else the file
+  name; `publish.py` never adds an `alt` key to the block.
+
+### `content.raw` and CSS
+
+- On WordPress 7.0 and later, `content.raw` is WordPress's canonical re-serialization of the stored blocks, not
+  the stored bytes (`divi5/page-format.md`). `fetch` says so on stderr for block content. Use the fetched file as
+  the baseline as-is. After a draft, `publish.py` prints a note if the stored `content.raw` differs from the file it
+  sent (expected for converter or builder output, which isn't canonical).
+- **CSS:** a REST update marks the page's files in `wp-content/et-cache/<id>/` stale (`*.stale` markers; Divi 4
+  deleted the directory instead), and the next front-end view regenerates them. Nothing to purge. A WP-CLI update
+  without `--user` skips that and the next view serves the old CSS, so always pass `--user=<admin>`.
+
+### The sequence with curl
+
+For a manual run (`publish.py` does all of this, with the checks). `page.html` is the Divi 5 page file.
+
+```bash
+# 1. create the draft holding the Divi 4 stub
+ID=$(curl -s -u "$WP_USER:$WP_APP_PASSWORD" -H 'Content-Type: application/json' \
+  -d '{"title": "Emergency Plumber in Miami", "status": "draft", "content": "[et_pb_section][/et_pb_section]"}' \
+  "$SITE/wp-json/wp/v2/pages" | python3 -c 'import json, sys; print(json.load(sys.stdin)["id"])')
+
+# 2. one batch: re-save the title (renders the stub, registers the key), then content + meta
+python3 - "$ID" > batch.json <<'PY'
+import json, sys
+pid = sys.argv[1]
+content = open("page.html", encoding="utf-8", newline="").read()
+print(json.dumps({"requests": [
+    {"method": "POST", "path": f"/wp/v2/pages/{pid}", "body": {"title": "Emergency Plumber in Miami"}},
+    {"method": "POST", "path": f"/wp/v2/pages/{pid}",
+     "body": {"content": content, "meta": {"_et_pb_use_builder": "on"}}}]}))
+PY
+curl -s -u "$WP_USER:$WP_APP_PASSWORD" -H 'Content-Type: application/json' -d @batch.json \
+  "$SITE/wp-json/batch/v1" | python3 -c '
+import json, sys
+r = json.load(sys.stdin)["responses"]
+print([x["status"] for x in r], r[1]["body"].get("meta", {}).get("_et_pb_use_builder"))'
+# expect: [200, 200] on
+```
+
+Anything else (`None`, or a non-200) means the meta wasn't stored: the page renders in the theme's template.
 
 ## Raw REST reference
 

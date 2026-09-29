@@ -133,5 +133,65 @@ class RouteTokenTest(unittest.TestCase):
         self.assertRegex(t1, r"^[A-Za-z0-9_-]+$")
 
 
+class IterLocalImages5Test(unittest.TestCase):
+    """The Divi 5 (block) branch: image leaves are the schema5 leaves typed `image` (image.innerContent src,
+    blurb imageIcon.innerContent src, background image.url, ...)."""
+    SOURCE = ('<!-- wp:divi/placeholder -->'
+              '<!-- wp:divi/section {"module":{"decoration":{"background":{"desktop":{"value":'
+              '{"image":{"url":"./img/bg.jpg"}}}}}},"builderVersion":"5.13.1"} -->'
+              '<!-- wp:divi/row {"builderVersion":"5.13.1"} --><!-- wp:divi/column {"builderVersion":"5.13.1"} -->'
+              '<!-- wp:divi/image {"image":{"innerContent":{"desktop":{"value":{"src":"./img/a.png","alt":"A"}}}},'
+              '"builderVersion":"5.0.0-public-beta.1"} /-->'
+              '<!-- wp:divi/image {"image":{"innerContent":{"desktop":{"value":{"src":"https://example.com/r.jpg"}}}},'
+              '"builderVersion":"5.13.1"} /-->'
+              '<!-- wp:divi/blurb {"imageIcon":{"innerContent":{"desktop":{"value":{"src":"file://__FILE__"}}}},'
+              '"builderVersion":"5.13.1"} /-->'
+              '<!-- wp:divi/text {"content":{"innerContent":{"desktop":{"value":"./img/not-an-image-leaf.png"}}},'
+              '"builderVersion":"5.13.1"} /-->'
+              '<!-- /wp:divi/column --><!-- /wp:divi/row --><!-- /wp:divi/section --><!-- /wp:divi/placeholder -->')
+
+    def _doc(self, base):
+        from divi5_blocks import parse as parse5
+        return parse5(self.SOURCE.replace("__FILE__", str(base / "b.gif")))
+
+    def test_finds_image_leaves_by_schema_type(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            found = list(local_media.iter_local_images(self._doc(base), base))
+        got = sorted((block.name, ref.attr, ref.breakpoint, ref.state, ref.sub, str(path))
+                     for block, ref, path in found)
+        self.assertEqual(got, sorted([
+            ("divi/section", "module.decoration.background", "desktop", "value", "image.url",
+             str((base / "img" / "bg.jpg").resolve())),
+            ("divi/image", "image.innerContent", "desktop", "value", "src", str((base / "img" / "a.png").resolve())),
+            ("divi/blurb", "imageIcon.innerContent", "desktop", "value", "src", str(base / "b.gif")),
+        ]))
+
+    def test_set_image5_rewrites_only_that_leaf_and_keeps_builder_version(self):
+        from divi5_blocks import serialize as serialize5
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            doc = self._doc(base)
+            for block, ref, _path in list(local_media.iter_local_images(doc, base)):
+                if block.name == "divi/image":
+                    local_media.set_image5(block, ref, "https://site.test/wp-content/uploads/a.png")
+            out = serialize5(doc)
+        self.assertIn('{"image":{"innerContent":{"desktop":{"value":{"src":"https://site.test/wp-content/uploads/a.png",'
+                      '"alt":"A"}}}},"builderVersion":"5.0.0-public-beta.1"}', out)
+        self.assertNotIn('"id"', out)
+        # every other block keeps its exact source bytes
+        self.assertIn('"url":"./img/bg.jpg"', out)
+        self.assertIn('"src":"file://', out)
+        self.assertEqual(out.replace("https://site.test/wp-content/uploads/a.png", "./img/a.png"),
+                         self.SOURCE.replace("__FILE__", str(base / "b.gif")))
+
+    def test_upload_alt_prefers_sibling_alt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            found = {b.name: (b, r) for b, r, _p in local_media.iter_local_images(self._doc(base), base)}
+        self.assertEqual(local_media.image_alt5(*found["divi/image"]), "A")
+        self.assertEqual(local_media.image_alt5(*found["divi/blurb"]), "")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -18,7 +18,7 @@ text, HTML, URLs, styles (`storage-and-serialization.md` §1.1).
 | what | where | does a page you write touch it? |
 |---|---|---|
 | the layout and all content | `post_content`: `divi/*` blocks inside one `divi/placeholder` block | **yes**, it is what you write |
-| builder flags | post meta `_et_pb_use_builder` (required, see [Post meta](#post-meta)), `_et_pb_use_divi_5` | set when publishing |
+| builder flags | post meta `_et_pb_use_builder` (required, see [Post meta](#post-meta)), `_et_pb_use_divi_5` | `publish.py` sets `_et_pb_use_builder` |
 | page settings (custom CSS, gutter width, …) | post meta, under the Divi 4 key names (`_et_pb_custom_css`, …) | no |
 | Customizer settings and **global colors** | option `et_divi`: the five Customizer colors (`accent_color`, …) and `et_divi['et_global_data']['global_colors']` | no, read only |
 | **design variables** (numbers, fonts, images, strings, links, gradients) | option `et_divi_global_variables` | no, read only |
@@ -170,7 +170,7 @@ A text whose HTML has quotes, `&`, tags and `--`:
 | meta key | value | needed? |
 |---|---|---|
 | `_et_pb_use_builder` | `on` | **Yes.** Without it the modules still render and are styled, but inside the theme's normal page template: an `<h1 class="entry-title">` with the page title and a sidebar. With it: body classes `et_pb_pagebuilder_layout et_no_sidebar`, no title, no sidebar. `et_pb_is_pagebuilder_used()` reads only this key (`includes/builder/core.php:4216-4234`). |
-| `_et_pb_use_divi_5` | `on` | Not for rendering. The Visual Builder writes it on save and the Divi 5 Migrator skips pages that have it; set it anyway. |
+| `_et_pb_use_divi_5` | `on` | Not for rendering. The Visual Builder writes it on save and the Divi 5 Migrator skips pages that have it. REST can't set it: Divi 5.13.1 never registers it (`register_meta`) for REST, so `publish.py` doesn't send it. To set it, use WP-CLI: `wp post meta update <id> _et_pb_use_divi_5 on --user=<admin>`. |
 | `_et_pb_show_page_creation` | `off` | Optional; hides the builder's "create page" prompt. |
 
 ### Why REST needs `publish.py`
@@ -188,7 +188,9 @@ The sequence that works, verified live (`storage-and-serialization.md`, "Addendu
 2. Send one `POST /batch/v1` with two requests for that page. The first re-saves the title; rendering its
    response loads the shortcode framework, which registers the key. The second, in the same PHP process, sends the
    real block content and `"meta": {"_et_pb_use_builder": "on"}`. Expect 207 with two 200s.
-3. Read the page back (`?context=edit`) and check `meta._et_pb_use_builder == "on"`.
+3. Check the second response's `meta._et_pb_use_builder == "on"`: it is read from the database right after the
+   write, while the key is registered. A later plain `GET ?context=edit` can't show the key for a page holding Divi 5
+   blocks (nothing registers it in that request, so `meta` comes back without it); it must just not say otherwise.
 
 Without the stub, the same batch stores nothing. The cost is one extra revision holding the stub.
 **Use `publish.py`**, which runs this sequence for Divi 5 sites and checks the read-back (see
