@@ -48,4 +48,38 @@ declarations, show no layout shift, and every other miss must be named by the co
 
 ## Measurements
 
-(Rows are added by `RENDER5_FIDELITY_RECORD=1`; the batch-1 held-out pre-fix row comes first.)
+| Fixture | Stage | Modules | Tuned | Markup ratio | Identical class lists | Builder CSS (common/truth) | Declarations | Extra | Coverage-ignored | Date |
+|---|---|---|---|---|---|---|---|---|---|---|
+| b1-heldout.html | R5b held-out pre-fix | button, column, heading, image, row, section, text | no | 0.9902 | 19/154 | 982/1041 | 94.3 % | 2 | 12 | 2026-09-29 |
+
+### Batch 1 gate: GATE_FAILED (measured 2026-09-29)
+
+The four tuned fixtures match exactly (sequence equal, `.et-l` byte-identical, 0 missing, 0 extra, nothing
+coverage-ignored). The held-out page's truth was rendered before the engine was written, and its diffs were first
+looked at after the pre-fix row above was recorded. No fix was made after it (the gate is on the pre-fix numbers).
+
+| Gate criterion | Result | Verdict |
+|---|---|---|
+| ≥ 95 % of the builder CSS declarations | **982/1041 = 94.3 %** (59 missing, 2 extra) | missed by 7 declarations |
+| No layout shift | **shift:** section 4 ("Alternating Features") is 177 px taller at 1440 px and 280 px taller at 390 px, and everything below it moves; sections 1–3 are geometry-identical (every order-classed element) at both widths | missed |
+| Every other miss named by coverage | the 59 missing are all named; the **2 extra are not** | missed |
+
+What the misses are (after recording):
+
+| Miss | Declarations | Named by coverage | Visible |
+|---|---|---|---|
+| Image `module.decoration.filters` (saturate 0 %, 100 % on hover, and its filter transition) on the 5 trust-bar logos | 30 missing | yes (`image:module.decoration.filters.saturate`) | colour instead of grey logos |
+| Text `content.decoration.bodyFont.quote` (blockquote font and border colour) on 5 Divi AI texts | 20 missing | yes (`text:content.decoration.bodyFont.quote.*`) | no (the texts have no blockquote) |
+| Section bottom divider (`module.advanced.dividers.bottom`), its rules and its `et_pb_bottom_inside_divider` element plus the section's `section_has_divider et_pb_bottom_divider` classes | 6 missing, 1 element, 1 class list | yes (`section:module.advanced.dividers.bottom.*`) | the divider shape is missing (no geometry change) |
+| Row `module.decoration.disabledOn` (the recipe's mobile/desktop row variants) | 3 missing | yes (`row:module.decoration.disabledOn`) | **the layout shift:** both row variants show |
+| A section background image without `size`/`position` gets `background-size:cover` and `background-position:center` (the spike's defaults); Divi prints neither | 2 extra | **no** (a silent engine bug: `image.url` is honoured) | none at these sizes (static CSS has the same defaults) |
+
+Every unported feature above is an existing option family (filters, dividers, disabledOn, the quote font); none is a
+flaw in the metadata-driven approach, and the byte-identical tuned pages (including the spike's two held-out
+pages and a new image/specialty page) stand. But the binding bar is the pre-fix held-out number, so batch 1 stops
+here: `tests/test_render5_fidelity.py::test_batch1_heldout_meets_the_addendum_a_bar` is an expected failure, and
+per Addendum A Playground stays the only Divi 5 preview unless the controller decides otherwise.
+
+Coverage on the held-out page: 890 attribute values, 33 not honoured (12 distinct keys), 0 unsupported modules.
+Speed (median of 20 warm renders, Divi 5.13.1): builder 1.0–2.3 ms on the tuned pages and 5.3 ms on the held-out
+page (75 modules, 1041 declarations); a CLI one-shot including Python start and data: URI embedding, 0.07 s.
