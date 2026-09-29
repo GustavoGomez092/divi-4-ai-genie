@@ -63,7 +63,9 @@ The Divi 4 attributes the recipes use, and where they live on Divi 5:
 | `admin_label` | `module.meta.adminLabel` |
 
 There are no `_last_edited` or `__hover_enabled` flags: a `tablet`/`phone` key or a `hover` state is its own
-switch ([value-formats.md](../../reference/divi5/value-formats.md#breakpoints)).
+switch ([value-formats.md](../../reference/divi5/value-formats.md#breakpoints)). A state sits beside `value`,
+inside the breakpoint: `"background":{"desktop":{"value":{"color":"…"},"hover":{"color":"…"}}}`, never
+`{"desktop":{…},"hover":{…}}` (that is `E5_UNKNOWN_ATTR`).
 
 ## 2. `$variable` or literal
 

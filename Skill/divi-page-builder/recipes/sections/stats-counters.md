@@ -3,9 +3,9 @@
 **Use for:** a short "by the numbers" band of 3-4 large counters (years in business, jobs
 completed, average response time) that builds credibility through scale. · **SEO:** no heading
 required by the pattern itself, though an `h2` may introduce it on a longer page; each counter's
-`title` is plain text, not a heading element, so it never competes with the page's own heading
-outline. **Data note — never invent these numbers.** The figures below (`15+`, `5,000+`, `24/7`,
-`100%`) are illustrative placeholders for `sample-tokens.json`'s fictional brand only. On a real
+`title` renders as a heading (`title_level`, default `h3`), so the band must sit below an `h2` for the
+outline not to skip a level. **Data note — never invent these numbers.** The figures below (`15`, `5000`, `24`,
+`100`) are illustrative placeholders for `sample-tokens.json`'s fictional brand only. On a real
 client site, every number in this section must come from the client's own brief or fact sheet — do
 not estimate, round up, or fabricate a statistic to fill the pattern.
 

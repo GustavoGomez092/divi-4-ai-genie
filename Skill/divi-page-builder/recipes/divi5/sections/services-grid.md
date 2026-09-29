@@ -44,6 +44,12 @@ Icon placement is `imageIcon.decoration.sizing`: the schema's `imageIcon.advance
 - The three `1_3` columns stack below 981px, one blurb per line, with no attribute; the 56px icon needs no phone
   value.
 
+**Not three services?** Four use one `"1_4,1_4,1_4,1_4"` row. Five or more use rows of `"1_3,1_3,1_3"`, and the last row is
+`"1_2,1_2"` if two are left or `"4_4"` if one is left. Each row's fractions must add up to one (`E5_COLUMNS`). Set a `size`
+in every blurb title's `title.decoration.font.font`, e.g. `"20px"`. Divi sizes an unsized `h3` by column: 20px
+in `1_3`/`1_4` columns and 22px in wider ones. Without a size, a `1_2` row's titles come out bigger than the
+`1_3` row above them.
+
 ## Worked example (sample-tokens.json)
 
 Heading and blurb titles in the navy global, icons in the orange global (`gcid-r6orange001`), section color and

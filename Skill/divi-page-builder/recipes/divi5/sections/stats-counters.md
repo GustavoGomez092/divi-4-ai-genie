@@ -27,6 +27,11 @@ states `columnStructure` `"4_4"`); every block `builderVersion` = `site.divi_ver
 | counter `number.advanced.enablePercentSign` | the same bundle: `"off"` on every counter that is not a percentage (the module's default is `"on"`); leave it out on a real percentage | same |
 | counter `number.innerContent`, `title.innerContent` | the client's brief or fact sheet — never a token, never invented | — |
 
+The number is free text that counts up and then prints verbatim ([number-counter gotchas](../../../reference/divi5/modules/number-counter.md#gotchas)):
+a trailing `+` or `%` is fine (`"25+"`, `"1,200+"`); a leading `$` shows `NaN` while it counts; a symbol after a
+decimal adds a digit to the count (`"4.9★"` counts `0.00` … `4.89`), so a rating is `"4.9"` with the star in the
+title; `"24/7"` or `"60-minute"` belong in the title or a text block, not the number.
+
 ## Responsive rules
 
 - The numbers shrink per breakpoint: `number.decoration.font.font` → `tablet` `{"size": "40px"}`, `phone`

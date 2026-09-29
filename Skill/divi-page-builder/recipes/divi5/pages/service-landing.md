@@ -16,6 +16,11 @@ worked example; how to read the recipes is in the [Divi 5 recipes README](../REA
 | 7 | FAQ | [FAQ](../sections/faq.md) | white | `h2` + `h3` (questions) + the `FAQPage` JSON-LD |
 | 8 | CTA band | [CTA band](../sections/cta-band.md) | navy | `h4` |
 
+**Fit the list to the brief.** Build only the sections the brief has content for, and never invent a
+testimonial, logo or statistic to fill one. With no hero photo, use [Hero centered](../sections/hero-centered.md)
+(same `h1`, no image). With no logos, reviews or feature copy, leave out the trust bar, testimonials and
+alternating features. The outline below still holds without them: FAQ `h3` questions, then the CTA `h4`.
+
 ## Rhythm
 
 Navy → grey → white → white → grey → white → white → navy: the hero and the closing CTA band are the only dark

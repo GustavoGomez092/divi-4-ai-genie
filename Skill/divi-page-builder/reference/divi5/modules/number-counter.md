@@ -147,3 +147,11 @@ Legacy, from Divi's Divi 4 conversion map only. They appear only in Divi's conve
 - `title.decoration.font.font` — desktop `{"headingLevel":"h3"}`
 
 </details>
+
+## Gotchas
+
+- `number.innerContent` is free text, and Divi 5 keeps it verbatim: the count-up animates the number it finds in it, then prints your text unchanged. `"25+"` counts 0 → 25 and ends on `25+`; `"1,200+"` counts with the comma (`1,038`, `1,198`) and ends on `1,200+`; `"98%"` with `enablePercentSign` `"off"` ends on `98%`. So a trailing suffix (`+`, `%`, `★`) is safe; it appears only when the count stops (Divi 5.13.1's `module-library-script-number-counter.js`, checked on a live Divi 5.13.1 page).
+- **Don't start with a non-number.** Divi `parseFloat`s the text after removing commas: `"$49"` shows `NaN` for the whole count-up (about 1.8 s) before `$49`. Put a currency sign or other prefix in the title, or use a `divi/text`/`divi/heading` block for that stat.
+- Every character after the last `.` counts as a decimal place: `"4.9"` counts `0.0` … `4.9`, but `"4.9★"` counts `0.00` … `4.89` and then jumps to `4.9★`. For a rating, write `"4.9"` and put the star in the title (`"★ from 1,200 reviews"`), or accept the extra digit while it counts.
+- Text such as `"24/7"` counts 0 → 24 and then prints `24/7`: a count-up that means nothing. Keep a counter for a real quantity, and put `24/7` in text.
+- `number.advanced.enablePercentSign` defaults to `"on"` and adds a `%` after the number: set `"off"` on every counter that isn't a percentage.
