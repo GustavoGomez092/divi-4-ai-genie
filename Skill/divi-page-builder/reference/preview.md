@@ -6,6 +6,10 @@ hands the same command to `scripts/preview/preview.mjs`, which runs the *real* D
 WordPress Playground (WebAssembly PHP + SQLite) — verified byte-for-byte against a
 live page (repo only: `research/playground-spike.md`).
 
+`preview.py` looks at each page's format first. **Divi 4 shortcode** pages use the two previews above.
+**Divi 5 block** pages (`<!-- wp:divi/… -->` markup) always render on the real Divi 5 theme in Playground,
+with or without `--exact`: the Python renderer is Divi 4 only. See [§8](#8-divi-5-block-pages).
+
 ## 1. The two previews
 
 | | `python3 scripts/preview.py` (default) | `--exact` (`node scripts/preview/preview.mjs`) |
@@ -200,7 +204,9 @@ which preview (or which check) can show them. `Ctrl-C` stops the server.
 
 ### Local images
 
-Both commands recognize local image references the same way `publish.py draft` does: any image
+Both commands recognize local image references the same way `publish.py draft` does (Divi 5 block
+pages: the block image leaves `publish.py` uploads, such as `image.innerContent` `src` and background
+`image.url`; they are always inlined as `data:` URIs, in `serve` too, because Playground renders them): any image
 attribute (`src`, `background_image`, anything ending `_image`, etc. — `local_media.py`) whose
 value is `./relative`, `../relative` or `file:///abs/path`, resolved against the page file's own
 directory. `render` embeds each one it finds on disk as a `data:` URI, so the standalone HTML
@@ -221,14 +227,16 @@ python3 scripts/preview.py doctor
 ```
 python: 3.11.6 (/usr/bin/python3)
 cache dir: /Users/you/.cache/divi-page-builder
-cached Divi versions: 4.27.3, 4.27.9
+cached Divi versions: 4.27.3, 4.27.9, 5.13.1
+Divi 5 (block pages): cached 5.13.1
 jQuery: CDN (no cached WordPress copy)
-node: /usr/local/bin/node v24.1.0 (only needed for --exact)
+node: /usr/local/bin/node v24.1.0 (only needed for --exact and Divi 5 block pages)
 Elegant Themes credentials: keys.json
 ```
 
-Reports Python, the cache dir, cached Divi versions, where jQuery will come from, whether Node is
-present (only needed for `--exact`), and whether Elegant Themes credentials are available and
+Reports Python, the cache dir, cached Divi versions, whether a Divi 5 is cached (for block pages),
+where jQuery will come from, whether Node is present (only needed for `--exact` and Divi 5 block
+pages), and whether Elegant Themes credentials are available and
 where from — `env`, `keys.json`, or `none` — without ever printing them. `--keys PATH` picks the
 keys.json file, same as everywhere else.
 
@@ -236,24 +244,33 @@ keys.json file, same as everywhere else.
 
 ```bash
 python3 scripts/preview.py fetch-divi 4.27.9 --keys ~/.config/divi-page-builder/keys.json
-python3 scripts/preview.py fetch-divi latest
+python3 scripts/preview.py fetch-divi latest     # the newest Divi 4
+python3 scripts/preview.py fetch-divi latest5    # the newest Divi 5
+python3 scripts/preview.py fetch-divi 5.13.1
 ET_USERNAME=you@example.com ET_API_KEY=your-api-key python3 scripts/preview.py fetch-divi 4.27.9
 ```
 
 The only command that always talks to Elegant Themes. Downloads and unpacks the requested version
-(or the account's latest) into the cache and exits, using the credentials described above
+(or the account's latest: `latest` is the Divi 4 line, `latest5` the Divi 5 line) into the cache and exits, using the credentials described above
 (`--keys PATH`, or env `ET_USERNAME`/`ET_API_KEY`, which wins when both are set).
 
 ### Version selection
 
 Preview on the client's own Divi version so what you see matches what they'll get. Resolution
 order, first match wins: `--divi VERSION` → `--tokens tokens.json` (reads `site.divi_version`,
-the file `extract_tokens.py` produces) → the newest version already cached → `latest` from
-Elegant Themes (needs credentials and network — the fallback of last resort). A tokens file whose
+the file `extract_tokens.py` produces) → the newest version already cached **of the page's Divi
+major** (Divi 4 for shortcode, Divi 5 for blocks) → `latest` (Divi 4) or `latest5` (Divi 5) from
+Elegant Themes (needs credentials and network — the fallback of last resort). A cached Divi 5 is
+never used for a shortcode page just because it is newer, and the reverse. A tokens file whose
 `site.divi_version` is empty (`""`, the version wasn't detected) counts as not giving one: both
-previews fall through to the newest cached version, else `latest`, and print a one-line note. A
+previews fall through to the newest cached version of that major, else `latest`/`latest5`, and print a one-line note. A
 tokens file with no `site.divi_version` key at all is refused (exit 2): it isn't an
 `extract_tokens.py` output, so pass `--divi VERSION` instead.
+
+An explicit version of the other major is refused (exit 2) rather than guessed around: a Divi 5
+version for a shortcode page without `--exact` (the Python renderer is Divi 4 only; `--exact` renders
+it through Divi 5's shortcode compatibility layer, which is not what converted blocks look like), and a
+Divi 4 version for a block page.
 
 ### Caching
 
@@ -281,6 +298,8 @@ workflow:
 | Symptom | Cause | Fix |
 |---|---|---|
 | A `render`ed file's icons are missing/broken when opened over `file://` | An old/manual build referenced fonts by a relative or `file://` path instead of embedding them. | `preview.py render` always embeds icon fonts (and all local assets) as `data:` URIs in standalone output — it never emits a `file://` URL. If you see this, you're not looking at `preview.py`'s own output; `serve` instead maps assets under `/__divi/…`, which needs the server running. |
+| A block page fails with `preview: Divi 5 block pages render on the real Divi 5 theme …` and exits `2` | Node 20+ is missing: Divi 5 pages have no Python preview. | Install Node ≥ 20. |
+| `the Python preview renders Divi 4 only, and this page is Divi 4 shortcode but the Divi version is 5.…` | `--divi`/`--tokens` name a Divi 5 version for a shortcode page. | Preview Divi 5 sites with block pages; or drop `--divi`/`--tokens`; or add `--exact`. |
 | `--exact` fails with `preview: … --exact needs Node 20+ …` and exits `2` | Node isn't installed, isn't on `PATH`, or is older than 20 (the message then starts `found Node v18…`). | Install Node ≥ 20 from https://nodejs.org/, or drop `--exact` to use the Python preview. `doctor` reports the Node version it finds and flags one that's too old. |
 | `render`/`serve`/`fetch-divi` fails with "Divi is not cached for this version: set ET_USERNAME and ET_API_KEY" | The requested Divi version isn't cached and no credentials are set. | Add an `elegant_themes` section to `keys.json` (`--keys PATH` picks the file), set `ET_USERNAME`/`ET_API_KEY` (Elegant Themes account → API), or use a version that's already cached (`doctor` lists them and reports where its credentials come from). |
 | A download fails with `HTTP 429` / "rate-limited" | Elegant Themes' rate limit (~15 calls / 5 min). | Wait a few minutes. A cached version never calls the API, so this only affects fetching a *new* version. |
@@ -311,3 +330,68 @@ real site header/menu, plugins, a child theme, and any content that needs the li
 Use `preview.py` for fast, portable, offline-capable iteration on a layout's own builder markup
 and styling; use `--exact` to confirm a specific module or feature against real Divi; use a draft
 on the client's own site to confirm the final, fully-dressed page.
+
+## 8. Divi 5 block pages
+
+A page holding Divi 5 block markup (`<!-- wp:divi/placeholder -->…`, in a `.txt` file or an `.html` file) is
+rendered by the **real Divi 5 theme in WordPress Playground**, the same machinery as `--exact` with the Divi 5
+theme mounted. `--exact` changes nothing for such a page. Measured against the same content published on a
+real Divi 5.13.1 site (repo only: `research/divi5/playground.md`): the builder markup (`.et-l` tag/class sequence)
+and every builder CSS declaration are identical on all three test pages.
+
+**Requirements.** Node ≥ 20 and a cached Divi 5 (`fetch-divi latest5` or `fetch-divi 5.13.1`, once; about
+35 MB). `doctor` reports both.
+
+```bash
+python3 scripts/preview.py render page.html --out preview.html                     # stock Divi 5 settings
+python3 scripts/preview.py render page.html --tokens tokens.json --out preview.html # + the site's design system
+python3 scripts/preview.py serve --pages ./drafts --tokens tokens.json
+```
+
+- **`render`** writes one self-contained HTML file, like `--exact` (Divi's CSS, JS and icon fonts inlined).
+  The default `--out` is `<page name>.html`, or `<page name>.preview.html` when that would be the page itself.
+- **`serve`** keeps shortcode pages on the Python preview and starts **one warm Playground** for the block
+  pages: `http://127.0.0.1:PORT/<name>` redirects to it. Block pages are staged into a private directory (local
+  images inlined, the tokens seed alongside), re-staged within about half a second of a save, and re-rendered
+  on every reload (they don't reload themselves; reload the tab). Ctrl-C (or SIGTERM) stops the Playground too.
+  Page names are made URL-safe (`my page` → `my-page`). A dir that mixes shortcode and block pages works
+  without `--exact`; `serve --exact` on a mixed dir is refused (one Playground runs one Divi).
+- **Local images** (`./`, `../`, `file://`) in block image attributes are inlined as `data:` URIs.
+
+**Timings** (Divi 5.13.1, this project's Mac):
+
+| Step | Time |
+|---|---|
+| `render`, warm caches | about 5 s unloaded (boot about 3 s + render 1.4–1.9 s); 6.8–8.7 s measured on a busy machine |
+| `serve`, first page after start | about 7 s (boot), about 30 s the very first time (Playground CLI install) |
+| `serve`, each reload | 0.85–1.2 s unloaded; 1.6–3.5 s on a machine at load average 6–7 (the research prototype measured the same there) |
+| Output size | 1.7–1.9 MB (Divi 5 ships only the CSS/JS the page uses) |
+
+### Token seeding (`--tokens`)
+
+Playground is a fresh WordPress with **stock Divi 5 settings**: none of the client's global colors, design
+variables or presets exist there, so `var(--gcid-…)` / `var(--gvid-…)` references render **unset** and preset
+classes carry no styling. With `--tokens tokens.json` (Divi 5 tokens, [design-tokens.md §7](design-tokens.md#7-divi-5-sites))
+the preview adds one `<style id="pp-token-seed">` at the end of `<head>` holding:
+
+- `:root:root{--gcid-…:…;--gvid-…:…}` from `colors.global`, `colors.customizer` and `variables` (images as
+  `url("…")`, fonts quoted). `:root:root` outranks the stock `:root` values Divi prints.
+- every recovered preset rule: `presets[…].css.rules`, `group_presets[…].css.rules` and `preset_defaults`
+  (with their media queries).
+
+**Limits.** It seeds only what the extractor recovered:
+
+- a color or variable with `value: null` stays unset, and string/link variables are never CSS;
+- a preset with `css: null` stays unstyled; preset CSS is what sampled pages rendered, not the preset
+  itself (a state or breakpoint no sampled page used is missing), and `!important` flags are not recovered;
+- the Customizer fonts, body size and the rest of the site's Theme Customizer, Theme Builder header/footer,
+  plugins and child theme are not applied (the header/footer are Playground's stock ones);
+- anything unsafe in a `<style>` (`<`, `{`, `}`, comments) is dropped.
+
+So the seeded preview is a close approximation of the client's look, not proof of it: **the WordPress draft
+preview (`publish.py draft`) stays the authoritative check** for anything site-wide.
+
+**Other limits.** Divi 4 shortcode pages are not converted to blocks (give the preview the format the site
+stores: blocks on a Divi 5 site). Content that needs the live site's data (posts, menus, media library, comments)
+is missing, as for Divi 4. The Visual Builder is not available in the preview.
+

@@ -602,6 +602,28 @@ class BlocksServeTest(unittest.TestCase):
         self.assertEqual(get(self.port, "/rendered")[0], 404)
 
 
+class PlaygroundPagesTest(unittest.TestCase):
+    def test_concurrent_first_requests_start_one_playground(self):
+        sys.path.insert(0, str(SCRIPTS))
+        import preview
+        t = BlocksRoutingTest("setUp")
+        t.setUp()
+        self.addCleanup(t.tearDown)
+        with mock.patch.dict(os.environ, t.env):
+            pg = preview.PlaygroundPages(t.pages, "5.13.1", "", str(t.bin / "node"), dict(t.env))
+            self.addCleanup(pg.stop)
+            threads = [threading.Thread(target=pg.start) for _ in range(8)]
+            for th in threads:
+                th.start()
+            for th in threads:
+                th.join()
+            deadline = time.time() + 10
+            while pg.base is None and time.time() < deadline:
+                time.sleep(0.05)
+        self.assertIsNotNone(pg.base)
+        self.assertEqual(sum(1 for l in t.logged().splitlines() if l.startswith("ARGS ") and " serve " in l), 1)
+
+
 class BlocksServeStopTest(unittest.TestCase):
     def test_terminating_serve_stops_the_playground_child(self):
         t = BlocksRoutingTest("setUp")

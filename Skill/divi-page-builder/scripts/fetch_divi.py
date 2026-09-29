@@ -6,6 +6,8 @@
 
 `latest` is the newest Divi 4 (the account's Divi 4 line, as always); `latest5` the newest Divi 5
 (check_theme_updates with divi_5=on). A 5.x version number downloads through the same endpoint.
+Verified 2026-09-29: latest5 answered "5.14" (a short version: 5.14 and 5.14.0 are treated as one), and
+the 5.13.1 download is a 32.7 MB zip with the same top-level "Divi/" layout as Divi 4 (3,360 entries).
 
 Credentials: env ET_USERNAME/ET_API_KEY win if both are set; otherwise the keys.json file's
 "elegant_themes" section (--keys PATH, else env DIVI_KEYS_FILE, else
@@ -118,6 +120,16 @@ LATEST_ALIASES = {"latest": 4, "latest4": 4, "latest5": 5}
 def latest_major(version: str) -> Optional[int]:
     """4/5 for a latest alias, None for a concrete version."""
     return LATEST_ALIASES.get(version)
+
+
+def same_version(a: str, b: str) -> bool:
+    """5.14 and 5.14.0 are one version (the Divi 5 API reports short versions)."""
+    def key(v):
+        parts = v.split(".")
+        while len(parts) > 1 and parts[-1] == "0":
+            parts.pop()
+        return parts
+    return key(a) == key(b)
 
 
 def _creds(keys_path=None):
@@ -245,7 +257,7 @@ def ensure_divi(version: str = "latest", cache_dir: Optional[Path] = None, log=N
     style_css = dest / "Divi" / "style.css"
     gm = re.search(r"^Version:\s*(\S+)", style_css.read_text(encoding="utf-8", errors="replace"), re.M) if style_css.is_file() else None
     got = gm.group(1) if gm else None
-    if got != version:
+    if got is None or not same_version(got, version):
         raise FetchError(f"Downloaded zip has Divi {got}, expected {version}")
 
     log(f"Fetched Divi {version} ({len(dl['body']) / 1048576:.1f} MB) in {int((time.time() - t0) * 1000)} ms -> {dest / 'Divi'}")

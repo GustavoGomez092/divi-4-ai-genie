@@ -1,15 +1,19 @@
+import http.client
 import http.server
+import json
 import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import threading
+import time
 import unittest
 import urllib.parse
 from pathlib import Path
 
-from _paths import FIXTURES, SKILL, WP_LOCAL, live_only, live_tests_enabled
+from _paths import FIXTURES, FIXTURES5, SITE5_URL, SKILL, WP_LOCAL, live5_only, live_only, live_tests_enabled, wp5
 from divi_shortcode import parse
 
 PREVIEW = SKILL / "scripts" / "preview" / "preview.mjs"
@@ -201,6 +205,177 @@ class PreviewTest(unittest.TestCase):
             self.assertNotIn(secret, out)
             self.assertNotIn(urllib.parse.quote(secret, safe=""), out)
             self.assertNotIn(urllib.parse.quote_plus(secret), out)
+
+
+# ---- Divi 5: Playground preview vs the real Divi 5 site ---------------------------------------------------------------
+PREVIEW_PY = SKILL / "scripts" / "preview.py"
+D5_FIXTURES = {"divi-ai-layout": FIXTURES5 / "divi-ai" / "layout.html",
+               "heldout-inscope": FIXTURES5 / "converted" / "heldout-inscope.html",
+               "content-heldout": FIXTURES5 / "converted" / "content-heldout.html"}
+# research/divi5/playground.md (R5): identical tag/class sequences, and builder CSS 490/490 (heldout-inscope) and
+# 161/161 (content-heldout) declarations identical. (Its divi-ai figure, 2,480, was for a different conversion of
+# that layout than divi-ai/layout.html.) Every fixture must be exact: no missing or extra declaration.
+D5_SPIKE_DECLS = {"heldout-inscope": 490, "content-heldout": 161}
+D5_TITLE = "D5TEST preview"
+D5_META = json.dumps({"_et_pb_use_builder": "on", "_et_pb_use_divi_5": "on", "_et_pb_page_layout": "et_no_sidebar",
+                      "_et_pb_built_for_post_type": "page"})
+
+
+def _d5_pages():
+    """Ids of every "D5TEST preview" page on the Divi 5 site, trashed ones included."""
+    return wp5("post", "list", "--post_type=page", "--post_status=any,trash", f"--s={D5_TITLE}",
+               "--field=ID").stdout.split()
+
+
+def _wp5(*args):
+    out = wp5(*args)
+    if out.returncode != 0:
+        raise RuntimeError(f"wp {' '.join(map(str, args[:3]))} failed: {out.stderr[-400:]}")
+    return out.stdout.strip()
+
+
+@live5_only
+class Divi5PreviewParityTest(unittest.TestCase):
+    """preview.py render / serve of Divi 5 block pages (WordPress Playground, real Divi 5) against the same content
+    published on divi-5-test.local: builder markup (tag/class sequence of .et-l) and builder CSS declaration sets
+    (research/tools/fidelity.py, Divi 5-aware). The live side is a fresh fetch after a warm-up view, with its
+    same-origin stylesheets inlined (fidelity.flatten). Pages are created as "D5TEST preview …" and deleted after."""
+
+    @classmethod
+    def setUpClass(cls):
+        import fetch_divi
+        import fidelity
+        cls.fidelity = fidelity
+        if shutil.which("node") is None:
+            raise unittest.SkipTest("node not installed")
+        cls.version = fetch_divi.newest_cached(major=5)
+        if cls.version is None:
+            raise unittest.SkipTest("no Divi 5 cached (preview.py fetch-divi latest5)")
+        site_version = _wp5("theme", "get", "Divi", "--field=version").splitlines()[-1]
+        if site_version != cls.version:
+            raise unittest.SkipTest(f"site runs Divi {site_version}, cache has {cls.version}")
+        cls.admin = _wp5("user", "list", "--role=administrator", "--field=user_login").splitlines()[0]
+        cls._sweep()
+        cls.tmp = Path(tempfile.mkdtemp())
+        cls.ids, cls.live, cls.preview, cls.results, cls.timings = {}, {}, {}, {}, {}
+        try:
+            for name, path in D5_FIXTURES.items():
+                cls.ids[name] = int(_wp5("post", "create", str(path), "--post_type=page", "--post_status=publish",
+                                         f"--post_title={D5_TITLE} {name}", f"--meta_input={D5_META}", "--porcelain",
+                                         f"--user={cls.admin}").splitlines()[-1])
+                stored = _wp5("post", "get", cls.ids[name], "--field=post_content")
+                assert stored.strip() == path.read_text().strip(), f"{name}: WordPress changed the content"
+            for name in D5_FIXTURES:
+                cls.live[name] = cls.live_page(name)
+            for name, path in D5_FIXTURES.items():
+                out = cls.tmp / f"{name}.html"
+                t0 = time.time()
+                run = subprocess.run([sys.executable, str(PREVIEW_PY), "render", str(path), "--out", str(out)],
+                                     capture_output=True, text=True, timeout=600)
+                cls.timings[name] = round(time.time() - t0, 1)
+                assert run.returncode == 0, run.stderr[-800:]
+                assert f"divi={cls.version}" in run.stderr, run.stderr[-400:]
+                cls.preview[name] = out.read_text(encoding="utf-8", errors="replace")
+                cls.results[name] = fidelity.compare(cls.live[name], cls.preview[name])
+            sys.stderr.write("\nD5 preview parity " + json.dumps(
+                {n: {"markup": r["markup"], "css": r["css"], "render_s": cls.timings[n]}
+                 for n, r in cls.results.items()}) + "\n")
+        except BaseException:
+            cls._cleanup()
+            raise
+
+    @classmethod
+    def live_page(cls, name):
+        url = f"{SITE5_URL}/?page_id={cls.ids[name]}"
+        cls.fidelity.flatten(url)  # warm-up view: Divi writes the page's static CSS on the first one
+        return cls.fidelity.flatten(url)
+
+    @classmethod
+    def _sweep(cls):
+        for pid in _d5_pages():
+            wp5("post", "delete", pid, "--force", f"--user={cls.admin}")
+
+    @classmethod
+    def _cleanup(cls):
+        cls._sweep()
+        shutil.rmtree(getattr(cls, "tmp", ""), ignore_errors=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._cleanup()
+        left = _d5_pages()
+        if left:
+            raise AssertionError(f"{D5_TITLE} pages left on the site: {left}")
+
+    def test_builder_markup_is_identical(self):
+        for name, r in self.results.items():
+            with self.subTest(name=name):
+                self.assertGreater(r["markup"]["truth_elements"], 50)
+                self.assertTrue(r["markup"]["tag_class_sequence_equal"], r["markup"])
+
+    def test_builder_css_declarations_are_identical(self):
+        for name, r in self.results.items():
+            with self.subTest(name=name):
+                self.assertGreaterEqual(r["css"]["common"], D5_SPIKE_DECLS.get(name, 1), r["css"])
+                self.assertEqual((r["css"]["missing"], r["css"]["extra"]), (0, 0),
+                                 (r["missing_examples"], r["extra_examples"]))
+
+    def test_render_is_self_contained(self):
+        for name, html in self.preview.items():
+            with self.subTest(name=name):
+                self.assertNotRegex(html, r"url\(\s*['\"]?(?:https?:)?//127\.0\.0\.1[^)]*\.(?:woff2?|ttf)")
+                self.assertIn("url(data:font/", html)
+
+    def test_serve_matches_live_across_page_switches_and_edits(self):
+        """One warm Playground: a -> b -> a -> a edited (to c's content). Each response must match its live page
+        (Divi 5 caches per-post CSS; the mu-plugin purges it per request, with a fake id per page name)."""
+        import socket
+        pages = self.tmp / "serve"
+        pages.mkdir()
+        (pages / "a.html").write_text(D5_FIXTURES["heldout-inscope"].read_text())
+        (pages / "b.html").write_text(D5_FIXTURES["content-heldout"].read_text())
+        with socket.socket() as sock:
+            sock.bind(("127.0.0.1", 0))
+            port = sock.getsockname()[1]
+        proc = subprocess.Popen([sys.executable, str(PREVIEW_PY), "serve", "--pages", str(pages), "--port", str(port)],
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        try:
+            def fetch(name):
+                deadline = time.time() + 300
+                while time.time() < deadline:
+                    conn = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+                    try:
+                        conn.request("GET", f"/{name}")
+                        r = conn.getresponse()
+                        r.read()
+                        if r.status == 302:
+                            t0 = time.time()
+                            html = self.fidelity.flatten(r.getheader("Location"))
+                            return html, time.time() - t0
+                    except OSError:
+                        pass
+                    finally:
+                        conn.close()
+                    time.sleep(0.5)
+                self.fail("serve never redirected to the Playground")
+
+            steps = [("a", "heldout-inscope"), ("b", "content-heldout"), ("a", "heldout-inscope")]
+            timings = []
+            for page, fixture in steps + [("a", "divi-ai-layout")]:
+                if fixture == "divi-ai-layout":  # the edit: same page name, new content
+                    (pages / "a.html").write_text(D5_FIXTURES[fixture].read_text())
+                    time.sleep(1.5)  # serve re-stages within ~0.5 s
+                html, secs = fetch(page)
+                timings.append(round(secs, 2))
+                r = self.fidelity.compare(self.live[fixture], html)
+                with self.subTest(step=f"{page}={fixture}"):
+                    self.assertTrue(r["markup"]["tag_class_sequence_equal"], r["markup"])
+                    self.assertEqual((r["css"]["missing"], r["css"]["extra"]), (0, 0),
+                                     (r["css"], r["missing_examples"], r["extra_examples"]))
+            sys.stderr.write(f"\nD5 serve re-render seconds (page + its stylesheets): {timings}\n")
+        finally:
+            proc.terminate()
+            proc.wait(timeout=30)
 
 
 if __name__ == "__main__":

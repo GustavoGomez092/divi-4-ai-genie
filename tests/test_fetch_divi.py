@@ -437,6 +437,39 @@ class LatestVersionTest(unittest.TestCase):
         self.assertEqual(received[0]["divi_5"], ["on"])
 
 
+class ShortVersionTest(unittest.TestCase):
+    """The Divi 5 line reports short versions (latest5 answered "5.14" on 2026-09-29); a zip whose style.css says
+    5.14.0 is that version, not a mismatch."""
+
+    def test_python_accepts_a_trailing_zero_difference(self):
+        handler = _make_handler(dl_body=_zip_bytes("5.14.0"))
+        with _server(handler) as base, tempfile.TemporaryDirectory() as cache:
+            env = {"ET_USERNAME": "someone", "ET_API_KEY": "secretkey", "PP_ET_ENDPOINT": base}
+            with mock.patch.dict(os.environ, env, clear=True):
+                got = fetch_divi.ensure_divi("5.14", cache)
+            self.assertEqual(got, Path(cache) / "Divi-5.14" / "Divi")
+
+    def test_python_still_rejects_a_different_version(self):
+        handler = _make_handler(dl_body=_zip_bytes("5.14.1"))
+        with _server(handler) as base, tempfile.TemporaryDirectory() as cache:
+            env = {"ET_USERNAME": "someone", "ET_API_KEY": "secretkey", "PP_ET_ENDPOINT": base}
+            with mock.patch.dict(os.environ, env, clear=True), self.assertRaises(FetchError):
+                fetch_divi.ensure_divi("5.14", cache)
+
+    @unittest.skipUnless(shutil.which("node"), "node not installed")
+    def test_node_accepts_a_trailing_zero_difference(self):
+        handler = _make_handler(dl_body=_zip_bytes("5.14.0"))
+        with _server(handler) as base, tempfile.TemporaryDirectory() as cache:
+            script = (f"import({FETCH_MJS.as_uri()!r}).then(m => m.ensureDivi('5.14', {cache!r}, () => {{}}))"
+                      ".then(r => console.log(r.version)).catch(e => { console.error(e.message); process.exit(1); });")
+            env = {"PATH": os.environ["PATH"], "ET_USERNAME": "someone", "ET_API_KEY": "secretkey",
+                   "PP_ET_ENDPOINT": base}
+            proc = subprocess.run(["node", "--input-type=module", "-e", script], capture_output=True, text=True,
+                                  timeout=60, env=env)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(proc.stdout.strip(), "5.14")
+
+
 @unittest.skipUnless(shutil.which("node"), "node not installed")
 class NodeMajorAwareTest(unittest.TestCase):
     """fetch-divi.mjs: the same per-major selection preview.mjs uses (listCachedDivi/newestCached/contentMajor/

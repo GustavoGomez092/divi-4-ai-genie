@@ -448,7 +448,8 @@ class PlaygroundPages:
         self.error = None
         self.proc = None
         self._mtimes: dict = {}
-        self._lock = threading.Lock()
+        self._lock = threading.Lock()  # staging
+        self._start_lock = threading.Lock()  # one Playground, however many first requests arrive together
         self._stop = threading.Event()
 
     def names(self) -> dict:
@@ -473,22 +474,22 @@ class PlaygroundPages:
                 self._mtimes.pop(name, None)
 
     def start(self) -> None:
-        with self._lock:
-            if self.proc is not None:
+        with self._start_lock:
+            if self.proc is not None or self._stop.is_set():
                 return
             self.stage = Path(tempfile.mkdtemp(prefix="pp-d5-serve-"))
-        self.sync()
-        port = free_port()
-        self.proc = subprocess.Popen([self.node, str(PREVIEW_MJS), "serve", "--pages", str(self.stage),
-                                      "--port", str(port), "--divi", self.version],
-                                     env=self.env, stdout=subprocess.PIPE, text=True)
+            self.sync()
+            self.proc = subprocess.Popen([self.node, str(PREVIEW_MJS), "serve", "--pages", str(self.stage),
+                                          "--port", str(free_port()), "--divi", self.version],
+                                         env=self.env, stdout=subprocess.PIPE, text=True)
         threading.Thread(target=self._read, daemon=True).start()
         threading.Thread(target=self._watch, daemon=True).start()
 
     def _read(self) -> None:
         for line in self.proc.stdout:
-            if self.base is None and line.startswith("http://") and "/?pp_preview=" in line:
-                self.base = line.split("/?pp_preview=")[0]
+            m = re.search(r"(http://\S+?)/\?pp_preview=", line)  # a page URL, or the "(no *.txt …)" hint
+            if self.base is None and m:
+                self.base = m.group(1)
                 sys.stderr.write(f"Divi 5 block pages: WordPress Playground (Divi {self.version}) ready at "
                                  f"{self.base}\n")
         code = self.proc.wait()
@@ -503,7 +504,8 @@ class PlaygroundPages:
         return f"{self.base}/?pp_preview={safe_name(name)}"
 
     def stop(self) -> None:
-        self._stop.set()
+        with self._start_lock:
+            self._stop.set()
         if self.proc is not None and self.proc.poll() is None:
             self.proc.terminate()
             try:

@@ -37,7 +37,7 @@ The question: can the `--exact` preview (`Skill/divi-page-builder/scripts/previe
 - **Not verified:**
   - Downloading Divi 5 from Elegant Themes. The API was timing out today and was deliberately not called; the cache was seeded from the LocalWP copy.
   - The Visual Builder. The front end doesn't need it.
-- **Hazard created by this spike.** The user cache now holds `Divi-5.13.1`, so "newest cached" resolves to **5.13.1** in `preview.mjs`, `preview.py`, `divi_render/assets.py` and `tests/test_render_fidelity.py` / `test_render_fallbacks.py`. **A Divi 4 run without `--divi` or `--tokens` now picks Divi 5.** Version resolution must become major-aware before this ships. See "Required changes" §2.
+- **Hazard created by this spike (resolved in Task 14, see §6).** The user cache now holds `Divi-5.13.1`, so "newest cached" resolves to **5.13.1** in `preview.mjs`, `preview.py`, `divi_render/assets.py` and `tests/test_render_fidelity.py` / `test_render_fallbacks.py`. **A Divi 4 run without `--divi` or `--tokens` now picks Divi 5.** Version resolution must become major-aware before this ships. See "Required changes" §2.
 
 ---
 
@@ -200,6 +200,45 @@ Markup and builder-CSS declarations were identical in every variant. The one exc
 5. **Optional:**
    - Accept `.html` page files for block markup (only `.txt` is listed today; block content in `.txt` works).
    - The Divi 4 head-move regex (`et-builder-module-design-*`) never matches on Divi 5. Harmless: on a first-load Divi 5 page the builder CSS sits in the footer, and pixels are identical.
+
+## 6. Shipped (Task 14, 2026-09-29)
+
+The prototype was ported into `Skill/divi-page-builder/scripts/preview/` and `preview.py`:
+
+- **Version selection is major-aware** everywhere (`fetch_divi.newest_cached(major=)`, `fetch-divi.mjs`
+  `newestCached`/`resolveDiviVersion`, `divi_render/assets.py`, the render-fidelity tests): shortcode → newest cached
+  4.x, blocks → newest cached 5.x, explicit `--divi`/`--tokens` win. The Divi 5.13.1 cache is back in place
+  (`~/.cache/divi-page-builder/divi/Divi-5.13.1`) and the Divi 4 suites pick 4.27.9.
+- **mu-plugin:** the three fixes, each gated on the mounted theme's `style.css` major being 5. `serve` requests get a
+  fake id per page name (`990000002 + crc32(name) % 999998`) and that id's `et-cache` dir is purged per request;
+  `inline=1` renders keep `990000001`. The seeding sidecar `<name>.seed.css` is injected at the end of `<head>`.
+  The prototype's experiments (`d5=preview`, `fonts=inline`, the timing comment) were not shipped.
+- **Divi 4 regression:** `render` of heldout-inscope, content-heldout and divi-ai-layout on 4.27.9 with the shipped
+  preview vs the pre-change one: byte-identical apart from WordPress's random `wp_block_styles_on_demand_placeholder`
+  token (3.10/3.26/3.15 MB). `serve` (non-inline) of two of them: identical after the same normalization.
+- **Elegant Themes API (2 calls):** `check_theme_updates` with `divi_5=on` and `installed_themes[Divi]=5.0.0` answered
+  `new_version` **5.14**. `api_downloads.php?…&version=5.13.1` returned a **32.7 MB** zip with the Divi 4 layout
+  (top-level `Divi/`, 3,360 entries, `style.css` Version 5.13.1).
+
+**Live parity** (`tests/test_preview.py` `Divi5PreviewParityTest`, `preview.py render` vs the same block content
+published on divi-5-test.local as "D5TEST preview …" pages, fetched after a warm-up view and flattened; pages deleted after):
+
+| Fixture | Elements | Tag/class sequence | `.et-l` bytes (live / preview) | Builder CSS decls (live / preview / common) | `render` wall time |
+|---|---|---|---|---|---|
+| `divi5/divi-ai/layout.html` | 231 | identical | 24,859 / 24,859, byte-identical | 2,099 / 2,099 / 2,099 | 7.1 s |
+| `divi5/converted/heldout-inscope.html` | 127 | identical | 8,282 / 8,282, byte-identical | 490 / 490 / 490 | 8.7 s |
+| `divi5/converted/content-heldout.html` | 82 | identical | 5,875 / 5,881 (audio post id) | 161 / 161 / 161 | 6.8 s |
+
+(`divi-ai/layout.html` is a different conversion of that layout than the spike's 123 KB one, hence 2,099 not 2,480.)
+
+**`serve`** (one warm Playground behind `preview.py serve`): a → b → a → a edited to divi-ai's content, each flattened
+response vs its live page: identical sequences and 0 missing / 0 extra declarations at every step. The per-name fake
+ids left three `et-cache` dirs (990000001 and two per-page ids) and no rows in the Playground site's options.
+
+**Timings on 2026-09-29** were taken with the machine at load average 6–7 (another long-running process at 85 % CPU):
+`render` 6.8–8.7 s end to end, `serve` reloads 1.6–3.5 s, first page after `serve` starts about 7 s. The research
+prototype measured the same 1.6–3.5 s (up to 6.9 s) on the same pages in the same conditions, so the port adds no
+cost; the unloaded figures in §4 stand.
 
 ## Implications for the skill
 

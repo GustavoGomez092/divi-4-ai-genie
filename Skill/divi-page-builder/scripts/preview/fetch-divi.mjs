@@ -12,6 +12,7 @@
 //                   from the installed version: installed 0 -> 2.3.6 (!), 4.0.0 -> newest Divi 4 (4.27.9 on 2026-09-24).
 //                   Divi 5 is only offered when the divi_5 parameter is sent (et_core_maybe_add_divi5_api_parameter):
 //                   `latest5` sends divi_5=on with installed_themes[Divi]=5.0.0; `latest` never sends it.
+//                   Verified 2026-09-29: latest5 -> "5.14"; the 5.13.1 zip is 32.7 MB, top-level "Divi/" as for Divi 4.
 //   download      : GET https://www.elegantthemes.com/api/api_downloads.php?api_update=1&theme=Divi&version=V&username=U&api_key=K
 //                   -> 200 application/zip (top-level dir "Divi/"); omit `version` for latest.
 //                   bad api key -> 200 text/html "API key is not valid"; bad user -> "Subscription is not active";
@@ -97,6 +98,12 @@ export function unzip(zip, dest) {
 	throw new Error('Could not extract ' + zip + ' (need `unzip` or bsdtar `tar`).');
 }
 
+// 5.14 and 5.14.0 are one version (the Divi 5 API reports short versions).
+export function sameVersion(a, b) {
+	const key = (v) => { const p = v.split('.'); while (p.length > 1 && p[p.length - 1] === '0') p.pop(); return p.join('.'); };
+	return key(a) === key(b);
+}
+
 /** Returns the absolute path of an unpacked Divi theme dir (…/Divi-<version>/Divi) for `version`. */
 export async function ensureDivi(version = 'latest', cacheDir = defaultCacheDir(), log = console.error) {
 	if (LATEST_ALIASES[version]) version = await latestVersion(LATEST_ALIASES[version]);
@@ -123,7 +130,7 @@ export async function ensureDivi(version = 'latest', cacheDir = defaultCacheDir(
 	fs.writeFileSync(zip, dl.body);
 	unzip(zip, path.join(cacheDir, `Divi-${version}`));
 	const got = (fs.readFileSync(styleCss, 'utf8').match(/^Version:\s*(\S+)/m) || [])[1];
-	if (got !== version) throw new Error(`Downloaded zip has Divi ${got}, expected ${version}`);
+	if (!got || !sameVersion(got, version)) throw new Error(`Downloaded zip has Divi ${got}, expected ${version}`);
 	log(`Fetched Divi ${version} (${(dl.body.length / 1048576).toFixed(1)} MB) in ${Date.now() - t0} ms -> ${themeDir}`);
 	return { version, themeDir, cached: false };
 }
