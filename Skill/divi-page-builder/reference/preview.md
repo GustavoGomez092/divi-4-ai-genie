@@ -386,7 +386,9 @@ the preview adds one `<style id="pp-token-seed">` at the end of `<head>` holding
   itself (a state or breakpoint no sampled page used is missing), and `!important` flags are not recovered;
 - the Customizer fonts, body size and the rest of the site's Theme Customizer, Theme Builder header/footer,
   plugins and child theme are not applied (the header/footer are Playground's stock ones);
-- anything unsafe in a `<style>` (`<`, `{`, `}`, comments) is dropped.
+- a value, selector or media query that could break out of its declaration is dropped: one containing `;`, `{`, `}`,
+  `<`, `>`, a backslash, a line break or a comment, or with unpaired quotes, brackets or parentheses (so a
+  `data:` image variable is not seeded).
 
 So the seeded preview is a close approximation of the client's look, not proof of it: **the WordPress draft
 preview (`publish.py draft`) stays the authoritative check** for anything site-wide.

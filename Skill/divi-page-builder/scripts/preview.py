@@ -117,9 +117,9 @@ def resolve_divi_version(divi: str | None, tokens: str | None, major: int = 4) -
         if version:
             return version
         version = fallback()
+        label = "the newest cached Divi" + (" 5" if major == 5 else "")  # the Divi 4 note is unchanged
         print(f"note: site.divi_version is empty in {tokens}; using "
-              f"{version if version.startswith('latest') else f'the newest cached Divi {major}, ' + version}",
-              file=sys.stderr)
+              f"{version if version.startswith('latest') else label + ', ' + version}", file=sys.stderr)
         return version
     return fallback()
 
@@ -146,11 +146,17 @@ D5_ONLY = ("this page is Divi 5 block markup, which needs a Divi 5 theme, but th
 
 
 # ----------------------------------------------------------------------------- Divi 5 token seeding
-_UNSAFE_CSS = re.compile(r"[<>{}]|/\*|\*/")
+# Nothing in a seeded value, selector or media query may end or escape its declaration/rule/<style>: no
+# `;` `{` `}` `<` `>` `\`, line breaks or comments, and quotes, brackets and parentheses must pair up.
+_UNSAFE_CSS = re.compile(r"[<>{};\\\r\n]|/\*|\*/")
 
 
 def _css_safe(text) -> bool:
-    return isinstance(text, str) and text.strip() != "" and not _UNSAFE_CSS.search(text)
+    if not isinstance(text, str) or not text.strip() or _UNSAFE_CSS.search(text):
+        return False
+    if text.count('"') % 2 or text.count("'") % 2:
+        return False
+    return text.count("(") == text.count(")") and text.count("[") == text.count("]")
 
 
 def _var_css(entry: dict) -> str | None:
@@ -163,9 +169,10 @@ def _var_css(entry: dict) -> str | None:
     if kind in ("strings", "links"):
         return None  # resolved inline by Divi, never CSS
     if kind == "images":
-        return 'url("' + value.replace('"', '%22') + '")'
+        return None if '"' in value else 'url("' + value + '")'
     if kind == "fonts":
-        return "'" + value.strip("'\"").replace("'", "\\'") + "'"
+        name = value.strip("'\"")
+        return None if ("'" in name or '"' in name) else "'" + name + "'"
     return value.strip()
 
 
@@ -569,10 +576,9 @@ STARTING = ("<!DOCTYPE html><meta http-equiv=refresh content=2><title>Starting D
 
 
 def make_handler(pages: Path, version: str | None, with_js: bool, keys_path=None, blocks=None,
-                 version_error: str | None = None, blocks_error: str | None = None):
+                 version_error: str | None = None):
     """The serve handler. Divi 4 shortcode pages render in Python on `version` (None: they can't, and show
-    `version_error`); Divi 5 block pages redirect to the warm Playground `blocks` (PlaygroundPages; None:
-    they show `blocks_error`)."""
+    `version_error`); Divi 5 block pages redirect to the warm Playground of `blocks` (LazyBlocks)."""
     dr = _renderer()
     from divi_render.assets import mime_type, resolve_asset
     theme = dr.theme_for(version, DIVI_ROUTE, False, keys_path=keys_path) if version else None
@@ -629,16 +635,17 @@ def make_handler(pages: Path, version: str | None, with_js: bool, keys_path=None
             if f is None:
                 return self.send(404, b"no such page", "text/plain")
             if page_is_blocks(f):
-                if blocks is None:
+                pg, blocks_error = blocks.get() if blocks else (None, None)
+                if pg is None:
                     return self.error_page(500, blocks_error or "Divi 5 block pages can't be previewed here.")
-                blocks.start()
-                if blocks.error:
-                    return self.error_page(500, blocks.error)
-                if blocks.base is None:
-                    return self.send(503, STARTING.format(v=html.escape(blocks.version)).encode(),
+                pg.start()
+                if pg.error:
+                    return self.error_page(500, pg.error)
+                if pg.base is None:
+                    return self.send(503, STARTING.format(v=html.escape(pg.version)).encode(),
                                      extra={"Retry-After": "2"})
-                blocks.sync()
-                return self.send(302, b"", "text/plain", {"Location": blocks.url(name)})
+                pg.sync()
+                return self.send(302, b"", "text/plain", {"Location": pg.url(name)})
             if theme is None:
                 return self.error_page(500, version_error or "Divi 4 pages can't be previewed here.")
             t0 = time.perf_counter()
@@ -694,46 +701,79 @@ def cmd_serve(a) -> int:
             raise UsageError(version_error)
     elif shortcode_names or not block_names:
         version = v4
-    # Divi 5 block pages: one warm Playground, started now when there are any (else on the first request).
-    blocks = blocks_error = None
-    try:
-        blocks = PlaygroundPages(pages, blocks_version(a), load_seed(a.tokens),
-                                 usable_node(D5_NODE, quiet=True), exact_env(a.keys))
-    except (UsageError, NodeMissing, wp_keys.KeysError) as e:
-        blocks_error = str(e)
+    # Divi 5 block pages: one warm Playground, set up only when a block page exists (now, or on the first
+    # block-page request): a Divi 4-only serve never resolves a Divi 5 version.
+    blocks = LazyBlocks(pages, a)
     if block_names:
+        pg, blocks_error = blocks.get()
         if blocks_error and not shortcode_names:
             print(f"preview: {blocks_error}", file=sys.stderr)
             return 2
         if blocks_error:
             print(f"preview: Divi 5 block pages won't render: {blocks_error}", file=sys.stderr)
-        else:
-            blocks.start()
-    handler = make_handler(pages, version, not a.no_js, keys_path=a.keys, blocks=blocks,
-                           version_error=version_error, blocks_error=blocks_error)
-    server = ThreadingHTTPServer(("127.0.0.1", a.port), handler)
-    base = f"http://127.0.0.1:{server.server_address[1]}"
-    for n in files:
-        print(f"{base}/{n}", flush=True)
-    if not files:
-        print(f"(no *.txt in {pages}; add one and open {base}/<name>)", flush=True)
-    kinds = (["Python preview for Divi 4 shortcode"] if shortcode_names or not block_names else []) + \
-            ([f"Divi {blocks.version} Playground for block pages"] if blocks and block_names else [])
-    print(f"Serving ({', '.join(kinds)}); Ctrl-C to stop.", file=sys.stderr, flush=True)
-
-    def on_term(*_):
-        raise KeyboardInterrupt  # SIGTERM stops like Ctrl-C: the Playground child is stopped too
-
-    signal.signal(signal.SIGTERM, on_term)
     try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        pass
+        handler = make_handler(pages, version, not a.no_js, keys_path=a.keys, blocks=blocks,
+                               version_error=version_error)
+        server = ThreadingHTTPServer(("127.0.0.1", a.port), handler)
+        base = f"http://127.0.0.1:{server.server_address[1]}"
+        for n in files:
+            print(f"{base}/{n}", flush=True)
+        if not files:
+            print(f"(no *.txt in {pages}; add one and open {base}/<name>)", flush=True)
+        pg = blocks.started()
+        if block_names and pg:
+            pg.start()
+        kinds = (["Python preview"] if not block_names else
+                 (["Python preview for Divi 4 shortcode"] if shortcode_names else [])
+                 + ([f"Divi {pg.version} Playground for block pages"] if pg else []))
+        print(f"Serving ({', '.join(kinds)}); Ctrl-C to stop.", file=sys.stderr, flush=True)
+
+        def on_term(*_):
+            raise KeyboardInterrupt  # SIGTERM stops like Ctrl-C: the Playground child is stopped too
+
+        signal.signal(signal.SIGTERM, on_term)
+        try:
+            server.serve_forever()
+        except KeyboardInterrupt:
+            pass
+        finally:
+            server.server_close()
     finally:
-        server.server_close()
-        if blocks:
-            blocks.stop()
+        blocks.stop()  # the Playground child and its stage dir never outlive serve, even on a failed start
     return 0
+
+
+class LazyBlocks:
+    """The PlaygroundPages for serve, created on first need (Divi 5 version, seed, Node check) and remembered,
+    with the reason when block pages can't render."""
+
+    def __init__(self, pages: Path, a):
+        self.pages, self.a = pages, a
+        self._lock = threading.Lock()
+        self._done = False
+        self._pg = self._error = None
+
+    def get(self) -> tuple:
+        with self._lock:
+            if not self._done:
+                self._done = True
+                try:
+                    self._pg = PlaygroundPages(self.pages, blocks_version(self.a), load_seed(self.a.tokens),
+                                               usable_node(D5_NODE, quiet=True), exact_env(self.a.keys))
+                except (UsageError, NodeMissing, wp_keys.KeysError, fetch_divi.FetchError) as e:
+                    self._error = str(e)
+            return self._pg, self._error
+
+    def started(self):
+        """The PlaygroundPages if it was set up (not starting anything)."""
+        return self._pg
+
+    def stop(self) -> None:
+        with self._lock:
+            self._done = True  # no Playground after shutdown
+            pg = self._pg
+        if pg:
+            pg.stop()
 
 
 # ----------------------------------------------------------------------------- doctor / fetch

@@ -26,7 +26,7 @@
  *   - inline=1 also embeds the icon fonts Divi 5 references by protocol-relative URL inside <style> blocks.
  *   - "Open Sans" is dropped from builder Google Fonts URLs when the theme already loads it (what a warm live
  *     Divi 5 page does; the preview is always a cold render).
- * Token seeding (any Divi): <name>.seed.css next to the page (written by preview.py --tokens) is added as
+ * Token seeding (Divi 5 only): <name>.seed.css next to the page (written by preview.py --tokens) is added as
  * <style id="pp-token-seed"> at the end of <head>.
  */
 
@@ -84,9 +84,10 @@ $pp_title     = isset( $_GET['title'] ) ? wp_unslash( (string) $_GET['title'] ) 
 // Page-level meta sidecar (optional): <name>.meta.json, flat {"meta_key": "value"} (e.g. _et_pb_custom_css).
 $pp_meta_file = $pp_dir . '/' . $pp_name . '.meta.json';
 $pp_meta_in   = is_readable( $pp_meta_file ) ? (array) json_decode( file_get_contents( $pp_meta_file ), true ) : array();
-// Token-seeding sidecar (optional): <name>.seed.css, the client's recovered global colors/variables/preset CSS.
+// Token-seeding sidecar (optional, Divi 5 only): <name>.seed.css, the client's recovered global colors,
+// variables and preset CSS. Never read on Divi 4, so Divi 4 output can't change.
 $pp_seed_file = $pp_dir . '/' . $pp_name . '.seed.css';
-$pp_seed_css  = is_readable( $pp_seed_file ) ? (string) file_get_contents( $pp_seed_file ) : '';
+$pp_seed_css  = ( pp_preview_divi_major() >= 5 && is_readable( $pp_seed_file ) ) ? (string) file_get_contents( $pp_seed_file ) : '';
 
 /**
  * Prime the fake post + meta. Called early and again on `wp` in case anything flushed the cache.
@@ -275,11 +276,12 @@ add_action(
 
 /**
  * Token seeding: the <name>.seed.css sidecar as the last <style> of <head> (its :root:root block outranks the
- * stock :root values Divi prints; preset rules precede the builder CSS, as on the live site). No sidecar: no-op.
+ * stock :root values Divi prints; preset rules precede the builder CSS, as on the live site). No sidecar, or
+ * Divi 4: no-op.
  */
 function pp_preview_seed( $html ) {
 	global $pp_seed_css;
-	$at = '' === trim( $pp_seed_css ) ? false : stripos( $html, '</head>' );
+	$at = ( pp_preview_divi_major() < 5 || '' === trim( $pp_seed_css ) ) ? false : stripos( $html, '</head>' );
 	if ( false === $at ) {
 		return $html;
 	}

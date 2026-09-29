@@ -359,6 +359,25 @@ class SeedCssTest(unittest.TestCase):
         self.assertNotIn("</style", self.css)
         self.assertNotIn("<script", self.css)
 
+    def test_values_that_could_break_out_of_a_declaration_are_skipped(self):
+        import preview
+        bad = {"a;color:red": "semicolon", "a\\9": "backslash", "a\nb": "newline", "red'": "unbalanced quote",
+               'x"': "unbalanced double quote", "a}b": "brace"}
+        tokens = {"colors": {"global": {f"gcid-bad{i}": {"value": v} for i, v in enumerate(bad)}},
+                  "variables": {"gvid-font": {"value": "Po'ppins", "kind": "fonts"},
+                                "gvid-img": {"value": 'https://x.test/a".jpg', "kind": "images"}},
+                  "presets": {"divi/text": [{"id": "p", "css": {"rules": [
+                      {"selector": ".preset--module--divi-text--p", "declarations": {
+                          "font-family": "'Open Sans', sans-serif", "color": "red;x:y", "margin": "0\\;"}},
+                      {"selector": '.a[data-x="1"', "declarations": {"color": "blue"}},
+                      {"selector": ".preset--module--divi-text--p", "declarations": {"color": "green"},
+                       "media": "screen;x"}]}}]}}
+        css = preview.seed_css(tokens)
+        self.assertNotIn("gcid-bad", css)
+        self.assertNotIn("gvid-font", css)
+        self.assertNotIn("gvid-img", css)
+        self.assertEqual(css, ".preset--module--divi-text--p{font-family:'Open Sans', sans-serif}")
+
     def test_variables_are_seeded_in_css_form(self):
         root = self.root()
         self.assertIn("--gvid-pad:clamp(48px, 8vw, 96px);", root)
@@ -622,6 +641,52 @@ class PlaygroundPagesTest(unittest.TestCase):
                 time.sleep(0.05)
         self.assertIsNotNone(pg.base)
         self.assertEqual(sum(1 for l in t.logged().splitlines() if l.startswith("ARGS ") and " serve " in l), 1)
+
+
+class ServeStartupTest(unittest.TestCase):
+    def setUp(self):
+        self.t = BlocksRoutingTest("setUp")
+        self.t.setUp()
+        self.addCleanup(self.t.tearDown)
+        self.tmpdir = Path(self.t.tmp.name) / "tmp"
+        self.tmpdir.mkdir()
+
+    def test_a_failed_start_leaves_no_playground_child_or_stage_dir(self):
+        env = dict(self.t.env, TMPDIR=str(self.tmpdir))
+        r = run("serve", "--pages", self.t.pages, "--port", "99999", env=env, timeout=60)
+        self.assertNotEqual(r.returncode, 0, r.stdout + r.stderr)
+        time.sleep(0.5)
+        self.assertNotIn(" serve ", self.t.logged())
+        self.assertEqual(sorted(p.name for p in self.tmpdir.iterdir()), [])
+
+    def test_shortcode_only_serve_output_is_the_divi_4_output(self):
+        # Divi 4 output must not change: no Divi 5 resolution (or its note) when there are no block pages.
+        cache = Path(self.t.tmp.name) / "cache"
+        pages = Path(self.t.tmp.name) / "d4pages"
+        pages.mkdir()
+        (pages / "landing.txt").write_text(LANDING.read_text())
+        tokens = Path(self.t.tmp.name) / "tokens.json"
+        tokens.write_text(json.dumps({"site": {"divi_version": ""}}))
+        port = free_port()
+        proc = subprocess.Popen([sys.executable, str(PREVIEW), "serve", "--pages", str(pages), "--port", str(port),
+                                 "--tokens", str(tokens)], env=self.t.env, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, text=True)
+        try:
+            deadline = time.time() + 20
+            while time.time() < deadline:
+                try:
+                    socket.create_connection(("127.0.0.1", port), timeout=0.5).close()
+                    break
+                except OSError:
+                    time.sleep(0.1)
+        finally:
+            proc.terminate()
+            out, err = proc.communicate(timeout=15)
+        self.assertEqual(out, f"http://127.0.0.1:{port}/landing\n")
+        self.assertEqual(err, f"note: site.divi_version is empty in {tokens}; using the newest cached Divi, 4.27.10\n"
+                              "Serving (Python preview); Ctrl-C to stop.\n")
+        self.assertEqual(self.t.logged(), "")  # node never ran
+        del cache
 
 
 class BlocksServeStopTest(unittest.TestCase):

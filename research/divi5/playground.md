@@ -35,9 +35,9 @@ The question: can the `--exact` preview (`Skill/divi-page-builder/scripts/previe
 
   These match Divi 4. Peak PHP memory is 96–129 MB of Playground's 256 MB.
 - **Not verified:**
-  - Downloading Divi 5 from Elegant Themes. The API was timing out today and was deliberately not called; the cache was seeded from the LocalWP copy.
+  - Downloading Divi 5 from Elegant Themes. The API was timing out today and was deliberately not called; the cache was seeded from the LocalWP copy. (Checked in Task 14, §6: `divi_5=on` returns the Divi 5 line and a 5.13.1 download has the Divi 4 zip layout.)
   - The Visual Builder. The front end doesn't need it.
-- **Hazard created by this spike (resolved in Task 14, see §6).** The user cache now holds `Divi-5.13.1`, so "newest cached" resolves to **5.13.1** in `preview.mjs`, `preview.py`, `divi_render/assets.py` and `tests/test_render_fidelity.py` / `test_render_fallbacks.py`. **A Divi 4 run without `--divi` or `--tokens` now picks Divi 5.** Version resolution must become major-aware before this ships. See "Required changes" §2.
+- **Hazard created by this spike (resolved in Task 14, see §6).** With `Divi-5.13.1` in the user cache, "newest cached" resolved to **5.13.1** in `preview.mjs`, `preview.py`, `divi_render/assets.py` and `tests/test_render_fidelity.py` / `test_render_fallbacks.py`, so a Divi 4 run without `--divi` or `--tokens` picked Divi 5. Version resolution is now major-aware everywhere (shortcode → newest cached 4.x, blocks → newest cached 5.x).
 
 ---
 
@@ -212,7 +212,8 @@ The prototype was ported into `Skill/divi-page-builder/scripts/preview/` and `pr
 - **mu-plugin:** the three fixes, each gated on the mounted theme's `style.css` major being 5. `serve` requests get a
   fake id per page name (`990000002 + crc32(name) % 999998`) and that id's `et-cache` dir is purged per request;
   `inline=1` renders keep `990000001`. The seeding sidecar `<name>.seed.css` is injected at the end of `<head>`.
-  The prototype's experiments (`d5=preview`, `fonts=inline`, the timing comment) were not shipped.
+  The seed sidecar is read and injected only on Divi 5. The prototype's experiments (`d5=preview`, `fonts=inline`,
+  the timing comment) were not shipped.
 - **Divi 4 regression:** `render` of heldout-inscope, content-heldout and divi-ai-layout on 4.27.9 with the shipped
   preview vs the pre-change one: byte-identical apart from WordPress's random `wp_block_styles_on_demand_placeholder`
   token (3.10/3.26/3.15 MB). `serve` (non-inline) of two of them: identical after the same normalization.
@@ -247,7 +248,7 @@ cost; the unloaded figures in §4 stand.
 - **The preview must receive the format the target site stores.** Divi 5 blocks for a Divi 5 site; Divi 4 shortcode for a Divi 4 site. Shortcode fed to Divi 5 renders, but not like converted blocks.
 - **Divi 5 needs about 2× the download and cache** (about 35 MB zip, 132 MB unpacked). Warm and `serve` timings are the same as Divi 4.
 - **Open items:**
-  - The Divi 5 download through the Elegant Themes API: `divi_5=on` for "latest", and whether a per-version download works for 5.x.
+  - The Divi 5 download through the Elegant Themes API: resolved in Task 14 (§6). `latest5` sends `divi_5=on` (answered 5.14 on 2026-09-29) and a per-version 5.13.1 download works, with the Divi 4 zip layout. A 5.14 download itself is not yet verified.
   - The Visual Builder inside Playground (not needed).
   - Theme Builder templates and client settings (out of scope, as for Divi 4).
 
