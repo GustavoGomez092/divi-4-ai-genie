@@ -6,7 +6,8 @@
 //       for every DIR/<name>.txt (Divi 4 shortcode or Divi 5 blocks). The file is re-read on every request: edit, reload.
 //   node preview.mjs render <layout.txt> [--out page.html] [--divi VER | --tokens tokens.json] [same flags]
 //       Boots, renders one layout to a self-contained HTML file (local CSS/JS/icon fonts inlined), shuts down.
-//       Sidecars next to the layout are used when present: <name>.meta.json (page meta), <name>.seed.css (tokens).
+//       Sidecars next to the layout are used when present: <name>.meta.json (page meta), <name>.seed.css and
+//       <name>.seed.json (Divi 5 token seeding: CSS, and the site options Divi reads its design system from).
 //   node preview.mjs fetch-divi <VER|latest|latest5>
 //       Downloads and caches a Divi version from Elegant Themes. The only command that needs credentials.
 //   node preview.mjs doctor
@@ -102,6 +103,8 @@ function writeBlueprint(php) {
 }
 
 function startPlayground({ siteDir, themeDir, pagesDir, port, php, debug }) {
+	const blueprint = writeBlueprint(php);
+	const dropBlueprint = () => fs.rmSync(path.dirname(blueprint), { recursive: true, force: true });
 	// --prefer-offline: the CLI version is pinned, so never revalidate against the registry (offline, npx
 	// otherwise waits ~70 s for the registry to time out before using its cache).
 	const args = ['-y', '--prefer-offline', CLI, 'server', `--php=${php}`, `--port=${port}`,
@@ -111,19 +114,20 @@ function startPlayground({ siteDir, themeDir, pagesDir, port, php, debug }) {
 		`--mount=${themeDir}:/wordpress/wp-content/themes/Divi`,
 		`--mount=${path.join(HERE, 'mu-plugin')}:/wordpress/wp-content/mu-plugins`,
 		`--mount=${pagesDir}:/pp-pages`,
-		`--blueprint=${writeBlueprint(php)}`];
+		`--blueprint=${blueprint}`];
 	if (debug) args.push('--define-bool', 'WP_DEBUG', 'true', '--define-bool', 'WP_DEBUG_DISPLAY', 'true');
 	const win = process.platform === 'win32';
 	const child = spawn(win ? 'npx.cmd' : 'npx', args, { stdio: ['ignore', 'pipe', 'pipe'], detached: !win, shell: win, env: playgroundEnv() });
 	let exited = false;
 	child.on('exit', () => { exited = true; });
 	const kill = (sig) => { try { win ? spawn('taskkill', ['/pid', String(child.pid), '/T', '/F']) : process.kill(-child.pid, sig); } catch {} };
-	// Resolves once the whole process group is gone (SIGKILL after 5 s).
+	// Resolves once the whole process group is gone (SIGKILL after 5 s); the blueprint's temp dir goes with it.
 	const stop = () => new Promise((resolve) => {
-		if (exited) return resolve();
-		child.once('exit', () => resolve());
+		const done = () => { dropBlueprint(); resolve(); };
+		if (exited) return done();
+		child.once('exit', done);
 		kill('SIGTERM');
-		setTimeout(() => { kill('SIGKILL'); resolve(); }, 5000).unref();
+		setTimeout(() => { kill('SIGKILL'); done(); }, 5000).unref();
 	});
 	const ready = new Promise((resolve, reject) => {
 		let log = '';
@@ -182,7 +186,7 @@ function doctor() {
 const o = parseArgs(process.argv.slice(2));
 const cmd = o._[0];
 if (!['serve', 'render', 'fetch-divi', 'doctor'].includes(cmd)) {
-	console.error(fs.readFileSync(fileURLToPath(import.meta.url), 'utf8').split('\n').slice(1, 28).map((l) => l.replace(/^\/\/ ?/, '')).join('\n'));
+	console.error(fs.readFileSync(fileURLToPath(import.meta.url), 'utf8').split('\n').slice(1, 29).map((l) => l.replace(/^\/\/ ?/, '')).join('\n'));
 	process.exit(2);
 }
 
@@ -224,8 +228,9 @@ try {
 		if (!o._[1]) throw new Error('render needs a layout file');
 		pagesDir = tmpPages = fs.mkdtempSync(path.join(os.tmpdir(), 'pp-preview-'));
 		fs.copyFileSync(path.resolve(o._[1]), path.join(pagesDir, 'page.txt'));
-		// Sidecars: <name>.meta.json (page meta) and <name>.seed.css (token seeding, written by preview.py --tokens).
-		for (const ext of ['.meta.json', '.seed.css']) {
+		// Sidecars: <name>.meta.json (page meta), <name>.seed.css and <name>.seed.json (Divi 5 token seeding,
+		// written by preview.py --tokens; the mu-plugin ignores them on Divi 4).
+		for (const ext of ['.meta.json', '.seed.css', '.seed.json']) {
 			const side = path.resolve(o._[1]).replace(/\.[^.]+$/, '') + ext;
 			if (fs.existsSync(side)) fs.copyFileSync(side, path.join(pagesDir, 'page' + ext));
 		}

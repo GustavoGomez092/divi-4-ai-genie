@@ -370,25 +370,44 @@ python3 scripts/preview.py serve --pages ./drafts --tokens tokens.json
 ### Token seeding (`--tokens`)
 
 Playground is a fresh WordPress with **stock Divi 5 settings**: none of the client's global colors, design
-variables or presets exist there, so `var(--gcid-…)` / `var(--gvid-…)` references render **unset** and preset
+variables or presets exist there, so `$variable()` references to them render **unset** (Divi drops a declaration
+whose variable the site doesn't define, so a section padded by a variable gets Divi's default padding) and preset
 classes carry no styling. With `--tokens tokens.json` (Divi 5 tokens, [design-tokens.md §7](design-tokens.md#7-divi-5-sites))
-the preview adds one `<style id="pp-token-seed">` at the end of `<head>` holding:
+the preview seeds the client's design system two ways:
 
-- `:root:root{--gcid-…:…;--gvid-…:…}` from `colors.global`, `colors.customizer` and `variables` (images as
-  `url("…")`, fonts quoted). `:root:root` outranks the stock `:root` values Divi prints.
-- every recovered preset rule: `presets[…].css.rules`, `group_presets[…].css.rules` and `preset_defaults`
-  (with their media queries).
+- **The site's options**, where Divi reads them: `colors.global` → `et_divi[et_global_data][global_colors]`,
+  `colors.customizer` → the five Customizer color options (`accent_color`, `secondary_accent_color`,
+  `header_color`, `font_color`, `link_color`), and `variables` → `et_divi_global_variables` under each variable's
+  `kind` (numbers, fonts, images, strings, links, gradients), all `active` and labelled with their id. Divi then
+  resolves every `$variable()` ref and prints the `:root` values itself, as on the live site: variable padding,
+  radius, fonts, strings and links render. The values are merged over the Playground site's options **for each
+  request only** (nothing is written to its database, which is cached and shared by later renders), so a render
+  without `--tokens` is stock again.
+- **One `<style id="pp-token-seed">`** at the end of `<head>`: `:root:root{--gcid-…:…;--gvid-…:…}` (images as
+  `url("…")`, fonts quoted; it repeats the values Divi now prints, and is the only source for a variable whose
+  `kind` wasn't recovered) and every recovered preset rule: `presets[…].css.rules`, `group_presets[…].css.rules`
+  and `preset_defaults` (with their media queries). Presets are not seeded as options: tokens hold their CSS, not
+  their attributes.
+
+Measured on the hero-split recipe (Divi 5.13.1): the seeded preview's builder markup and all 86 builder CSS
+declarations are identical to the same page on a Divi 5 site whose options hold the same values. Seeding the
+options adds no measurable time (render step 1.32–1.34 s against 1.34–1.42 s with the CSS seed alone, 3 runs each).
+
+`serve --tokens` reads the tokens once, at start: every block page in the session gets the same seed. After the
+tokens change, restart `serve`.
 
 **Limits.** It seeds only what the extractor recovered:
 
-- a color or variable with `value: null` stays unset, and string/link variables are never CSS;
+- a color or variable with `value: null` stays unset;
 - a preset with `css: null` stays unstyled; preset CSS is what sampled pages rendered, not the preset
   itself (a state or breakpoint no sampled page used is missing), and `!important` flags are not recovered;
+- a derived global color (a tint of another) is seeded with its resolved value, not as a link to its base;
 - the Customizer fonts, body size and the rest of the site's Theme Customizer, Theme Builder header/footer,
   plugins and child theme are not applied (the header/footer are Playground's stock ones);
-- a value, selector or media query that could break out of its declaration is dropped: one containing `;`, `{`, `}`,
-  `<`, `>`, a backslash, a line break or a comment, or with unpaired quotes, brackets or parentheses (so a
-  `data:` image variable is not seeded).
+- a value, selector or media query that could break out of its declaration is dropped (from the CSS and the
+  options alike): one containing `;`, `{`, `}`, `<`, `>`, a backslash, a line break or a comment, or with unpaired
+  quotes, brackets or parentheses (so a `data:` image variable, or a string variable with an apostrophe, is not
+  seeded).
 
 So the seeded preview is a close approximation of the client's look, not proof of it: **the WordPress draft
 preview (`publish.py draft`) stays the authoritative check** for anything site-wide.

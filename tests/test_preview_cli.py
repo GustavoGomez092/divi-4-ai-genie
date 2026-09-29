@@ -401,6 +401,104 @@ class SeedCssTest(unittest.TestCase):
         self.assertEqual(preview.seed_css({"site": {"divi_version": "4.27.9"}, "colors": {"palette": []}}), "")
 
 
+class SeedOptionsTest(unittest.TestCase):
+    """seed_options(tokens): the recovered Divi 5 design system as the WordPress options Divi reads it from, so
+    the Playground preview resolves $variable() refs to number/font/string/link/image variables and global colors
+    the way the live site does (seed_css alone can't: Divi resolves a gvid ref to '' unless the variable exists
+    in et_divi_global_variables)."""
+
+    def setUp(self):
+        sys.path.insert(0, str(SCRIPTS))
+        import preview
+        self.preview = preview
+        self.opts = preview.seed_options(TOKENS5)
+
+    def test_option_names(self):
+        self.assertEqual(sorted(self.opts), ["et_divi", "et_divi_global_variables"])
+
+    def test_global_colors_go_to_et_global_data_active_and_labelled_by_id(self):
+        colors = self.opts["et_divi"]["et_global_data"]["global_colors"]
+        self.assertEqual(sorted(colors), ["gcid-light", "gcid-navy"])  # null and unsafe skipped
+        navy = colors["gcid-navy"]
+        self.assertEqual((navy["color"], navy["label"], navy["status"]), ("#0B2A3C", "gcid-navy", "active"))
+        self.assertEqual((navy["folder"], navy["usedInPosts"]), ("", []))
+        self.assertIn("lastUpdated", navy)
+        self.assertEqual(colors["gcid-light"]["color"], "#fdcdab")  # a derived color uses its resolved value
+
+    def test_customizer_colors_go_to_their_customizer_options(self):
+        et_divi = self.opts["et_divi"]
+        self.assertEqual(et_divi["accent_color"], "#7C3AED")
+        self.assertNotIn("link_color", et_divi)  # value null
+        tokens = {"colors": {"customizer": {
+            "primary": {"id": "gcid-primary-color", "value": "#111111"},
+            "secondary": {"id": "gcid-secondary-color", "value": "#222222"},
+            "heading": {"id": "gcid-heading-color", "value": "#333333"},
+            "body": {"id": "gcid-body-color", "value": "#444444"},
+            "link": {"id": "gcid-link-color", "value": "#555555"}},
+            "global": {"gcid-body-color": {"value": "#666666"}}}}  # a Customizer id listed as a global color
+        et_divi = self.preview.seed_options(tokens)["et_divi"]
+        self.assertEqual({k: et_divi[k] for k in ("accent_color", "secondary_accent_color", "header_color",
+                                                   "link_color")},
+                         {"accent_color": "#111111", "secondary_accent_color": "#222222",
+                          "header_color": "#333333", "link_color": "#555555"})
+        self.assertIn(et_divi["font_color"], ("#444444", "#666666"))
+        self.assertNotIn("et_global_data", et_divi)  # never stored as a plain global color
+
+    def test_variables_go_to_their_kinds_bucket(self):
+        v = self.opts["et_divi_global_variables"]
+        self.assertEqual(sorted(v), ["fonts", "gradients", "images", "numbers"])
+        self.assertEqual(v["numbers"]["gvid-pad"], {"id": "gvid-pad", "label": "gvid-pad",
+                                                    "value": "clamp(48px, 8vw, 96px)", "order": 1,
+                                                    "status": "active", "type": "numbers"})
+        self.assertEqual(v["fonts"]["gvid-font"]["value"], "Poppins")  # the stored form, not CSS-quoted
+        self.assertEqual(v["images"]["gvid-img"]["value"], "https://example.com/hero.jpg")  # not url("…")
+        self.assertEqual(v["gradients"]["gvid-grad"]["value"], "linear-gradient(90deg, #fff 0%, #000 100%)")
+        for bucket, items in v.items():
+            for gvid, item in items.items():
+                self.assertEqual((item["id"], item["type"], item["status"]), (gvid, bucket, "active"))
+
+    def test_string_and_link_variables_are_seeded_too(self):
+        tokens = {"variables": {"gvid-tag": {"value": "Fast, friendly plumbers", "kind": "strings"},
+                                "gvid-cta": {"value": "https://example.com/start", "kind": "links"},
+                                "gvid-nul": {"value": None, "kind": "strings"}}}
+        v = self.preview.seed_options(tokens)["et_divi_global_variables"]
+        self.assertEqual(v["strings"]["gvid-tag"]["value"], "Fast, friendly plumbers")
+        self.assertEqual(v["links"]["gvid-cta"]["value"], "https://example.com/start")
+        self.assertNotIn("gvid-nul", v["strings"])
+
+    def test_values_are_sanitized_like_seed_css(self):
+        bad = ["a;color:red", "a\\9", "a\nb", "red'", 'x"', "a}b", "<b>", "/* x */", "calc(1px"]
+        tokens = {"colors": {"global": {f"gcid-bad{i}": {"value": b} for i, b in enumerate(bad)},
+                             "customizer": {"primary": {"id": "gcid-primary-color", "value": "red;x:y"}}},
+                  "variables": dict({f"gvid-bad{i}": {"value": b, "kind": "numbers"} for i, b in enumerate(bad)},
+                                    **{"gvid-font": {"value": "Po'ppins", "kind": "fonts"},
+                                       "gvid-img": {"value": 'https://x.test/a".jpg', "kind": "images"},
+                                       "gvid-str": {"value": "it's", "kind": "strings"}})}
+        self.assertEqual(self.preview.seed_options(tokens), {})
+
+    def test_bad_ids_and_unknown_kinds_are_skipped(self):
+        tokens = {"colors": {"global": {"navy": {"value": "#000"}, "gcid-x y": {"value": "#000"}},
+                             "customizer": {"primary": {"id": "gcid-evil-color", "value": "#000"}}},
+                  "variables": {"gvid-a": {"value": "1px", "kind": "colors"}, "gvid-b": {"value": "1px"},
+                                "pad": {"value": "1px", "kind": "numbers"}}}
+        self.assertEqual(self.preview.seed_options(tokens), {})
+
+    def test_nothing_to_seed_is_empty(self):
+        self.assertEqual(self.preview.seed_options({}), {})
+        self.assertEqual(self.preview.seed_options([]), {})
+        self.assertEqual(self.preview.seed_options({"site": {"divi_version": "4.27.9"},
+                                                    "colors": {"palette": []}}), {})
+
+    def test_sample_tokens_seed_the_recipe_variables(self):
+        sample = json.loads((SCRIPTS.parent / "recipes" / "divi5" / "sample-tokens.json").read_text())
+        opts = self.preview.seed_options(sample)
+        numbers = opts["et_divi_global_variables"]["numbers"]
+        self.assertEqual(numbers["gvid-r6secpad01"]["value"], "clamp(48px, 8vw, 96px)")
+        self.assertEqual(numbers["gvid-r6radius01"]["value"], "12px")
+        self.assertEqual(opts["et_divi"]["et_global_data"]["global_colors"]["gcid-r6navy0001"]["color"], "#0B2A3C")
+        self.assertEqual(opts["et_divi"]["accent_color"], "#F97316")
+
+
 BLOCK_PAGE = ('<!-- wp:divi/placeholder --><!-- wp:divi/section {"builderVersion":"5.13.1"} -->'
               '<!-- wp:divi/row {"builderVersion":"5.13.1"} --><!-- wp:divi/column {"builderVersion":"5.13.1"} -->'
               '<!-- wp:divi/image {"image":{"innerContent":{"desktop":{"value":{"src":"./img/a.png"}}}},'
@@ -417,7 +515,8 @@ out=""; pages=""; port=""; prev=""
 for a in "$@"; do
   case "$prev" in --out) out="$a";; --pages) pages="$a";; --port) port="$a";; esac
   case "$a" in *.txt) echo "PAGE $(cat "$a")" >> "$log"; s="${a%.txt}.seed.css"
-    [ -f "$s" ] && echo "SEED $(cat "$s")" >> "$log";; esac
+    [ -f "$s" ] && echo "SEED $(cat "$s")" >> "$log"; o="${a%.txt}.seed.json"
+    [ -f "$o" ] && echo "OPTS $(cat "$o")" >> "$log";; esac
   prev="$a"
 done
 if [ "$2" = render ]; then echo "<html>fake</html>" > "$out"; exit 0; fi
@@ -500,6 +599,26 @@ class BlocksRoutingTest(unittest.TestCase):
     def test_no_seed_sidecar_without_tokens(self):
         run("render", self.page, "--out", Path(self.tmp.name) / "o.html", env=self.env)
         self.assertNotIn("SEED ", self.logged())
+        self.assertNotIn("OPTS ", self.logged())
+
+    def test_tokens_seed_the_site_options_sidecar(self):
+        tokens = Path(self.tmp.name) / "tokens.json"
+        tokens.write_text(json.dumps(TOKENS5))
+        r = run("render", self.page, "--out", Path(self.tmp.name) / "o.html", "--tokens", tokens, env=self.env)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        line = next(l for l in self.logged().splitlines() if l.startswith("OPTS "))
+        sys.path.insert(0, str(SCRIPTS))
+        import preview
+        self.assertEqual(json.loads(line[5:]), preview.seed_options(TOKENS5))
+        self.assertIn("design variables", r.stdout)
+
+    def test_tokens_with_nothing_for_the_options_write_no_options_sidecar(self):
+        tokens = Path(self.tmp.name) / "tokens.json"
+        tokens.write_text(json.dumps({"site": {"divi_version": "5.13.1"}, "presets": TOKENS5["presets"]}))
+        r = run("render", self.page, "--out", Path(self.tmp.name) / "o.html", "--tokens", tokens, env=self.env)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("SEED ", self.logged())
+        self.assertNotIn("OPTS ", self.logged())
 
     def test_a_divi_4_version_for_a_block_page_is_refused(self):
         r = run("render", self.page, "--divi", "4.27.10", "--out", Path(self.tmp.name) / "o.html", env=self.env)
@@ -641,6 +760,24 @@ class PlaygroundPagesTest(unittest.TestCase):
                 time.sleep(0.05)
         self.assertIsNotNone(pg.base)
         self.assertEqual(sum(1 for l in t.logged().splitlines() if l.startswith("ARGS ") and " serve " in l), 1)
+
+
+    def test_serve_stages_the_options_seed_for_every_block_page(self):
+        sys.path.insert(0, str(SCRIPTS))
+        import preview
+        t = BlocksRoutingTest("setUp")
+        t.setUp()
+        self.addCleanup(t.tearDown)
+        (t.pages / "about.html").write_text(BLOCK_PAGE)
+        opts = preview.seed_options(TOKENS5)
+        pg = preview.PlaygroundPages(t.pages, "5.13.1", "", str(t.bin / "node"), dict(t.env), options=opts)
+        pg.stage = Path(tempfile.mkdtemp(dir=t.tmp.name))
+        pg.sync()
+        for name in ("home", "about"):
+            self.assertEqual(json.loads((pg.stage / f"{name}.seed.json").read_text()), opts)
+        (t.pages / "about.html").unlink()
+        pg.sync()
+        self.assertFalse((pg.stage / "about.seed.json").exists())
 
 
 class ServeStartupTest(unittest.TestCase):

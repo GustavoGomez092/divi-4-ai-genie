@@ -27,7 +27,9 @@
  *   - "Open Sans" is dropped from builder Google Fonts URLs when the theme already loads it (what a warm live
  *     Divi 5 page does; the preview is always a cold render).
  * Token seeding (Divi 5 only): <name>.seed.css next to the page (written by preview.py --tokens) is added as
- * <style id="pp-token-seed"> at the end of <head>.
+ * <style id="pp-token-seed"> at the end of <head>; <name>.seed.json (the client's global colors, Customizer colors
+ * and design variables in the shape Divi stores them) is merged over the site's et_divi / et_divi_global_variables
+ * options for that request only, so Divi resolves $variable() refs to them as on the live site (see pp_preview_seed_options).
  */
 
 if ( ! defined( 'ABSPATH' ) || empty( $_GET['pp_preview'] ) ) {
@@ -88,6 +90,57 @@ $pp_meta_in   = is_readable( $pp_meta_file ) ? (array) json_decode( file_get_con
 // variables and preset CSS. Never read on Divi 4, so Divi 4 output can't change.
 $pp_seed_file = $pp_dir . '/' . $pp_name . '.seed.css';
 $pp_seed_css  = ( pp_preview_divi_major() >= 5 && is_readable( $pp_seed_file ) ) ? (string) file_get_contents( $pp_seed_file ) : '';
+// Design-data sidecar (optional, Divi 5 only): <name>.seed.json, preview.py's seed_options(). Never read on Divi 4.
+$pp_seed_json = $pp_dir . '/' . $pp_name . '.seed.json';
+if ( pp_preview_divi_major() >= 5 && is_readable( $pp_seed_json ) ) {
+	pp_preview_seed_options( json_decode( (string) file_get_contents( $pp_seed_json ), true ) );
+}
+
+/**
+ * Divi 5 reads its design system from options: global colors from et_divi[et_global_data][global_colors], the
+ * Customizer colors from et_divi[accent_color|…], design variables from et_divi_global_variables, and resolves a
+ * $variable() ref to a design variable to '' when the variable isn't there (DynamicContentGlobalVariableOptions::
+ * get_variable_value_by_id), whatever CSS is seeded. The seed is merged over the stored option on every read of
+ * this request (option_/default_option_ filters). Nothing is written: while seeding, updates to the two options
+ * are dropped (pre_update_option_ returns the old value), so the cached Playground site never keeps a client's
+ * values and a later render without --tokens is stock again.
+ *
+ * @param mixed $seed {"et_divi": {...}, "et_divi_global_variables": {...}}; other keys are ignored.
+ */
+function pp_preview_seed_options( $seed ) {
+	foreach ( array( 'et_divi', 'et_divi_global_variables' ) as $option ) {
+		if ( empty( $seed[ $option ] ) || ! is_array( $seed[ $option ] ) ) {
+			continue;
+		}
+		$values = $seed[ $option ];
+		$merge  = function ( $stored ) use ( $values ) {
+			return pp_preview_merge( $stored, $values );
+		};
+		add_filter( "option_{$option}", $merge, 999 );
+		add_filter( "default_option_{$option}", $merge, 999 );
+		add_filter(
+			"pre_update_option_{$option}",
+			function ( $value, $old_value ) {
+				return $old_value;
+			},
+			999,
+			2
+		);
+	}
+}
+
+/**
+ * $values merged into $stored, recursively (a serialized nested value, like et_divi[et_global_data], is
+ * unserialized first); $values wins.
+ */
+function pp_preview_merge( $stored, $values ) {
+	$stored = maybe_unserialize( $stored );
+	$stored = is_array( $stored ) ? $stored : array();
+	foreach ( $values as $key => $value ) {
+		$stored[ $key ] = ( is_array( $value ) && $value && array_key_exists( $key, $stored ) ) ? pp_preview_merge( $stored[ $key ], $value ) : $value;
+	}
+	return $stored;
+}
 
 /**
  * Prime the fake post + meta. Called early and again on `wp` in case anything flushed the cache.

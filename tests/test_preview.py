@@ -13,7 +13,7 @@ import unittest
 import urllib.parse
 from pathlib import Path
 
-from _paths import FIXTURES, FIXTURES5, SITE5_URL, SKILL, WP_LOCAL, live5_only, live_only, live_tests_enabled, wp5
+from _paths import FIXTURES, FIXTURES5, ROOT, SITE5_URL, SKILL, WP_LOCAL, live5_only, live_only, live_tests_enabled, wp5
 from divi_shortcode import parse
 
 PREVIEW = SKILL / "scripts" / "preview" / "preview.mjs"
@@ -376,6 +376,126 @@ class Divi5PreviewParityTest(unittest.TestCase):
         finally:
             proc.terminate()
             proc.wait(timeout=30)
+
+
+# ---- Divi 5: design data seeded into the Playground site's options (Task 14b) ------------------------------------------
+D5_SAMPLE_TOKENS = SKILL / "recipes" / "divi5" / "sample-tokens.json"
+D5_HERO_RECIPE = SKILL / "recipes" / "divi5" / "sections" / "hero-split.md"
+D5_SEED_TITLE = "D5TEST 14b seed"
+SEED_SITE_OPTIONS = ROOT / "research" / "tools" / "divi5" / "seed_site_options.php"
+
+
+def _recipe_example(path):
+    """The last ```divi5 block of a recipe (its worked example)."""
+    return re.findall(r"```divi5\n(.*?)\n```", path.read_text(encoding="utf-8"), re.S)[-1]
+
+
+@live5_only
+class Divi5SeedOptionsTest(unittest.TestCase):
+    """preview.py render --tokens (Divi 5) seeds the site's design data (global colors, Customizer colors, design
+    variables) into the Playground site's options, so Divi itself resolves the $variable() refs: the hero-split
+    recipe (section padding and image/button radius from gvid variables, navy background from a gcid color) renders
+    them, a later render without --tokens is stock again (nothing persisted), and the builder CSS matches the same
+    page on divi-5-test.local seeded the same way (seed_site_options.php; its option rows are restored byte-for-byte
+    and the "D5TEST 14b seed" page deleted)."""
+
+    @classmethod
+    def setUpClass(cls):
+        import fetch_divi
+        import fidelity
+        import preview
+        if shutil.which("node") is None:
+            raise unittest.SkipTest("node not installed")
+        version = fetch_divi.newest_cached(major=5)
+        if version is None:
+            raise unittest.SkipTest("no Divi 5 cached (preview.py fetch-divi latest5)")
+        site_version = _wp5("theme", "get", "Divi", "--field=version").splitlines()[-1]
+        if site_version != version:
+            raise unittest.SkipTest(f"site runs Divi {site_version}, cache has {version}")
+        cls.tmp = Path(tempfile.mkdtemp())
+        cls.page = cls.tmp / "hero.html"
+        cls.page.write_text(_recipe_example(D5_HERO_RECIPE), encoding="utf-8")
+        cls.html, cls.timings = {}, {}
+        cls.render_tmp = cls.tmp / "render-tmp"  # the renders' TMPDIR: no pp-* temp dir may outlive them
+        cls.render_tmp.mkdir()
+        for name, extra in (("seeded", ["--tokens", str(D5_SAMPLE_TOKENS)]), ("stock", [])):
+            out = cls.tmp / f"{name}.html"
+            t0 = time.time()
+            run = subprocess.run([sys.executable, str(PREVIEW_PY), "render", str(cls.page), "--out", str(out), *extra],
+                                 capture_output=True, text=True, timeout=600,
+                                 env=dict(os.environ, TMPDIR=str(cls.render_tmp)))
+            cls.timings[name] = round(time.time() - t0, 1)
+            assert run.returncode == 0, run.stderr[-800:]
+            cls.html[name] = out.read_text(encoding="utf-8", errors="replace")
+        # The same page on the Divi 5 site, seeded the same way (the options JSON the preview used), then restored.
+        (cls.tmp / "seed.json").write_text(json.dumps(preview.seed_options(json.loads(D5_SAMPLE_TOKENS.read_text()))))
+        admin = _wp5("user", "list", "--role=administrator", "--field=user_login").splitlines()[0]
+        cls.sha_before = _wp5("eval-file", SEED_SITE_OPTIONS, "sha").splitlines()[-1]
+        backup = cls.tmp / "backup.json"
+        _wp5("eval-file", SEED_SITE_OPTIONS, "backup", backup)
+        pid = None
+        try:
+            _wp5("eval-file", SEED_SITE_OPTIONS, "apply", cls.tmp / "seed.json")
+            pid = int(_wp5("post", "create", cls.page, "--post_type=page", "--post_status=publish",
+                           f"--post_title={D5_SEED_TITLE} hero", f"--meta_input={D5_META}", "--porcelain",
+                           f"--user={admin}").splitlines()[-1])
+            url = f"{SITE5_URL}/?page_id={pid}"
+            fidelity.flatten(url)  # warm-up view: Divi writes the page's static CSS on the first one
+            cls.html["live"] = fidelity.flatten(url)
+        finally:
+            if pid:
+                wp5("post", "delete", pid, "--force", f"--user={admin}")
+            _wp5("eval-file", SEED_SITE_OPTIONS, "restore", backup)
+            cls.sha_after = _wp5("eval-file", SEED_SITE_OPTIONS, "sha").splitlines()[-1]
+            cls.left = wp5("post", "list", "--post_type=page", "--post_status=any,trash", f"--s={D5_SEED_TITLE}",
+                           "--field=ID").stdout.split()
+        cls.result = fidelity.compare(cls.html["live"], cls.html["seeded"])
+        sys.stderr.write("\nD5 seed options " + json.dumps({"render_s": cls.timings, "markup": cls.result["markup"],
+                                                            "css": cls.result["css"]}) + "\n")
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(getattr(cls, "tmp", ""), ignore_errors=True)
+
+    def test_divi_prints_the_seeded_variables_and_colors_itself(self):
+        html = self.html["seeded"]
+        numeric = re.search(r'<style class="et-vb-global-data et-vb-global-numeric-vars">([^<]*)</style>', html)
+        self.assertIsNotNone(numeric, "Divi printed no number variables")
+        self.assertIn("--gvid-r6secpad01: clamp(48px, 8vw, 96px);", numeric.group(1))
+        self.assertIn("--gvid-r6radius01: 12px;", numeric.group(1))
+        self.assertIn("--gcid-r6navy0001: #0B2A3C;", html)  # Divi's own :root (the seed CSS has no space)
+        self.assertIn("--gcid-primary-color: #F97316;", html)  # the Customizer accent color
+
+    def test_variable_padding_and_radius_render(self):
+        for name, present in (("seeded", True), ("stock", False)):
+            html = self.html[name]
+            with self.subTest(render=name):
+                self.assertEqual(".et_pb_section_0.et_pb_section{padding-top:var(--gvid-r6secpad01);"
+                                 "padding-bottom:var(--gvid-r6secpad01)}" in html, present)
+                self.assertEqual("border-top-left-radius:var(--gvid-r6radius01);border-top-right-radius:"
+                                 "var(--gvid-r6radius01);border-bottom-right-radius:var(--gvid-r6radius01);"
+                                 "border-bottom-left-radius:var(--gvid-r6radius01);overflow:hidden}" in html, present)
+
+    def test_nothing_persists_into_the_playground_site(self):
+        html = self.html["stock"]  # rendered after the seeded one, on the same cached site
+        self.assertNotIn("et-vb-global-numeric-vars", html)
+        self.assertNotIn("gvid-r6secpad01:", html)
+        self.assertNotIn("--gcid-r6navy0001:", html)
+        self.assertIn("--gcid-primary-color: #2ea3f2;", html)  # stock accent color
+
+    def test_builder_css_matches_the_seeded_live_site(self):
+        r = self.result
+        self.assertTrue(r["markup"]["tag_class_sequence_equal"], r["markup"])
+        self.assertGreater(r["css"]["common"], 20, r["css"])
+        self.assertEqual((r["css"]["missing"], r["css"]["extra"]), (0, 0), (r["missing_examples"], r["extra_examples"]))
+        self.assertIn("--gvid-r6secpad01: clamp(48px, 8vw, 96px);", self.html["live"])
+
+    def test_renders_leave_no_temp_dirs(self):
+        self.assertEqual(sorted(p.name for p in self.render_tmp.iterdir() if p.name.startswith("pp-")), [])
+
+    def test_live_site_restored(self):
+        self.assertEqual(self.sha_after, self.sha_before)
+        self.assertEqual(self.left, [])
 
 
 if __name__ == "__main__":

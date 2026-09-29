@@ -11,13 +11,15 @@ WordPress); Divi 5 block pages on the real Divi 5 theme in WordPress Playground 
       when that is the page itself).
       A Divi 5 block page (<!-- wp:divi/... --> markup, in a .txt or .html file) always renders in
       Playground, like --exact: local images inlined, and with --tokens the site's recovered global
-      colors, variables and preset CSS seeded into the page (see seed_css).
+      colors, variables and preset CSS seeded: into the Playground site's options for that render (see
+      seed_options) and as CSS (see seed_css).
   python3 preview.py serve [--pages DIR] [--port 8765] [--tokens tokens.json | --divi VER] [--no-js] [--exact] [--keys PATH]
       Serves http://127.0.0.1:PORT/<name> for every DIR/<name>.txt (and every DIR/<name>.html holding
       Divi 5 blocks). Shortcode pages are re-rendered on each request, poll for edits and reload
       themselves; Divi's fonts/images/JS come from /__divi/... Pages with unsupported modules or
       site-data content show a banner saying which preview can show them. Block pages redirect to one
-      warm Divi 5 Playground that re-renders them on every reload (edits are picked up within ~0.5 s).
+      warm Divi 5 Playground that re-renders them on every reload (edits are picked up within ~0.5 s);
+      --tokens is read once, at start, and seeds every block page of the session.
   python3 preview.py doctor [--keys PATH]
       Reports Python, the cache dir, cached Divi versions (and whether a Divi 5 is cached), whether
       Node is present (only needed for --exact and Divi 5 block pages) and whether Elegant Themes
@@ -230,6 +232,62 @@ def seed_css(tokens: dict) -> str:
     return "\n".join(dict.fromkeys(parts))
 
 
+# Divi 5 stores the five Theme Customizer colors in et_divi under these keys and exposes them as these gcids
+# (GlobalData::$customizer_colors).
+CUSTOMIZER_COLOR_OPTIONS = {"gcid-primary-color": "accent_color", "gcid-secondary-color": "secondary_accent_color",
+                            "gcid-heading-color": "header_color", "gcid-body-color": "font_color",
+                            "gcid-link-color": "link_color"}
+VARIABLE_BUCKETS = ("numbers", "strings", "images", "links", "fonts", "gradients")  # GlobalData.php:830
+SEED_TIMESTAMP = "2000-01-01T00:00:00.000Z"  # lastUpdated of seeded global colors (Divi only displays it)
+
+
+def _option_value(entry: dict) -> str | None:
+    """A tokens.json color/variable value as Divi stores it in its options (fonts unquoted, images as the bare
+    URL), under the same rules as seed_css: None when unknown (null) or unsafe."""
+    value = entry.get("value")
+    if entry.get("kind") in ("strings", "links"):
+        return value.strip() if _css_safe(value) else None
+    if _var_css(entry) is None:
+        return None
+    return value.strip().strip("'\"") if entry.get("kind") == "fonts" else value.strip()
+
+
+def seed_options(tokens: dict) -> dict:
+    """The client's recovered Divi 5 design system as the WordPress options Divi reads it from (research/divi5/
+    tokens-and-detection.md §2), for the Playground preview's mu-plugin to merge over the stock site's options:
+    {"et_divi": {"<customizer color option>": hex, "et_global_data": {"global_colors": {gcid: {...}}}},
+     "et_divi_global_variables": {<kind>: {gvid: {id, label, value, order, status, type}}}}.
+    Divi resolves a $variable() ref to a design variable only when the variable exists there, so this is what
+    makes number/font/string/link/image variables render. Null, unsafe (same rules as seed_css) and unknown-kind
+    entries are skipped; empty dict when there is nothing to seed."""
+    if not isinstance(tokens, dict):
+        return {}
+    colors = tokens.get("colors") if isinstance(tokens.get("colors"), dict) else {}
+    et_divi, global_colors, variables = {}, {}, {}
+    customizer = [((e or {}).get("id"), e) for e in (colors.get("customizer") or {}).values()
+                  if (e or {}).get("id") in CUSTOMIZER_COLOR_OPTIONS]
+    for name, entry in list((colors.get("global") or {}).items()) + customizer:
+        value = _option_value({"value": (entry or {}).get("value")})
+        if value is None or not re.fullmatch(r"gcid-[A-Za-z0-9_-]+", name):
+            continue
+        if name in CUSTOMIZER_COLOR_OPTIONS:
+            et_divi[CUSTOMIZER_COLOR_OPTIONS[name]] = value
+        else:
+            global_colors[name] = {"color": value, "label": name, "status": "active", "lastUpdated": SEED_TIMESTAMP,
+                                   "folder": "", "usedInPosts": []}
+    for name, entry in (tokens.get("variables") or {}).items():
+        kind = (entry or {}).get("kind")
+        value = _option_value(entry) if kind in VARIABLE_BUCKETS else None
+        if value is None or not re.fullmatch(r"gvid-[A-Za-z0-9_-]+", name):
+            continue
+        bucket = variables.setdefault(kind, {})
+        bucket[name] = {"id": name, "label": name, "value": value, "order": len(bucket) + 1, "status": "active",
+                        "type": kind}
+    if global_colors:
+        et_divi["et_global_data"] = {"global_colors": global_colors}
+    return {k: v for k, v in (("et_divi", et_divi), ("et_divi_global_variables", variables)) if v}
+
+
 def unsupported_items(coverage: dict) -> dict:
     """What the Python preview doesn't render but the --exact preview does."""
     return {k: n for k, n in coverage.get("unsupported_modules", {}).items() if n}
@@ -383,14 +441,16 @@ def blocks_version(a) -> str:
     return version
 
 
-def load_seed(tokens_path) -> str:
-    """seed_css() of --tokens (empty without tokens, or for Divi 4 tokens that have no Divi 5 ids)."""
+def load_seed(tokens_path) -> tuple:
+    """(seed_css(), seed_options()) of --tokens (empty without tokens, or for Divi 4 tokens that have no Divi 5
+    ids). Read once: a serve session keeps the tokens it started with."""
     if not tokens_path:
-        return ""
+        return "", {}
     try:
-        return seed_css(json.loads(Path(tokens_path).read_text(encoding="utf-8")))
+        tokens = json.loads(Path(tokens_path).read_text(encoding="utf-8"))
     except (OSError, ValueError) as e:
         raise UsageError(f"cannot read {tokens_path}: {e}") from None
+    return seed_css(tokens), seed_options(tokens)
 
 
 def safe_name(name: str) -> str:
@@ -398,9 +458,10 @@ def safe_name(name: str) -> str:
     return re.sub(r"[^A-Za-z0-9_-]", "-", name) or "page"
 
 
-def stage_block_page(page: Path, stage: Path, seed: str, name: str | None = None) -> Path:
+def stage_block_page(page: Path, stage: Path, seed: str, name: str | None = None, options: dict | None = None) -> Path:
     """Writes <stage>/<name>.txt (the page with its local images inlined as data: URIs), plus the page's
-    <stem>.meta.json and a <name>.seed.css sidecar (token seeding), for preview.mjs / the mu-plugin."""
+    <stem>.meta.json and the token-seeding sidecars <name>.seed.css (seed_css) and <name>.seed.json
+    (seed_options), for preview.mjs / the mu-plugin."""
     name = name or safe_name(page.stem)
     staged = stage / f"{name}.txt"
     text = local_media.embed_local_images(page.read_text(encoding="utf-8"), page.resolve().parent)
@@ -415,6 +476,11 @@ def stage_block_page(page: Path, stage: Path, seed: str, name: str | None = None
         seed_file.write_text(seed, encoding="utf-8")
     elif seed_file.exists():
         seed_file.unlink()
+    options_file = stage / f"{name}.seed.json"
+    if options:
+        options_file.write_text(json.dumps(options), encoding="utf-8")
+    else:
+        options_file.unlink(missing_ok=True)
     return staged
 
 
@@ -422,7 +488,7 @@ def render_blocks(a, page: Path) -> int:
     """render for a Divi 5 block page: Playground (preview.mjs render) on a Divi 5 theme, with local images
     inlined and the --tokens seed, writing the same standalone HTML file as --exact."""
     version = blocks_version(a)
-    seed = load_seed(a.tokens)
+    seed, options = load_seed(a.tokens)
     try:
         node = usable_node(D5_NODE)
         env = exact_env(getattr(a, "keys", None))
@@ -433,23 +499,26 @@ def render_blocks(a, page: Path) -> int:
         return 2
     out = Path(a.out).resolve() if a.out else default_out(page).resolve()
     with tempfile.TemporaryDirectory(prefix="pp-d5-render-") as stage:
-        staged = stage_block_page(page, Path(stage), seed)
+        staged = stage_block_page(page, Path(stage), seed, options=options)
         code = subprocess.call([node, str(PREVIEW_MJS), "render", str(staged), "--out", str(out),
                                 "--divi", version], env=env)
     if code == 0:
         print(f"Divi 5 block page rendered on Divi {version} (WordPress Playground)"
               + ("; tokens seeded: global colors, variables and preset CSS from tokens.json" if seed else "")
+              + ("; the global colors and design variables also as the site's options" if options else "")
               + ". The WordPress draft preview stays the authoritative check.")
     return code
 
 
 class PlaygroundPages:
     """One warm Playground (preview.mjs serve on a Divi 5 theme) for the block pages of a pages dir. The pages
-    are staged into a private dir (local images inlined, tokens seed sidecar) and re-staged within ~0.5 s of
-    an edit; the Playground re-renders on every request, so reloading shows the change."""
+    are staged into a private dir (local images inlined, tokens seed sidecars) and re-staged within ~0.5 s of
+    an edit; the Playground re-renders on every request, so reloading shows the change. The seed (CSS and
+    options) is the session's: every block page gets the same one, from the tokens read at start."""
 
-    def __init__(self, pages: Path, version: str, seed: str, node: str, env: dict):
+    def __init__(self, pages: Path, version: str, seed: str, node: str, env: dict, options: dict | None = None):
         self.pages, self.version, self.seed, self.node, self.env = pages, version, seed, node, env
+        self.options = options or {}
         self.stage = None
         self.base = None
         self.error = None
@@ -471,12 +540,12 @@ class PlaygroundPages:
                 try:
                     stamp = (f.stat().st_mtime_ns, f.stat().st_size)
                     if self._mtimes.get(name) != stamp:
-                        stage_block_page(f, self.stage, self.seed, name)
+                        stage_block_page(f, self.stage, self.seed, name, self.options)
                         self._mtimes[name] = stamp
                 except (OSError, UnicodeDecodeError) as e:
                     sys.stderr.write(f"preview: cannot stage {f}: {e}\n")
             for name in set(self._mtimes) - set(current):
-                for ext in (".txt", ".meta.json", ".seed.css"):
+                for ext in (".txt", ".meta.json", ".seed.css", ".seed.json"):
                     (self.stage / f"{name}{ext}").unlink(missing_ok=True)
                 self._mtimes.pop(name, None)
 
@@ -758,8 +827,10 @@ class LazyBlocks:
             if not self._done:
                 self._done = True
                 try:
-                    self._pg = PlaygroundPages(self.pages, blocks_version(self.a), load_seed(self.a.tokens),
-                                               usable_node(D5_NODE, quiet=True), exact_env(self.a.keys))
+                    version = blocks_version(self.a)
+                    seed, options = load_seed(self.a.tokens)
+                    self._pg = PlaygroundPages(self.pages, version, seed, usable_node(D5_NODE, quiet=True),
+                                               exact_env(self.a.keys), options)
                 except (UsageError, NodeMissing, wp_keys.KeysError, fetch_divi.FetchError) as e:
                     self._error = str(e)
             return self._pg, self._error

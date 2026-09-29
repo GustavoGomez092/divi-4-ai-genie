@@ -200,9 +200,9 @@ As on Divi 4 ([README §5](../README.md#5-the-verification-loop)), against the *
 1. **Validate**: `python3 scripts/validate.py page.html --tokens tokens.json` (a lone section with
    `--fragment`): 0 errors, and no `W5_UNKNOWN_VARIABLE` or `W5_UNKNOWN_PRESET`.
 2. **Preview**: `python3 scripts/preview.py render page.html --tokens tokens.json --out preview.html` renders on
-   real Divi 5 in Playground with the site's global colors and preset CSS; **stop until the user approves it**.
-   Number and font variables (`gvid-…`) print only on a site that defines them, so in the preview a section padded
-   by a variable shows Divi's default padding and a radius variable shows square corners; the draft shows them.
+   real Divi 5 in Playground with the site's global colors, design variables and preset CSS (seeded into the
+   Playground site's options, so a variable padding or radius renders as on the site); **stop until the user
+   approves it**.
 3. **Draft**: `python3 scripts/publish.py draft page.html --site "$SITE" --user "$WP_USER" --title "…"`, then
    review the draft's `preview_url` before publishing ([publishing.md](../../reference/publishing.md)).
 
