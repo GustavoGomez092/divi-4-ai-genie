@@ -13,7 +13,8 @@ import urllib.request
 from typing import Callable, Optional
 
 _BLOCK_OPEN = re.compile(r"<!--\s+wp:divi/[a-z0-9-]+")
-_JSON_BLOCK = re.compile(r"<!--\s+/?wp:[^>]*?-->", re.S)
+# A whole block delimiter comment; its JSON may hold a raw `>` (WordPress escapes `--`, so `-->` ends it).
+_JSON_BLOCK = re.compile(r"<!--\s+/?wp:(?:(?!-->).)*-->", re.S)
 _SHORTCODE = re.compile(r"\[et_pb_[a-z0-9_]+[\s\]/]")
 _VERSION = re.compile(r"^\s*Version:\s*([0-9][0-9.]*)", re.M)
 _ASSET_VER = re.compile(r"/themes/Divi/[^\"'?\s]*\?ver=([0-9]+\.[0-9][0-9.]*)")

@@ -25,12 +25,19 @@ class DetectContentTest(unittest.TestCase):
         src = '<!-- wp:divi/text {"content":{"innerContent":{"desktop":{"value":"[et_pb_x]"}}}} /-->'
         self.assertEqual(detect_content(src), "blocks")
 
+    def test_block_json_with_raw_angle_bracket_is_still_blocks(self):
+        # A raw `>` inside the block JSON must not end the comment early and expose the shortcode text.
+        self.assertEqual(detect_content('<!-- wp:divi/text {"a":"<p>[et_pb_x]</p>"} /-->'), "blocks")
+
 
 class FixtureListTest(unittest.TestCase):
     def test_invalid_fixtures_excluded_from_d5_fixtures(self):
         valid = {p for p in d5_fixtures()}
         self.assertFalse([p for p in valid if "invalid" in p.parts])
         self.assertFalse(valid & set(d5_invalid_fixtures()))
+
+    def test_invalid_fixtures_exist(self):
+        self.assertTrue(d5_invalid_fixtures())
 
 
 class VersionTest(unittest.TestCase):
