@@ -140,3 +140,28 @@ address (the `4.9★` count-up digit and the mixed blurb title sizes).
 A second with-skill run is warranted to confirm that the new guidance changes behaviour. The agent should write
 `"4.9"` (star in the title) or knowingly keep `"4.9★"`, give every blurb title a `size`, and get the hover
 nesting right the first time. The page should still validate to 0/0.
+
+## With skill, run 2 (fresh sonnet; same brief; after the run-1 doc fixes)
+
+Files: [divi5-run2/with-skill/](divi5-run2/with-skill/) (page.html, log.md, build.py; the preview is not kept because it contains Divi CSS).
+
+| metric | result |
+|---|---|
+| validator | **0 errors, 0 warnings** (re-run independently). It was clean on the first and only validate; run 1 needed a fix round (4 `E5_UNKNOWN_ATTR`) |
+| counters | `"25+"`, `"60"`, `"4.9"` with the star in the title (`"★ from 1,200 reviews"`), `enablePercentSign` off: the run-1 fix worked |
+| blurb titles | every one has a font size (20px), so the 3 + 2 rows match |
+| outline | one `h1`, no skipped level; it added its own `h2` above the counters. `FAQPage` JSON-LD once |
+| preview | Divi 5.13.1 in Playground, 1.6 s. It stopped before publishing |
+
+What changed vs run 1: the hover nesting, the counter values, the blurb sizing and the no-photo hero (hero-centered) were all right without a retry.
+
+Remaining stumbles from its log, and what was done:
+
+| # | stumble | fix |
+|---|---|---|
+| 1 | SKILL.md steps name `page.txt` while Divi 5 recipes use `page.html` | step 6 says `page.txt` is Divi 4, `page.html` Divi 5 (SKILL.md 1193 words) |
+| 2 | Stats band with no heading above it: the page recipe said counters add no section heading, so the `h3`s would sit beside the blurb `h3`s | service-landing: the stats band gets its own `h2` ("By the Numbers"); stats-counters checklist points to it as the default |
+| 3 | The button recipe keeps a preset whose look is unknown (`11111111-…`, `css: null`) | README Presets: keep such a preset only when its bundle's attrs set every visible property; otherwise write the button inline with no `modulePreset` |
+| 4 | Heading-row layout and `1_3` x3 counters row not shown | not changed (validator accepts it; mirrors services-grid) |
+
+Verdict: the fixes change behaviour as intended; run 2 met every success criterion with no validator round-trip.

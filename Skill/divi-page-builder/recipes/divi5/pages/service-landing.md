@@ -11,7 +11,7 @@ worked example; how to read the recipes is in the [Divi 5 recipes README](../REA
 | 2 | Trust bar | [Trust bar](../sections/trust-bar.md) | light grey | none |
 | 3 | Services | [Services grid](../sections/services-grid.md) | white | `h2` + `h3` (blurbs) |
 | 4 | Why it matters | [Alternating features](../sections/alternating-features.md) | white | `h3` (feature titles; it borrows the Services `h2`, so it never comes right after the hero) |
-| 5 | By the numbers | [Stats counters](../sections/stats-counters.md) | light grey | `h3` (counter titles) |
+| 5 | By the numbers | [Stats counters](../sections/stats-counters.md) | light grey | `h2` (its own heading row) + `h3` (counter titles) |
 | 6 | Testimonials | [Testimonials](../sections/testimonials.md) (grid) | white | `h2` |
 | 7 | FAQ | [FAQ](../sections/faq.md) | white | `h2` + `h3` (questions) + the `FAQPage` JSON-LD |
 | 8 | CTA band | [CTA band](../sections/cta-band.md) | navy | `h4` |
@@ -33,7 +33,7 @@ width: the hero and the trust bar are 90% / 1200px, the others Divi's default ro
 
 - **One `h1`:** the hero headline. No other block may set `headingLevel` `"h1"`, including the contact form
   (whose default is `h1`) if you add one.
-- **`h2`:** Services, Testimonials, FAQ. The trust bar and stats counters add no section heading.
+- **`h2`:** Services, Testimonials, FAQ. The trust bar adds no section heading. The stats counters get their own `h2` ("By the Numbers", a heading row above the counters) so their `h3` titles don't read as siblings of the Services blurbs; skip that `h2` only if the band sits directly under an existing `h2` it belongs to.
 - **`h3`:** the blurb titles, the feature titles, the counter titles (`number-counter` titles render as `h3`) and
   the FAQ questions.
 - **`h4`:** the CTA band's title, one below the FAQ questions just before it.

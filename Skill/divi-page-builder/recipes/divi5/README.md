@@ -92,8 +92,7 @@ photo with the brand navy that way. Use it only for a shade of a brand color tha
 it, unless the preset's `css` fails the contrast check below. `r6btnpreset1` is such a preset: its `css` sets a
 white label (`color: #ffffff`) on the orange, so the split hero leaves it out and writes the orange, the navy
 label and the radius variable itself. A preset whose `css` is `null` is still a real id whose look is unknown:
-keep it with its bundle's attrs, as the CTA button does with `11111111-2222-3333-4444-555555555555` (its bundle
-sets the label color itself). To get the site's default look, write no `modulePreset` at all.
+keep it only when its bundle's attrs set every visible property themselves (label color, background, radius, hover), as the CTA button does with `11111111-2222-3333-4444-555555555555`; the look you can't see must not decide contrast. Otherwise, and whenever the tokens show neither the preset's `css` nor a bundle that spells the look out, write the button inline with no `modulePreset`. To get the site's default look, write no `modulePreset` at all.
 
 ### Contrast
 
