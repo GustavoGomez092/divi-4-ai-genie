@@ -642,14 +642,45 @@ def _check_whole_value(block, path, mod, schema5, attr, bp, st, value, report) -
                hint=f"Move them to {attr}.font ({_FONT_STYLE_HINT} all go there).")
     gradient = value.get("gradient")
     if isinstance(gradient, dict) and "enabled" not in gradient and gradient.keys() & {"stops", "type", "direction"} \
-            and "gradient.enabled" in schema5.leaf_spec(spec):
-        base = get_attr(block, attr)
-        inherited = base.get("gradient") if isinstance(base, dict) and (bp, st) != ("desktop", "value") else None
-        if not (isinstance(inherited, dict) and "enabled" in inherited):
-            report("error", "E5_GRADIENT_DISABLED",
-                   f"{attr}.gradient has stops/type/direction but no \"enabled\": \"on\": Divi renders no gradient",
+            and "gradient.enabled" in schema5.leaf_spec(spec) and not _inherits_enabled(block, attr, bp, st):
+        message = f"{attr}.gradient has stops/type/direction but no \"enabled\": \"on\": Divi renders no gradient"
+        if _preset_may_style_background(block.attrs):
+            report("warning", "W5_GRADIENT_MAYBE_DISABLED", message + " unless its preset enables the gradient",
                    node=block, path=path, attr=f"{attr}.gradient", value=_show(gradient)[:200],
-                   hint='Add "enabled": "on" to the gradient object.')
+                   hint='Add "enabled": "on" to the gradient object unless the preset already enables it.')
+        else:
+            report("error", "E5_GRADIENT_DISABLED", message, node=block, path=path, attr=f"{attr}.gradient",
+                   value=_show(gradient)[:200], hint='Add "enabled": "on" to the gradient object.')
+
+
+def _inherits_enabled(block, attr, bp, st) -> bool:
+    """Whether a value without gradient.enabled inherits one: Divi's cascade is the breakpoint's own `value` (for
+    hover/sticky), then tablet.value (for phone), then desktop.value; the first gradient carrying the key wins."""
+    chain = ([(bp, "value")] if st != "value" else []) + ([("tablet", "value")] if bp == "phone" else []) \
+        + [("desktop", "value")]
+    for cbp, cst in chain:
+        if (cbp, cst) == (bp, st):
+            continue
+        base = get_attr(block, attr, cbp, cst)
+        inherited = base.get("gradient") if isinstance(base, dict) else None
+        if isinstance(inherited, dict) and "enabled" in inherited:
+            return True
+    return False
+
+
+def _preset_may_style_background(attrs: dict) -> bool:
+    """A non-default modulePreset, or a background/button group preset, may supply gradient.enabled."""
+    for label, pid in _preset_ids(attrs):
+        if pid == "default":
+            continue
+        if label == "modulePreset":
+            return True
+        group = label.split(" ", 1)[1]
+        spec = (attrs.get("groupPreset") or {}).get(group)
+        name = spec.get("groupName") if isinstance(spec, dict) else None
+        if name in ("divi/background", "divi/button") or "background" in group.lower():
+            return True
+    return False
 
 
 def _scoped(report, bp, st):

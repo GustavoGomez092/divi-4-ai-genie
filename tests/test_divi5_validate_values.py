@@ -31,7 +31,7 @@ VALUE_CODES = {"E5_UNKNOWN_ATTR", "E5_BAD_BREAKPOINT", "W5_BREAKPOINT_DISABLED",
                "E5_BAD_VARIABLE", "W5_UNKNOWN_VARIABLE", "W5_UNKNOWN_PRESET", "E5_NONCANONICAL",
                "W5_SHORTCODE_BRACKETS", "W_EXTERNAL_IMAGE", "W5_NO_ALT", "W5_BUILDER_VERSION",
                "W5_HOVER_WITHOUT_DESKTOP", "E5_UNITLESS_LENGTH", "E5_GRADIENT_DISABLED", "E5_GRADIENT_STOP_POSITION",
-               "W5_BARE_FONT", "W5_LEGACY_ATTR"}
+               "W5_GRADIENT_MAYBE_DISABLED", "W5_BARE_FONT", "W5_LEGACY_ATTR"}
 LAYOUT = {"decoration": {"layout": {"desktop": {"value": {"display": "block"}}}}}
 V = "5.13.1"
 
@@ -108,13 +108,14 @@ class ValidCorpusTest(unittest.TestCase):
                     bad.append((p.name, f.code, f.tag, f.attr, f.value[:80], f.message))
         self.assertEqual(bad, [])
 
-    def test_valid_fixtures_only_warn_legacy_among_the_silent_value_checks(self):
-        """Of the Task 9b checks, real Divi 5 content may only warn W5_LEGACY_ATTR (converter output keeps them)."""
+    def test_silent_value_checks_on_valid_fixtures_find_only_the_one_legacy_attr(self):
+        """Of the Task 9b checks, real Divi 5 content triggers exactly one finding: the Divi AI premade's
+        nextBackgroundColor (doc-experiments.md §7), a W5_LEGACY_ATTR warning."""
         found = [(p.name, f.code, f.attr) for p in d5_fixtures()
                  for f in validate_source(p.read_text(), fragment=True)
-                 if f.code in ("E5_UNITLESS_LENGTH", "E5_GRADIENT_DISABLED", "E5_GRADIENT_STOP_POSITION",
-                               "W5_BARE_FONT")]
-        self.assertEqual(found, [])
+                 if f.code in ("E5_UNITLESS_LENGTH", "E5_GRADIENT_DISABLED", "W5_GRADIENT_MAYBE_DISABLED",
+                               "E5_GRADIENT_STOP_POSITION", "W5_BARE_FONT", "W5_LEGACY_ATTR")]
+        self.assertEqual(found, [("layout.html", "W5_LEGACY_ATTR", "nextBackgroundColor")])
 
 
 class ValueProblemsTest(unittest.TestCase):
@@ -498,6 +499,43 @@ class GradientTest(unittest.TestCase):
         self.assertEqual(self.bg(bg),
                          [("error", "E5_GRADIENT_DISABLED", "module.decoration.background.gradient:desktop:hover")])
 
+    def test_phone_inherits_enabled_from_tablet(self):
+        bg = {"desktop": {"value": {"color": "#000"}},
+              "tablet": {"value": {"gradient": {"enabled": "on", "stops": self.STOPS}}},
+              "phone": {"value": {"gradient": {"stops": self.STOPS[::-1]}}}}
+        self.assertEqual(self.bg(bg), [])
+
+    def test_hover_inherits_enabled_from_its_breakpoint_value(self):
+        bg = {"desktop": {"value": {"color": "#000"}},
+              "tablet": {"value": {"gradient": {"enabled": "on", "stops": self.STOPS}},
+                         "hover": {"gradient": {"stops": self.STOPS[::-1]}}}}
+        self.assertEqual(self.bg(bg), [])
+
+    def test_tablet_does_not_inherit_from_phone(self):
+        bg = {"desktop": {"value": {"color": "#000"}},
+              "tablet": {"value": {"gradient": {"stops": self.STOPS}}},
+              "phone": {"value": {"gradient": {"enabled": "on"}}}}
+        self.assertEqual(self.bg(bg),
+                         [("error", "E5_GRADIENT_DISABLED", "module.decoration.background.gradient:tablet:value")])
+
+    def test_preset_may_enable_the_gradient(self):
+        """A non-default modulePreset or a background group preset may supply "enabled": the finding is a warning."""
+        bg = {"desktop": {"value": {"gradient": {"stops": self.STOPS}}}}
+        for extra in ({"modulePreset": ["p1"]},
+                      {"groupPreset": {"designBackground": {"presetId": ["g1"], "groupName": "divi/background"}}}):
+            with self.subTest(extra=extra):
+                attrs = text_attrs(module={"decoration": {"background": bg}}, **extra)
+                f = [x for x in run(page(block("text", attrs))) if "GRADIENT" in x.code]
+                self.assertEqual([(x.level, x.code, x.attr) for x in f],
+                                 [("warning", "W5_GRADIENT_MAYBE_DISABLED",
+                                   "module.decoration.background.gradient:desktop:value")])
+                self.assertIn("unless its preset enables the gradient", f[0].message)
+        for extra in ({"modulePreset": ["default"]},
+                      {"groupPreset": {"designText": {"presetId": ["g1"], "groupName": "divi/font"}}}):
+            with self.subTest(extra=extra):
+                attrs = text_attrs(module={"decoration": {"background": bg}}, **extra)
+                self.assertIn("E5_GRADIENT_DISABLED", codes(page(block("text", attrs))))
+
     def test_stop_position_with_unit(self):
         stops = [{"position": "0%", "color": "#1e3a8a"}, {"position": "100px", "color": "#3b82f6"}]
         f = self.bg({"desktop": {"value": {"gradient": {"enabled": "on", "stops": stops}}}})
@@ -529,6 +567,16 @@ class BareFontTest(unittest.TestCase):
         self.assertEqual([(x.level, x.attr) for x in f], [("warning", "title.decoration.font:desktop:value")])
         self.assertIn("title.decoration.font.font", f[0].hint)
         self.assertIn("size", f[0].message)
+
+    def test_toggle_open_toggle_bare_font(self):
+        """doc-experiments.md §1: openToggle.decoration.font.desktop.value.color rendered no rule."""
+        attrs = {"builderVersion": V, "title": {"innerContent": {"desktop": {"value": "Q"}}},
+                 "openToggle": {"decoration": {"font": {"desktop": {"value": {"color": "#ff0005"}}}}}}
+        f = [(x.level, x.code, x.attr) for x in run(page(block("toggle", attrs))) if x.level == "error"
+             or x.code == "W5_BARE_FONT"]
+        self.assertEqual(f, [("warning", "W5_BARE_FONT", "openToggle.decoration.font:desktop:value")])
+        attrs["openToggle"]["decoration"]["font"] = {"font": {"desktop": {"value": {"color": "#ff0006"}}}}
+        self.assertNotIn("W5_BARE_FONT", codes(page(block("toggle", attrs))))
 
     def test_font_font_text_shadow_and_text_effects_are_fine(self):
         f = self.blurb({"font": {"desktop": {"value": {"size": "52px"}}},

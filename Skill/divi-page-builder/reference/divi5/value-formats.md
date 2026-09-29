@@ -143,7 +143,7 @@ Common mistake: a CSS color name (`"red"`, `"navy"`) or `oklch()`: `E5_BAD_VALUE
 
 Grammar: a number with a CSS unit (`px`, `%`, `em`, `rem`, `vw`, `vh`, `vmin`, `vmax`, `ch`, `ex`, `cm`, `mm`, `in`,
 `pt`, `pc`, `deg`, `rad`, `turn`, `ms`, `s`, `fr`; restricted to the leaf's own `units` where a table lists them),
-a unitless number only where CSS takes one (`lineHeight: "1.4"`; see below), a keyword (`auto`, `none`, `inherit`, `initial`, `unset`, `normal`,
+a unitless number (`lineHeight: "1.4"`; valid CSS only where the property takes a plain number, see below), a keyword (`auto`, `none`, `inherit`, `initial`, `unset`, `normal`,
 `fit-content`, `min-content`, `max-content`), a CSS function (`calc()`, `clamp()`, `min()`, `max()`, `var()`), or a
 number variable (`$variable({"type":"content",…})$`). Always a **string**: `"24px"`, not `24`.
 
@@ -325,8 +325,9 @@ object in the [Background](design-families.md#background) family:
 ```
 
 Common mistakes (live check, `doc-experiments.md` §8): Divi 4's `"#fff 0%|#000 100%"` string (`E5_BAD_VALUE`);
-leaving out `"enabled": "on"` (no gradient renders; `E5_GRADIENT_DISABLED`, unless the desktop value it inherits
-from sets `enabled`); and positions with a unit (`"position": "0%"`), which rendered no gradient at all
+leaving out `"enabled": "on"` (no gradient renders; `E5_GRADIENT_DISABLED`, unless the value it inherits from sets
+`enabled`: its breakpoint's `value` for hover/sticky, then `tablet` for phone, then `desktop`; a warning,
+`W5_GRADIENT_MAYBE_DISABLED`, when the block's preset might enable it); and positions with a unit (`"position": "0%"`), which rendered no gradient at all
 (`E5_GRADIENT_STOP_POSITION`). `0` and `"0"` both work. An explicit `"enabled": "off"` is a deliberate switch-off
 (Divi writes it itself) and is not reported.
 
@@ -490,7 +491,8 @@ icon module as an `<a href="tel:…">` (live check).
 | `E5_BAD_VALUE` | error | the value doesn't fit the leaf type or options | see the type's section above |
 | `E5_BAD_VARIABLE` | error | a malformed `$variable(…)$` | follow the reference grammar |
 | `E5_UNITLESS_LENGTH` | error | a non-zero number without a unit on a length CSS needs a unit for (spacing, sizing, border, gaps, offsets, font size, letter spacing, shadows) | add a unit, e.g. `41px` |
-| `E5_GRADIENT_DISABLED` | error | a background gradient with stops/type/direction but no `"enabled"` (here or on its desktop value) | add `"enabled": "on"` |
+| `E5_GRADIENT_DISABLED` | error | a background gradient with stops/type/direction but no `"enabled"` (here or on the value it inherits from) | add `"enabled": "on"` |
+| `W5_GRADIENT_MAYBE_DISABLED` | warning | the same, on a block with a non-default `modulePreset` or a background/button `groupPreset`, which may enable it | add `"enabled": "on"` unless the preset does |
 | `E5_GRADIENT_STOP_POSITION` | error | a gradient stop `position` with a unit (`"0%"`) | write a plain number: `0`, `100` |
 | `W5_BARE_FONT` | warning | text styles written directly on `….decoration.font` | move them to `….decoration.font.font` |
 | `W5_LEGACY_ATTR` | warning | an attribute only Divi's Divi 4 conversion writes (a module page's Legacy table) | style each column on its own `divi/column`, or use the module's own attributes |
