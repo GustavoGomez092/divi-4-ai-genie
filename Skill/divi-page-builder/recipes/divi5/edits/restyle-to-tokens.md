@@ -17,7 +17,8 @@ spacing scale. This edit never changes copy or structure, only design values, an
 That path is what [`page_edit.py`](../../../scripts/page_edit.py) `set-attr` takes. A path that goes inside a
 value (`button.decoration.background.color`, `title.decoration.font.font.family`) changes that one key and keeps
 the rest of the value: a background's gradient or image stays when only its color changes, a font's size and
-weight stay when only its family changes. Pass `--breakpoint tablet|phone` for a tablet or phone value and
+weight stay when only its family changes. The split between the attribute and the key inside its value comes from the
+Divi 5 schema, so a value the block doesn't have yet (a hover color, a border radius) lands in the right place. Pass `--breakpoint tablet|phone` for a tablet or phone value and
 `--state hover` for a hover one; the default is the desktop value.
 
 Where the right value comes from, in order:
@@ -104,5 +105,5 @@ stores it as a string and escapes its quotes canonically:
 python3 scripts/page_edit.py offbrand.html set-attr "$BTN" button.decoration.background.color \
   '$variable({"type":"color","value":{"name":"gcid-primary-color","settings":{}}})$' --out var.html
 python3 scripts/page_edit.py var.html extract "$BTN"
-#   ..."background":{"desktop":{"value":{"color":"$variable({"type":"color","value":{"name":"gcid-primary-color","settings":{}}})$"}...
+#   ..."background":{"desktop":{"value":{"color":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-primary-color\u0022,\u0022settings\u0022:{}}})$"}...
 ```

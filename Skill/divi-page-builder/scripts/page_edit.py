@@ -16,13 +16,16 @@ leading "placeholder[0] >" may be left out. set-attr takes a dotted attribute pa
 parses as JSON, otherwise a string:
        page_edit.py PAGE set-attr PATH title.innerContent "New headline"
        page_edit.py PAGE set-attr PATH button.decoration.background '{"color":"#0f172a"}' --state hover
---breakpoint (default desktop) and --state (default value) pick the responsive slot; builderVersion,
-modulePreset, groupPreset, locked, existing non-responsive leaves and a NAME that already spells the slot
-(button.innerContent.desktop.value.text) are written without one (or pass --breakpoint none). A NAME that reaches
-inside a responsive value (button.decoration.background.color) sets just that key in the chosen slot.
+NAME is an attribute path from the module's reference page (reference/divi5/modules/<module>.md), optionally
+followed by a key inside its value (button.decoration.background.color, title.decoration.font.font.headingLevel);
+the schema splits it, and the value goes into the --breakpoint (default desktop) / --state (default value) slot:
+<attr>.<breakpoint>.<state>[.<key>], whether or not the block has the attribute yet. builderVersion, modulePreset,
+groupPreset, locked and a NAME that already spells the slot (button.innerContent.desktop.value.text) are written
+as named; --breakpoint none writes any NAME as named (for blocks the schema doesn't know).
 Only the edited block is re-rendered (canonically; its builderVersion is kept); replace/insert-* splice FILE's
-block markup verbatim at the target's span boundaries. Mutating verbs refuse a page with block parse problems
-(outline/extract still run, with a warning), and refuse a FILE that isn't clean Divi 5 block markup.
+block markup verbatim at the target's span boundaries (insert-* never at the placeholder itself: sections stay
+inside it). Mutating verbs refuse a page with block parse problems (outline/extract still run, with a warning),
+and refuse a FILE that isn't clean Divi 5 block markup.
 
 Exit status: 0 = done, 1 = refused (wrong format for the site, parse problems, bad FILE), 2 = usage or no such node.
 
@@ -42,6 +45,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from divi_shortcode import build_open_tag, escape_attr_value, parse, replace_span  # noqa: E402
 import divi5_blocks  # noqa: E402
+import divi5_schema  # noqa: E402
 from divi_format import detect_content, major_from_version  # noqa: E402
 
 PROG = "page_edit.py"
@@ -199,54 +203,67 @@ def _json_or_text(raw: str):
         return raw
 
 
-def _inside_responsive(block, keys):
-    """i when keys[:i] names a responsive attribute ({breakpoint: {state: value}}) and keys[i:] reach inside its
-    value (button.decoration.background.color); None otherwise."""
-    for i in range(1, len(keys)):
-        cur = divi5_blocks.get_attr(block, ".".join(keys[:i]), breakpoint=None)
-        if not isinstance(cur, dict):
-            return None
-        if divi5_blocks._is_responsive(cur):
-            return i
-    return None
+# Every key that can sit in a value's breakpoint slot, disabledOn's pseudo-breakpoints included.
+SLOT_BREAKPOINTS = divi5_blocks.BREAKPOINTS + divi5_blocks.DISABLED_ON_BREAKPOINTS
+
+
+def _module_doc(block) -> str:
+    short = block.name[5:] if block.name.startswith("divi/") else block.name
+    return f"reference/divi5/modules/{short}.md"
+
+
+def _slot_keys(block, keys, a) -> list:
+    """The key path set-attr writes: <attr>.<breakpoint>.<state>[.<sub-path>]. The attribute/sub-path split comes
+    from the compiled schema (the longest known attribute prefix; the rest is inside its value), so it is right
+    whether or not the block has that attribute yet. NotFound when the schema can't place the path."""
+    dotted, state = ".".join(keys), a.state or "value"
+    head = keys[0]
+    if head in divi5_schema.NONRESPONSIVE or head.startswith("_") or a.breakpoint == "none":
+        if a.state not in (None, "value") or a.breakpoint not in (None, "none"):
+            raise NotFound(f"{dotted} is not responsive: it takes no --breakpoint/--state")
+        return keys
+    mod = divi5_schema.load_schema5().module(block.name)
+    named = next((i for i in range(1, len(keys) - 1)
+                  if keys[i] in SLOT_BREAKPOINTS and keys[i + 1] in divi5_blocks.STATES), None)
+    if named is not None:
+        # The path already spells the slot (button.innerContent.desktop.value.text): check the split, write as-is.
+        if a.breakpoint is not None or a.state is not None:
+            raise NotFound(f"{dotted} already names its breakpoint and state; drop --breakpoint/--state")
+        attr, bp, st = ".".join(keys[:named]), keys[named], keys[named + 1]
+        if mod is not None:
+            r = mod.resolve(".".join(keys[:named] + keys[named + 2:]), bp, st)
+            if r.attr_path != attr or r.status != "ok":
+                raise NotFound(f"{dotted}: {block.name} stores this value as "
+                               f"{r.attr_path or '<unknown attribute>'}.<breakpoint>.<state>"
+                               f"{'.' + r.sub_path if r.sub_path else ''} ({r.status}; see {_module_doc(block)})")
+        return keys
+    if mod is None:
+        raise NotFound(f"{block.name} is not in the Divi 5 schema, so {dotted} can't be placed; spell the slot "
+                       f"(<attr>.desktop.value[.<key>]) or pass --breakpoint none")
+    bp = a.breakpoint or "desktop"
+    r = mod.resolve(dotted, bp, state)
+    if r.status == "unknown_attr":
+        raise NotFound(f"{dotted} is not a known attribute path of {block.name}; use one listed in "
+                       f"{_module_doc(block)} (an attribute, optionally followed by a key inside its value)")
+    if r.status != "ok":
+        states = ", ".join(r.leaf.get("states", ())) if r.leaf else ""
+        raise NotFound(f"{dotted} on {block.name} has no {bp}/{state} slot ({r.status}"
+                       f"{'; states: ' + states if states else ''})")
+    return r.attr_path.split(".") + [bp, state] + (r.sub_path.split(".") if r.sub_path else [])
 
 
 def _set_attr5(ap, a, src, block) -> str:
     if len(a.args) != 3:
         ap.error("set-attr needs PATH NAME VALUE")
     dotted, value = a.args[1], _json_or_text(a.args[2])
-    keys, state = dotted.split("."), a.state or "value"
-    named = any(bp in divi5_blocks.BREAKPOINTS and st in divi5_blocks.STATES for bp, st in zip(keys, keys[1:]))
-    inside = None if named or a.breakpoint == "none" else _inside_responsive(block, keys)
-    if inside is not None and keys[inside] in divi5_blocks.BREAKPOINTS + divi5_blocks.STATES:
-        ap.error(f"{dotted}: name both the breakpoint and the state ({'.'.join(keys[:inside])}.<breakpoint>.<state>"
-                 "...), or use --breakpoint/--state")
-    if inside is not None:
-        # Write the one key inside the slot's value, keeping the value's other keys (a background's gradient
-        # stays when only its color changes).
-        dotted = ".".join(keys[:inside] + [a.breakpoint or "desktop", state] + keys[inside:])
-        breakpoint = None
-    elif a.breakpoint is not None:
-        breakpoint = None if a.breakpoint == "none" else a.breakpoint
-    else:
-        existing = divi5_blocks.get_attr(block, dotted, breakpoint=None)
-        # Top-level keys that never hold a {breakpoint: {state: value}} object, a NAME that already spells the
-        # slot, or an existing non-responsive leaf ([] is PHP's empty object: not a leaf).
-        flat = (keys[0] in divi5_blocks.NON_RESPONSIVE or named
-                or (existing is not None and existing != [] and not isinstance(existing, dict)))
-        breakpoint = None if flat else "desktop"
-    if breakpoint is None and inside is None and a.state not in (None, "value"):
-        ap.error(f"--state {a.state} needs a responsive attribute ({dotted} is written without a breakpoint)")
-    if breakpoint is not None:
-        existing = divi5_blocks.get_attr(block, dotted, breakpoint=None)
-        if isinstance(existing, dict) and existing and not divi5_blocks._is_responsive(existing):
-            raise NotFound(f"{dotted} is a group of attributes on {block.name}, not one value; name one inside it "
-                           f"(e.g. {dotted}.{next(iter(existing))})")
+    keys = _slot_keys(block, dotted.split("."), a)
     if keys[0] == "builderVersion":
         _warn("changing builderVersion on an existing block changes which render-time migrations Divi runs on it; "
               "leave it as it is unless you mean that")
     try:
-        divi5_blocks.set_attr(block, dotted, value, breakpoint=breakpoint, state=state)
+        # A path inside a value (button.decoration.background.desktop.value.color) changes that one key and keeps
+        # the value's others (a background's gradient stays when only its color changes).
+        divi5_blocks.set_attr(block, ".".join(keys), value, breakpoint=None)
     except TypeError as e:
         raise NotFound(str(e)) from None
     # Only this block is dirty: serialize() re-renders its own delimiters and reuses every child's source span.
@@ -280,6 +297,9 @@ def _edit_blocks(ap, a, src) -> str:
         return _set_attr5(ap, a, src, block)
     if len(a.args) != 2:
         ap.error(f"{a.command} needs PATH FILE")
+    if a.command != "replace" and block.name == "divi/placeholder":
+        raise Refused(f"{a.command} {a.args[0]} would put the blocks outside the page's divi/placeholder wrapper; "
+                      "anchor on a section inside it (section[0], section[N])")
     snippet = _load_snippet5(a.args[1], block)
     if a.command == "replace":
         return src[:block.start] + snippet + src[block.end:]

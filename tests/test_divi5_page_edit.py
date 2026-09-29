@@ -172,7 +172,56 @@ class VerbsOnConvertedPage(unittest.TestCase):
             code, out, err = run(PAGE, "set-attr", BUTTON, *args)
             self.assertEqual((code, out), (2, ""), args)
             self.assertIn("page_edit.py", err)
-        self.assertIn("group of attributes", run(PAGE, "set-attr", BUTTON, "button.decoration", "x")[2])
+        self.assertIn("not a known attribute path of divi/button",
+                      run(PAGE, "set-attr", BUTTON, "button.decoration", "x")[2])
+        self.assertIn("reference/divi5/modules/button.md", run(PAGE, "set-attr", BUTTON, "nonsense", "x")[2])
+        code, out, err = run(PAGE, "set-attr", HEADING, "title.decoration.font.font.headingLevel", "h2", "--state",
+                             "hover")  # headingLevel has no hover state
+        self.assertEqual((code, out), (2, ""))
+        self.assertIn("bad_state", err)
+        code, out, err = run(PAGE, "set-attr", BUTTON, "button.innerContent.desktop.value.text", "x", "--state",
+                             "hover")  # the path already names its slot
+        self.assertEqual((code, out), (2, ""))
+
+    def test_set_attr_places_a_missing_attribute_by_schema(self):
+        # Review fix: the attribute doesn't exist on the block yet; the schema splits attr / sub-path.
+        divider = "section[0] > row[0] > column[1] > divider[0]"
+        self.assertIsNone(divi5_blocks.get_attr(divi5_blocks.parse(SRC).find("placeholder[0] > " + divider),
+                                                "module.decoration.border", breakpoint=None))
+        start, end = span(SRC, "placeholder[0] > " + divider)
+        out = ok(self, PAGE, "set-attr", divider, "module.decoration.border.radius", '{"topLeft":"4px"}')
+        block = divi5_blocks.parse(out).find("placeholder[0] > " + divider)
+        self.assertEqual(block.attrs["module"]["decoration"]["border"], {"desktop": {"value": {"radius": {"topLeft": "4px"}}}})
+        self.assertEqual(out[:start], SRC[:start])
+        self.assertEqual(out[block.end:], SRC[end:])
+        self.assertEqual(new_errors(out, SRC), [])
+        # a key deeper inside a structured leaf, at states the block has never had
+        for state in ("hover", "sticky"):
+            out = ok(self, PAGE, "set-attr", divider, "module.decoration.border.radius.topLeft", "4px",
+                     "--state", state)
+            border = divi5_blocks.parse(out).find("placeholder[0] > " + divider).attrs["module"]["decoration"]["border"]
+            self.assertEqual(border, {"desktop": {state: {"radius": {"topLeft": "4px"}}}})
+        out = ok(self, PAGE, "set-attr", divider, "module.decoration.background.color", "#0f172a", "--state", "hover",
+                 "--breakpoint", "tablet")
+        self.assertEqual(divi5_blocks.parse(out).find("placeholder[0] > " + divider).attrs["module"]["decoration"]
+                         ["background"], {"tablet": {"hover": {"color": "#0f172a"}}})
+
+    def test_set_attr_heading_level_on_a_heading_without_font(self):
+        # Review fix: a freshly inserted heading with no title.decoration at all.
+        bare = ('<!-- wp:divi/heading {"title":{"innerContent":{"desktop":{"value":"New"}}},'
+                '"builderVersion":"5.13.1"} /-->')
+        inserted = ok(self, PAGE, "insert-after", HEADING, tmp_file(self, bare))
+        page = tmp_file(self, inserted)
+        path = "section[0] > row[0] > column[0] > heading[1]"
+        out = ok(self, page, "set-attr", path, "title.decoration.font.font.headingLevel", "h2")
+        block = divi5_blocks.parse(out).find("placeholder[0] > " + path)
+        self.assertEqual(block.attrs["title"]["decoration"], {"font": {"font": {"desktop": {"value": {"headingLevel": "h2"}}}}})
+        self.assertEqual(divi5_blocks.get_attr(block, "title.decoration.font.font")["headingLevel"], "h2")
+
+    def test_set_attr_disabled_on_pseudo_breakpoint_path(self):
+        out = ok(self, PAGE, "set-attr", HEADING, "module.decoration.disabledOn.desktopAbove.value", "on")
+        self.assertEqual(divi5_blocks.parse(out).find(HEADING).attrs["module"]["decoration"]["disabledOn"],
+                         {"desktopAbove": {"value": "on"}})
 
     def test_set_attr_locked_is_not_responsive(self):
         out = ok(self, PAGE, "set-attr", HEADING, "locked", '"on"')
@@ -366,6 +415,13 @@ class Refusals(unittest.TestCase):
                              tmp_file(self, "<!-- wp:divi/placeholder -->" + NEW_SECTION + "<!-- /wp:divi/placeholder -->"))
         self.assertEqual((code, out), (1, ""))
         self.assertIn("placeholder", err)
+
+    def test_insert_at_placeholder_refused(self):
+        for verb in ("insert-after", "insert-before"):
+            for path in ("placeholder[0]", "divi/placeholder[0]"):
+                code, out, err = run(PAGE, verb, path, tmp_file(self, NEW_SECTION))
+                self.assertEqual((code, out), (1, ""), (verb, path))
+                self.assertIn("outside the page's divi/placeholder", err)
 
     def test_mixed_page_refused(self):
         page = tmp_file(self, SRC + "[et_pb_section][/et_pb_section]")

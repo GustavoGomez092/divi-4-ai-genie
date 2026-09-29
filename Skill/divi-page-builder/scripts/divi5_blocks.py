@@ -343,7 +343,10 @@ def set_attr(block: Block, dotted: str, value, breakpoint: Optional[str] = "desk
     block.dirty = True
 
 
-def _is_responsive(d: dict) -> bool:
+def is_responsive(d) -> bool:
+    """True for a {breakpoint: {state: value}} object (disabledOn's pseudo-breakpoints included)."""
+    if not isinstance(d, dict):
+        return False
     return bool(d) and all(k in _BP_SET for k in d) and all(
         isinstance(s, dict) and s and all(k in _STATE_SET for k in s) for s in d.values())
 
@@ -355,7 +358,7 @@ def iter_leaves(attrs, _prefix: str = "") -> Iterator[Tuple[str, Optional[str], 
     for k, v in attrs.items():
         path = f"{_prefix}.{k}" if _prefix else k
         if isinstance(v, dict):
-            if _is_responsive(v):
+            if is_responsive(v):
                 for bp, states in v.items():
                     for st, val in states.items():
                         yield path, bp, st, val

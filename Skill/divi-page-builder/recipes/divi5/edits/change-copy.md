@@ -15,7 +15,9 @@ dance as in Divi 4.
 - `NAME` is a dotted attribute path: `title.innerContent` (heading, blurb, CTA, toggle titles),
   `content.innerContent` (text, blurb, CTA and toggle bodies, HTML), `button.innerContent.text` (a button label;
   the link stays), `image.innerContent.alt`. The module's reference page
-  (`reference/divi5/modules/<module>.md`) lists every attribute.
+  (`reference/divi5/modules/<module>.md`) lists every attribute. `page_edit.py` places NAME by the Divi 5
+  schema, so it works whether or not the block has that attribute yet, and refuses (exit 2) a path the
+  schema doesn't know.
 - `VALUE` is plain text or HTML: `page_edit.py` escapes it canonically for you (`<` becomes `\u003c`, `&` becomes
   `\u0026`, and so on). A VALUE that parses as JSON is stored as JSON, so quote a number you mean as text
   (`'"2026"'`).
