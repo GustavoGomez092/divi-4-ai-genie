@@ -102,7 +102,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `button.decoration.button.decoration.sizing` | [Button](../design-families.md#button) |
 | `button.decoration.button.decoration.spacing` | [Button](../design-families.md#button) |
 | `button.decoration.button.innerContent` | [Button](../design-families.md#button) |
-| `button.decoration.font` | [Font](../design-families.md#font) |
+| `button.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `button.decoration.font.font`, not here |
 | `button.decoration.font.font` | [Font](../design-families.md#font) |
 | `button.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `button.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -130,11 +130,11 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `content.decoration.bodyFont.ul.textEffects` | [Body font](../design-families.md#font-body) |
 | `content.decoration.bodyFont.ul.textShadow` | [Body font](../design-families.md#font-body) |
 | `content.decoration.inlineFont` | [Inline fonts](../design-families.md#inline-font) |
-| `currencyFrequency.decoration.font` | [Font](../design-families.md#font) |
+| `currencyFrequency.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `currencyFrequency.decoration.font.font`, not here |
 | `currencyFrequency.decoration.font.font` | [Font](../design-families.md#font) |
 | `currencyFrequency.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `currencyFrequency.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `excluded.decoration.font` | [Font](../design-families.md#font) |
+| `excluded.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `excluded.decoration.font.font`, not here |
 | `excluded.decoration.font.font` | [Font](../design-families.md#font) |
 | `excluded.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `excluded.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -158,16 +158,16 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
 | `price.decoration.background` | [Background](../design-families.md#background) |
 | `price.decoration.border` | [Border](../design-families.md#border) |
-| `price.decoration.font` | [Font](../design-families.md#font) |
+| `price.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `price.decoration.font.font`, not here |
 | `price.decoration.font.font` | [Font](../design-families.md#font) |
 | `price.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `price.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `subtitle.decoration.font` | [Font](../design-families.md#font) |
+| `subtitle.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `subtitle.decoration.font.font`, not here |
 | `subtitle.decoration.font.font` | [Font](../design-families.md#font) |
 | `subtitle.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `subtitle.decoration.font.textShadow` | [Font](../design-families.md#font) |
 | `title.decoration.background` | [Background](../design-families.md#background) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |

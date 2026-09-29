@@ -71,7 +71,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `button.decoration.button.decoration.sizing` | [Button](../design-families.md#button) |
 | `button.decoration.button.decoration.spacing` | [Button](../design-families.md#button) |
 | `button.decoration.button.innerContent` | [Button](../design-families.md#button) |
-| `button.decoration.font` | [Font](../design-families.md#font) |
+| `button.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `button.decoration.font.font`, not here |
 | `button.decoration.font.font` | [Font](../design-families.md#font) |
 | `button.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `button.decoration.font.textShadow` | [Font](../design-families.md#font) |

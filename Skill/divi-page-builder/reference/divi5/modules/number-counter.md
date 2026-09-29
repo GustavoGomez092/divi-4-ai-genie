@@ -73,11 +73,11 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.transform` | [Transform](../design-families.md#transform) |
 | `module.decoration.transition` | [Transition](../design-families.md#transition) |
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
-| `number.decoration.font` | [Font](../design-families.md#font) |
+| `number.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `number.decoration.font.font`, not here |
 | `number.decoration.font.font` | [Font](../design-families.md#font) |
 | `number.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `number.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -110,7 +110,6 @@ Module-specific:
 | attribute | key | type | values | R | states | notes |
 |---|---|---|---|---|---|---|
 | `adminLabel` | — | text |  | desktop | · |  |
-| `content` | — | html |  | R | hover, sticky | D4 `content` |
 | `css` | `after` | text |  | R | hover, sticky | D4 `custom_css_after` |
 | `css` | `before` | text |  | R | hover, sticky | D4 `custom_css_before` |
 | `css` | `freeForm` | text |  | R | hover, sticky | D4 `custom_css_free_form` |
@@ -130,6 +129,12 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.meta.adminLabel` | [Admin label](../design-families.md#admin-label) |
 | `module.meta.meta.forceVisible` | [Meta](../design-families.md#meta) |
 | `module.meta.meta.tocListHeading` | [Meta](../design-families.md#meta) |
+
+Legacy, from Divi's Divi 4 conversion map only. The validator accepts them so that converted pages validate, but they appear only in Divi's conversion outlines: no Divi 5 module code reads them. Don't write them.
+
+| attribute | key | type | values | R | states | notes |
+|---|---|---|---|---|---|---|
+| `content` | — | html |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `content` |
 
 <details>
 <summary>Render defaults (6): what Divi uses when an attribute is unset — don't repeat these</summary>

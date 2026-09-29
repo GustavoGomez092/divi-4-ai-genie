@@ -35,6 +35,24 @@ FAMILY_TITLES = {"box-shadow": "Box shadow", "disabled-on": "Disabled on", "emai
                  "font-placeholder": "Placeholder font", "id-classes": "CSS ID & classes",
                  "inline-font": "Inline fonts", "spam-protection": "Spam protection", "z-index": "Z-index",
                  "accent-color": "Accent color", "admin-label": "Admin label"}
+# Family tables that are containers only: Divi reads their sub-tables, never keys written directly on them.
+# Font: FontStyle::style() (server/Packages/Module/Options/Font/FontStyle.php) styles an element's text from
+# `….decoration.font.font`, `.textShadow` and `.textEffects` only; values written directly under
+# `….decoration.font` rendered nothing on blurb, heading and toggle (live check, Divi 5.13.1).
+CONTAINER_NOTES = {
+    ("font", ""): "Container only: write the text styles (size, color, weight, family, headingLevel, …) under "
+                  "`….decoration.font.font`. Divi 5.13.1 styles text from `….font.font`, `.textShadow` and "
+                  "`.textEffects` only; keys written directly here are accepted by the validator but render "
+                  "nothing (live check: a blurb and a heading title, and a toggle's `openToggle`).",
+}
+# Block-level attributes Divi's converter writes on every block (Conversion::getAttrMap, schema.md §1.2) plus
+# `css`: real Divi 5 attributes even though module.json does not declare them.
+BLOCK_LEVEL = frozenset({"adminLabel", "builderVersion", "css", "globalColorsInfo", "globalModule", "globalParent",
+                         "groupPreset", "locked", "modulePreset", "nonconvertible", "on", "open", "shortcodeName",
+                         "themeBuilderArea", "unknownAttributes"})
+LEGACY_NOTE = "**legacy (D4 conversion) — don't author**"
+LEGACY_COLUMN_NOTE = ("**legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block "
+                      "(`module.decoration.*`, `css`)")
 MAX_OPTIONS = 15
 ROW_HEADER = ("| attribute | key | type | values | R | states | notes |\n"
               "|---|---|---|---|---|---|---|")
@@ -276,6 +294,23 @@ def d4_field_map(raw_module: dict) -> dict:
     return {k: sorted(v)[:3] for k, v in out.items()}
 
 
+def is_legacy(path: str, raw_module: dict, d4map: dict) -> bool:
+    """An attribute only Divi's D4 -> D5 conversion map produces: no group segment, not a block-level attr, its root
+    not declared in module.json, and a Divi 4 field converts to it. In Divi 5.13.1 these names occur only in the
+    conversion outlines (_all_modules_conversion_outline.php, module-library.js), never in module code."""
+    root = path.split(".")[0]
+    if any(seg in GROUPS for seg in path.split(".")) or root in BLOCK_LEVEL:
+        return False
+    if root in (raw_module.get("attributes") or {}):
+        return False
+    return any(attr == path for attr, _sub in d4map)
+
+
+def _legacy_note(path: str) -> str:
+    column = path.startswith("columns") or "Column" in path or "column" in path or path[-1:].isdigit()
+    return LEGACY_COLUMN_NOTE if column else LEGACY_NOTE
+
+
 def group_of(path: str) -> str:
     """innerContent / decoration / advanced / meta: the first group segment of an attribute path."""
     for seg in path.split("."):
@@ -371,11 +406,13 @@ def render_module(short: str, schema, raw_module: dict, notes_dir) -> str:
         if not rows:
             lines += ["None on this block.", ""]
             continue
-        if rows["inline"]:
-            if rows["family"]:
+        legacy = [p for p in rows["inline"] if is_legacy(p, raw_module, d4map)]
+        current = [p for p in rows["inline"] if p not in legacy]
+        if current:
+            if rows["family"] or legacy:
                 lines += ["Module-specific:", ""]
             lines.append(ROW_HEADER)
-            for path in rows["inline"]:
+            for path in current:
                 for sub, leaf in sorted(schema.leaf_spec(mod.attrs[path]).items()):
                     lines.append(f"| `{path}` | {_key(sub)} | {_leaf_cells(leaf, _note(leaf, d4map.get((path, sub))))} |")
             lines.append("")
@@ -386,7 +423,18 @@ def render_module(short: str, schema, raw_module: dict, notes_dir) -> str:
                 spec = mod.attrs[path]
                 fam, prefix = spec["family"], spec.get("prefix", "")
                 extra = f" (+ {', '.join(spec['states_extra'])} states)" if spec.get("states_extra") else ""
-                lines.append(f"| `{path}` | [{family_title(fam)}](../design-families.md#{fam}){extra} |")
+                container = " — container only: write keys under " \
+                            f"`{path}.font`, not here" if (fam, prefix) == ("font", "") else ""
+                lines.append(f"| `{path}` | [{family_title(fam)}](../design-families.md#{fam}){extra}{container} |")
+            lines.append("")
+        if legacy:
+            lines += ["Legacy, from Divi's Divi 4 conversion map only. The validator accepts them so that converted "
+                      "pages validate, but they appear only in Divi's conversion outlines: no Divi 5 module code "
+                      "reads them. Don't write them.", "", ROW_HEADER]
+            for path in legacy:
+                for sub, leaf in sorted(schema.leaf_spec(mod.attrs[path]).items()):
+                    note = "; ".join(x for x in (_legacy_note(path), _note(leaf, d4map.get((path, sub)))) if x)
+                    lines.append(f"| `{path}` | {_key(sub)} | {_leaf_cells(leaf, note)} |")
             lines.append("")
     lines += _defaults_block(mod)
     note = Path(notes_dir) / f"{short}.md" if notes_dir else None
@@ -461,6 +509,8 @@ def render_families(schema, names) -> str:
         for prefix in sorted(used[fam]):
             table = spec["attrs"][prefix]
             out += [_prefix_heading(schema, fam, prefix), ""]
+            if (fam, prefix) in CONTAINER_NOTES:
+                out += [f"> **{CONTAINER_NOTES[(fam, prefix)]}**", ""]
             other = canonical.get(_table_key(table), (fam, prefix))
             if other != (fam, prefix):
                 out += [f"Same keys as [{family_title(other[0])} → `….{family_suffix(schema, *other)}`]"

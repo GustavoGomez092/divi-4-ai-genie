@@ -685,9 +685,11 @@ Group key `decoration.fit` · used by 10 module(s) · e.g. `image.decoration.fit
 
 Group key `decoration.font` · used by 41 module(s) · e.g. `tab.decoration.font` (tabs), `date.decoration.font` (timeline), `list.decoration.font` (table-of-contents)
 
-> Schema notes: divi/font (all 5 variants: has_heading_level/has_list/has_paragraph/has_border). The bare attr ("") also holds color/size/textAlign/headingLevel in some modules (accordion open/closed toggle).
+> Schema notes: divi/font (all 5 variants: has_heading_level/has_list/has_paragraph/has_border). The dump also lists color/size/textAlign/headingLevel directly on the bare attr ("") for a few elements (accordion/toggle openToggle, pricing-tables featured*, gallery pagination), but Divi 5.13.1 styles text only from .font.font/.textShadow/.textEffects (FontStyle.php); bare keys render nothing (live check).
 
 ### `….decoration.font`
+
+> **Container only: write the text styles (size, color, weight, family, headingLevel, …) under `….decoration.font.font`. Divi 5.13.1 styles text from `….font.font`, `.textShadow` and `.textEffects` only; keys written directly here are accepted by the validator but render nothing (live check: a blurb and a heading title, and a toggle's `openToggle`).**
 
 | key | type | values | R | states | notes |
 |---|---|---|---|---|---|

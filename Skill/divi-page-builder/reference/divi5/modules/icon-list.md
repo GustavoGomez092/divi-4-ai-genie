@@ -40,7 +40,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `icon.decoration.border` | [Border](../design-families.md#border) |
 | `icon.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) |
 | `icon.decoration.spacing` | [Spacing](../design-families.md#spacing) |
-| `listItem.decoration.font` | [Font](../design-families.md#font) |
+| `listItem.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `listItem.decoration.font.font`, not here |
 | `listItem.decoration.font.font` | [Font](../design-families.md#font) |
 | `listItem.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `listItem.decoration.font.textShadow` | [Font](../design-families.md#font) |

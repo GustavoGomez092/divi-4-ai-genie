@@ -50,39 +50,39 @@ Shared families (in the linked family, the table whose heading ends like the att
 
 | attribute | family |
 |---|---|
-| `emptyState.decoration.font` | [Font](../design-families.md#font) |
+| `emptyState.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `emptyState.decoration.font.font`, not here |
 | `emptyState.decoration.font.font` | [Font](../design-families.md#font) |
 | `emptyState.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `emptyState.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `list.decoration.font` | [Font](../design-families.md#font) |
+| `list.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `list.decoration.font.font`, not here |
 | `list.decoration.font.font` | [Font](../design-families.md#font) |
 | `list.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `list.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `list1.decoration.font` | [Font](../design-families.md#font) |
+| `list1.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `list1.decoration.font.font`, not here |
 | `list1.decoration.font.font` | [Font](../design-families.md#font) |
 | `list1.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `list1.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `list2.decoration.font` | [Font](../design-families.md#font) |
+| `list2.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `list2.decoration.font.font`, not here |
 | `list2.decoration.font.font` | [Font](../design-families.md#font) |
 | `list2.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `list2.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `list3.decoration.font` | [Font](../design-families.md#font) |
+| `list3.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `list3.decoration.font.font`, not here |
 | `list3.decoration.font.font` | [Font](../design-families.md#font) |
 | `list3.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `list3.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `list4.decoration.font` | [Font](../design-families.md#font) |
+| `list4.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `list4.decoration.font.font`, not here |
 | `list4.decoration.font.font` | [Font](../design-families.md#font) |
 | `list4.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `list4.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `list5.decoration.font` | [Font](../design-families.md#font) |
+| `list5.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `list5.decoration.font.font`, not here |
 | `list5.decoration.font.font` | [Font](../design-families.md#font) |
 | `list5.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `list5.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `list6.decoration.font` | [Font](../design-families.md#font) |
+| `list6.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `list6.decoration.font.font`, not here |
 | `list6.decoration.font.font` | [Font](../design-families.md#font) |
 | `list6.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `list6.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `marker.decoration.font` | [Font](../design-families.md#font) |
+| `marker.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `marker.decoration.font.font`, not here |
 | `marker.decoration.font.font` | [Font](../design-families.md#font) |
 | `marker.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `marker.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -105,7 +105,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.transform` | [Transform](../design-families.md#transform) |
 | `module.decoration.transition` | [Transition](../design-families.md#transition) |
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |

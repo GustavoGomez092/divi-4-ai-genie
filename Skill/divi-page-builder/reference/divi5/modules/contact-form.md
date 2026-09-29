@@ -66,20 +66,20 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `button.decoration.button.decoration.sizing` | [Button](../design-families.md#button) |
 | `button.decoration.button.decoration.spacing` | [Button](../design-families.md#button) |
 | `button.decoration.button.innerContent` | [Button](../design-families.md#button) |
-| `button.decoration.font` | [Font](../design-families.md#font) |
+| `button.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `button.decoration.font.font`, not here |
 | `button.decoration.font.font` | [Font](../design-families.md#font) |
 | `button.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `button.decoration.font.textShadow` | [Font](../design-families.md#font) |
 | `button.decoration.sizing` | [Sizing](../design-families.md#sizing) |
 | `button.decoration.spacing` | [Spacing](../design-families.md#spacing) |
-| `captcha.decoration.font` | [Font](../design-families.md#font) |
+| `captcha.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `captcha.decoration.font.font`, not here |
 | `captcha.decoration.font.font` | [Font](../design-families.md#font) |
 | `captcha.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `captcha.decoration.font.textShadow` | [Font](../design-families.md#font) |
 | `checkbox.decoration.background` | [Background](../design-families.md#background) (+ focus, checked, active states) |
 | `checkbox.decoration.border` | [Border](../design-families.md#border) (+ focus, checked, active states) |
 | `checkbox.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) (+ focus, checked, active states) |
-| `checkbox.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
+| `checkbox.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) — container only: write keys under `checkbox.decoration.font.font`, not here |
 | `checkbox.decoration.font.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `checkbox.decoration.font.textEffects` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `checkbox.decoration.font.textShadow` | [Font](../design-families.md#font) (+ focus, checked, active states) |
@@ -88,7 +88,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `field.decoration.background` | [Background](../design-families.md#background) (+ focus, checked, active states) |
 | `field.decoration.border` | [Border](../design-families.md#border) (+ focus, checked, active states) |
 | `field.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) (+ focus, checked, active states) |
-| `field.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
+| `field.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) — container only: write keys under `field.decoration.font.font`, not here |
 | `field.decoration.font.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `field.decoration.font.textEffects` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `field.decoration.font.textShadow` | [Font](../design-families.md#font) (+ focus, checked, active states) |
@@ -121,13 +121,13 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `radio.decoration.background` | [Background](../design-families.md#background) (+ focus, checked, active states) |
 | `radio.decoration.border` | [Border](../design-families.md#border) (+ focus, checked, active states) |
 | `radio.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) (+ focus, checked, active states) |
-| `radio.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
+| `radio.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) — container only: write keys under `radio.decoration.font.font`, not here |
 | `radio.decoration.font.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `radio.decoration.font.textEffects` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `radio.decoration.font.textShadow` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `radio.decoration.icon` | [Icon](../design-families.md#icon) (+ focus, checked, active states) |
 | `radio.decoration.spacing` | [Spacing](../design-families.md#spacing) (+ focus, checked, active states) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -249,7 +249,6 @@ Module-specific:
 | attribute | key | type | values | R | states | notes |
 |---|---|---|---|---|---|---|
 | `adminLabel` | — | text |  | desktop | · |  |
-| `content` | — | html |  | R | hover, sticky | D4 `content` |
 | `css` | `after` | text |  | R | hover, sticky | D4 `custom_css_after` |
 | `css` | `before` | text |  | R | hover, sticky | D4 `custom_css_before` |
 | `css` | `captchaField` | text |  | R | hover, sticky | D4 `custom_css_captcha_field` |
@@ -273,6 +272,12 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.meta.adminLabel` | [Admin label](../design-families.md#admin-label) |
 | `module.meta.meta.forceVisible` | [Meta](../design-families.md#meta) |
 | `module.meta.meta.tocListHeading` | [Meta](../design-families.md#meta) |
+
+Legacy, from Divi's Divi 4 conversion map only. The validator accepts them so that converted pages validate, but they appear only in Divi's conversion outlines: no Divi 5 module code reads them. Don't write them.
+
+| attribute | key | type | values | R | states | notes |
+|---|---|---|---|---|---|---|
+| `content` | — | html |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `content` |
 
 <details>
 <summary>Render defaults (8): what Divi uses when an attribute is unset — don't repeat these</summary>

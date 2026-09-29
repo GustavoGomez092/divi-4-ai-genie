@@ -56,7 +56,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `button.decoration.button.decoration.sizing` | [Button](../design-families.md#button) |
 | `button.decoration.button.decoration.spacing` | [Button](../design-families.md#button) |
 | `button.decoration.button.innerContent` | [Button](../design-families.md#button) |
-| `button.decoration.font` | [Font](../design-families.md#font) |
+| `button.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `button.decoration.font.font`, not here |
 | `button.decoration.font.font` | [Font](../design-families.md#font) |
 | `button.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `button.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -94,38 +94,38 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `content.decoration.bodyFont.ul.list` | [Body font](../design-families.md#font-body) |
 | `content.decoration.bodyFont.ul.textEffects` | [Body font](../design-families.md#font-body) |
 | `content.decoration.bodyFont.ul.textShadow` | [Body font](../design-families.md#font-body) |
-| `currencyFrequency.decoration.font` | [Font](../design-families.md#font) |
+| `currencyFrequency.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `currencyFrequency.decoration.font.font`, not here |
 | `currencyFrequency.decoration.font.font` | [Font](../design-families.md#font) |
 | `currencyFrequency.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `currencyFrequency.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `excluded.decoration.font` | [Font](../design-families.md#font) |
+| `excluded.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `excluded.decoration.font.font`, not here |
 | `excluded.decoration.font.font` | [Font](../design-families.md#font) |
 | `excluded.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `excluded.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `featuredContent.decoration.font` | [Font](../design-families.md#font) |
+| `featuredContent.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `featuredContent.decoration.font.font`, not here |
 | `featuredContent.decoration.font.font` | [Font](../design-families.md#font) |
 | `featuredContent.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `featuredContent.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `featuredCurrencyFrequency.decoration.font` | [Font](../design-families.md#font) |
+| `featuredCurrencyFrequency.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `featuredCurrencyFrequency.decoration.font.font`, not here |
 | `featuredCurrencyFrequency.decoration.font.font` | [Font](../design-families.md#font) |
 | `featuredCurrencyFrequency.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `featuredCurrencyFrequency.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `featuredExcluded.decoration.font` | [Font](../design-families.md#font) |
+| `featuredExcluded.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `featuredExcluded.decoration.font.font`, not here |
 | `featuredExcluded.decoration.font.font` | [Font](../design-families.md#font) |
 | `featuredExcluded.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `featuredExcluded.decoration.font.textShadow` | [Font](../design-families.md#font) |
 | `featuredPrice.decoration.background` | [Background](../design-families.md#background) |
-| `featuredPrice.decoration.font` | [Font](../design-families.md#font) |
+| `featuredPrice.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `featuredPrice.decoration.font.font`, not here |
 | `featuredPrice.decoration.font.font` | [Font](../design-families.md#font) |
 | `featuredPrice.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `featuredPrice.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `featuredSubtitle.decoration.font` | [Font](../design-families.md#font) |
+| `featuredSubtitle.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `featuredSubtitle.decoration.font.font`, not here |
 | `featuredSubtitle.decoration.font.font` | [Font](../design-families.md#font) |
 | `featuredSubtitle.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `featuredSubtitle.decoration.font.textShadow` | [Font](../design-families.md#font) |
 | `featuredTable.decoration.background` | [Background](../design-families.md#background) |
 | `featuredTitle.decoration.background` | [Background](../design-families.md#background) |
-| `featuredTitle.decoration.font` | [Font](../design-families.md#font) |
+| `featuredTitle.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `featuredTitle.decoration.font.font`, not here |
 | `featuredTitle.decoration.font.font` | [Font](../design-families.md#font) |
 | `featuredTitle.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `featuredTitle.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -150,16 +150,16 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
 | `price.decoration.background` | [Background](../design-families.md#background) |
 | `price.decoration.border` | [Border](../design-families.md#border) |
-| `price.decoration.font` | [Font](../design-families.md#font) |
+| `price.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `price.decoration.font.font`, not here |
 | `price.decoration.font.font` | [Font](../design-families.md#font) |
 | `price.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `price.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `subtitle.decoration.font` | [Font](../design-families.md#font) |
+| `subtitle.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `subtitle.decoration.font.font`, not here |
 | `subtitle.decoration.font.font` | [Font](../design-families.md#font) |
 | `subtitle.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `subtitle.decoration.font.textShadow` | [Font](../design-families.md#font) |
 | `title.decoration.background` | [Background](../design-families.md#background) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |

@@ -27,11 +27,14 @@ def short(name):
 
 class GeneratedDocsTest(unittest.TestCase):
     def test_generation_is_deterministic_and_matches_committed_files(self):
+        import contextlib
+        import io
         with tempfile.TemporaryDirectory() as tmp:
             skill = Path(tmp)
             (skill / "reference" / "divi5").mkdir(parents=True)
             shutil.copy(REF5 / "design-families.md", skill / "reference" / "divi5" / "design-families.md")
-            self.assertEqual(gd.main(SCHEMA5_RAW, skill, NOTES5), 0)
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(gd.main(SCHEMA5_RAW, skill, NOTES5), 0)
             out = skill / "reference" / "divi5"
             generated = sorted(p.name for p in (out / "modules").glob("*.md"))
             committed = sorted(p.name for p in MODULES5.glob("*.md"))
@@ -135,6 +138,44 @@ class GeneratedDocsTest(unittest.TestCase):
             self.assertIn("## Gotchas", page)
             self.assertIn(note.read_text().strip().splitlines()[0], page)
 
+    def test_bare_font_attr_is_marked_as_a_container(self):
+        # Divi 5.13.1 styles text only from ….decoration.font.font (FontStyle.php); keys written directly under
+        # ….decoration.font render nothing (live check on blurb, heading and toggle, task 9 report).
+        blurb = (MODULES5 / "blurb.md").read_text()
+        bare = [l for l in blurb.splitlines() if l.startswith("| `title.decoration.font` |")]
+        self.assertEqual(len(bare), 1)
+        self.assertIn("`title.decoration.font.font`", bare[0])
+        fonts = [l for l in blurb.splitlines() if l.startswith("| `title.decoration.font.font` |")]
+        self.assertNotIn("don't write", fonts[0])
+        families = (REF5 / "design-families.md").read_text()
+        section = families.split('<a id="font"></a>', 1)[1].split("\n## ", 1)[0]
+        bare_table = section.split("### `….decoration.font`\n", 1)[1].split("### ", 1)[0]
+        self.assertIn("….decoration.font.font", bare_table.split("| key |", 1)[0])
+
+    def test_icon_notes_explain_the_divi4_string_conversion(self):
+        for page in ("blurb", "button"):
+            text = (MODULES5 / f"{page}.md").read_text()
+            self.assertIn("||", text, page)
+            self.assertIn("value-formats.md#icons", text, page)
+
+    def test_legacy_conversion_attrs_are_tagged(self):
+        row = (MODULES5 / "row.md").read_text()
+        lines = row.splitlines()
+        legacy = [l for l in lines if l.startswith(("| `customCssMain1` |", "| `padding1Phone` |",
+                                                     "| `columns.column-1.spacing` |"))]
+        self.assertTrue(legacy)
+        for l in legacy:
+            self.assertIn("legacy (D4 conversion)", l)
+        self.assertIn("Legacy", row.split("## Meta and block-level attributes", 1)[1])
+        for keep in ("| `css` |", "| `adminLabel` |", "| `locked` |"):
+            for l in (l for l in lines if l.startswith(keep)):
+                self.assertNotIn("legacy", l)
+        section = (MODULES5 / "section.md").read_text()
+        self.assertTrue(any(l.startswith("| `columnsPadding` |") and "legacy (D4 conversion)" in l
+                            for l in section.splitlines()))
+        text = (MODULES5 / "text.md").read_text()
+        self.assertNotIn("legacy (D4 conversion)", text)
+
     def test_design_families_prose_and_markers(self):
         text = (REF5 / "design-families.md").read_text()
         head, rest = text.split("<!-- BEGIN GENERATED -->", 1)
@@ -143,6 +184,69 @@ class GeneratedDocsTest(unittest.TestCase):
         used = {spec["family"] for n in IN_SCOPE for spec in SCHEMA5.module(n).attrs.values() if "family" in spec}
         for fam in used:
             self.assertIn(f'<a id="{fam}"></a>', rest, fam)
+
+
+HAND_WRITTEN = ("page-format.md", "structure.md", "value-formats.md")
+BLOCK5 = re.compile(r"^```divi5\n(.*?)^```", re.S | re.M)
+LINK = re.compile(r"\]\(([^)\s]+)\)")
+
+
+def _slug(heading: str) -> str:
+    return re.sub(r"[^\w\- ]", "", heading.strip().lower()).replace(" ", "-")
+
+
+def _anchors(path: Path) -> set:
+    text = path.read_text()
+    prose = re.sub(r"```.*?```", "", text, flags=re.S)
+    return {_slug(h) for h in re.findall(r"^#+ (.*)$", prose, re.M)} | set(re.findall(r'<a id="([^"]+)"', text))
+
+
+class HandWrittenReferencesTest(unittest.TestCase):
+    """reference/divi5/{page-format,structure,value-formats}.md (Task 9)."""
+
+    def test_examples_validate_without_any_finding(self):
+        for name in HAND_WRITTEN:
+            blocks = BLOCK5.findall((REF5 / name).read_text())
+            self.assertTrue(blocks, name)
+            for i, src in enumerate(blocks):
+                findings = [(f.level, f.code, f.attr) for f in validate_source(src.strip(), fragment=True)]
+                self.assertEqual(findings, [], f"{name} block {i}")
+
+    def test_examples_carry_the_schema_builder_version(self):
+        version = SCHEMA5.meta["divi_version"]
+        for name in HAND_WRITTEN:
+            for src in BLOCK5.findall((REF5 / name).read_text()):
+                self.assertIn(f'"builderVersion":"{version}"', src, name)
+                self.assertNotIn('"builderVersion":"', src.replace(f'"builderVersion":"{version}"', ""), name)
+
+    def test_relative_links_and_anchors_resolve(self):
+        pages = [REF5 / n for n in HAND_WRITTEN] + [REF5 / "design-families.md"] + sorted(MODULES5.glob("*.md"))
+        broken = []
+        for page in pages:
+            for link in LINK.findall(page.read_text()):
+                if link.startswith(("http://", "https://")):
+                    continue
+                target, _, anchor = link.partition("#")
+                path = (page.parent / target).resolve() if target else page
+                if not path.exists():
+                    broken.append((page.name, link))
+                elif anchor and path.suffix == ".md" and anchor not in _anchors(path):
+                    broken.append((page.name, link))
+        self.assertEqual(broken, [])
+
+    def test_cited_validator_codes_exist(self):
+        scripts = SKILL / "scripts"
+        source = "".join(p.read_text() for p in scripts.glob("*.py"))
+        for name in HAND_WRITTEN:
+            for code in set(re.findall(r"`([EW]5?_[A-Z0-9_]{3,})`", (REF5 / name).read_text())):
+                self.assertTrue(f'"{code}"' in source, f"{name} cites {code}, which no validator script reports")
+
+    def test_skill_index_lists_the_divi5_references(self):
+        index = (SKILL / "SKILL.md").read_text()
+        for rel in re.findall(r"`(reference/divi5/[^`]+)`", index):
+            self.assertTrue((SKILL / rel).exists(), rel)
+        for name in HAND_WRITTEN:
+            self.assertIn(f"reference/divi5/{name}", index)
 
 
 class Divi5DocExamplesTest(unittest.TestCase):

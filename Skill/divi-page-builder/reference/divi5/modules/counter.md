@@ -58,7 +58,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `barCounter.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) |
 | `barCounter.decoration.sizing` | [Sizing](../design-families.md#sizing) |
 | `barProgress.decoration.background` | [Background](../design-families.md#background) |
-| `barProgress.decoration.font` | [Font](../design-families.md#font) |
+| `barProgress.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `barProgress.decoration.font.font`, not here |
 | `barProgress.decoration.font.font` | [Font](../design-families.md#font) |
 | `barProgress.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `barProgress.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -75,7 +75,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.transform` | [Transform](../design-families.md#transform) |
 | `module.decoration.transition` | [Transition](../design-families.md#transition) |
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |

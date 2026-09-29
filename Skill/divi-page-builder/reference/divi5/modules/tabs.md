@@ -37,7 +37,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | attribute | family |
 |---|---|
 | `activeTab.decoration.background` | [Background](../design-families.md#background) |
-| `activeTab.decoration.font` | [Font](../design-families.md#font) |
+| `activeTab.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `activeTab.decoration.font.font`, not here |
 | `activeTab.decoration.font.font` | [Font](../design-families.md#font) |
 | `activeTab.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `activeTab.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -82,7 +82,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.transition` | [Transition](../design-families.md#transition) |
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
 | `tab.decoration.background` | [Background](../design-families.md#background) |
-| `tab.decoration.font` | [Font](../design-families.md#font) |
+| `tab.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `tab.decoration.font.font`, not here |
 | `tab.decoration.font.font` | [Font](../design-families.md#font) |
 | `tab.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `tab.decoration.font.textShadow` | [Font](../design-families.md#font) |

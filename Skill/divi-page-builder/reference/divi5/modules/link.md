@@ -46,7 +46,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 
 | attribute | family |
 |---|---|
-| `content.decoration.font` | [Font](../design-families.md#font) |
+| `content.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `content.decoration.font.font`, not here |
 | `content.decoration.font.font` | [Font](../design-families.md#font) |
 | `content.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `content.decoration.font.textShadow` | [Font](../design-families.md#font) |

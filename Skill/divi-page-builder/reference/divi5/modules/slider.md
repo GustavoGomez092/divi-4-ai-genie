@@ -56,7 +56,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `button.decoration.button.decoration.sizing` | [Button](../design-families.md#button) |
 | `button.decoration.button.decoration.spacing` | [Button](../design-families.md#button) |
 | `button.decoration.button.innerContent` | [Button](../design-families.md#button) |
-| `button.decoration.font` | [Font](../design-families.md#font) |
+| `button.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `button.decoration.font.font`, not here |
 | `button.decoration.font.font` | [Font](../design-families.md#font) |
 | `button.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `button.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -125,7 +125,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.transform` | [Transform](../design-families.md#transform) |
 | `module.decoration.transition` | [Transition](../design-families.md#transition) |
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |

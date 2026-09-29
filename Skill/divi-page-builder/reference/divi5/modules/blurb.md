@@ -127,7 +127,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.transform` | [Transform](../design-families.md#transform) |
 | `module.decoration.transition` | [Transition](../design-families.md#transition) |
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -200,6 +200,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 ## Gotchas
 
 - `title.innerContent` is an object, not a string: `{"text": "…", "url": "…", "target": "off"|"on"}` (Divi 4 `title`, `url`, `url_new_window`). Only `divi/heading` and a few others take a plain string title.
-- Icon or image: in `imageIcon.innerContent`, `useIcon: "on"` shows `icon` (an icon object `{"unicode", "type", "weight"}`, see [icons.md](../../icons.md)); the default `"off"` shows the image `src` (give it an `alt`). Set only the one you use.
+- Icon or image: in `imageIcon.innerContent`, `useIcon: "on"` shows `icon`; the default `"off"` shows the image `src` (give it an `alt`). Set only the one you use.
+- `icon` is an object `{"unicode": "…", "type": "divi"|"fa", "weight": "…"}`, all three keys required. Find the icon in [icons.md](../../icons.md) and split its Divi 4 value on `||`: `&#xf095;||fa||900` becomes `{"unicode": "&#xf095;", "type": "fa", "weight": "900"}` (Divi's converter does exactly this, `ValueExpansion::convertFontIcon`). Pasting the `||` string itself is `E5_BAD_VALUE`. Details: [value-formats.md#icons](../value-formats.md#icons).
 - The title renders as `h4` by default. In a grid of blurbs under an `h2` section heading, set `title.decoration.font.font` → `{"headingLevel": "h3"}` so the outline doesn't skip a level.
 - `imageIcon.advanced.placement` is `top` (default) or `left`; `left` suits compact feature lists. The icon color is `imageIcon.advanced.color` (default: the site's primary global color).

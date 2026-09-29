@@ -55,7 +55,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 
 | attribute | family |
 |---|---|
-| `label.decoration.font` | [Font](../design-families.md#font) |
+| `label.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `label.decoration.font.font`, not here |
 | `label.decoration.font.font` | [Font](../design-families.md#font) |
 | `label.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `label.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -78,15 +78,15 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.transform` | [Transform](../design-families.md#transform) |
 | `module.decoration.transition` | [Transition](../design-families.md#transition) |
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
-| `number.decoration.font` | [Font](../design-families.md#font) |
+| `number.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `number.decoration.font.font`, not here |
 | `number.decoration.font.font` | [Font](../design-families.md#font) |
 | `number.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `number.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `separator.decoration.font` | [Font](../design-families.md#font) |
+| `separator.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `separator.decoration.font.font`, not here |
 | `separator.decoration.font.font` | [Font](../design-families.md#font) |
 | `separator.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `separator.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |

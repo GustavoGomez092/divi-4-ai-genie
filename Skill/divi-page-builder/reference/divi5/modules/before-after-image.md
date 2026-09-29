@@ -71,7 +71,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `beforeImage.decoration.sizing` | [Sizing](../design-families.md#sizing) |
 | `labels.decoration.background` | [Background](../design-families.md#background) |
 | `labels.decoration.border` | [Border](../design-families.md#border) |
-| `labels.decoration.font` | [Font](../design-families.md#font) |
+| `labels.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `labels.decoration.font.font`, not here |
 | `labels.decoration.font.font` | [Font](../design-families.md#font) |
 | `labels.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `labels.decoration.font.textShadow` | [Font](../design-families.md#font) |

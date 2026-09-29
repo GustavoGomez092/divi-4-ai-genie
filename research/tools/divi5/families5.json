@@ -895,7 +895,7 @@
   },
   "font": {
    "key": "decoration.font",
-   "_notes": "divi/font (all 5 variants: has_heading_level/has_list/has_paragraph/has_border). The bare attr (\"\") also holds color/size/textAlign/headingLevel in some modules (accordion open/closed toggle).",
+   "_notes": "divi/font (all 5 variants: has_heading_level/has_list/has_paragraph/has_border). The dump also lists color/size/textAlign/headingLevel directly on the bare attr (\"\") for a few elements (accordion/toggle openToggle, pricing-tables featured*, gallery pagination), but Divi 5.13.1 styles text only from .font.font/.textShadow/.textEffects (FontStyle.php); bare keys render nothing (live check).",
    "attrs": {
     "": {
      "": "object",

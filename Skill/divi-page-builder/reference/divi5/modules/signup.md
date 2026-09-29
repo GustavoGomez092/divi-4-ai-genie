@@ -66,7 +66,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `button.decoration.button.decoration.sizing` | [Button](../design-families.md#button) |
 | `button.decoration.button.decoration.spacing` | [Button](../design-families.md#button) |
 | `button.decoration.button.innerContent` | [Button](../design-families.md#button) |
-| `button.decoration.font` | [Font](../design-families.md#font) |
+| `button.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `button.decoration.font.font`, not here |
 | `button.decoration.font.font` | [Font](../design-families.md#font) |
 | `button.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `button.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -75,7 +75,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `checkbox.decoration.background` | [Background](../design-families.md#background) (+ focus, checked, active states) |
 | `checkbox.decoration.border` | [Border](../design-families.md#border) (+ focus, checked, active states) |
 | `checkbox.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) (+ focus, checked, active states) |
-| `checkbox.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
+| `checkbox.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) — container only: write keys under `checkbox.decoration.font.font`, not here |
 | `checkbox.decoration.font.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `checkbox.decoration.font.textEffects` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `checkbox.decoration.font.textShadow` | [Font](../design-families.md#font) (+ focus, checked, active states) |
@@ -105,7 +105,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `field.decoration.background` | [Background](../design-families.md#background) (+ focus, checked, active states) |
 | `field.decoration.border` | [Border](../design-families.md#border) (+ focus, checked, active states) |
 | `field.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) (+ focus, checked, active states) |
-| `field.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
+| `field.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) — container only: write keys under `field.decoration.font.font`, not here |
 | `field.decoration.font.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `field.decoration.font.textEffects` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `field.decoration.font.textShadow` | [Font](../design-families.md#font) (+ focus, checked, active states) |
@@ -138,17 +138,17 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `radio.decoration.background` | [Background](../design-families.md#background) (+ focus, checked, active states) |
 | `radio.decoration.border` | [Border](../design-families.md#border) (+ focus, checked, active states) |
 | `radio.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) (+ focus, checked, active states) |
-| `radio.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
+| `radio.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) — container only: write keys under `radio.decoration.font.font`, not here |
 | `radio.decoration.font.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `radio.decoration.font.textEffects` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `radio.decoration.font.textShadow` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `radio.decoration.icon` | [Icon](../design-families.md#icon) (+ focus, checked, active states) |
 | `radio.decoration.spacing` | [Spacing](../design-families.md#spacing) (+ focus, checked, active states) |
-| `resultMessage.decoration.font` | [Font](../design-families.md#font) |
+| `resultMessage.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `resultMessage.decoration.font.font`, not here |
 | `resultMessage.decoration.font.font` | [Font](../design-families.md#font) |
 | `resultMessage.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `resultMessage.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |

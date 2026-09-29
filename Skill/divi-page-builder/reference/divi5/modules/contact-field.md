@@ -61,7 +61,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `checkbox.decoration.background` | [Background](../design-families.md#background) (+ focus, checked, active states) |
 | `checkbox.decoration.border` | [Border](../design-families.md#border) (+ focus, checked, active states) |
 | `checkbox.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) (+ focus, checked, active states) |
-| `checkbox.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
+| `checkbox.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) — container only: write keys under `checkbox.decoration.font.font`, not here |
 | `checkbox.decoration.font.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `checkbox.decoration.font.textEffects` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `checkbox.decoration.font.textShadow` | [Font](../design-families.md#font) (+ focus, checked, active states) |
@@ -70,7 +70,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `field.decoration.background` | [Background](../design-families.md#background) (+ focus, checked, active states) |
 | `field.decoration.border` | [Border](../design-families.md#border) (+ focus, checked, active states) |
 | `field.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) (+ focus, checked, active states) |
-| `field.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
+| `field.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) — container only: write keys under `field.decoration.font.font`, not here |
 | `field.decoration.font.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `field.decoration.font.textEffects` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `field.decoration.font.textShadow` | [Font](../design-families.md#font) (+ focus, checked, active states) |
@@ -81,7 +81,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `field.decoration.placeholderFont.textEffects` | [Placeholder font](../design-families.md#font-placeholder) (+ focus, checked, active states) |
 | `field.decoration.placeholderFont.textShadow` | [Placeholder font](../design-families.md#font-placeholder) (+ focus, checked, active states) |
 | `field.decoration.spacing` | [Spacing](../design-families.md#spacing) (+ focus, checked, active states) |
-| `fieldTitle.decoration.font` | [Font](../design-families.md#font) |
+| `fieldTitle.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `fieldTitle.decoration.font.font`, not here |
 | `fieldTitle.decoration.font.font` | [Font](../design-families.md#font) |
 | `fieldTitle.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `fieldTitle.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -107,7 +107,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `radio.decoration.background` | [Background](../design-families.md#background) (+ focus, checked, active states) |
 | `radio.decoration.border` | [Border](../design-families.md#border) (+ focus, checked, active states) |
 | `radio.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) (+ focus, checked, active states) |
-| `radio.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
+| `radio.decoration.font` | [Font](../design-families.md#font) (+ focus, checked, active states) — container only: write keys under `radio.decoration.font.font`, not here |
 | `radio.decoration.font.font` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `radio.decoration.font.textEffects` | [Font](../design-families.md#font) (+ focus, checked, active states) |
 | `radio.decoration.font.textShadow` | [Font](../design-families.md#font) (+ focus, checked, active states) |
@@ -242,7 +242,6 @@ Module-specific:
 | attribute | key | type | values | R | states | notes |
 |---|---|---|---|---|---|---|
 | `adminLabel` | — | text |  | desktop | · |  |
-| `content` | — | html |  | R | hover, sticky | D4 `content` |
 | `css` | `after` | text |  | R | hover, sticky | D4 `custom_css_after` |
 | `css` | `before` | text |  | R | hover, sticky | D4 `custom_css_before` |
 | `css` | `freeForm` | text |  | R | hover, sticky | D4 `custom_css_free_form` |
@@ -260,6 +259,12 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.meta.adminLabel` | [Admin label](../design-families.md#admin-label) |
 | `module.meta.meta.forceVisible` | [Meta](../design-families.md#meta) |
 | `module.meta.meta.tocListHeading` | [Meta](../design-families.md#meta) |
+
+Legacy, from Divi's Divi 4 conversion map only. The validator accepts them so that converted pages validate, but they appear only in Divi's conversion outlines: no Divi 5 module code reads them. Don't write them.
+
+| attribute | key | type | values | R | states | notes |
+|---|---|---|---|---|---|---|
+| `content` | — | html |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `content` |
 
 <details>
 <summary>Render defaults (5): what Divi uses when an attribute is unset — don't repeat these</summary>

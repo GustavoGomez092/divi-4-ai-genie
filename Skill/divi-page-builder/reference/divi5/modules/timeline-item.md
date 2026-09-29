@@ -94,7 +94,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `content.decoration.bodyFont.ul.list` | [Body font](../design-families.md#font-body) |
 | `content.decoration.bodyFont.ul.textEffects` | [Body font](../design-families.md#font-body) |
 | `content.decoration.bodyFont.ul.textShadow` | [Body font](../design-families.md#font-body) |
-| `date.decoration.font` | [Font](../design-families.md#font) |
+| `date.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `date.decoration.font.font`, not here |
 | `date.decoration.font.font` | [Font](../design-families.md#font) |
 | `date.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `date.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -127,7 +127,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `spacer.decoration.layout` | [Layout](../design-families.md#layout) |
 | `spacer.decoration.sizing` | [Sizing](../design-families.md#sizing) |
 | `spacer.decoration.spacing` | [Spacing](../design-families.md#spacing) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |

@@ -66,11 +66,11 @@ Shared families (in the linked family, the table whose heading ends like the att
 
 | attribute | family |
 |---|---|
-| `author.decoration.font` | [Font](../design-families.md#font) |
+| `author.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `author.decoration.font.font`, not here |
 | `author.decoration.font.font` | [Font](../design-families.md#font) |
 | `author.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `author.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `company.decoration.font` | [Font](../design-families.md#font) |
+| `company.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `company.decoration.font.font`, not here |
 | `company.decoration.font.font` | [Font](../design-families.md#font) |
 | `company.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `company.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -97,7 +97,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `content.decoration.bodyFont.ul.textShadow` | [Body font](../design-families.md#font-body) |
 | `content.decoration.inlineFont` | [Inline fonts](../design-families.md#inline-font) |
 | `image.decoration.boxShadow` | [Box shadow](../design-families.md#box-shadow) |
-| `jobTitle.decoration.font` | [Font](../design-families.md#font) |
+| `jobTitle.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `jobTitle.decoration.font.font`, not here |
 | `jobTitle.decoration.font.font` | [Font](../design-families.md#font) |
 | `jobTitle.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `jobTitle.decoration.font.textShadow` | [Font](../design-families.md#font) |

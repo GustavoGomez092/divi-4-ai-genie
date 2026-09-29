@@ -124,11 +124,11 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.transform` | [Transform](../design-families.md#transform) |
 | `module.decoration.transition` | [Transition](../design-families.md#transition) |
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
-| `name.decoration.font` | [Font](../design-families.md#font) |
+| `name.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `name.decoration.font.font`, not here |
 | `name.decoration.font.font` | [Font](../design-families.md#font) |
 | `name.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `name.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `position.decoration.font` | [Font](../design-families.md#font) |
+| `position.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `position.decoration.font.font`, not here |
 | `position.decoration.font.font` | [Font](../design-families.md#font) |
 | `position.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `position.decoration.font.textShadow` | [Font](../design-families.md#font) |

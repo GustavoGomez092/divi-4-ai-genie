@@ -91,7 +91,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `buttonOne.decoration.button.decoration.sizing` | [Button](../design-families.md#button) |
 | `buttonOne.decoration.button.decoration.spacing` | [Button](../design-families.md#button) |
 | `buttonOne.decoration.button.innerContent` | [Button](../design-families.md#button) |
-| `buttonOne.decoration.font` | [Font](../design-families.md#font) |
+| `buttonOne.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `buttonOne.decoration.font.font`, not here |
 | `buttonOne.decoration.font.font` | [Font](../design-families.md#font) |
 | `buttonOne.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `buttonOne.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -111,7 +111,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `buttonTwo.decoration.button.decoration.sizing` | [Button](../design-families.md#button) |
 | `buttonTwo.decoration.button.decoration.spacing` | [Button](../design-families.md#button) |
 | `buttonTwo.decoration.button.innerContent` | [Button](../design-families.md#button) |
-| `buttonTwo.decoration.font` | [Font](../design-families.md#font) |
+| `buttonTwo.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `buttonTwo.decoration.font.font`, not here |
 | `buttonTwo.decoration.font.font` | [Font](../design-families.md#font) |
 | `buttonTwo.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `buttonTwo.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -165,11 +165,11 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
 | `overlay.decoration.background` | [Background](../design-families.md#background) |
 | `scrollDown.decoration.icon` | [Icon](../design-families.md#icon) |
-| `subhead.decoration.font` | [Font](../design-families.md#font) |
+| `subhead.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `subhead.decoration.font.font`, not here |
 | `subhead.decoration.font.font` | [Font](../design-families.md#font) |
 | `subhead.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `subhead.decoration.font.textShadow` | [Font](../design-families.md#font) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |

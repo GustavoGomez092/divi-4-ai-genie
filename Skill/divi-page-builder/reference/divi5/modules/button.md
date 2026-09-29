@@ -65,7 +65,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `button.decoration.button.decoration.sizing` | [Button](../design-families.md#button) |
 | `button.decoration.button.decoration.spacing` | [Button](../design-families.md#button) |
 | `button.decoration.button.innerContent` | [Button](../design-families.md#button) |
-| `button.decoration.font` | [Font](../design-families.md#font) |
+| `button.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `button.decoration.font.font`, not here |
 | `button.decoration.font.font` | [Font](../design-families.md#font) |
 | `button.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `button.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -115,7 +115,6 @@ Module-specific:
 | attribute | key | type | values | R | states | notes |
 |---|---|---|---|---|---|---|
 | `adminLabel` | — | text |  | desktop | · |  |
-| `content` | — | html |  | R | hover, sticky | D4 `content` |
 | `css` | `after` | text |  | R | hover, sticky | D4 `custom_css_after` |
 | `css` | `before` | text |  | R | hover, sticky | D4 `custom_css_before` |
 | `css` | `freeForm` | text |  | R | hover, sticky | D4 `custom_css_free_form` |
@@ -134,6 +133,12 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.meta.meta.forceVisible` | [Meta](../design-families.md#meta) |
 | `module.meta.meta.tocListHeading` | [Meta](../design-families.md#meta) |
 
+Legacy, from Divi's Divi 4 conversion map only. The validator accepts them so that converted pages validate, but they appear only in Divi's conversion outlines: no Divi 5 module code reads them. Don't write them.
+
+| attribute | key | type | values | R | states | notes |
+|---|---|---|---|---|---|---|
+| `content` | — | html |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `content` |
+
 <details>
 <summary>Render defaults (4): what Divi uses when an attribute is unset — don't repeat these</summary>
 
@@ -150,4 +155,5 @@ Shared families (in the linked family, the table whose heading ends like the att
 - When you style the button (font, background, border, spacing, icon), also set `button.decoration.button` → `{"enable": "on"}`. It is Divi 4's `custom_button="on"` in the conversion map, and every styled button in Divi's converter and Divi AI output sets it. [design-families.md](../design-families.md#how-to-read-a-family-table) has a complete styled button.
 - Align the button with `module.advanced.alignment` (`left`, `center`, `right`).
 - The button icon lives in `button.decoration.button` too: `{"icon": {"enable": "on", "settings": {"unicode": "…", "type": "divi", "weight": "400"}, "placement": "right", "onHover": "on"}}`. Its render default is `icon.enable: "on"`.
+- `icon.settings` is an icon object: take the value from [icons.md](../../icons.md) and split it on `||` (`&#xf095;||fa||900` → `{"unicode": "&#xf095;", "type": "fa", "weight": "900"}`); see [value-formats.md#icons](../value-formats.md#icons).
 - Style with `button.decoration.background`, `.border`, `.font.font` and `.spacing`, the paths Divi's converter and Divi AI write. The `button.decoration.button.decoration.*` and `button.decoration.button.innerContent` paths are declared by Divi's preset expander but appear in none of the Divi-written fixtures; don't use them.

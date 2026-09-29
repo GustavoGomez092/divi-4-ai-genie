@@ -109,11 +109,6 @@ Module-specific:
 | attribute | key | type | values | R | states | notes |
 |---|---|---|---|---|---|---|
 | `adminLabel` | — | text |  | desktop | · |  |
-| `columnsBackground` | — | json |  | R | hover, sticky | D4 `columns_background` |
-| `columnsCss` | — | json |  | R | hover, sticky | D4 `columns_css` |
-| `columnsCssFields` | — | json |  | R | hover, sticky | D4 `columns_css_fields` |
-| `columnsPadding` | — | json |  | R | hover, sticky | D4 `columns_padding` |
-| `content` | — | html |  | R | hover, sticky | D4 `content` |
 | `css` | `after` | text |  | R | hover, sticky | D4 `custom_css_after` |
 | `css` | `before` | text |  | R | hover, sticky | D4 `custom_css_before` |
 | `css` | `column_1_after` | text |  | R | hover, sticky | D4 `custom_css_after_1` |
@@ -129,10 +124,8 @@ Module-specific:
 | `css` | `mainElement` | text |  | R | hover, sticky | D4 `custom_css_main_element` |
 | `globalColorsInfo` | — | json |  | desktop | · | D4 global_colors_info (Conversion::getAttrMap) |
 | `locked` | — | onoff |  | desktop | · |  |
-| `nextBackgroundColor` | — | color |  | R | hover, sticky | D4 `next_background_color` |
 | `on` | — | json |  | desktop | · | block-level attr from Conversion::getAttrMap; value shape not documented |
 | `open` | — | onoff |  | desktop | · |  |
-| `prevBackgroundColor` | — | color |  | R | hover, sticky | D4 `prev_background_color` |
 | `themeBuilderArea` | — | json |  | desktop | · | theme-builder area marker (Conversion::getAttrMap) |
 
 Shared families (in the linked family, the table whose heading ends like the attribute lists its keys):
@@ -142,6 +135,18 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.meta.adminLabel` | [Admin label](../design-families.md#admin-label) |
 | `module.meta.meta.forceVisible` | [Meta](../design-families.md#meta) |
 | `module.meta.meta.tocListHeading` | [Meta](../design-families.md#meta) |
+
+Legacy, from Divi's Divi 4 conversion map only. The validator accepts them so that converted pages validate, but they appear only in Divi's conversion outlines: no Divi 5 module code reads them. Don't write them.
+
+| attribute | key | type | values | R | states | notes |
+|---|---|---|---|---|---|---|
+| `columnsBackground` | — | json |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `columns_background` |
+| `columnsCss` | — | json |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `columns_css` |
+| `columnsCssFields` | — | json |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `columns_css_fields` |
+| `columnsPadding` | — | json |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; style each column on its own `divi/column` block (`module.decoration.*`, `css`); D4 `columns_padding` |
+| `content` | — | html |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `content` |
+| `nextBackgroundColor` | — | color |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `next_background_color` |
+| `prevBackgroundColor` | — | color |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `prev_background_color` |
 
 <details>
 <summary>Render defaults (2): what Divi uses when an attribute is unset — don't repeat these</summary>

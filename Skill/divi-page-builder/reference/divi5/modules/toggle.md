@@ -54,7 +54,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 
 | attribute | family |
 |---|---|
-| `closedTitle.decoration.font` | [Font](../design-families.md#font) |
+| `closedTitle.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `closedTitle.decoration.font.font`, not here |
 | `closedTitle.decoration.font.font` | [Font](../design-families.md#font) |
 | `closedTitle.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `closedTitle.decoration.font.textShadow` | [Font](../design-families.md#font) |
@@ -102,12 +102,12 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.transition` | [Transition](../design-families.md#transition) |
 | `module.decoration.zIndex` | [Z-index](../design-families.md#z-index) |
 | `openToggle.decoration.background` | [Background](../design-families.md#background) |
-| `openToggle.decoration.font` | [Font](../design-families.md#font) |
+| `openToggle.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `openToggle.decoration.font.font`, not here |
 | `openToggle.decoration.font.font` | [Font](../design-families.md#font) |
 | `openToggle.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `openToggle.decoration.font.textShadow` | [Font](../design-families.md#font) |
 | `openToggleIcon.decoration.icon` | [Icon](../design-families.md#icon) |
-| `title.decoration.font` | [Font](../design-families.md#font) |
+| `title.decoration.font` | [Font](../design-families.md#font) — container only: write keys under `title.decoration.font.font`, not here |
 | `title.decoration.font.font` | [Font](../design-families.md#font) |
 | `title.decoration.font.textEffects` | [Font](../design-families.md#font) |
 | `title.decoration.font.textShadow` | [Font](../design-families.md#font) |

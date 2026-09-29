@@ -109,15 +109,12 @@ Module-specific:
 | attribute | key | type | values | R | states | notes |
 |---|---|---|---|---|---|---|
 | `adminLabel` | — | text |  | desktop | · |  |
-| `content` | — | html |  | R | hover, sticky | D4 `content` |
 | `css` | `after` | text |  | R | hover, sticky | D4 `custom_css_after` |
 | `css` | `before` | text |  | R | hover, sticky | D4 `custom_css_before` |
 | `css` | `freeForm` | text |  | R | hover, sticky | D4 `custom_css_free_form` |
 | `css` | `mainElement` | text |  | R | hover, sticky | D4 `custom_css_main_element` |
 | `globalColorsInfo` | — | json |  | desktop | · | D4 global_colors_info (Conversion::getAttrMap) |
-| `googleMapsScriptNotice` | — | text |  | desktop | · | D4 `google_maps_script_notice` |
 | `locked` | — | onoff |  | desktop | · |  |
-| `mapCenterMap` | — | object |  | desktop | · | D4 `map_center_map` |
 | `on` | — | json |  | desktop | · | block-level attr from Conversion::getAttrMap; value shape not documented |
 | `open` | — | onoff |  | desktop | · |  |
 | `themeBuilderArea` | — | json |  | desktop | · | theme-builder area marker (Conversion::getAttrMap) |
@@ -129,6 +126,14 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.meta.adminLabel` | [Admin label](../design-families.md#admin-label) |
 | `module.meta.meta.forceVisible` | [Meta](../design-families.md#meta) |
 | `module.meta.meta.tocListHeading` | [Meta](../design-families.md#meta) |
+
+Legacy, from Divi's Divi 4 conversion map only. The validator accepts them so that converted pages validate, but they appear only in Divi's conversion outlines: no Divi 5 module code reads them. Don't write them.
+
+| attribute | key | type | values | R | states | notes |
+|---|---|---|---|---|---|---|
+| `content` | — | html |  | R | hover, sticky | **legacy (D4 conversion) — don't author**; D4 `content` |
+| `googleMapsScriptNotice` | — | text |  | desktop | · | **legacy (D4 conversion) — don't author**; D4 `google_maps_script_notice` |
+| `mapCenterMap` | — | object |  | desktop | · | **legacy (D4 conversion) — don't author**; D4 `map_center_map` |
 
 <details>
 <summary>Render defaults (5): what Divi uses when an attribute is unset — don't repeat these</summary>
