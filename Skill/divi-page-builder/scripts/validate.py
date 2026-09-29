@@ -26,6 +26,7 @@ from divi_schema import Schema, load_schema  # noqa: E402
 from divi_shortcode import parse  # noqa: E402
 import divi5_blocks  # noqa: E402
 from divi5_checks_structure import check_headings5, check_structure5  # noqa: E402
+from divi5_checks_values import check_attributes5  # noqa: E402
 from divi5_schema import load_schema5  # noqa: E402
 
 
@@ -69,13 +70,58 @@ def mark_preexisting(findings, baseline_findings) -> None:
             f.preexisting = True
 
 
-def _validate_blocks(source: str, fragment: bool) -> List[Finding]:
+def _validate_blocks(source: str, fragment: bool, tokens: Optional[dict], site_url: Optional[str]) -> List[Finding]:
     doc = divi5_blocks.parse(source)
     report = Reporter(doc)
     schema5 = load_schema5()
     check_structure5(doc, schema5, report, fragment=fragment)
     check_headings5(doc, schema5, report, fragment=fragment)
+    check_attributes5(doc, schema5, report, **_tokens5(tokens, site_url))
     return report.findings
+
+
+def _dict(value) -> dict:
+    return value if isinstance(value, dict) else {}
+
+
+def _preset_ids(node) -> set:
+    """Every preset "id"/"uuid" under a tokens presets tree: the Divi 4 shape {slug: [{uuid}]} and the Divi 5 shape
+    {module|group: {name: [{id}]}} alike."""
+    out = set()
+    if isinstance(node, dict):
+        for key in ("id", "uuid"):
+            if isinstance(node.get(key), str):
+                out.add(node[key])
+        for v in node.values():
+            if isinstance(v, (dict, list)):
+                out |= _preset_ids(v)
+    elif isinstance(node, list):
+        for v in node:
+            out |= _preset_ids(v)
+    return out
+
+
+def _tokens5(tokens: Optional[dict], site_url: Optional[str]) -> dict:
+    """check_attributes5 keyword arguments from tokens.json, read defensively (the D5 tokens shape is still settling:
+    presets ids, colors.global keys, variables keys at either depth, site.divi_version). known_vars stays None
+    without tokens, so unknown gcid-/gvid- ids are only reported against a real token list."""
+    t = _dict(tokens)
+    site = _dict(t.get("site"))
+    colors = _dict(t.get("colors"))
+    known_vars = None
+    if t:
+        names = set(_dict(colors.get("global")))
+        names |= {p["global"] for p in colors.get("palette") or [] if isinstance(p, dict)
+                  and isinstance(p.get("global"), str)}
+        for key, value in _dict(t.get("variables")).items():
+            names.add(key)
+            names |= set(_dict(value))
+        known_vars = frozenset(names)
+    version = site.get("divi_version")
+    return {"known_presets": frozenset(_preset_ids(t.get("presets")) | _preset_ids(t.get("group_presets"))),
+            "known_vars": known_vars,
+            "site_host": urlparse(site_url or (site.get("url") if isinstance(site.get("url"), str) else "")).hostname,
+            "site_version": version if isinstance(version, str) and version else None}
 
 
 def _mixed(source: str) -> List[Finding]:
@@ -106,7 +152,7 @@ def validate_source(source: str, schema: Optional[Schema] = None, tokens: Option
     if kind == "mixed":
         findings = _mixed(source)
     elif kind == "blocks":
-        findings = _validate_blocks(source, fragment)
+        findings = _validate_blocks(source, fragment, tokens, site_url)
     else:
         return _validate_shortcode(source, schema if schema is not None else load_schema(), tokens, site_url,
                                    baseline, fragment)

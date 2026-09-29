@@ -5,6 +5,7 @@ import unittest
 from contextlib import redirect_stdout
 
 from _paths import FIXTURES5, d5_fixtures
+from divi5_blocks import canonical_json
 from validate import main, validate_source
 
 EXPECT = {
@@ -33,7 +34,12 @@ def heading(text, level=None):
 
 
 def text(html):
-    return '<!-- wp:divi/text {"content":{"innerContent":{"desktop":{"value":' + json.dumps(html) + '}}}} /-->'
+    return '<!-- wp:divi/text ' + canonical_json({"content": {"innerContent": {"desktop": {"value": html}}}}) + ' /-->'
+
+
+# The helper blocks carry no builderVersion (a divi5_checks_values warning); structure tests look past it.
+def structural(findings):
+    return [f for f in findings if f.code != "W5_BUILDER_VERSION"]
 
 
 def blurb(title, level=None):
@@ -136,13 +142,13 @@ class Structure5Test(unittest.TestCase):
 
 class Placement5Test(unittest.TestCase):
     def test_clean_page(self):
-        self.assertEqual([f.code for f in validate_source(simple(H1, text("<p>x</p>")))], [])
+        self.assertEqual([f.code for f in structural(validate_source(simple(H1, text("<p>x</p>"))))], [])
 
     def test_no_placeholder_warns_on_whole_pages_only(self):
         src = page(section(row(column(H1))), placeholder=False)
-        found = validate_source(src)
+        found = structural(validate_source(src))
         self.assertEqual([(f.level, f.code) for f in found], [("warning", "W5_NO_PLACEHOLDER")])
-        self.assertEqual(validate_source(src, fragment=True), [])
+        self.assertEqual(structural(validate_source(src, fragment=True)), [])
 
     def test_non_divi_block_and_top_level_text(self):
         src = page(section(row(column(H1 + "<!-- wp:paragraph --><p>x</p><!-- /wp:paragraph -->"))))
@@ -151,7 +157,7 @@ class Placement5Test(unittest.TestCase):
 
     def test_out_of_scope_block_warns(self):
         src = simple(H1, '<!-- wp:divi/woocommerce-product-price /-->')
-        found = [(f.level, f.code, f.tag) for f in validate_source(src)]
+        found = [(f.level, f.code, f.tag) for f in structural(validate_source(src))]
         self.assertEqual(found, [("warning", "W5_OUT_OF_SCOPE", "divi/woocommerce-product-price")])
 
     def test_child_module_outside_its_parent(self):

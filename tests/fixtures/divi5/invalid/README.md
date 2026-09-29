@@ -2,7 +2,11 @@
 
 Each page is built from the section of `converted/unicode.html` (section → row → column → heading + text,
 inside `divi/placeholder`) and changed so that exactly one validator error appears.
-`tests/test_divi5_validate_structure.py` checks the codes below.
+`tests/test_divi5_validate_structure.py` checks the structure and heading codes below, and
+`tests/test_divi5_validate_values.py` the attribute/value ones (the rows from `unknown-attr.html` on). The
+attribute/value pages were written with `divi5_blocks.canonical_json`, so the JSON is WordPress-canonical
+except where the change is the point (`noncanonical-lt.html`). The last two rows are warnings: those pages have
+no error at all.
 
 | File | Expected code | What was changed |
 |---|---|---|
@@ -18,6 +22,16 @@ inside `divi/placeholder`) and changed so that exactly one validator error appea
 | `freeform.html` | `E5_NOT_DIVI` | plain text between the section and the placeholder close |
 | `specialty-no-specialty-column.html` | `E5_SPECIALTY_COLUMN` | specialty section of two module columns, none with `module.advanced.specialtyColumns` |
 | `inner-row-misplaced.html` | `E5_INNER_ROW_PLACEMENT` | a `divi/row-inner` inside a regular row's column |
+| `unknown-attr.html` | `E5_UNKNOWN_ATTR` | heading gets an attribute `titel.innerContent` (typo of `title`) |
+| `bad-breakpoint.html` | `E5_BAD_BREAKPOINT` | heading `title.innerContent` gets a `mobile` breakpoint beside `desktop` |
+| `bad-state.html` | `E5_BAD_STATE` | heading `title.innerContent` gets a `desktop.sticky` value (the leaf takes value/hover) |
+| `bad-color.html` | `E5_BAD_VALUE` | text `content.decoration.bodyFont.body.font` color `#12345` (5 hex digits) |
+| `bad-unit.html` | `E5_BAD_VALUE` | heading title font size `40pz` |
+| `bad-enum.html` | `E5_BAD_VALUE` | heading title font `headingLevel` `h7` |
+| `bad-variable.html` | `E5_BAD_VARIABLE` | text body font color `$variable({"type":"color","value":{"settings":{}}})$` (no `value.name`) |
+| `noncanonical-lt.html` | `E5_NONCANONICAL` | text innerContent JSON with raw `<` / `>` instead of `\u003c` / `\u003e` |
+| `unknown-preset.html` | `W5_UNKNOWN_PRESET` | heading `modulePreset` `["doesnotexist"]` |
+| `shortcode-brackets.html` | `W5_SHORTCODE_BRACKETS` | text innerContent `<p>See [gallery] for photos.</p>` |
 
 Specialty sections follow the Divi 4 rules exactly, with codes named after Divi 4's:
 `E5_SPECIALTY_COLUMN` (Divi 4 `E_SPECIALTY_COLUMN`) = a specialty section needs exactly one column with

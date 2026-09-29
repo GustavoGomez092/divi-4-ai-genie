@@ -1,0 +1,583 @@
+"""Attribute-path, value-type, escaping, preset and variable rules for Divi 5 blocks.
+
+The Divi 5 counterpart of divi_checks_values.py; findings go through validate.Reporter. Paths and leaf types come
+from the compiled schema (divi5_schema): every responsive value (attrs … {breakpoint: {state: value}}) is resolved,
+object values are walked leaf by leaf (ModuleSchema5.walk_value), and each typed leaf value is checked by
+value_problems5() against the grammar of its type (families5.json `_types`).
+"""
+from __future__ import annotations
+
+import difflib
+import json
+import re
+from collections import defaultdict
+from typing import Dict, Iterator, List, Optional, Set, Tuple
+from urllib.parse import urlparse
+
+from divi5_blocks import BREAKPOINTS, DISABLED_ON_BREAKPOINTS, STATES, Block, get_attr
+
+PLACEHOLDER = "divi/placeholder"
+# Breakpoints Divi 5 ships switched off (Settings > Breakpoints); values there apply only once the site enables them.
+DISABLED_BREAKPOINTS = ("phoneWide", "tabletWide", "widescreen", "ultraWide")
+# The five Customizer colors Divi 5 exposes as global colors: always defined (tokens-and-detection.md §2).
+CUSTOMIZER_COLOR_IDS = frozenset({"gcid-primary-color", "gcid-secondary-color", "gcid-heading-color",
+                                  "gcid-body-color", "gcid-link-color"})
+IMAGE_MODULES = ("divi/image", "divi/fullwidth-image")
+_KNOWN_BP = frozenset(BREAKPOINTS + DISABLED_ON_BREAKPOINTS)
+_STATE_SET = frozenset(STATES)
+
+_HEX = re.compile(r"#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})")
+_COLOR_FUNC = re.compile(r"(?i:rgba?|hsla?)\(.+\)", re.S)
+_VAR_FUNC = re.compile(r"var\(--[\w-]+(?:\s*,.*)?\)", re.S)
+_LENGTH_FUNC = re.compile(r"(?i:calc|clamp|min|max|var)\(.+\)", re.S)
+_NUMBER = re.compile(r"-?(?:\d+\.?\d*|\.\d+)")
+_NUM_UNIT = re.compile(r"(-?(?:\d+\.?\d*|\.\d+))([a-zA-Z%]*)")
+_LENGTH_KEYWORDS = frozenset({"auto", "none", "inherit", "initial"})
+_GENERIC_UNITS = frozenset({"px", "%", "em", "rem", "ex", "ch", "vw", "vh", "vmin", "vmax", "cm", "mm", "in", "pt",
+                            "pc", "deg", "rad", "turn", "ms", "s", "fr"})
+_FONT_WEIGHT_WORDS = frozenset({"normal", "bold", "lighter", "bolder"})
+_SPACING_SIDES = ("top", "right", "bottom", "left")
+_SPACING_SYNC = ("syncVertical", "syncHorizontal")
+_RADIUS_CORNERS = ("topLeft", "topRight", "bottomRight", "bottomLeft")
+_ICON_TYPES = ("divi", "fa")
+_SHORTCODE_OPEN = re.compile(r"\[[A-Za-z]")
+# Which `$variable()$` types may stand for a whole value of each leaf type (tokens-and-detection.md §2: the VB emits
+# color, content and gradient; numbers, fonts, strings, links and images are all `content`).
+_VARIABLE_TYPES = {
+    "color": {"color"}, "gradient": {"gradient"}, "radius": {"content"},
+    "length": {"content"}, "number": {"content"}, "text": {"content"}, "html": {"content"}, "url": {"content"},
+    "image": {"content"}, "font-family": {"content"}, "font-weight": {"content"},
+}
+
+_VAR_MARK = "$variable("
+_DECODER = json.JSONDecoder()
+
+
+# ----------------------------------------------------------------------------- $variable() references
+
+def _variable_problem(obj) -> Optional[str]:
+    if not isinstance(obj, dict):
+        return "its payload is not a JSON object"
+    if not isinstance(obj.get("type"), str) or not obj["type"]:
+        return 'it has no "type"'
+    value = obj.get("value")
+    if not isinstance(value, dict) or not isinstance(value.get("name"), str) or not value["name"]:
+        return 'it has no "value.name"'
+    return None
+
+
+def scan_variables(text: str) -> Iterator[Tuple[int, int, Optional[dict], Optional[str]]]:
+    """(start, end, payload, problem) for every `$variable(` in a string; problem is None for a well-formed
+    reference (JSON object with a type and value.name, closed by `)$`)."""
+    i = 0
+    while True:
+        i = text.find(_VAR_MARK, i)
+        if i < 0:
+            return
+        j = i + len(_VAR_MARK)
+        try:
+            obj, end = _DECODER.raw_decode(text, j)
+        except ValueError:
+            yield i, j, None, "its payload is not valid JSON"
+            i = j
+            continue
+        if not text.startswith(")$", end):
+            yield i, end, None, "it is not closed with )$"
+            i = end
+            continue
+        problem = _variable_problem(obj)
+        yield i, end + 2, (None if problem else obj), problem
+        i = end + 2
+
+
+_MALFORMED = object()
+
+
+def _whole_variable(value: str):
+    """The payload when `value` is exactly one `$variable(…)$`; _MALFORMED when it is one but broken; None when it
+    is not a whole-value reference."""
+    if not (value.startswith(_VAR_MARK) and value.endswith(")$")):
+        return None
+    refs = list(scan_variables(value))
+    if len(refs) == 1 and refs[0][0] == 0 and refs[0][1] == len(value):
+        return refs[0][2] if refs[0][3] is None else _MALFORMED
+    if refs and refs[0][3] is not None:
+        return _MALFORMED
+    return None
+
+
+# ----------------------------------------------------------------------------- value grammar per leaf type
+
+def _balanced(s: str) -> bool:
+    depth = 0
+    for c in s:
+        if c == "(":
+            depth += 1
+        elif c == ")":
+            depth -= 1
+            if depth < 0:
+                return False
+    return depth == 0
+
+
+def _is_number(value) -> bool:
+    if isinstance(value, bool):
+        return False
+    if isinstance(value, (int, float)):
+        return True
+    return isinstance(value, str) and bool(_NUMBER.fullmatch(value))
+
+
+def _color_ok(value) -> bool:
+    if not isinstance(value, str):
+        return False
+    if value == "" or value.lower() == "transparent" or _HEX.fullmatch(value):
+        return True
+    if _COLOR_FUNC.fullmatch(value) or _VAR_FUNC.fullmatch(value):
+        return _balanced(value)
+    return False
+
+
+def _length_problem(value, units=None) -> Optional[str]:
+    if isinstance(value, bool) or not isinstance(value, (str, int, float)):
+        return "expected a CSS length string such as 10px"
+    if not isinstance(value, str):
+        return None if value == 0 else f"{value} has no unit (write e.g. {value}px)"
+    if value == "" or value in _LENGTH_KEYWORDS:
+        return None
+    if _LENGTH_FUNC.fullmatch(value):
+        return None if _balanced(value) else "unbalanced parentheses"
+    m = _NUM_UNIT.fullmatch(value)
+    if not m:
+        return "not a number with a CSS unit"
+    number, unit = m.group(1), m.group(2).lower()
+    if unit == "":
+        return None if float(number) == 0 else f"'{value}' has no unit (write e.g. {value}px)"
+    allowed = [u.lower() for u in units] if units else _GENERIC_UNITS
+    if unit not in allowed:
+        return f"unit '{m.group(2)}' is not one of {', '.join(units) if units else 'the CSS length units'}"
+    return None
+
+
+def _font_weight_ok(value) -> bool:
+    if isinstance(value, bool):
+        return False
+    if isinstance(value, int):
+        return 100 <= value <= 900 and value % 100 == 0
+    if not isinstance(value, str):
+        return False
+    if value.isdigit():
+        return _font_weight_ok(int(value))
+    return value in _FONT_WEIGHT_WORDS or (value.endswith("_weight") and len(value) > len("_weight"))
+
+
+def _url_ok(value) -> bool:
+    return isinstance(value, str) and not re.search(r"\s", value)
+
+
+def _onoff_ok(value) -> bool:
+    return value in ("on", "off", "")
+
+
+def _spacing_problems(value) -> List[str]:
+    if not isinstance(value, dict):
+        return ["expected an object {top, right, bottom, left, syncVertical, syncHorizontal}"]
+    out = []
+    for k, v in value.items():
+        if k in _SPACING_SIDES:
+            p = _length_problem_or_var(v)
+            if p:
+                out.append(f"{k}: {p}")
+        elif k in _SPACING_SYNC:
+            if not _onoff_ok(v):
+                out.append(f"{k} must be on or off")
+        else:
+            out.append(f"'{k}' is not a spacing key (top, right, bottom, left, syncVertical, syncHorizontal)")
+    return out
+
+
+def _radius_problems(value) -> List[str]:
+    if isinstance(value, str):
+        p = _length_problem(value)
+        return [p] if p else []
+    if not isinstance(value, dict):
+        return ["expected an object {topLeft, topRight, bottomRight, bottomLeft, sync} or a length"]
+    out = []
+    for k, v in value.items():
+        if k in _RADIUS_CORNERS:
+            p = _length_problem_or_var(v)
+            if p:
+                out.append(f"{k}: {p}")
+        elif k == "sync":
+            if not _onoff_ok(v):
+                out.append("sync must be on or off")
+        else:
+            out.append(f"'{k}' is not a radius key (topLeft, topRight, bottomRight, bottomLeft, sync)")
+    return out
+
+
+def _length_problem_or_var(v) -> Optional[str]:
+    if isinstance(v, str) and _VAR_MARK in v:
+        whole = _whole_variable(v)
+        if whole is _MALFORMED or (whole is not None and whole.get("type") == "content"):
+            return None
+    return _length_problem(v)
+
+
+def _icon_problems(value) -> List[str]:
+    if not isinstance(value, dict):
+        return ['expected an icon object {"unicode": "&#xf0a9;", "type": "fa", "weight": "900"}']
+    out = [f"'{k}' is not an icon key (unicode, type, weight)" for k in value if k not in ("unicode", "type", "weight")]
+    missing = [k for k in ("unicode", "type", "weight") if k not in value]
+    if missing:
+        out.append(f"missing {', '.join(missing)}")
+    if "unicode" in value and (not isinstance(value["unicode"], str) or not value["unicode"]):
+        out.append("unicode must be the icon's character entity, e.g. &#xf0a9;")
+    if "type" in value and value["type"] not in _ICON_TYPES:
+        out.append("type must be divi or fa")
+    if "weight" in value and not (_is_number(value["weight"]) or value["weight"] in _FONT_WEIGHT_WORDS):
+        out.append("weight must be a number such as 400 or 900")
+    return out
+
+
+def _gradient_problems(value) -> List[str]:
+    if not isinstance(value, list):
+        return ['expected a list of stops [{"position": 0, "color": "#fff"}, …]']
+    out = []
+    for i, stop in enumerate(value):
+        if not isinstance(stop, dict):
+            out.append(f"stop {i} is not an object {{position, color}}")
+            continue
+        if "position" not in stop or "color" not in stop:
+            out.append(f"stop {i} needs position and color")
+            continue
+        pos = stop["position"]
+        if not (_is_number(pos) or (isinstance(pos, str) and _NUM_UNIT.fullmatch(pos)
+                                    and _NUM_UNIT.fullmatch(pos).group(2) in ("%", "px"))):
+            out.append(f"stop {i} position {pos!r} is not a number")
+        color = stop["color"]
+        if not _color_value_ok(color):
+            out.append(f"stop {i} color {color!r} is not a color")
+    return out
+
+
+def _color_value_ok(value) -> bool:
+    if isinstance(value, str) and value.startswith(_VAR_MARK):
+        whole = _whole_variable(value)
+        if whole is _MALFORMED or (whole is not None and whole.get("type") == "color"):
+            return True
+    return _color_ok(value)
+
+
+_EXPECT = {
+    "color": "a color (#hex, rgb()/rgba()/hsl()/hsla(), transparent, or a $variable color reference)",
+    "number": "a number",
+    "onoff": "on or off",
+    "url": "a URL string without spaces",
+    "image": "an image URL string without spaces",
+    "text": "a string",
+    "html": "an HTML string",
+    "font-family": "a font family name string",
+    "font-weight": "a font weight (100-900, normal, bold, lighter, bolder or a <Font>_weight token)",
+    "object": "a JSON object",
+}
+
+
+def _show(value) -> str:
+    return value if isinstance(value, str) else json.dumps(value)
+
+
+def value_problems5(leaf_spec: dict, value) -> List[str]:
+    """Messages for one leaf value against its leaf spec ({type, options?, units?, multiple?}); [] when it fits.
+    "" is an unset value and fits every type. A whole-value `$variable(…)$` fits when its type suits the leaf
+    (color for color, gradient for gradient, content for lengths, numbers, text, URLs, images and fonts); a
+    malformed one is left to check_attributes5's E5_BAD_VARIABLE."""
+    t = leaf_spec.get("type")
+    if t == "json" or value == "":
+        return []
+    if isinstance(value, str) and value.startswith(_VAR_MARK):
+        whole = _whole_variable(value)
+        if whole is _MALFORMED:
+            return []
+        if whole is not None:
+            if whole["type"] in _VARIABLE_TYPES.get(t, ()):
+                return []
+            return [f"a $variable of type '{whole['type']}' cannot be a {t} value"]
+    if t == "color":
+        ok = _color_ok(value)
+    elif t == "length":
+        p = _length_problem(value, leaf_spec.get("units"))
+        return [f"'{_show(value)}' is not a CSS length: {p}"] if p else []
+    elif t == "number":
+        ok = _is_number(value)
+    elif t == "enum":
+        options = leaf_spec.get("options") or []
+        vals = value if isinstance(value, list) and leaf_spec.get("multiple") else [value]
+        bad = [v for v in vals if not isinstance(v, str) or v not in options]
+        if bad:
+            return [f"'{_show(v)}' is not one of {', '.join(options)}" for v in bad]
+        return []
+    elif t == "onoff":
+        ok = _onoff_ok(value)
+    elif t in ("url", "image"):
+        ok = _url_ok(value)
+    elif t in ("text", "html", "font-family"):
+        ok = isinstance(value, str)
+    elif t == "font-weight":
+        ok = _font_weight_ok(value)
+    elif t == "icon":
+        return _icon_problems(value)
+    elif t == "spacing":
+        return _spacing_problems(value)
+    elif t == "radius":
+        return _radius_problems(value)
+    elif t == "gradient":
+        return _gradient_problems(value)
+    elif t == "object":
+        ok = isinstance(value, (dict, list))
+    else:
+        return []
+    return [] if ok else [f"'{_show(value)}' is not {_EXPECT.get(t, 'a ' + str(t))}"]
+
+
+# ----------------------------------------------------------------------------- walking a block's attributes
+
+def _responsive_like(d: dict) -> bool:
+    """A {breakpoint: {state: value}} dict, including ones with a breakpoint or state Divi doesn't have (those are
+    reported by the resolver as bad_breakpoint / bad_state)."""
+    return bool(d) and all(isinstance(v, dict) and v and (k in _KNOWN_BP or all(s in _STATE_SET for s in v))
+                           for k, v in d.items())
+
+
+def _leaves(attrs, prefix: str = "") -> Iterator[Tuple[str, Optional[str], Optional[str], object]]:
+    """divi5_blocks.iter_leaves, but a breakpoint or state that isn't Divi's is yielded (to be reported) instead of
+    being read as part of the attribute path."""
+    if not isinstance(attrs, dict):
+        return
+    for k, v in attrs.items():
+        path = f"{prefix}.{k}" if prefix else str(k)
+        if isinstance(v, dict):
+            if _responsive_like(v):
+                for bp, states in v.items():
+                    for st, val in states.items():
+                        yield path, bp, st, val
+            else:
+                yield from _leaves(v, path)
+        else:
+            yield path, None, None, v
+
+
+def _strings(value) -> Iterator[str]:
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for v in value.values():
+            yield from _strings(v)
+    elif isinstance(value, list):
+        for v in value:
+            yield from _strings(v)
+
+
+def noncanonical_reasons(raw: str) -> List[str]:
+    """What in a block's raw attribute JSON differs from WordPress's serialize_block_attributes() output in a way
+    that matters: a raw <, >, & or -- (written \\u003c, \\u003e, \\u0026, \\u002d\\u002d) and the \\" quote form
+    (written \\u0022). A `\\\\` backslash escape (the Visual Builder's form) is harmless and not reported."""
+    found: List[str] = []
+    in_str, i = False, 0
+    while i < len(raw):
+        c = raw[i]
+        if in_str and c == "\\":
+            if raw[i + 1:i + 2] == '"' and '\\"' not in found:
+                found.append('\\"')
+            i += 2
+            continue
+        if c == '"':
+            in_str = not in_str
+        elif c in "<>&" and c not in found:
+            found.append(c)
+        elif c == "-" and raw[i + 1:i + 2] == "-" and "--" not in found:
+            found.append("--")
+        i += 1
+    return found
+
+
+def _alt_text(block: Block) -> str:
+    inner = get_attr(block, "image.innerContent")
+    alt = inner.get("alt") if isinstance(inner, dict) else None
+    if isinstance(alt, str) and alt.strip():
+        return alt
+    items = get_attr(block, "module.decoration.attributes")
+    items = items.get("attributes") if isinstance(items, dict) else None
+    for item in items if isinstance(items, list) else ():
+        if isinstance(item, dict) and item.get("name") == "alt" and item.get("targetElement", "image") == "image" \
+                and isinstance(item.get("value"), str) and item["value"].strip():
+            return item["value"]
+    return ""
+
+
+def _preset_ids(attrs: dict) -> List[Tuple[str, str]]:
+    """(label, id) for every preset reference: modulePreset entries and groupPreset presetIds."""
+    out: List[Tuple[str, str]] = []
+    mp = attrs.get("modulePreset")
+    for pid in ([mp] if isinstance(mp, str) else mp if isinstance(mp, list) else []):
+        if isinstance(pid, str):
+            out.append(("modulePreset", pid))
+    gp = attrs.get("groupPreset")
+    for group, spec in (gp.items() if isinstance(gp, dict) else ()):
+        ids = spec.get("presetId") if isinstance(spec, dict) else None
+        for pid in ([ids] if isinstance(ids, str) else ids if isinstance(ids, list) else []):
+            if isinstance(pid, str):
+                out.append((f"groupPreset {group}", pid))
+    return out
+
+
+def _close_match(name: str, candidates) -> str:
+    close = difflib.get_close_matches(name, list(candidates), n=1, cutoff=0.75)
+    return f"did you mean '{close[0]}'?" if close else ""
+
+
+def check_attributes5(doc, schema5, report, known_presets=frozenset(), known_vars: Optional[frozenset] = None,
+                      site_host: Optional[str] = None, site_version: Optional[str] = None) -> None:
+    """Attribute paths, breakpoints/states, value types, escaping, presets and variables of every Divi block.
+    known_vars=None means no tokens were given: unknown gcid-/gvid- ids are then not reported."""
+    for block, path, _parent in doc.walk():
+        if block.raw_json:
+            reasons = noncanonical_reasons(block.raw_json)
+            if reasons:
+                report("error", "E5_NONCANONICAL",
+                       f"[{block.name}] attribute JSON is not in WordPress canonical form: it contains raw "
+                       + ", ".join(f"'{r}'" for r in reasons), node=block, path=path, value=" ".join(reasons),
+                       hint="write the JSON in WordPress canonical form (validate.py never rewrites; page_edit/publish "
+                            "do): < > & -- and \" inside strings are \\u003c \\u003e \\u0026 \\u002d\\u002d \\u0022")
+        if block.name == PLACEHOLDER or not block.name.startswith("divi/") or not isinstance(block.attrs, dict):
+            continue
+        mod = schema5.module(block.name)
+        if mod is None:
+            continue
+        _check_block(block, path, mod, schema5, report, known_presets, known_vars, site_host, site_version)
+
+
+def _check_block(block, path, mod, schema5, report, known_presets, known_vars, site_host, site_version) -> None:
+    attrs = block.attrs
+    version = attrs.get("builderVersion")
+    if not isinstance(version, str) or not version:
+        report("warning", "W5_BUILDER_VERSION", f"[{block.name}] has no builderVersion", node=block, path=path,
+               attr="builderVersion", hint=f"Add \"builderVersion\":\"{site_version or '<the site Divi version>'}\".")
+    elif site_version and version != site_version:
+        report("warning", "W5_BUILDER_VERSION", f"[{block.name}] builderVersion {version} is not the site's Divi "
+                                                f"{site_version}", node=block, path=path, attr="builderVersion",
+               value=version, hint=f"New or edited blocks carry \"builderVersion\":\"{site_version}\".")
+    for label, pid in _preset_ids(attrs):
+        if pid != "default" and pid not in known_presets:
+            report("warning", "W5_UNKNOWN_PRESET",
+                   f"{label} id '{pid}' is not a preset known on this site: an unknown preset id makes Divi drop the "
+                   "module's default preset styling; omit modulePreset or use [\"default\"]",
+                   node=block, path=path, attr=label.split(" ")[0], value=pid,
+                   hint="Use a preset id listed in tokens.json.")
+    if block.name in IMAGE_MODULES and not _alt_text(block):
+        report("warning", "W5_NO_ALT", f"[{block.name}] has no alt text", node=block, path=path,
+               attr="image.innerContent.alt",
+               hint='Set image.innerContent desktop value "alt" to a short description of the image.')
+
+    seen: Dict[str, Set[Tuple[str, str]]] = defaultdict(set)
+    unknown: Set[str] = set()
+    warned_bp: Set[Tuple[str, str]] = set()
+    for attr, bp, st, value in _leaves(attrs):
+        for s in _strings(value):
+            _check_variables(s, block, path, attr, report, known_vars)
+        if bp is None:
+            res = mod.resolve(attr, None, None)
+            if res.status == "nonresponsive":
+                continue
+            if res.status == "unknown_attr":
+                if attr not in unknown:
+                    unknown.add(attr)
+                    _unknown(block, path, attr, value, mod.attrs, report)
+            else:
+                report("error", "E5_BAD_BREAKPOINT", f"{attr} is not wrapped in a breakpoint and state",
+                       node=block, path=path, attr=attr, value=_show(value),
+                       hint='Divi 5 values are stored as {"desktop":{"value":…}}.')
+            continue
+        seen[attr].add((bp, st))
+        if bp in DISABLED_BREAKPOINTS and (attr, bp) not in warned_bp:
+            warned_bp.add((attr, bp))
+            report("warning", "W5_BREAKPOINT_DISABLED",
+                   f"{attr} sets the {bp} breakpoint, which Divi 5 ships switched off", node=block, path=path,
+                   attr=attr, value=bp, hint="Its values apply only once the site enables that breakpoint "
+                                             "(Divi > Theme Options > Breakpoints); use desktop/tablet/phone.")
+        for res, v in mod.walk_value(attr, bp, st, value):
+            full = (res.attr_path or attr) + (f".{res.sub_path}" if res.sub_path else "")
+            if res.status == "unknown_attr":
+                if full in unknown:
+                    continue
+                unknown.add(full)
+                if res.attr_path is None:
+                    _unknown(block, path, attr, value, mod.attrs, report)
+                else:
+                    table = schema5.leaf_spec(mod.attrs[res.attr_path]) if res.attr_path in mod.attrs else {}
+                    _unknown(block, path, full, v, [f"{res.attr_path}.{k}" for k in table if k], report)
+            elif res.status == "bad_breakpoint":
+                report("error", "E5_BAD_BREAKPOINT", f"'{bp}' is not a Divi breakpoint ({full})", node=block,
+                       path=path, attr=full, value=bp,
+                       hint="Breakpoints are desktop, tablet, phone (and phoneWide, tabletWide, widescreen, "
+                            "ultraWide when enabled).")
+            elif res.status == "bad_state":
+                allowed = ", ".join(res.leaf["states"]) if res.leaf else "value"
+                report("error", "E5_BAD_STATE", f"State '{st}' is not allowed on {full} (allowed: {allowed})",
+                       node=block, path=path, attr=full, value=st)
+            else:
+                _check_leaf(block, path, full, bp, res.leaf, v, report, site_host)
+    for attr, pairs in seen.items():
+        if attr in unknown or ("desktop", "value") in pairs or attr.endswith("disabledOn"):
+            continue
+        extra = sorted(f"{bp}.{st}" for bp, st in pairs
+                       if st in ("hover", "sticky") or (bp in BREAKPOINTS and bp != "desktop"))
+        if extra:
+            report("warning", "W5_HOVER_WITHOUT_DESKTOP",
+                   f"{attr} sets {', '.join(extra)} but no desktop.value", node=block, path=path, attr=attr,
+                   value=",".join(extra), hint="Set the desktop value too; the other breakpoints and states vary it.")
+
+
+def _unknown(block, path, attr, value, candidates, report) -> None:
+    report("error", "E5_UNKNOWN_ATTR", f"[{block.name}] has no attribute '{attr}'", node=block, path=path, attr=attr,
+           value=_show(value)[:200], hint=_close_match(attr, candidates) or
+           f"See reference/divi5/modules/{block.name[5:]}.md for its attributes.")
+
+
+def _check_leaf(block, path, full, bp, leaf, value, report, site_host) -> None:
+    if not leaf.get("bp", True) and bp != "desktop" and bp not in leaf.get("breakpoints_extra", ()):
+        report("error", "E5_BAD_BREAKPOINT", f"{full} is not responsive: it only takes a desktop value, not {bp}",
+               node=block, path=path, attr=full, value=bp, hint="Move the value to desktop.")
+        return
+    for msg in value_problems5(leaf, value):
+        report("error", "E5_BAD_VALUE", f"{full}: {msg}", node=block, path=path, attr=full, value=_show(value)[:200])
+    t = leaf.get("type")
+    if t == "image" and site_host and isinstance(value, str) and _VAR_MARK not in value:
+        host = urlparse(value).hostname
+        if host and host.lower() != site_host.lower():
+            report("warning", "W_EXTERNAL_IMAGE", f"{full} points to {host}, not the site", node=block, path=path,
+                   attr=full, value=value, hint="Upload the image to the site's Media Library and use that URL.")
+    if t in ("html", "text") and ".innerContent" in f".{full}" and isinstance(value, str) \
+            and _SHORTCODE_OPEN.search(value):
+        report("warning", "W5_SHORTCODE_BRACKETS",
+               f"{full} contains '[' followed by a letter, which WordPress runs as a shortcode", node=block, path=path,
+               attr=full, value=value[:200], hint="Write literal brackets as &#91; and &#93;.")
+
+
+def _check_variables(text: str, block, path, attr, report, known_vars) -> None:
+    if _VAR_MARK not in text:
+        return
+    for start, end, obj, problem in scan_variables(text):
+        if problem:
+            report("error", "E5_BAD_VARIABLE", f"{attr}: malformed $variable reference: {problem}", node=block,
+                   path=path, attr=attr, value=text[start:end + 40][:200],
+                   hint='Write $variable({"type":"color","value":{"name":"gcid-…","settings":{}}})$ '
+                        '(type content for gvid- design variables).')
+            continue
+        name = obj["value"]["name"]
+        if known_vars is not None and name.startswith(("gcid-", "gvid-")) and name not in known_vars \
+                and name not in CUSTOMIZER_COLOR_IDS:
+            report("warning", "W5_UNKNOWN_VARIABLE", f"{attr} references {name}, which is not in tokens.json",
+                   node=block, path=path, attr=attr, value=name,
+                   hint="An unknown global color or variable renders as nothing; use an id from tokens.json or an "
+                        "inline value.")
