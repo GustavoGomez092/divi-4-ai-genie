@@ -1,0 +1,8 @@
+{"divi": "5.13.1",
+ "fixtures": [
+  {"file": "b1-tuned-recipes.html", "batch": 1, "tokens": "Skill/divi-page-builder/recipes/divi5/sample-tokens.json", "modules": ["button", "column", "heading", "row", "section", "text"], "tuned": true},
+  {"file": "b1-tuned-recipes2.html", "batch": 1, "tokens": "Skill/divi-page-builder/recipes/divi5/sample-tokens.json", "modules": ["button", "column", "heading", "row", "section", "text"], "tuned": true},
+  {"file": "b1-tuned-mixed.html", "batch": 1, "modules": ["button", "column", "heading", "row", "section", "text"], "tuned": true},
+  {"file": "b1-tuned-image-inner.html", "batch": 1, "modules": ["button", "column", "column-inner", "heading", "image", "row", "row-inner", "section", "text"], "tuned": true},
+  {"file": "b1-heldout.html", "batch": 1, "tokens": "Skill/divi-page-builder/recipes/divi5/sample-tokens.json", "modules": ["button", "column", "heading", "image", "row", "section", "text"], "tuned": false}
+ ]}
