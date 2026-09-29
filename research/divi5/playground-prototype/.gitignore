@@ -1,0 +1,18 @@
+# Never commit Elegant Themes code or caches. They live outside the repo
+# (PP_CACHE_DIR, default ~/.cache/divi-page-builder); these guard against accidental local copies.
+# Same rules as Skill/divi-page-builder/scripts/preview/.gitignore, plus the R5 spike's artefacts:
+# rendered HTML and screenshots embed Divi's licensed CSS/JS/fonts.
+*.zip
+Divi/
+Divi-*/
+cache/
+sites/
+wordpress/
+et-cache/
+out/
+shots/
+pages/
+*.html
+*.png
+*-geo.json
+__pycache__/

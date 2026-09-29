@@ -191,7 +191,7 @@ Customizer `gcid-primary-color` was also set to #7C3AED.
 
 - `et-vb-global-data et-vb-global-fonts`
 - `et-vb-global-data et-vb-global-numeric-vars`
-- `#divi-dynamic-critical-inline-css`
+- `#divi-dynamic-critical-inline-(css)`
 - `#et-critical-inline-css`
 
 The last two are inlined copies of `wp-content/et-cache/23/et-divi-dynamic-23-critical.css` and
