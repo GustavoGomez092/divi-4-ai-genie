@@ -1,7 +1,9 @@
 import time
 import unittest
 
-from _paths import d5_fixtures
+import importlib.util
+
+from _paths import FIXTURES5, TOOLS5, d5_fixtures
 from divi5_blocks import (Block, Freeform, canonical_json, get_attr, iter_leaves, new_block, parse,
                           render_block, serialize, set_attr, variable_refs, wrap_placeholder)
 
@@ -216,6 +218,24 @@ class CanonicalTest(unittest.TestCase):
             self.assertEqual(serialize(again), canon, p.name)
             self.assertEqual([b.attrs for b, _, _ in again.walk()], [b.attrs for b, _, _ in doc.walk()], p.name)
             self.assertEqual("".join(render_block(n) for n in again.nodes if isinstance(n, Block)), canon)
+
+
+class EscapeCasesFixtureTest(unittest.TestCase):
+    """tests/fixtures/divi5/escape-cases.html: R3's tricky values as a canonical page (judged live by
+    test_divi5_judge.py; offline it rides in d5_fixtures())."""
+
+    def test_fixture_is_generated_and_canonical(self):
+        spec = importlib.util.spec_from_file_location("make_escape_cases", TOOLS5 / "make_escape_cases.py")
+        gen = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(gen)
+        src = (FIXTURES5 / "escape-cases.html").read_text(encoding="utf-8")
+        self.assertEqual(src, gen.fixture_page())
+        doc = parse(src)
+        self.assertEqual(doc.problems, [])
+        self.assertEqual("".join(render_block(n) for n in doc.nodes), src)
+        for token in ("\\u005c", "\\u0022", "\\u002d\\u002d", "\\u003c", "\\u003e", "\\u0026", "\\u2028",
+                      "\\u2029", "\\t", "\\n", "\\u0001", "\x7f", "\u00fc", "\u20ac", "\U0001f600"):
+            self.assertIn(token, src)
 
 
 class AttrTest(unittest.TestCase):

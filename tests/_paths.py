@@ -44,7 +44,8 @@ def wp5(*args, timeout=120):
 def _site5_up() -> bool:
     import urllib.request
     try:
-        urllib.request.urlopen(SITE5_URL + "/", timeout=5)
+        # 20 s: the first view after Divi flushes its static CSS cache (any page delete) takes ~5 s.
+        urllib.request.urlopen(SITE5_URL + "/", timeout=20)
         return True
     except Exception:
         return False
