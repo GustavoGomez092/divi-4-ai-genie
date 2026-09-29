@@ -529,6 +529,38 @@ exit 0
 """
 
 
+class StageBlockPageAtomicTest(unittest.TestCase):
+    """stage_block_page writes the staged page and its .seed.css / .seed.json sidecars through a temp file and
+    os.replace, so a render in flight never reads a half-written sidecar."""
+
+    def test_every_staged_file_goes_through_a_temp_and_replace(self):
+        sys.path.insert(0, str(SCRIPTS))
+        import preview
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            page = d / "home.html"
+            page.write_text("<!-- wp:divi/placeholder --><!-- /wp:divi/placeholder -->", encoding="utf-8")
+            stage = d / "stage"
+            stage.mkdir()
+            moves, real = [], os.replace
+
+            def replace(src, dst):
+                moves.append((Path(src), Path(dst), Path(src).read_text(encoding="utf-8")))
+                return real(src, dst)
+
+            with mock.patch.object(preview.os, "replace", side_effect=replace):
+                preview.stage_block_page(page, stage, ":root{--gcid-x:#fff}", options={"et_divi": {"a": 1}})
+            by_dst = {dst.name: (src, text) for src, dst, text in moves}
+            self.assertEqual(sorted(by_dst), ["home.seed.css", "home.seed.json", "home.txt"])
+            for name, (src, text) in by_dst.items():
+                self.assertEqual(src.parent, stage)
+                self.assertNotEqual(src.name, name)
+                self.assertFalse(src.exists(), f"{src} left behind")
+                self.assertEqual((stage / name).read_text(encoding="utf-8"), text)
+            self.assertEqual(json.loads((stage / "home.seed.json").read_text()), {"et_divi": {"a": 1}})
+            self.assertEqual(sorted(p.name for p in stage.iterdir()), ["home.seed.css", "home.seed.json", "home.txt"])
+
+
 class BlocksRoutingTest(unittest.TestCase):
     """A Divi 5 block page always goes to Playground (preview.mjs) with a Divi 5 version, local images inlined
     and the tokens seed as a sidecar; the Python renderer is never used for it."""

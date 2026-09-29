@@ -110,6 +110,9 @@ export async function ensureDivi(version = 'latest', cacheDir = defaultCacheDir(
 	const themeDir = path.join(cacheDir, `Divi-${version}`, 'Divi');
 	const styleCss = path.join(themeDir, 'style.css');
 	if (fs.existsSync(styleCss)) return { version, themeDir, cached: true };
+	// Another spelling of the same version (Divi-5.14 for 5.14.0, or the reverse) is the same cached build.
+	const same = listCachedDivi(cacheDir).find((v) => sameVersion(v, version));
+	if (same) return { version, themeDir: path.join(cacheDir, `Divi-${same}`, 'Divi'), cached: true };
 
 	const c = creds();
 	const st = await etGet('api', { api_update: 1, action: 'check_version_status', product: 'Divi', version, ...c });

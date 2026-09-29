@@ -6,8 +6,9 @@
 
 `latest` is the newest Divi 4 (the account's Divi 4 line, as always); `latest5` the newest Divi 5
 (check_theme_updates with divi_5=on). A 5.x version number downloads through the same endpoint.
-Verified 2026-09-29: latest5 answered "5.14" (a short version: 5.14 and 5.14.0 are treated as one), and
-the 5.13.1 download is a 32.7 MB zip with the same top-level "Divi/" layout as Divi 4 (3,360 entries).
+Verified 2026-09-29: latest5 answered "5.14" (a short version: 5.14 and 5.14.0 are treated as one, in the cache
+too), and the 5.13.1 and 5.14 downloads are 32.7 / 32.9 MB zips with the same top-level "Divi/" layout as Divi 4
+(3,360 / 3,370 entries; 5.14's style.css says 5.14.0).
 
 Credentials: env ET_USERNAME/ET_API_KEY win if both are set; otherwise the keys.json file's
 "elegant_themes" section (--keys PATH, else env DIVI_KEYS_FILE, else
@@ -84,10 +85,14 @@ def default_cache_dir() -> Path:
 
 def theme_dir(version: str, cache_dir: Optional[Path] = None) -> Optional[Path]:
     """Returns the unpacked Divi theme dir (.../Divi-<version>/Divi) for `version`, or None if
-    it isn't cached (no readable style.css)."""
+    it isn't cached (no readable style.css). Version spellings are one version (same_version): a cached
+    Divi-5.14 serves 5.14.0 and the reverse; the exact spelling wins when both are cached."""
     cache_dir = Path(cache_dir) if cache_dir is not None else default_cache_dir()
     d = cache_dir / f"Divi-{version}" / "Divi"
-    return d if (d / "style.css").is_file() else None
+    if (d / "style.css").is_file():
+        return d
+    same = [v for v in list_cached(cache_dir) if same_version(v, version)]
+    return cache_dir / f"Divi-{same[0]}" / "Divi" if same else None
 
 
 def list_cached(cache_dir: Optional[Path] = None, major: Optional[int] = None) -> list:

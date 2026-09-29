@@ -39,6 +39,31 @@ TABLE_HEADER = ("| Fixture | Stage | Modules | Tuned | Markup ratio | Identical 
 TABLE_RULE = "|---|---|---|---|---|---|---|---|---|---|---|"
 
 
+class GateMissed(AssertionError):
+    """The Addendum A gate numbers fell short (the recorded, expected outcome of the parked renderer)."""
+
+
+def expected_gate_failure(test):
+    """unittest.expectedFailure, but only for GateMissed: any other exception (an ImportError, a renderer that
+    no longer runs, a plain assertion elsewhere) is reported as an error instead of being counted as the
+    expected failure, so rot in the parked renderer fails loudly."""
+    import functools
+
+    @functools.wraps(test)
+    def run(self, *args, **kwargs):
+        try:
+            return test(self, *args, **kwargs)
+        except GateMissed:
+            raise
+        except Exception:
+            outcome = getattr(self, "_outcome", None)
+            if outcome is None or not hasattr(outcome, "expecting_failure"):
+                raise RuntimeError("unittest internals changed: cannot tell rot from the expected gate miss")
+            outcome.expecting_failure = False
+            raise
+    return unittest.expectedFailure(run)
+
+
 def load_manifest() -> dict:
     return json.loads(MANIFEST.read_text())
 
@@ -115,6 +140,29 @@ class RecordMetrics5Test(unittest.TestCase):
                 record_metrics("a.html", ["text"], False, self.M, stage, path=self.path)
 
 
+class ExpectedGateFailureTest(unittest.TestCase):
+    """Only the gate miss is an expected failure; rot (an ImportError, any other exception) is an error."""
+
+    def outcome(self, exc):
+        class Probe(unittest.TestCase):
+            @expected_gate_failure
+            def test_gate(self):
+                raise exc
+
+        result = unittest.TestResult()
+        Probe("test_gate").run(result)
+        return len(result.expectedFailures), len(result.errors), len(result.failures), len(result.unexpectedSuccesses)
+
+    def test_gate_miss_is_the_expected_failure(self):
+        self.assertEqual(self.outcome(GateMissed("94.3 %")), (1, 0, 0, 0))
+
+    def test_rot_is_an_error(self):
+        for exc in (ImportError("no divi5_render"), KeyError("html"), AssertionError("not the gate")):
+            with self.subTest(exc=exc):
+                expected, errors, failures, _ = self.outcome(exc)
+                self.assertEqual((expected, errors + failures), (0, 1))
+
+
 class RenderFidelity5Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -123,10 +171,7 @@ class RenderFidelity5Test(unittest.TestCase):
         if fetch_divi.theme_dir(cls.version) is None:
             raise unittest.SkipTest(f"Divi {cls.version} is not cached (python3 scripts/preview.py fetch-divi "
                                     f"{cls.version})")
-        try:
-            import divi5_render
-        except ImportError as e:  # pragma: no cover
-            raise unittest.SkipTest(f"divi5_render unavailable: {e}")
+        import divi5_render  # in the repo (parked, not removed): an ImportError is rot, so it errors, never skips
         cls.r = divi5_render
         cls.fixtures = man["fixtures"]
         cls.truth, cls.tokens = {}, {}
@@ -180,17 +225,23 @@ class RenderFidelity5Test(unittest.TestCase):
                            and x not in res.coverage["unsupported_modules"] and x not in res.coverage["needs_site_data"]]
                 self.assertEqual(missing, [])
 
-    @unittest.expectedFailure
+    @expected_gate_failure
     def test_batch1_heldout_meets_the_addendum_a_bar(self):
         """The binding gate of Task 21-R5b, on the pre-fix engine. It missed (research/divi5/render-fidelity.md:
         94.3 % of the declarations, a layout shift from the unported disabledOn, 2 extra declarations the coverage
         report does not name), so this is an expected failure (NO-GO, engine parked: see research/divi5/render-fidelity.md and
         research/divi5/python-renderer/README.md); Playground stays the only Divi 5 preview. An unexpected success means the engine changed; re-measure and update the record."""
-        for fx in (f for f in self.fixtures if not f["tuned"] and f["batch"] == 1):
+        heldout = [f for f in self.fixtures if not f["tuned"] and f["batch"] == 1]
+        self.assertTrue(heldout, "no batch-1 held-out fixture in the manifest")
+        for fx in heldout:
             res = self.render(fx)
             m = metrics(self.truth[fx["file"]], res.html, res.coverage)
-            self.assertGreaterEqual(m["decl_pct"], MIN_HELDOUT_DECLS, json.dumps(m["compare"], indent=1))
-            self.assertEqual(m["extra"], 0)
+            self.assertGreater(m["truth"], 0)  # a vacuous comparison is rot, not the gate miss
+            if m["decl_pct"] < MIN_HELDOUT_DECLS:
+                raise GateMissed(f"{100 * m['decl_pct']:.1f} % of the builder CSS declarations, below "
+                                 f"{100 * MIN_HELDOUT_DECLS:.0f} %: " + json.dumps(m["compare"]["css"]))
+            if m["extra"]:
+                raise GateMissed(f"{m['extra']} extra declaration(s): " + json.dumps(m["compare"]["css"]))
 
 
 if __name__ == "__main__":

@@ -458,6 +458,13 @@ def safe_name(name: str) -> str:
     return re.sub(r"[^A-Za-z0-9_-]", "-", name) or "page"
 
 
+def write_atomic(path: Path, text: str) -> None:
+    """Write PATH through <PATH>.tmp + os.replace: a render in flight never reads half a file."""
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    os.replace(tmp, path)
+
+
 def stage_block_page(page: Path, stage: Path, seed: str, name: str | None = None, options: dict | None = None) -> Path:
     """Writes <stage>/<name>.txt (the page with its local images inlined as data: URIs), plus the page's
     <stem>.meta.json and the token-seeding sidecars <name>.seed.css (seed_css) and <name>.seed.json
@@ -465,20 +472,18 @@ def stage_block_page(page: Path, stage: Path, seed: str, name: str | None = None
     name = name or safe_name(page.stem)
     staged = stage / f"{name}.txt"
     text = local_media.embed_local_images(page.read_text(encoding="utf-8"), page.resolve().parent)
-    tmp = staged.with_suffix(".tmp")
-    tmp.write_text(text, encoding="utf-8")
-    os.replace(tmp, staged)  # atomic: a render in flight never reads half a file
+    write_atomic(staged, text)
     meta = page.with_name(page.stem + ".meta.json")
     if meta.is_file():
         shutil.copyfile(meta, stage / f"{name}.meta.json")
     seed_file = stage / f"{name}.seed.css"
     if seed:
-        seed_file.write_text(seed, encoding="utf-8")
+        write_atomic(seed_file, seed)
     elif seed_file.exists():
         seed_file.unlink()
     options_file = stage / f"{name}.seed.json"
     if options:
-        options_file.write_text(json.dumps(options), encoding="utf-8")
+        write_atomic(options_file, json.dumps(options))
     else:
         options_file.unlink(missing_ok=True)
     return staged

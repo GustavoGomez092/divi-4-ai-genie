@@ -84,6 +84,39 @@ class CacheLayoutTest(unittest.TestCase):
             theme = _seed_cached(cache, "4.27.9")
             self.assertEqual(fetch_divi.theme_dir("4.27.9", cache), theme)
 
+    def test_theme_dir_treats_version_spellings_as_one(self):
+        with tempfile.TemporaryDirectory() as cache:
+            short = _seed_cached(cache, "5.14")
+            self.assertEqual(fetch_divi.theme_dir("5.14.0", cache), short)
+            self.assertEqual(fetch_divi.theme_dir("5.14", cache), short)
+            self.assertIsNone(fetch_divi.theme_dir("5.14.1", cache))
+            self.assertIsNone(fetch_divi.theme_dir("5.1.4", cache))
+        with tempfile.TemporaryDirectory() as cache:
+            long = _seed_cached(cache, "5.14.0")
+            self.assertEqual(fetch_divi.theme_dir("5.14", cache), long)
+            exact = _seed_cached(cache, "5.14")
+            self.assertEqual(fetch_divi.theme_dir("5.14", cache), exact)  # the exact spelling wins
+
+    def test_ensure_divi_reuses_another_spelling_without_any_http_call(self):
+        with tempfile.TemporaryDirectory() as cache:
+            theme = _seed_cached(cache, "5.14", content_version="5.14.0")
+            with mock.patch.object(fetch_divi, "_et_get", side_effect=AssertionError("no HTTP")):
+                self.assertEqual(fetch_divi.ensure_divi("5.14.0", cache), theme)
+
+    @unittest.skipUnless(shutil.which("node"), "node not installed")
+    def test_node_reuses_another_spelling_without_any_http_call(self):
+        with tempfile.TemporaryDirectory() as cache:
+            theme = _seed_cached(cache, "5.14", content_version="5.14.0")
+            script = (f"import({FETCH_MJS.as_uri()!r}).then(m => m.ensureDivi('5.14.0', {cache!r}, () => {{}}))"
+                      ".then(r => console.log(JSON.stringify(r))).catch(e => { console.error(e.message); "
+                      "process.exit(1); });")
+            env = {"PATH": os.environ["PATH"], "PP_ET_ENDPOINT": "http://127.0.0.1:9/"}  # any HTTP call fails
+            proc = subprocess.run(["node", "--input-type=module", "-e", script], capture_output=True, text=True,
+                                  timeout=60, env=env)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        got = json.loads(proc.stdout)
+        self.assertEqual((got["themeDir"], got["cached"]), (str(theme), True))
+
     def test_newest_cached_orders_versions_numerically(self):
         with tempfile.TemporaryDirectory() as cache:
             _seed_cached(cache, "4.27.9")

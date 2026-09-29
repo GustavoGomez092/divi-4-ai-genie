@@ -97,6 +97,17 @@ def node(*args, timeout=600):
     return subprocess.run(["node", str(PREVIEW), *args], capture_output=True, text=True, timeout=timeout, env=env)
 
 
+class LiveWritesNameTheAdminTest(unittest.TestCase):
+    """Offline guard: every eval-file seed_site_options.php apply/restore in these live tests is a write, so it
+    passes --user=<admin> (the binding rule for wp writes)."""
+
+    def test_seed_site_options_writes_pass_user(self):
+        src = Path(__file__).read_text(encoding="utf-8")
+        calls = re.findall(r'_wp5\("eval-file", SEED_SITE_OPTIONS, "(?:apply|restore)"[^\n]*', src)
+        self.assertEqual(len(calls), 2, calls)
+        for line in calls:
+            self.assertIn('f"--user={admin}"', line)
+
 class PreviewTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -437,7 +448,7 @@ class Divi5SeedOptionsTest(unittest.TestCase):
         _wp5("eval-file", SEED_SITE_OPTIONS, "backup", backup)
         pid = None
         try:
-            _wp5("eval-file", SEED_SITE_OPTIONS, "apply", cls.tmp / "seed.json")
+            _wp5("eval-file", SEED_SITE_OPTIONS, "apply", cls.tmp / "seed.json", f"--user={admin}")
             pid = int(_wp5("post", "create", cls.page, "--post_type=page", "--post_status=publish",
                            f"--post_title={D5_SEED_TITLE} hero", f"--meta_input={D5_META}", "--porcelain",
                            f"--user={admin}").splitlines()[-1])
@@ -447,7 +458,11 @@ class Divi5SeedOptionsTest(unittest.TestCase):
         finally:
             if pid:
                 wp5("post", "delete", pid, "--force", f"--user={admin}")
-            _wp5("eval-file", SEED_SITE_OPTIONS, "restore", backup)
+            try:
+                _wp5("eval-file", SEED_SITE_OPTIONS, "restore", backup, f"--user={admin}")
+            except BaseException:
+                sys.stderr.write(f"\nD5 seed options: restore failed; the options backup is at {backup}\n")
+                raise
             cls.sha_after = _wp5("eval-file", SEED_SITE_OPTIONS, "sha").splitlines()[-1]
             cls.left = wp5("post", "list", "--post_type=page", "--post_status=any,trash", f"--s={D5_SEED_TITLE}",
                            "--field=ID").stdout.split()
