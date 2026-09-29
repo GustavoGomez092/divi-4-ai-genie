@@ -40,6 +40,7 @@ STRUCTURAL_TEXT = frozenset({"module.advanced.type", "module.advanced.columnStru
 CONTENT_SUBKEYS = frozenset({"title", "titleText", "alt"})
 HTML_ATTRS = "module.advanced.htmlAttributes"
 ADMIN_LABEL = "module.meta.adminLabel"
+MAX_CONTEXTS = 5  # per module_styles entry; `uses` keeps the full count
 VARIABLE_KINDS = {"length": "numbers", "number": "numbers", "spacing": "numbers", "radius": "numbers", "font-family": "fonts", "image": "images",
                   "gradient": "gradients", "url": "links", "text": "strings", "html": "strings"}
 TRANSPARENT = ("transparent", "rgba(0,0,0,0)", "rgba(255,255,255,0)")
@@ -182,7 +183,7 @@ def _skeleton(block: Block, schema5) -> dict:
     media: List[str] = []
     if mod is not None and isinstance(block.attrs, dict):
         attrs = design_attrs(block, mod)
-        label = _value(block, ADMIN_LABEL)
+        label = _value(block, ADMIN_LABEL) if block.name == "divi/section" else None
         if label:
             _set(attrs, ADMIN_LABEL.split(".") + ["desktop", "value"], label)
         if _preset_list(block):
@@ -192,6 +193,18 @@ def _skeleton(block: Block, schema5) -> dict:
         media = _media(block, mod)
     return {"name": block.name, "attrs": attrs, "media": media,
             "children": [_skeleton(c, schema5) for c in block.blocks]}
+
+
+def _css_slots(block: Block) -> List[str]:
+    """Which custom CSS slots (mainElement, before, …) a block's `css` attr fills, at any breakpoint/state. Never the
+    CSS itself: it can carry content (`content:"…"`) and image URLs."""
+    css = block.attrs.get("css")
+    slots = set()
+    for bp_value in css.values() if isinstance(css, dict) else ():
+        for st_value in bp_value.values() if isinstance(bp_value, dict) else ():
+            if isinstance(st_value, dict):
+                slots |= {k for k, v in st_value.items() if v}
+    return sorted(slots)
 
 
 def _font_entry(font_attr: dict) -> dict:
@@ -346,9 +359,9 @@ def tokens5_from_documents(docs: List, schema5) -> dict:
             design = design_attrs(block, mod)
             html_attrs = _value(block, HTML_ATTRS)
             html_attrs = {k: v for k, v in (html_attrs or {}).items() if v} if isinstance(html_attrs, dict) else {}
-            css = block.attrs.get("css") if isinstance(block.attrs.get("css"), dict) else {}
+            css_slots = _css_slots(block)
             module_preset, gp = _preset_list(block), _group_presets(block)
-            key = json.dumps([design, module_preset, gp, html_attrs, css], sort_keys=True)
+            key = json.dumps([design, module_preset, gp, html_attrs, css_slots], sort_keys=True)
             section, column, cur = None, None, parent
             while cur is not None:
                 if cur.name in ("divi/column", "divi/column-inner") and column is None:
@@ -362,9 +375,10 @@ def tokens5_from_documents(docs: List, schema5) -> dict:
             ctx["index_in_parent"] = index_in_parent.get(id(block), 0)
             entry = styles[block.name].setdefault(key, {
                 "uses": 0, "attrs": design, "module_preset": module_preset, "group_presets": gp,
-                "html_attributes": html_attrs, "custom_css": css, "media": [], "contexts": []})
+                "html_attributes": html_attrs, "custom_css_slots": css_slots, "media": [], "contexts": []})
             entry["uses"] += 1
-            entry["contexts"].append(ctx)
+            if len(entry["contexts"]) < MAX_CONTEXTS:
+                entry["contexts"].append(ctx)
             entry["media"] = sorted(set(entry["media"]) | set(_media(block, mod)))
 
     scale = {lvl: {**json.loads(c.most_common(1)[0][0]), "uses": sum(c.values())} for lvl, c in sorted(levels.items())}

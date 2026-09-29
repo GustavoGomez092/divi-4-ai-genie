@@ -175,6 +175,36 @@ class ClassificationTest(unittest.TestCase):
         self.assertNotIn("53px", json.dumps(t["module_styles"]))
 
 
+class FixRound1Test(unittest.TestCase):
+    def test_custom_css_records_slots_never_text(self):
+        css = {"desktop": {"value": {"mainElement": 'background:url(https://x/y.jpg);',
+                                     "before": 'content:"Call 555-0100";'}},
+               "tablet": {"value": {"after": "color:red;"}}}
+        t = tokens(section([block("text", {"builderVersion": V, "css": css, "content": {
+            "innerContent": {"desktop": {"value": "<p>Hi</p>"}}}})]))
+        flat = json.dumps(t)
+        self.assertNotIn("555-0100", flat)
+        self.assertNotIn("x/y.jpg", flat)
+        (entry,) = t["module_styles"]["divi/text"]
+        self.assertEqual(entry["custom_css_slots"], ["after", "before", "mainElement"])
+        self.assertNotIn("custom_css", entry)
+
+    def test_exemplars_keep_admin_label_on_sections_only(self):
+        btn = block("button", {"builderVersion": V, "module": {"meta": {"adminLabel": {"desktop": {
+            "value": "Main CTA"}}}}})
+        t = tokens(section([btn], module={"meta": {"adminLabel": {"desktop": {"value": "Hero"}}}}))
+        hero = t["section_exemplars"][0]
+        self.assertEqual(hero["attrs"]["module"]["meta"]["adminLabel"]["desktop"]["value"], "Hero")
+        self.assertNotIn("Main CTA", json.dumps(t["section_exemplars"]))
+
+    def test_contexts_are_capped(self):
+        blurb = block("blurb", {"builderVersion": V, "title": {"decoration": {"font": {"font": {
+            "desktop": {"value": {"size": "22px"}}}}}}})
+        (entry,) = tokens(section([blurb] * 7))["module_styles"]["divi/blurb"]
+        self.assertEqual(entry["uses"], 7)
+        self.assertEqual(len(entry["contexts"]), 5)
+
+
 class TypographyTest(unittest.TestCase):
     def test_default_heading_level_comes_from_the_schema(self):
         t = tokens(section([heading({"desktop": {"value": {"family": "Montserrat", "size": "56px"}},
