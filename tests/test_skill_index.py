@@ -4,9 +4,12 @@ import unittest
 from _paths import SKILL
 
 # Two-level index: SKILL.md names these index pages, and each of them links every file it indexes (one hop).
-# The generated module pages are reached through their module README the same way.
-INDEX_PAGES = ("recipes/README.md", "recipes/divi5/README.md",
-               "reference/modules/README.md", "reference/divi5/modules/README.md")
+# The generated module pages are reached through their module README the same way. Reachability is checked per
+# version: a Divi 4 file must be reachable from a Divi 4 index page, a Divi 5 file (under a `divi5/` directory)
+# from a Divi 5 one, so the Divi 5 recipe README's "Divi 4 original" links can't stand in for the Divi 4 index.
+INDEX_DIVI4 = ("recipes/README.md", "reference/modules/README.md")
+INDEX_DIVI5 = ("recipes/divi5/README.md", "reference/divi5/modules/README.md")
+INDEX_PAGES = INDEX_DIVI4 + INDEX_DIVI5
 
 # Files an AI needs for any page of that Divi version: named in SKILL.md itself, never behind an index page.
 CORE_DIVI4 = ("reference/page-format.md", "reference/structure.md", "reference/value-formats.md",
@@ -15,24 +18,41 @@ CORE_DIVI4 = ("reference/page-format.md", "reference/structure.md", "reference/v
 CORE_DIVI5 = ("reference/divi5/page-format.md", "reference/divi5/structure.md", "reference/divi5/value-formats.md",
               "reference/divi5/design-families.md", "reference/divi5/modules/README.md", "recipes/divi5/README.md")
 
-SCRIPTS = ("scripts/divi_format.py", "scripts/validate.py", "scripts/extract_tokens.py", "scripts/page_edit.py",
+SCRIPTS = ("scripts/divi_format.py", "scripts/divi5_blocks.py", "scripts/validate.py", "scripts/extract_tokens.py", "scripts/page_edit.py",
            "scripts/preview.py", "scripts/preview/preview.mjs", "scripts/publish.py")
 
 LINK = re.compile(r"\]\(([^)\s]+)\)")
 SKILL_PATH = re.compile(r"`((?:reference|recipes|scripts)/[^`\s<]+\.(?:md|py|mjs|json))`")  # `<slug>` = a pattern
 
 
-def _linked_files(index_rel):
-    """Skill-relative paths of every local file an index page links to."""
+def _linked_files(index_rel, text=None):
+    """Skill-relative paths of every local file an index page links to (`text` overrides the page's content)."""
     page = SKILL / index_rel
     out = set()
-    for link in LINK.findall(page.read_text()):
+    for link in LINK.findall(page.read_text() if text is None else text):
         if link.startswith(("http://", "https://", "#")):
             continue
         target = (page.parent / link.partition("#")[0]).resolve()
         if target.is_file() and SKILL.resolve() in target.parents:
             out.add(target.relative_to(SKILL.resolve()).as_posix())
     return out
+
+
+def _is_divi5(rel):
+    return "divi5/" in rel
+
+
+def unindexed(skill_text, overrides=None):
+    """Skill .md files not named in SKILL.md and not linked from an index page of their own Divi version.
+    `overrides` maps an index page to replacement text (used to prove the check can fail)."""
+    overrides = overrides or {}
+    named = set(SKILL_PATH.findall(skill_text))
+    linked4, linked5 = set(), set()
+    for pages, linked in ((INDEX_DIVI4, linked4), (INDEX_DIVI5, linked5)):
+        for page in pages:
+            linked |= _linked_files(page, overrides.get(page))
+    files = sorted(p.relative_to(SKILL).as_posix() for p in SKILL.rglob("*.md") if p.name != "SKILL.md")
+    return [f for f in files if f not in named and f not in (linked5 if _is_divi5(f) else linked4)]
 
 
 class SkillIndexTest(unittest.TestCase):
@@ -51,14 +71,26 @@ class SkillIndexTest(unittest.TestCase):
             self.assertIn(f"`{page}`", self.text, page)
 
     def test_every_skill_file_is_indexed(self):
-        """Every .md in the skill is named in SKILL.md, or linked from an index page that SKILL.md names."""
-        reachable = set(SKILL_PATH.findall(self.text))
-        for page in INDEX_PAGES:
-            reachable |= _linked_files(page)
-        files = sorted(p.relative_to(SKILL).as_posix() for p in SKILL.rglob("*.md") if p.name != "SKILL.md")
-        self.assertTrue([f for f in files if f.startswith(("reference/divi5/", "recipes/divi5/"))])
-        missing = [f for f in files if f not in reachable]
-        self.assertEqual(missing, [])
+        """Every .md in the skill is named in SKILL.md, or linked from an index page of its version that SKILL.md
+        names."""
+        files = [p.relative_to(SKILL).as_posix() for p in SKILL.rglob("*.md")]
+        self.assertTrue([f for f in files if _is_divi5(f)])
+        self.assertEqual(unindexed(self.text), [])
+
+    def test_the_index_check_catches_a_missing_divi4_recipe_row(self):
+        """Mutation: drop one recipe's row from recipes/README.md's index (in memory). recipes/divi5/README.md still
+        links that Divi 4 recipe as a "Divi 4 original", which must not count."""
+        readme = (SKILL / "recipes/README.md").read_text()
+        row = next(line for line in readme.splitlines() if "](sections/faq.md)" in line)
+        self.assertIn("../sections/faq.md", (SKILL / "recipes/divi5/README.md").read_text())
+        mutated = readme.replace(row + "\n", "")
+        self.assertEqual(unindexed(self.text, {"recipes/README.md": mutated}), ["recipes/sections/faq.md"])
+
+    def test_the_index_check_catches_a_missing_divi5_recipe_row(self):
+        readme = (SKILL / "recipes/divi5/README.md").read_text()
+        row = next(line for line in readme.splitlines() if "](sections/faq.md)" in line)
+        mutated = readme.replace(row + "\n", "")
+        self.assertEqual(unindexed(self.text, {"recipes/divi5/README.md": mutated}), ["recipes/divi5/sections/faq.md"])
 
     def test_every_index_entry_exists(self):
         named = SKILL_PATH.findall(self.text)

@@ -10,7 +10,7 @@ Write Divi pages as the exact `post_content` Divi stores (raw shortcode on Divi 
 **Not for:** Theme Builder templates, WooCommerce product layouts.
 
 ## Workflow
-1. **Which Divi?** Read `site.divi_major` in the site's `tokens.json`, or run `python3 scripts/divi_format.py site URL`. **Divi 5:** use the Divi 5 files of the reference index (`reference/divi5/`, `recipes/divi5/`) at every step below. **Divi 4:** the Divi 4 files. The scripts take either format.
+1. **Which Divi?** Read `site.divi_major` (or `site.divi_version`) in the site's `tokens.json`, or run `python3 scripts/divi_format.py site URL`. **Divi 5:** use the Divi 5 files of the reference index (`reference/divi5/`, `recipes/divi5/`) at every step below. **Divi 4:** the Divi 4 files.
 2. **Intake:** get the content brief, the site URL, and whether this is a new page or an edit. For an edit, fetch the current page (`reference/publishing.md` → "6. Edit an existing page") and save it as `original.txt`.
 3. **Tokens:** reuse the site's `tokens.json` if you have one; otherwise run `python3 scripts/extract_tokens.py --key "NAME" --page ID --out tokens.json` (`publish.py keys` lists the available sites; or `--site URL --user USER` with the password in `WP_APP_PASSWORD`). See `reference/design-tokens.md` (§7 for Divi 5).
 4. **Plan:** map the brief to recipes through the recipe index (`recipes/README.md`; Divi 5: `recipes/divi5/README.md`). Show the user the section outline and get a yes before writing.
@@ -53,6 +53,7 @@ All scripts detect the page format and handle Divi 4 and Divi 5.
 | `scripts/preview.py` | local preview: `render`, `serve` (live reload), `doctor`, `fetch-divi`; `--exact` hands Divi 4 off to Playground |
 | `scripts/preview/preview.mjs` | real-Divi preview in WordPress Playground (Node 20+): Divi 4 `--exact`, every Divi 5 page |
 | `scripts/publish.py` | `fetch` / `media` / `draft` / `publish` / `keys` over REST with an Application Password |
+| `scripts/divi5_blocks.py` | Divi 5 library: `parse`, `new_block`, `set_attr`, `render_block`/`serialize` in canonical JSON |
 
 ## Reference index
 | Divi 4 | Divi 5 | read it when |
@@ -63,7 +64,7 @@ All scripts detect the page format and handle Divi 4 and Divi 5.
 | `reference/design-families.md` | `reference/divi5/design-families.md` | styling: background, font, border, shadow, spacing, animation… |
 | `reference/modules/README.md` | `reference/divi5/modules/README.md` | finding a module; it links one page per module listing all of its fields |
 | `reference/icons.md` | | picking an icon: name → exact `font_icon`/`button_icon` value |
-| `recipes/README.md` | `recipes/divi5/README.md` | planning and composing: how recipes map tokens to fields, and the **recipe index** of every section, page and edit recipe (`sections/`, `pages/`, `edits/`) with when to use each |
+| `recipes/README.md` | `recipes/divi5/README.md` | planning and composing: how recipes map tokens to fields, and the **recipe index** linking every section, page and edit recipe |
 
 Both versions:
 

@@ -1,7 +1,7 @@
 # Publishing over REST
 
 **Before any command here writes to a site** (`media`, `draft`, `publish`), the user must have approved
-the page in the local preview (`preview.py`, SKILL.md step 6). Images and drafts are changes to the
+the page in the local preview (`preview.py`, SKILL.md step 7). Images and drafts are changes to the
 client's site, so nothing is uploaded just to look at a page.
 
 ## Credentials: keys.json
@@ -466,7 +466,7 @@ https://client-site.example/?page_id=15&preview=true
 ```
 
 **The WordPress draft, opened in a real logged-in browser tab, is the final visual check**, and it comes
-*after* the user has approved the local preview (`preview.py`, SKILL.md step 6); never push a draft to
+*after* the user has approved the local preview (`preview.py`, SKILL.md step 7); never push a draft to
 skip that step. Divi's actual PHP renders the shortcode tree,
 applies the theme's CSS, and reflects any real site customizations (Divi Theme Options,
 active plugins, global presets) that a local preview tool cannot fully replicate.
