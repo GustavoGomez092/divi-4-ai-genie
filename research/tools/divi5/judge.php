@@ -12,7 +12,8 @@
  *           child block sits); top-level HTML between blocks is {"name":null,"html"}.
  *   render  FILE stored as a draft page "D5TEST judge <file>" (+ _et_pb_use_builder=on) and rendered through the
  *           front-end path (a singular WP_Query for it, do_action('wp'), the_content) with every PHP error, warning,
- *           notice and deprecation captured: {"sections","modules","php_notices","stored_identical","bytes"}.
+ *           notice and deprecation captured: {"sections","modules","php_notices","stored_identical","bytes",
+ *           "cleanup_warnings"} (cleanup_warnings: the page or its et-cache directory could not be removed).
  *           sections counts elements with class et_pb_section, modules the elements with an et_pb_*_N order
  *           class. The page (and its et-cache directory) is deleted before exiting. parse-only: render is null.
  *
@@ -67,6 +68,7 @@ function d5j_count_classes( $html ) {
 function d5j_render( $file, $content ) {
 	global $wp_query, $wp_the_query, $wp;
 	$notices = array();
+	$cleanup = array();
 	$id      = wp_insert_post(
 		array(
 			'post_type'    => 'page',
@@ -112,7 +114,10 @@ function d5j_render( $file, $content ) {
 		error_reporting( $old_level );
 		wp_reset_postdata();
 	} finally {
-		wp_delete_post( $id, true );
+		// finally does not run on a fatal, exit or kill; tests/test_divi5_judge.py sweeps "D5TEST judge" pages.
+		if ( ! wp_delete_post( $id, true ) || get_post( $id ) ) {
+			$cleanup[] = "wp_delete_post($id) failed: page \"D5TEST judge " . basename( $file ) . '" is still there';
+		}
 		$cache = WP_CONTENT_DIR . '/et-cache/' . $id;
 		if ( is_dir( $cache ) ) {
 			foreach ( glob( $cache . '/{,.}*', GLOB_BRACE ) as $f ) {
@@ -120,7 +125,9 @@ function d5j_render( $file, $content ) {
 					unlink( $f );
 				}
 			}
-			rmdir( $cache );
+			if ( ! rmdir( $cache ) ) {
+				$cleanup[] = "could not remove $cache";
+			}
 		}
 	}
 	list( $sections, $modules ) = d5j_count_classes( $html );
@@ -130,6 +137,7 @@ function d5j_render( $file, $content ) {
 		'php_notices'      => array_values( array_unique( $notices ) ),
 		'stored_identical' => $stored === $content,
 		'bytes'            => strlen( $html ),
+		'cleanup_warnings' => $cleanup,
 	);
 }
 

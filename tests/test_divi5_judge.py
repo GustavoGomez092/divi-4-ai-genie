@@ -19,11 +19,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from _paths import FIXTURES5, TOOLS5, d5_fixtures, live5_only, wp5
+from _paths import FIXTURES5, SITE5_URL, TOOLS5, d5_fixtures, live5_only, wp5
 from divi5_blocks import Block, Freeform, _phpify, canonical_json, parse
 from validate import validate_source
 
 MARK = "D5JUDGE:"
+JUDGE_TITLE = "D5TEST judge"  # judge.php's draft pages are titled "D5TEST judge <file>"
+DIVI_PARSER = "ET\\Builder\\FrontEnd\\BlockParser\\BlockParser"
 _CACHE = {}
 _ADMIN = []
 
@@ -36,6 +38,43 @@ def _admin_id():
             raise unittest.SkipTest(f"local Divi 5 site unavailable (wp user list failed): {out.stderr[-300:]}")
         _ADMIN.append(ids[0])
     return _ADMIN[0]
+
+
+def judge_pages():
+    """IDs of pages left by judge.php (normally none: it deletes its page, but not after a fatal or a kill)."""
+    out = wp5(f"--user={_admin_id()}", "post", "list", "--post_type=page", "--post_status=any", "--nopaging",
+              "--fields=ID,post_title", "--format=json")
+    if out.returncode != 0:
+        raise AssertionError(f"wp post list failed: {out.stderr[-300:]}")
+    return [str(p["ID"]) for p in json.loads(out.stdout[out.stdout.index("["):])
+            if p["post_title"].startswith(JUDGE_TITLE)]
+
+
+def sweep_judge_pages():
+    ids = judge_pages()
+    if ids:
+        out = wp5(f"--user={_admin_id()}", "post", "delete", *ids, "--force")
+        if out.returncode != 0:
+            raise AssertionError(f"could not delete leftover judge pages {ids}: {out.stderr[-300:]}")
+    return ids
+
+
+def warm_site():
+    """Deleting a page makes Divi flush its static CSS cache; view the home page once so the next live5_only
+    probe (and anyone else) does not pay the slow regeneration."""
+    import urllib.error
+    import urllib.request
+    try:
+        urllib.request.urlopen(SITE5_URL + "/", timeout=60).read()
+    except urllib.error.HTTPError:
+        pass
+    except Exception as e:  # never fail the run on the courtesy request
+        print(f"warm-up of {SITE5_URL} failed: {e}")
+
+
+def _class_cleanup():
+    sweep_judge_pages()
+    warm_site()
 
 
 def judge(path, parse_only=False):
@@ -158,12 +197,16 @@ class DiviJudge5Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         _admin_id()  # SkipTest here if WP-CLI cannot reach the site
+        sweep_judge_pages()
+        cls.addClassCleanup(_class_cleanup)
         cls.fixtures = d5_fixtures()
         assert any(p.name == "escape-cases.html" for p in cls.fixtures)
 
     def test_tree_and_attrs_agree_with_divi(self):
         problems, per_file, total = [], {}, 0
         for p in self.fixtures:
+            if judge(p)["parser"] != DIVI_PARSER:
+                problems.append(f"{rel(p)}: parsed by {judge(p)['parser']}, not Divi's {DIVI_PARSER}")
             counts = {"blocks": 0}
             out = []
             diff_trees(ours(p), judge(p)["blocks"], "", out, counts)
@@ -176,8 +219,9 @@ class DiviJudge5Test(unittest.TestCase):
         self.assertEqual(problems, [], "\n".join(problems[:20]))
 
     def test_canonical_json_matches_serialize_block_attributes(self):
-        problems, total, escaped = [], 0, set()
+        problems, total, expected, escaped = [], 0, 0, set()
         for p in self.fixtures:
+            expected += sum(1 for _ in flat(ours(p)))
             for where, m, t in walk_pairs(ours(p), judge(p)["blocks"]):
                 total += 1
                 escaped.update(re.findall(r"\\u(?:005c|0022|002d|003c|003e|0026|2028|2029)", t["canonical"]))
@@ -185,6 +229,7 @@ class DiviJudge5Test(unittest.TestCase):
                     problems.append(f"{rel(p)}: {where}: {first_diff(m['canonical'], t['canonical'])}")
         print(f"\ndivi5 judge (canonical): {total - len(problems)}/{total} blocks byte-identical; "
               f"WP escapes seen: {sorted(escaped)}")
+        self.assertEqual(total, expected, "walk_pairs compared fewer blocks than we parsed (trees differ?)")
         # escape-cases.html must make WordPress use every serialize_block_attributes() escape at least once.
         self.assertEqual(escaped, {"\\u005c", "\\u0022", "\\u002d", "\\u003c", "\\u003e", "\\u0026",
                                    "\\u2028", "\\u2029"})
@@ -196,6 +241,8 @@ class DiviJudge5Test(unittest.TestCase):
             want = sum(1 for b, _, _ in parse(p.read_text(encoding="utf-8")).walk() if b.name == "divi/section")
             render = judge(p)["render"]
             sections += render["sections"]
+            if render["cleanup_warnings"]:
+                problems.append(f"{rel(p)}: cleanup {render['cleanup_warnings']}")
             if not render["stored_identical"]:
                 problems.append(f"{rel(p)}: WordPress changed the bytes on wp_insert_post")
             if render["php_notices"]:
@@ -257,6 +304,18 @@ class DiviJudge5Test(unittest.TestCase):
         self.assertIn("divi/fancy-text", [t["name"] for t in unknown])
         bad = list(flat(judge(FIXTURES5 / "invalid" / "bad-json.html")["blocks"]))
         self.assertEqual([t["attrs"] for t in bad if t["name"] == "divi/text"], [None])
+
+
+    def test_judge_uses_divis_parser_and_sweep_removes_leftover_pages(self):
+        """A disabled Divi would degrade the judge to core WordPress; a killed judge.php would leave its page."""
+        self.assertEqual(judge(self.fixtures[0], parse_only=True)["parser"], DIVI_PARSER)
+        out = wp5(f"--user={_admin_id()}", "post", "create", "--post_type=page", "--post_status=draft",
+                  f"--post_title={JUDGE_TITLE} leftover-probe", "--porcelain")
+        self.assertEqual(out.returncode, 0, out.stderr[-300:])
+        leftover = out.stdout.strip().splitlines()[-1]
+        self.assertIn(leftover, judge_pages())
+        self.assertIn(leftover, sweep_judge_pages())
+        self.assertEqual(judge_pages(), [])
 
 
 if __name__ == "__main__":

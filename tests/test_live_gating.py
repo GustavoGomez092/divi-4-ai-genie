@@ -1,7 +1,9 @@
 """Tests that touch a live WordPress site or read Elegant Themes credentials must be opt-in
 (PP_LIVE_TESTS=1). This checks the gating statically: nothing here calls the live site."""
 import os
+import socket
 import unittest
+import urllib.error
 from unittest import mock
 
 import _paths
@@ -38,6 +40,20 @@ class LiveGatingTest(unittest.TestCase):
             def sample():
                 pass
         self.assertIn("PP_LIVE_TESTS=1", _skip_reason(sample))
+
+    def test_site5_up_counts_any_http_response_as_up(self):
+        err = urllib.error.HTTPError(_paths.SITE5_URL + "/", 500, "Internal Server Error", {}, None)
+        with mock.patch("urllib.request.urlopen", side_effect=err) as urlopen:
+            self.assertTrue(_paths._site5_up())
+        self.assertEqual(urlopen.call_count, 1)
+
+    def test_site5_up_retries_once_after_timeout(self):
+        with mock.patch("urllib.request.urlopen", side_effect=[socket.timeout("slow"), object()]) as urlopen:
+            self.assertTrue(_paths._site5_up())
+        self.assertEqual(urlopen.call_count, 2)
+        with mock.patch("urllib.request.urlopen", side_effect=urllib.error.URLError("refused")) as urlopen:
+            self.assertFalse(_paths._site5_up())
+        self.assertEqual(urlopen.call_count, 2)
 
     @unittest.skipIf(os.environ.get("PP_LIVE_TESTS") == "1", "live tests enabled; gating not in effect")
     def test_preview_does_not_read_et_credentials_from_local_site(self):

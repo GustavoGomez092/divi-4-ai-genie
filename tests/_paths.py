@@ -41,14 +41,20 @@ def wp5(*args, timeout=120):
                           timeout=timeout)
 
 
-def _site5_up() -> bool:
+def _site5_up(attempts: int = 2, timeout: float = 30) -> bool:
+    """Any HTTP response (even a 500) proves the site is reachable. Generous timeout plus one retry: the first
+    view after Divi flushes its static CSS cache (e.g. after a page delete) takes several seconds."""
+    import urllib.error
     import urllib.request
-    try:
-        # 20 s: the first view after Divi flushes its static CSS cache (any page delete) takes ~5 s.
-        urllib.request.urlopen(SITE5_URL + "/", timeout=20)
-        return True
-    except Exception:
-        return False
+    for _ in range(attempts):
+        try:
+            urllib.request.urlopen(SITE5_URL + "/", timeout=timeout)
+            return True
+        except urllib.error.HTTPError:
+            return True
+        except Exception:
+            continue
+    return False
 
 
 LIVE_SKIP_REASON = ("live test: touches the local WordPress site (divi-test.local via wp-local.sh) or reads "
