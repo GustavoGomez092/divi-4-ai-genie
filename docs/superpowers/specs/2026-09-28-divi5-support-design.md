@@ -46,8 +46,8 @@ Divi 4 shortcode or Divi 5 blocks accordingly. All Divi 4 behaviour stays byte-f
    `<!-- wp:divi/<name> {JSON} -->…<!-- /wp:divi/<name> -->`, and `/-->` for empty leaves. All module content,
    including HTML, lives in the JSON (`…innerContent.desktop.value`). Nothing sits between the tags. The builder
    wraps the page in `<!-- wp:divi/placeholder -->`.
-   - **Canonical form.** WordPress's `serialize_block_attributes()` escaping (`" < > &
-     --`, `\\` → `\`), no whitespace between blocks, and self-closing empty leaves. Every PHP path
+   - **Canonical form.** WordPress's `serialize_block_attributes()` escaping (`\u0022 \u003c \u003e \u0026
+     \u002d\u002d`, `\\` → `\u005c`), no whitespace between blocks, and self-closing empty leaves. Every PHP path
      reaches this form and leaves it unchanged.
    - **Raw `<`, `>`, `&` or `"` inside the JSON destroys the page** for authors without `unfiltered_html`.
 2. **Value model.** Each attribute is nested as attrName group → `innerContent` / `decoration` / `advanced` /
