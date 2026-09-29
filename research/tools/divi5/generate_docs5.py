@@ -21,6 +21,7 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[3] / "Skill" / "divi-page-builder" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 from divi5_blocks import new_block, render_block  # noqa: E402
+from divi5_checks_values import NO_EFFECT  # noqa: E402
 from divi5_schema import GROUPS, is_legacy_attr, is_legacy_column_attr, load_schema5  # noqa: E402
 from validate import validate_source  # noqa: E402
 
@@ -288,6 +289,33 @@ def d4_field_map(raw_module: dict) -> dict:
     return {k: sorted(v)[:3] for k, v in out.items()}
 
 
+def _no_effect_mark(schema) -> str:
+    return f"**renders nothing on Divi {schema.meta['divi_version']}**"
+
+
+def no_effect_note(schema, short: str, path: str) -> str:
+    """The note for a module attribute listed in divi5_checks_values.NO_EFFECT (the validator's W5_NO_EFFECT)."""
+    docs = [e["doc"] for e in NO_EFFECT if e["attr"] == path and e["blocks"] != "*" and f"divi/{short}" in e["blocks"]]
+    return f"{_no_effect_mark(schema)} — " + "; ".join(docs) if docs else ""
+
+
+def family_no_effect_notes(schema, names) -> dict:
+    """{(family, prefix, key): note} for the NO_EFFECT entries that apply to every block ("*"), found through the
+    family table their attribute uses."""
+    out = {}
+    for e in NO_EFFECT:
+        if e["blocks"] != "*":
+            continue
+        specs = [schema.module(n).attrs.get(e["attr"]) for n in names]
+        spec = next((sp for sp in specs if sp and "family" in sp), None)
+        if spec is None:
+            continue
+        where = f"`{e['attr']}`" + (f", {'/'.join(e['breakpoints'])}" if e["breakpoints"] else "")
+        for key in e["keys"] or ("",):
+            out[(spec["family"], spec.get("prefix", ""), key)] = f"{_no_effect_mark(schema)} ({where}): {e['doc']}"
+    return out
+
+
 def _legacy_note(path: str) -> str:
     return LEGACY_COLUMN_NOTE if is_legacy_column_attr(path) else LEGACY_NOTE
 
@@ -394,8 +422,10 @@ def render_module(short: str, schema, raw_module: dict, notes_dir) -> str:
                 lines += ["Module-specific:", ""]
             lines.append(ROW_HEADER)
             for path in current:
+                dead = no_effect_note(schema, short, path)
                 for sub, leaf in sorted(schema.leaf_spec(mod.attrs[path]).items()):
-                    lines.append(f"| `{path}` | {_key(sub)} | {_leaf_cells(leaf, _note(leaf, d4map.get((path, sub))))} |")
+                    note = "; ".join(x for x in (dead, _note(leaf, d4map.get((path, sub)))) if x)
+                    lines.append(f"| `{path}` | {_key(sub)} | {_leaf_cells(leaf, note)} |")
             lines.append("")
         if rows["family"]:
             lines += ["Shared families (in the linked family, the table whose heading ends like the attribute "
@@ -406,7 +436,9 @@ def render_module(short: str, schema, raw_module: dict, notes_dir) -> str:
                 extra = f" (+ {', '.join(spec['states_extra'])} states)" if spec.get("states_extra") else ""
                 container = " — container only: write keys under " \
                             f"`{path}.font`, not here" if (fam, prefix) == ("font", "") else ""
-                lines.append(f"| `{path}` | [{family_title(fam)}](../design-families.md#{fam}){extra}{container} |")
+                dead = no_effect_note(schema, short, path)
+                dead = f" — {dead}" if dead else ""
+                lines.append(f"| `{path}` | [{family_title(fam)}](../design-families.md#{fam}){extra}{container}{dead} |")
             lines.append("")
         if legacy:
             lines += ["Legacy, from Divi's Divi 4 conversion map only. They appear only in Divi's conversion "
@@ -473,6 +505,7 @@ def _examples(rows, limit=3) -> str:
 
 def render_families(schema, names) -> str:
     used = families_used(schema, names)
+    dead = family_no_effect_notes(schema, names)
     canonical = _canonical_tables(schema, used)
     out = ["## Leaf types", '<a id="leaf-types"></a>', "",
            "Every `type` in the module pages and the tables below is one of these value grammars.", "",
@@ -499,7 +532,8 @@ def render_families(schema, names) -> str:
                 continue
             out.append(FAMILY_HEADER)
             for sub, leaf in sorted(table.items()):
-                out.append(f"| {_key(sub)} | {_leaf_cells(leaf, leaf.get('note', ''))} |")
+                note = "; ".join(x for x in (dead.get((fam, prefix, sub), ""), leaf.get("note", "")) if x)
+                out.append(f"| {_key(sub)} | {_leaf_cells(leaf, note)} |")
             out.append("")
     return "\n".join(out).rstrip("\n")
 

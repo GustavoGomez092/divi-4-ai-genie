@@ -90,10 +90,33 @@ Rules:
   (`Conversion::enabled()`, `Conversion.php:740-755`, drops disabled Divi 4 values on conversion).
 - Leaves marked `desktop` in a table's **R** column take only a desktop value, e.g. `headingLevel`, `useIcon`, link
   URLs, `htmlAttributes` (`E5_BAD_BREAKPOINT` on tablet or phone).
-- `module.decoration.disabledOn` also accepts the pseudo-breakpoints `desktopAbove` and `tabletOnly`.
+- `module.decoration.disabledOn` also accepts the pseudo-breakpoints `desktopAbove` and `tabletOnly`, and does
+  not inherit: [below](#hiding-a-block-per-breakpoint-disabledon).
 
 ```divi5
 <!-- wp:divi/section {"module":{"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/row {"module":{"advanced":{"columnStructure":{"desktop":{"value":"4_4"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/column {"module":{"advanced":{"type":{"desktop":{"value":"4_4"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/heading {"title":{"innerContent":{"desktop":{"value":"Emergency Plumber"}},"decoration":{"font":{"font":{"desktop":{"value":{"size":"56px"}},"tablet":{"value":{"size":"42px"}},"phone":{"value":{"size":"34px"}}}}}},"builderVersion":"5.13.1"} /--><!-- /wp:divi/column --><!-- /wp:divi/row --><!-- /wp:divi/section -->
+```
+
+### Hiding a block per breakpoint: `disabledOn`
+
+`module.decoration.disabledOn` hides a block (`display:none!important`) on each breakpoint whose value is `"on"`.
+Unlike every other responsive value, **a breakpoint's value does not inherit** to the smaller breakpoints: Divi
+prints each `"on"` in a media query of its own breakpoint only (`DisabledOnStyle.php`, `isVisibilityContext`):
+
+| key | hidden in |
+|---|---|
+| `desktop`, or the pseudo-breakpoint `desktopAbove` | `@media only screen and (min-width:981px)` |
+| `tablet`, or the pseudo-breakpoint `tabletOnly` | `@media only screen and (min-width:768px) and (max-width:980px)` |
+| `phone` | `@media only screen and (max-width:767px)` |
+
+So `{"desktop": {"value": "on"}}` hides the block on desktop only; it still shows on tablet and phone. To hide it on
+tablet and phone, state both breakpoints. `"off"` is the default and changes nothing:
+`{"desktop": {"value": "on"}, "phone": {"value": "off"}}` still shows on a tablet. State every breakpoint you mean (live check, `doc-experiments.md` §9: the computed
+`display` at 1440, 800 and 390px). `disabledOn` needs no `desktop` value, so it is exempt from
+`W5_HOVER_WITHOUT_DESKTOP`. Below: the phone number as text on desktop, as a call button on tablet and phone.
+
+```divi5
+<!-- wp:divi/section {"module":{"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/row {"module":{"advanced":{"columnStructure":{"desktop":{"value":"4_4"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/column {"module":{"advanced":{"type":{"desktop":{"value":"4_4"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/text {"content":{"innerContent":{"desktop":{"value":"\u003cp\u003eCall (305) 555-0100 for a same-day visit.\u003c/p\u003e"}}},"module":{"decoration":{"disabledOn":{"tablet":{"value":"on"},"phone":{"value":"on"}}}},"builderVersion":"5.13.1"} /--><!-- wp:divi/button {"button":{"innerContent":{"desktop":{"value":{"text":"Call now","linkUrl":"tel:+13055550100"}}}},"module":{"decoration":{"disabledOn":{"desktop":{"value":"on"}}}},"builderVersion":"5.13.1"} /--><!-- /wp:divi/column --><!-- /wp:divi/row --><!-- /wp:divi/section -->
 ```
 
 ## States: hover, sticky and the form states
@@ -496,6 +519,7 @@ icon module as an `<a href="tel:…">` (live check).
 | `E5_GRADIENT_STOP_POSITION` | error | a gradient stop `position` with a unit (`"0%"`) | write a plain number: `0`, `100` |
 | `W5_BARE_FONT` | warning | text styles written directly on `….decoration.font` | move them to `….decoration.font.font` |
 | `W5_LEGACY_ATTR` | warning | an attribute only Divi's Divi 4 conversion writes (a module page's Legacy table) | style each column on its own `divi/column`, or use the module's own attributes |
+| `W5_NO_EFFECT` | warning | a value Divi 5.13.1 accepts but renders nothing for: a blurb's `imageIcon.advanced.width` or `alignment` (on a page with any block of `builderVersion` 5.1.1 or newer), a slider's own text `orientation`, a tablet/phone `flexType` on a page that loads no flex-grid CSS, a team member's flex `layout` in a narrow column (`doc-experiments.md` §9; the module pages mark each one) | use the path the hint names |
 | `W5_BREAKPOINT_DISABLED` | warning | a value for `phoneWide`, `tabletWide`, `widescreen` or `ultraWide` | use `desktop`/`tablet`/`phone` |
 | `W5_HOVER_WITHOUT_DESKTOP` | warning | tablet, phone, hover or sticky set without a `desktop.value` | set the desktop value too |
 | `W5_UNKNOWN_VARIABLE` | warning | a `gcid-`/`gvid-` id not in `tokens.json` (with `--tokens`) | use an id from the tokens, or a literal |

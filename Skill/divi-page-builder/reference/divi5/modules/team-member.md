@@ -114,7 +114,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.decoration.disabledOn` | [Disabled on](../design-families.md#disabled-on) |
 | `module.decoration.filters` | [Filters](../design-families.md#filters) |
 | `module.decoration.interactions` | [Interactions](../design-families.md#interactions) |
-| `module.decoration.layout` | [Layout](../design-families.md#layout) |
+| `module.decoration.layout` | [Layout](../design-families.md#layout) — **renders nothing on Divi 5.13.1** — a flex layout in a 1_2, 1_3, 1_4, 1_5, 1_6, 2_5, 3_4, 3_5 or 3_8 column (forced to `display:block`): use `display` `"grid"`, or `css` → `memberImage` `"margin-bottom: 20px;"` |
 | `module.decoration.overflow` | [Overflow](../design-families.md#overflow) |
 | `module.decoration.position` | [Position](../design-families.md#position) |
 | `module.decoration.scroll` | [Scroll](../design-families.md#scroll) |

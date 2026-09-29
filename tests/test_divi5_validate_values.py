@@ -26,12 +26,13 @@ EXPECT = {
     "gradient-stop-position.html": ("E5_GRADIENT_STOP_POSITION", "error"),
     "bare-font.html": ("W5_BARE_FONT", "warning"),
     "legacy-attr.html": ("W5_LEGACY_ATTR", "warning"),
+    "no-effect.html": ("W5_NO_EFFECT", "warning"),
 }
 VALUE_CODES = {"E5_UNKNOWN_ATTR", "E5_BAD_BREAKPOINT", "W5_BREAKPOINT_DISABLED", "E5_BAD_STATE", "E5_BAD_VALUE",
                "E5_BAD_VARIABLE", "W5_UNKNOWN_VARIABLE", "W5_UNKNOWN_PRESET", "E5_NONCANONICAL",
                "W5_SHORTCODE_BRACKETS", "W_EXTERNAL_IMAGE", "W5_NO_ALT", "W5_BUILDER_VERSION",
                "W5_HOVER_WITHOUT_DESKTOP", "E5_UNITLESS_LENGTH", "E5_GRADIENT_DISABLED", "E5_GRADIENT_STOP_POSITION",
-               "W5_GRADIENT_MAYBE_DISABLED", "W5_BARE_FONT", "W5_LEGACY_ATTR"}
+               "W5_GRADIENT_MAYBE_DISABLED", "W5_BARE_FONT", "W5_LEGACY_ATTR", "W5_NO_EFFECT"}
 LAYOUT = {"decoration": {"layout": {"desktop": {"value": {"display": "block"}}}}}
 V = "5.13.1"
 
@@ -635,6 +636,196 @@ class LegacyAttrTest(unittest.TestCase):
         import divi5_schema
         self.assertIs(generate_docs5.is_legacy_attr, divi5_schema.is_legacy_attr)
         self.assertIs(generate_docs5.is_legacy_column_attr, divi5_schema.is_legacy_column_attr)
+
+
+def _d(value, **bps):
+    out = {"desktop": {"value": value}}
+    out.update({bp: {"value": v} for bp, v in bps.items()})
+    return out
+
+
+def _structure(name, ctype, children, layout=True, **advanced):
+    """A structure block (section/row/column/…) around rendered children, in the layout form unless layout=False."""
+    module = {}
+    if ctype:
+        module["advanced"] = {("columnStructure" if "row" in name else "type"): _d(ctype)}
+    for k, v in advanced.items():
+        module.setdefault("advanced", {})[k] = _d(v)
+    if layout:
+        module["decoration"] = {"layout": _d({"display": "block"})}
+    attrs = {"builderVersion": V, "module": module}
+    return f"<!-- wp:divi/{name} {canonical_json(attrs)} -->" + "".join(children) + f"<!-- /wp:divi/{name} -->"
+
+
+def columns_page(ctype, *modules):
+    """One row of three `ctype` columns (layout form); the modules go in the first column."""
+    cols = [_structure("column", ctype, modules)] + [_structure("column", ctype, []) for _ in range(2)]
+    row = _structure("row", ",".join([ctype] * 3), cols)
+    return "<!-- wp:divi/placeholder -->" + _structure("section", None, [row]) + "<!-- /wp:divi/placeholder -->"
+
+
+ICON5 = {"unicode": "&#xe03b;", "type": "divi", "weight": "400"}
+
+
+def blurb_attrs(image_icon, version=V):
+    attrs = {"builderVersion": version, "title": {"innerContent": _d({"text": "Fast"})},
+             "imageIcon": {"innerContent": _d({"useIcon": "on", "icon": ICON5})}}
+    attrs["imageIcon"].update(image_icon)
+    return attrs
+
+
+def no_effect(src, **kw):
+    return [f for f in run(src, **kw) if f.code == "W5_NO_EFFECT"]
+
+
+class NoEffectTest(unittest.TestCase):
+    """doc-experiments.md §9: values Divi 5.13.1 accepts but renders nothing for (live checks, Task 9c)."""
+
+    def test_blurb_icon_width_and_alignment_render_nothing(self):
+        src = page(block("blurb", blurb_attrs({"advanced": {"width": _d({"icon": "77px"}),
+                                                            "alignment": _d("left")}})))
+        f = no_effect(src)
+        self.assertEqual(sorted((x.level, x.attr) for x in f),
+                         [("warning", "imageIcon.advanced.alignment"), ("warning", "imageIcon.advanced.width")])
+        width = next(x for x in f if x.attr == "imageIcon.advanced.width")
+        align = next(x for x in f if x.attr == "imageIcon.advanced.alignment")
+        self.assertIn("5.13.1", width.message)
+        self.assertIn("imageIcon.decoration.sizing", width.hint)
+        self.assertIn("iconFontSize", width.hint)
+        self.assertIn("alignSelf", align.hint)
+        self.assertIn('"end"', align.hint)
+        self.assertEqual(codes(src).count("W5_NO_EFFECT"), 2)   # once per attribute, not per breakpoint
+
+    def test_blurb_sizing_placement_and_color_are_fine(self):
+        src = page(block("blurb", blurb_attrs({
+            "advanced": {"placement": _d("left"), "color": _d("#ff0077")},
+            "decoration": {"sizing": _d({"iconFontSize": "56px", "alignSelf": "flex-start"})}})))
+        self.assertEqual(no_effect(src), [])
+
+    def test_blurb_width_works_where_divi_migrates_the_whole_page(self):
+        """ComposibleOptionsMigration (5.1.1) moves them to sizing, but only when no block on the page is 5.1.1 or
+        newer (MigrationUtils::content_needs_migration); live: an all-5.0.0-beta page printed 79px, a mixed one
+        nothing."""
+        old = "5.0.0-public-beta.1"
+        attrs = blurb_attrs({"advanced": {"width": _d({"icon": "79px"})}}, version=old)
+        alone = f'<!-- wp:divi/blurb {canonical_json(attrs)} /-->'
+        self.assertEqual(no_effect(alone), [])
+        self.assertEqual(len(no_effect(page(block("blurb", attrs)))), 1)    # the page's structure blocks are 5.13.1
+
+    def test_slider_level_text_orientation_renders_nothing(self):
+        orient = {"module": {"advanced": {"text": {"text": _d({"orientation": "center", "color": "light"})}}}}
+        slide = block("slide", {"builderVersion": V, "title": {"innerContent": _d("One")}})
+        for parent in ("slider", "fullwidth-slider"):
+            with self.subTest(parent):
+                attrs = {"builderVersion": V, **orient}
+                src = page(f"<!-- wp:divi/{parent} {canonical_json(attrs)} -->{slide}<!-- /wp:divi/{parent} -->")
+                f = no_effect(src)
+                self.assertEqual([(x.attr, x.value) for x in f], [("module.advanced.text.text.orientation", "desktop")])
+                self.assertIn("divi/slide", f[0].hint)
+        slide = block("slide", {"builderVersion": V, "title": {"innerContent": _d("One")}, **orient})
+        self.assertEqual(no_effect(page(f"<!-- wp:divi/slider {canonical_json({'builderVersion': V})} -->"
+                                        f"{slide}<!-- /wp:divi/slider -->")), [])
+
+    HALF_PHONE_FULL = {"sizing": _d({"flexType": "12_24"}, phone={"flexType": "24_24"}, tablet={"flexType": "24_24"})}
+
+    def form(self, field_module):
+        field = block("contact-field", {"builderVersion": V, "fieldItem": {"innerContent": _d("Name")},
+                                        "module": {"decoration": field_module}})
+        return (f"<!-- wp:divi/contact-form {canonical_json({'builderVersion': V})} -->{field}"
+                "<!-- /wp:divi/contact-form -->")
+
+    def test_responsive_flex_type_renders_nothing_without_the_flex_grid_css(self):
+        f = no_effect(page(self.form(self.HALF_PHONE_FULL)))
+        self.assertEqual([(x.attr, x.value) for x in f], [("module.decoration.sizing.flexType", "phone,tablet")])
+        self.assertIn("mainElement", f[0].hint)
+        group = (f"<!-- wp:divi/group {canonical_json({'builderVersion': V})} -->"
+                 + block("text", text_attrs(module={"decoration": self.HALF_PHONE_FULL}))
+                 + "<!-- /wp:divi/group -->")
+        self.assertEqual(len(no_effect(page(group))), 1)
+
+    def test_desktop_flex_type_is_fine(self):
+        self.assertEqual(no_effect(page(self.form({"sizing": _d({"flexType": "12_24"})}))), [])
+
+    def test_responsive_flex_type_works_when_the_page_loads_the_flex_grid_css(self):
+        """DetectFeature::get_flex_grid_responsive_breakpoints loads it for pricing tables, or when a
+        non-self-closing, un-hyphenated block has a flexType and no desktop display:block (live: both worked)."""
+        pricing = (f"<!-- wp:divi/pricing-tables {canonical_json({'builderVersion': V})} -->"
+                   + block("pricing-table", {"builderVersion": V, "title": {"innerContent": _d("Basic")}})
+                   + "<!-- /wp:divi/pricing-tables -->")
+        self.assertEqual(no_effect(page(self.form(self.HALF_PHONE_FULL), pricing)), [])
+        flex_col = canonical_json({"builderVersion": V, "module": {"decoration": {"sizing": _d({"flexType": "24_24"})}}})
+        wrap = canonical_json({"builderVersion": V, "module": LAYOUT})
+        src = (f"<!-- wp:divi/section {wrap} --><!-- wp:divi/row {canonical_json({'builderVersion': V})} -->"
+               f"<!-- wp:divi/column {flex_col} -->{self.form(self.HALF_PHONE_FULL)}<!-- /wp:divi/column -->"
+               "<!-- /wp:divi/row --><!-- /wp:divi/section -->")
+        self.assertEqual(no_effect(src), [])
+
+    def test_flex_grid_port_and_version_order(self):
+        from divi5_checks_values import flex_grid_breakpoints, version_key
+        pricing = "<!-- wp:divi/pricing-tables {} --><!-- /wp:divi/pricing-tables -->"
+        self.assertEqual(flex_grid_breakpoints(pricing), {"phone"})           # pricing tables: phone, always
+        self.assertEqual(flex_grid_breakpoints(page(self.form(self.HALF_PHONE_FULL))), set())
+        self.assertLess(version_key("5.0.0-public-beta.1"), version_key("5.0.0"))
+        self.assertLess(version_key("5.0.0"), version_key("5.1.1"))
+        self.assertLess(version_key("5.1.1"), version_key("5.13.1"))
+        self.assertLess(version_key("4.27.9"), version_key("5.1.1"))
+
+    def test_malformed_values_do_not_crash(self):
+        for layout in ("flex", ["flex"], None):
+            attrs = {"builderVersion": V, "name": {"innerContent": _d("J")},
+                     "module": {"decoration": {"layout": {"desktop": {"value": layout}},
+                                               "sizing": {"phone": {"value": "24_24"}}}}}
+            run(columns_page("1_3", block("team-member", attrs)))
+
+    def team(self, layout):
+        attrs = {"builderVersion": V, "name": {"innerContent": _d("Jordan")}}
+        if layout is not None:
+            attrs["module"] = {"decoration": {"layout": _d(layout)}}
+        return block("team-member", attrs)
+
+    def test_team_member_flex_layout_renders_nothing_in_a_narrow_column(self):
+        f = no_effect(columns_page("1_3", self.team({"display": "flex", "rowGap": "37px"})))
+        self.assertEqual([(x.level, x.attr) for x in f], [("warning", "module.decoration.layout")])
+        self.assertIn("memberImage", f[0].hint)
+        self.assertEqual(len(no_effect(columns_page("1_4", self.team({"rowGap": "20px"})))), 1)
+
+    def test_team_member_layout_is_fine_in_a_full_column_or_as_a_grid(self):
+        self.assertEqual(no_effect(page(self.team({"display": "flex", "rowGap": "39px"}))), [])
+        self.assertEqual(no_effect(columns_page("1_3", self.team({"display": "grid", "rowGap": "38px"}))), [])
+        self.assertEqual(no_effect(columns_page("1_3", self.team(None))), [])
+
+    def test_team_member_in_a_specialty_inner_column_uses_the_scaled_width(self):
+        """Divi prints an inner 1_2 column of a 3_4 specialty column as et_pb_column_3_8 (doc-experiments.md §3)."""
+        def specialty(inner_type):
+            inner = _structure("column-inner", inner_type, [self.team({"rowGap": "20px"})],
+                               savedSpecialtyColumnType="3_4")
+            inner_row = _structure("row-inner", inner_type if inner_type == "4_4" else "1_2,1_2",
+                                   [inner] + ([] if inner_type == "4_4" else [_structure("column-inner", "1_2", [])]))
+            main = _structure("column", "3_4", [inner_row], specialtyColumns="3")
+            side = _structure("column", "1_4", [block("text", text_attrs())])
+            return _structure("section", None, [side, main], type="specialty")
+        self.assertEqual(len(no_effect(specialty("1_2"))), 1)   # 3/4 * 1/2 = 3_8
+        self.assertEqual(len(no_effect(specialty("4_4"))), 1)   # 3/4, also in Divi's list
+
+    def test_valid_corpus_finds_only_what_divis_converter_writes(self):
+        """Divi's own Divi 4 converter writes two of these no-ops: a slider-level orientation (it also copies it
+        onto every slide, where it works) and {display: flex, flexDirection: row} on team members that sit in 1_2
+        and 1_3 columns (forced to display:block there). Nothing else in the corpus renders nothing."""
+        found = {(p.parent.name, f.tag, f.attr) for p in d5_fixtures()
+                 for f in validate_source(p.read_text(), fragment=True) if f.code == "W5_NO_EFFECT"}
+        self.assertEqual({(d, a) for d, _t, a in found}, {("converted", "module.advanced.text.text.orientation"),
+                                                          ("converted", "module.decoration.layout")})
+        self.assertEqual({t for _d, t, _a in found}, {"divi/slider", "divi/fullwidth-slider", "divi/team-member"})
+
+    def test_shared_table_drives_the_docs_generator(self):
+        import sys
+        from _paths import TOOLS5
+        sys.path.insert(0, str(TOOLS5))
+        import divi5_checks_values
+        import generate_docs5
+        self.assertIs(generate_docs5.NO_EFFECT, divi5_checks_values.NO_EFFECT)
+        for entry in divi5_checks_values.NO_EFFECT:
+            self.assertTrue(entry["use"] and entry["why"] and entry["evidence"], entry["attr"])
 
 
 class BuilderVersionHintTest(unittest.TestCase):

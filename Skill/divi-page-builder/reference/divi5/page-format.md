@@ -256,11 +256,12 @@ output as-is and the browser shows `[20%]` (live check):
   default preset styling (`tokens-and-detection.md` §3.5).
 - **Divi 4 escapes** (`%22`, `%91`, `%93`) or Divi 4 value strings (`||`-separated icons, `|`-separated spacing);
   Divi 5 values are JSON ([value-formats.md](value-formats.md)).
-- **Values Divi accepts but silently ignores** (live checks, `doc-experiments.md` §1, §7, §8): a length without a
+- **Values Divi accepts but silently ignores** (live checks, `doc-experiments.md` §1, §7, §8, §9): a length without a
   unit where CSS needs one (`"top": 40`; `E5_UNITLESS_LENGTH`), a gradient without `"enabled": "on"`
   (`E5_GRADIENT_DISABLED`) or with stop positions like `"0%"` (`E5_GRADIENT_STOP_POSITION`), text styles on the bare
   `….decoration.font` instead of `….decoration.font.font` (`W5_BARE_FONT`), and Divi 4 conversion-only attributes such
-  as a row's `columns.column-1.*` or `padding1Phone` (`W5_LEGACY_ATTR`). See [value-formats.md](value-formats.md).
+  as a row's `columns.column-1.*` or `padding1Phone` (`W5_LEGACY_ATTR`), and paths a module page marks "renders
+  nothing", such as a blurb's `imageIcon.advanced.width` (`W5_NO_EFFECT`). See [value-formats.md](value-formats.md).
 - **Attribute-row ids copied from another page.** Custom attribute rows (`module.decoration.attributes`) carry a
   UUIDv4 `id`; generate a new one per row.
 

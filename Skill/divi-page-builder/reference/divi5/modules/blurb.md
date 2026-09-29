@@ -138,11 +138,11 @@ Module-specific:
 
 | attribute | key | type | values | R | states | notes |
 |---|---|---|---|---|---|---|
-| `imageIcon.advanced.alignment` | — | enum | `left`, `center`, `right` | R | sticky | D4 `icon_alignment` |
+| `imageIcon.advanced.alignment` | — | enum | `left`, `center`, `right` | R | sticky | **renders nothing on Divi 5.13.1** — use `imageIcon.decoration.sizing` → `alignSelf` `"flex-start"` / `"center"` / `"end"`; D4 `icon_alignment` |
 | `imageIcon.advanced.color` | — | color |  | R | hover, sticky | D4 `icon_color` |
 | `imageIcon.advanced.placement` | — | enum | `left`, `top` | R | · | D4 `icon_placement` |
-| `imageIcon.advanced.width` | `icon` | length |  | R | hover, sticky |  |
-| `imageIcon.advanced.width` | `image` | length |  | R | hover, sticky |  |
+| `imageIcon.advanced.width` | `icon` | length |  | R | hover, sticky | **renders nothing on Divi 5.13.1** — use `imageIcon.decoration.sizing` → `iconFontSize` (icon) or `width` (image) |
+| `imageIcon.advanced.width` | `image` | length |  | R | hover, sticky | **renders nothing on Divi 5.13.1** — use `imageIcon.decoration.sizing` → `iconFontSize` (icon) or `width` (image) |
 
 Shared families (in the linked family, the table whose heading ends like the attribute lists its keys):
 
@@ -204,3 +204,4 @@ Shared families (in the linked family, the table whose heading ends like the att
 - `icon` is an object `{"unicode": "…", "type": "divi"|"fa", "weight": "…"}`, all three keys required. Find the icon in [icons.md](../../icons.md) and split its Divi 4 value on `||`: `&#xf095;||fa||900` becomes `{"unicode": "&#xf095;", "type": "fa", "weight": "900"}` (Divi's converter does exactly this, `ValueExpansion::convertFontIcon`). Pasting the `||` string itself is `E5_BAD_VALUE`. Details: [value-formats.md#icons](../value-formats.md#icons).
 - The title renders as `h4` by default. In a grid of blurbs under an `h2` section heading, set `title.decoration.font.font` → `{"headingLevel": "h3"}` so the outline doesn't skip a level.
 - `imageIcon.advanced.placement` is `top` (default) or `left`; `left` suits compact feature lists. The icon color is `imageIcon.advanced.color` (default: the site's primary global color).
+- Icon or image size and alignment go in `imageIcon.decoration.sizing`: `iconFontSize` (icon), `width` (image), `alignSelf` `"flex-start"` / `"center"` / `"end"` (left / center / right; `"flex-end"` printed nothing). `imageIcon.advanced.width` and `imageIcon.advanced.alignment` validate but render nothing on Divi 5.13.1 (live check, `research/divi5/doc-experiments.md` §9; the validator warns `W5_NO_EFFECT`).

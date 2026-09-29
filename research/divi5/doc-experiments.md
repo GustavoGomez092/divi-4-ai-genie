@@ -143,3 +143,41 @@ Two more probe pages (same method), `builderVersion` 5.13.1:
 | font `style` as a string `"italic"` instead of `["italic"]` | 0 findings | `font-style:italic` (works) |
 | blurb `icon` `{"unicode": "&#xf095;", "type": "fa"}` (no `weight`) | `E5_BAD_VALUE` | no icon element at all (`find_icon_in_list()` needs all three keys) |
 
+## 9. More values that render nothing (Task 9c, 2026-09-29)
+
+Same site and version. Method: blocks built with `divi5_blocks` (`builderVersion` 5.13.1 unless stated), 0 validator
+findings, published as "D5TEST 9c …" pages with WP-CLI (`tests/_paths.wp5`, `--user=1`, `_et_pb_use_builder=on`),
+then the front end read two ways: the printed CSS (inline styles plus `et-cache/<id>/et-divi-dynamic-<id>.css`) and
+the computed styles in headless Chrome over CDP at 1440, 800 and 390px wide. All pages were deleted afterwards. These
+are the `W5_NO_EFFECT` entries (`scripts/divi5_checks_values.py` `NO_EFFECT`).
+
+| value | rendered | what works |
+|---|---|---|
+| blurb `imageIcon.advanced.width` `{"icon": "77px"}` (+ tablet `83px`), `{"image": "181px"}` | no rule with the size | `imageIcon.decoration.sizing` `iconFontSize` `78px` → `.et_pb_blurb_1 … .et-pb-icon{…font-size:78px}`; `width` `182px` → `…et_pb_image_wrap{width:182px}` |
+| blurb `imageIcon.advanced.alignment` `left` / `right` | no alignment rule | `imageIcon.decoration.sizing` `alignSelf` `flex-start` / `center` / `end` → `.et_pb_main_blurb_image{text-align:left/center/right}`; `flex-end` printed nothing (`BlurbModule::_align_self_to_alignment` maps only `flex-start`, `center`, `stretch`, `end`); the legacy sizing key `alignment` `right` also worked |
+| the same two on a blurb with `builderVersion` 5.0.0-public-beta.1 on a page whose other blocks are 5.13.1 | nothing | — |
+| the same, on a page where **every** block is 5.0.0-public-beta.1 | `font-size:79px`, `text-align:right` | `ComposibleOptionsMigration` (release 5.1.1) moves both to `imageIcon.decoration.sizing` on the front end, but `MigrationUtils::content_needs_migration` skips the page as soon as one block is 5.1.1 or newer |
+| slider and fullwidth slider `module.advanced.text.text` `{"orientation": "right"}` | the rule `.et_pb_slider_0 .et_pb_slide .et_pb_slide_description{text-align:right}` is printed, but each slide prints its default `.et_pb_slides .et_pb_slide_0.et_pb_slide .et_pb_slide_description{text-align:start}` (more specific): computed `start` | the same value on each `divi/slide`: computed `right` |
+| contact field `module.decoration.sizing` `{"flexType": "12_24"}` + phone (or tablet) `{"flexType": "24_24"}`, in a form in a layout-form column | the field gets the class `et_flex_column_24_24_phone`, but no rule exists for it: 149 of 312px at 390px (313 of 640 at 800px for tablet) | the field's `css` phone `{"mainElement": "width: 100%;"}`: 312 of 312px |
+| a `divi/text` in a `divi/group` with the same desktop/phone `flexType` | 141 of 312px at 390px | — |
+| the same form on a page that also has a flex row whose column states `flexType` (no `display: block`), or a `divi/pricing-tables` | `flex_grid_phone.css` is loaded: the field is 312 of 312px | — |
+| team member `module.decoration.layout` `{"display": "flex", "flexDirection": "column", "rowGap": "37px"}` in a `1_3` column | the rule is printed, but `team_member.css` has `.et_pb_column_1_3 .et_flex_module.et_pb_team_member{display:block!important}`: computed `display: block`, 0px between photo and text | in a `4_4` column: `flex`, 39px gap; `display: "grid"` with `rowGap` `38px` in the `1_3` column: `grid`, 38px gap |
+| `module.decoration.disabledOn` `{desktop: on}`, `{phone: on}`, `{tablet: on}`, `{desktop: on, phone: off}`, `{desktop: on, tablet: off, phone: off}`, `{desktopAbove: on}`, `{tabletOnly: on}` | `display:none!important` in `@media only screen and (min-width:981px)` for desktop/desktopAbove, `(min-width:768px) and (max-width:980px)` for tablet/tabletOnly, `(max-width:767px)` for phone; computed: desktop `on` hid the module at 1440px only (visible at 800 and 390px); `phone: off` changed nothing | state every breakpoint to hide on: `{tablet: on, phone: on}` for tablet and phone |
+
+Source for the flex-grid case: `DetectFeature::get_flex_grid_responsive_breakpoints`
+(`server/FrontEnd/Assets/DetectFeature.php:1805`) decides which `flex_grid_<breakpoint>.css` to load. Its block regex
+`<!-- wp:divi/\w+\s+(\{.+?\})\s*-->` never matches a self-closing block or a hyphenated name (`contact-field`,
+`team-member`), so a leaf module's own `flexType` doesn't count; a structure block in the layout form is skipped for its
+`display: block`. `wp eval` of the function returned `[]` for the form pages and `["phone"]` for the flex-row and
+pricing-table pages. The validator ports it regex for regex (`flex_grid_breakpoints`). Divi's own converter writes two
+of these no-ops in the fixture corpus: a slider-level `orientation` (it copies it onto every slide too, where it works)
+and `{display: flex, flexDirection: row}` on team members in `1_2`/`1_3` columns.
+
+Siblings checked and left alone: blurb `imageIcon.advanced.placement` (class `et_pb_blurb_position_top`) and `.color`
+(`color:var(--gcid-primary-color)`); image `image.advanced.overlay` / `overlayIcon` (`.et_pb_image_0 .et_overlay
+{background-color:#ff0099}`, `:before{color:#ff0098!important}`); slide `image.advanced.alignment` (read by
+`SlideModule.php:72-78`: `center` adds `et_pb_media_alignment_center`, `bottom` is the default and adds no class); the
+image/gallery/fullwidth-header/fullwidth-image `image.advanced.*` leaves are all read by their module PHP. A contact
+form's `field.decoration.font.font` color as the `gcid-r6navy0001` global printed
+`.et_pb_contact_form_0.et_pb_contact_form_container .input:not([type="checkbox"]):not([type="radio"]){…color:var(--gcid-r6navy0001)}`.
+

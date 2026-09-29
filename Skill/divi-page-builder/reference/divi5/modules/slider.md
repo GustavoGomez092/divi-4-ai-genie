@@ -167,7 +167,7 @@ Shared families (in the linked family, the table whose heading ends like the att
 | `module.advanced.link` | [Link](../design-families.md#link) |
 | `module.advanced.loop` | [Loop](../design-families.md#loop) |
 | `module.advanced.text` | [Text](../design-families.md#text) |
-| `module.advanced.text.text` | [Text](../design-families.md#text) |
+| `module.advanced.text.text` | [Text](../design-families.md#text) — **renders nothing on Divi 5.13.1** — its `orientation` (each slide's default wins): set `orientation` on each `divi/slide` |
 | `module.advanced.text.textShadow` | [Text](../design-families.md#text) |
 
 ## Meta and block-level attributes

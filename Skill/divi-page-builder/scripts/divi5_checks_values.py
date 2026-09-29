@@ -11,6 +11,7 @@ import difflib
 import json
 import re
 from collections import defaultdict
+from fractions import Fraction
 from typing import Dict, Iterator, List, Optional, Set, Tuple
 from urllib.parse import urlparse
 
@@ -66,6 +67,65 @@ _FONT_STYLE_HINT = "size, color, weight, family, lineHeight, letterSpacing, head
 
 _VAR_MARK = "$variable("
 _DECODER = json.JSONDecoder()
+
+# Attribute values that validate against the schema but that Divi 5.13.1 renders nothing for (W5_NO_EFFECT), each
+# verified live on the local Divi 5 site (research/divi5/doc-experiments.md §9). blocks: block names, or "*" for any;
+# attr: the attribute path; keys: keys of its value (None = the whole value); breakpoints: the breakpoints concerned
+# (None = all); when: the named page condition under which it renders nothing (None = always; _NO_EFFECT_WHEN);
+# use: the path that works; why: what Divi does; doc: the note on the generated reference pages. generate_docs5.py
+# reads the same table.
+NO_EFFECT = (
+    {"blocks": ("divi/blurb",), "attr": "imageIcon.advanced.width", "keys": None, "breakpoints": None,
+     "when": "divi_skips_the_5_1_1_migration",
+     "use": "imageIcon.decoration.sizing → iconFontSize (icon size) or width (image width)",
+     "why": "BlurbModule.php sizes the icon and image only from imageIcon.decoration.sizing; Divi moves this "
+            "attribute there only on a page whose blocks all predate 5.1.1 (ComposibleOptionsMigration)",
+     "doc": "use `imageIcon.decoration.sizing` → `iconFontSize` (icon) or `width` (image)",
+     "evidence": "doc-experiments.md §9: 77px/181px printed nothing; sizing 78px/182px printed"},
+    {"blocks": ("divi/blurb",), "attr": "imageIcon.advanced.alignment", "keys": None, "breakpoints": None,
+     "when": "divi_skips_the_5_1_1_migration",
+     "use": 'imageIcon.decoration.sizing → alignSelf "flex-start" (left), "center" or "end" (right; "flex-end" '
+            "prints nothing on a blurb)",
+     "why": "BlurbModule.php aligns the icon and image only from imageIcon.decoration.sizing; Divi moves this "
+            "attribute there only on a page whose blocks all predate 5.1.1 (ComposibleOptionsMigration)",
+     "doc": 'use `imageIcon.decoration.sizing` → `alignSelf` `"flex-start"` / `"center"` / `"end"`',
+     "evidence": "doc-experiments.md §9: left/right printed nothing; alignSelf flex-start/center/end printed "
+                 "text-align left/center/right"},
+    {"blocks": ("divi/slider", "divi/fullwidth-slider"), "attr": "module.advanced.text.text",
+     "keys": ("orientation",), "breakpoints": None, "when": None,
+     "use": "module.advanced.text.text → orientation on each divi/slide child",
+     "why": "every slide prints its own default text-align:start with a more specific selector, which wins",
+     "doc": "its `orientation` (each slide's default wins): set `orientation` on each `divi/slide`",
+     "evidence": "doc-experiments.md §9: slides computed text-align start under a slider set to right"},
+    {"blocks": "*", "attr": "module.decoration.sizing", "keys": ("flexType",), "breakpoints": ("tablet", "phone"),
+     "when": "flex_grid_css_not_loaded",
+     "use": 'the block\'s css at that breakpoint, e.g. phone {"mainElement": "width: 100%;"} (or one flexType on '
+            "every breakpoint)",
+     "why": "Divi loads the tablet/phone flex-grid CSS only when a non-self-closing block with an un-hyphenated "
+            "name has a flexType and no desktop display block, or the page has pricing tables "
+            "(DetectFeature::get_flex_grid_responsive_breakpoints); otherwise the et_flex_column_*_phone class has "
+            "no rule",
+     "doc": "unless the page loads Divi's flex-grid CSS (it has pricing tables, or a flex row/column that states a "
+            "`flexType`): set the width with the block's `css` at that breakpoint instead",
+     "evidence": "doc-experiments.md §9: a contact field and a text in a group stayed half width at 390px"},
+    {"blocks": ("divi/team-member",), "attr": "module.decoration.layout", "keys": None, "breakpoints": None,
+     "when": "team_member_forced_to_block",
+     "use": 'css → memberImage "margin-bottom: 20px;" for the photo gap, or layout display "grid" (its rowGap '
+            "works)",
+     "why": "in a 1_2, 1_3, 1_4, 1_5, 1_6, 2_5, 3_4, 3_5 or 3_8 column Divi's team_member.css sets a flex "
+            "team member to display:block!important",
+     "doc": 'a flex layout in a 1_2, 1_3, 1_4, 1_5, 1_6, 2_5, 3_4, 3_5 or 3_8 column (forced to `display:block`): '
+            'use `display` `"grid"`, or `css` → `memberImage` `"margin-bottom: 20px;"`',
+     "evidence": "doc-experiments.md §9: display flex + rowGap 37px in a 1_3 column computed display block, no gap"},
+)
+_MIGRATION_5_1_1 = "5.1.1"
+_BUILDER_VERSION_RE = re.compile(r'"builderVersion":"([^"]+)"')
+# DetectFeature::get_flex_grid_responsive_breakpoints (server/FrontEnd/Assets/DetectFeature.php:1805), verbatim.
+_FLEX_BLOCK_RE = re.compile(r"<!-- wp:divi/\w+\s+(\{.+?\})\s*-->", re.S)
+_DESKTOP_BLOCK_LAYOUT_RE = re.compile(r'"layout":\{.*?"desktop":\{"value":\{"display"\s*:\s*"block"', re.S)
+# Column widths whose class team_member.css lists in its display:block!important rules.
+_TEAM_BLOCK_WIDTHS = frozenset(Fraction(*map(int, t.split("_"))) for t in
+                               ("1_2", "1_3", "1_4", "1_5", "1_6", "2_5", "3_4", "3_5", "3_8"))
 
 
 # ----------------------------------------------------------------------------- $variable() references
@@ -510,6 +570,7 @@ def check_attributes5(doc, schema5, report, known_presets=frozenset(), known_var
                       site_host: Optional[str] = None, site_version: Optional[str] = None) -> None:
     """Attribute paths, breakpoints/states, value types, escaping, presets and variables of every Divi block.
     known_vars=None means no tokens were given: unknown gcid-/gvid- ids are then not reported."""
+    page = _Page(doc)
     for block, path, _parent in doc.walk():
         if block.raw_json:
             reasons = noncanonical_reasons(block.raw_json)
@@ -524,14 +585,15 @@ def check_attributes5(doc, schema5, report, known_presets=frozenset(), known_var
         mod = schema5.module(block.name)
         if mod is None:
             continue
-        _check_block(block, path, mod, schema5, report, known_presets, known_vars, site_host, site_version)
+        _check_block(block, path, mod, schema5, report, known_presets, known_vars, site_host, site_version, page)
 
 
 _BUILDER_VERSION_HINT = ("Blocks you create: set builderVersion to the site's Divi version. Don't change builderVersion "
                          "on existing blocks you edit — Divi's render-time migrations depend on it.")
 
 
-def _check_block(block, path, mod, schema5, report, known_presets, known_vars, site_host, site_version) -> None:
+def _check_block(block, path, mod, schema5, report, known_presets, known_vars, site_host, site_version,
+                 page=None) -> None:
     attrs = block.attrs
     version = attrs.get("builderVersion")
     if not isinstance(version, str) or not version:
@@ -557,6 +619,7 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
     unknown: Set[str] = set()
     warned_bp: Set[Tuple[str, str]] = set()
     warned_legacy: Set[str] = set()
+    no_effect: Dict[Tuple[int, str], Set[str]] = defaultdict(set)
     for attr, bp, st, value in _leaves(attrs):
         rep = _scoped(report, bp, st)
         for s in _strings(value):
@@ -575,6 +638,7 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
                        hint='Divi 5 values are stored as {"desktop":{"value":…}}.')
             continue
         seen[attr].add((bp, st))
+        _no_effect_hits(block.name, attr, bp, value, no_effect)
         if attr in mod.legacy and attr not in warned_legacy:
             warned_legacy.add(attr)
             _legacy(block, path, attr, report)
@@ -607,6 +671,7 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
                        node=block, path=path, attr=full, value=st)
             else:
                 _check_leaf(block, path, full, bp, res.leaf, v, rep, site_host)
+    _report_no_effect(block, path, no_effect, page or _Page(None), schema5, report)
     for attr, pairs in seen.items():
         if attr in unknown or ("desktop", "value") in pairs or attr.endswith("disabledOn"):
             continue
@@ -616,6 +681,128 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
             report("warning", "W5_HOVER_WITHOUT_DESKTOP",
                    f"{attr} sets {', '.join(extra)} but no desktop.value", node=block, path=path, attr=attr,
                    value=",".join(extra), hint="Set the desktop value too; the other breakpoints and states vary it.")
+
+
+def _no_effect_hits(name, attr, bp, value, hits) -> None:
+    """Record (NO_EFFECT index, reported path) -> breakpoints for one attribute value of a block."""
+    for i, entry in enumerate(NO_EFFECT):
+        if entry["attr"] != attr or (entry["blocks"] != "*" and name not in entry["blocks"]):
+            continue
+        if entry["breakpoints"] is not None and bp not in entry["breakpoints"]:
+            continue
+        if entry["keys"] is None:
+            hits[(i, attr)].add(bp)
+        elif isinstance(value, dict):
+            for k in entry["keys"]:
+                if k in value:
+                    hits[(i, f"{attr}.{k}")].add(bp)
+
+
+def _report_no_effect(block, path, hits, page, schema5, report) -> None:
+    version = schema5.meta.get("divi_version", "5")
+    for (i, where), bps in sorted(hits.items()):
+        entry = NO_EFFECT[i]
+        if entry["when"]:
+            bps = _NO_EFFECT_WHEN[entry["when"]](page, block, bps)
+        if not bps:
+            continue
+        report("warning", "W5_NO_EFFECT", f"[{block.name}] {where} renders nothing on Divi {version}: {entry['why']}",
+               node=block, path=path, attr=where, value=",".join(sorted(bps)), hint=f"Use {entry['use']}.")
+
+
+def version_key(version: str) -> Tuple[Tuple[int, ...], int]:
+    """A sortable key for a Divi version: 5.0.0-public-beta.1 < 5.0.0 < 5.1.1 (a pre-release sorts before its
+    release, as PHP's version_compare has it)."""
+    m = re.match(r"(\d+(?:\.\d+)*)(.*)", version or "")
+    if not m:
+        return (0,), 0
+    nums = tuple(int(n) for n in m.group(1).split("."))
+    nums += (0,) * (4 - len(nums))
+    return nums, 0 if m.group(2) else 1
+
+
+def flex_grid_breakpoints(source: str) -> Set[str]:
+    """The breakpoints whose flex-grid column CSS (et_flex_column_*_tablet/_phone) Divi 5.13.1 loads for this
+    content: DetectFeature::get_flex_grid_responsive_breakpoints, ported regex for regex. Its block regex skips
+    self-closing blocks and hyphenated names, so a leaf module's own flexType never loads it."""
+    has_pricing = "wp:divi/pricing-tables" in source
+    if '"flexType"' not in source and not has_pricing:
+        return set()
+    valid = any('"flexType"' in j and not _DESKTOP_BLOCK_LAYOUT_RE.search(j) for j in _FLEX_BLOCK_RE.findall(source))
+    if not valid and not has_pricing:
+        return set()
+    out = set()
+    for bp in ("tablet", "phone"):
+        if (bp == "phone" and has_pricing) \
+                or re.search(r'"flexType":\{.*?"%s":\{"value":' % bp, source, re.S) \
+                or re.search(r'"%s":\{"value":\{.*?"flexType":' % bp, source, re.S):
+            out.add(bp)
+    return out
+
+
+def _fraction(value) -> Optional[Fraction]:
+    m = re.fullmatch(r"(\d+)_(\d+)", value) if isinstance(value, str) else None
+    return Fraction(int(m.group(1)), int(m.group(2))) if m and int(m.group(2)) else None
+
+
+class _Page:
+    """Page-level facts the W5_NO_EFFECT conditions need, computed on first use."""
+
+    def __init__(self, doc):
+        self.source = doc.source if doc is not None else ""
+        self.parents = {id(b): p for b, _path, p in doc.walk()} if doc is not None else {}
+        self._cache: Dict[str, object] = {}
+
+    def _once(self, key, fn):
+        if key not in self._cache:
+            self._cache[key] = fn()
+        return self._cache[key]
+
+    def migrates_5_1_1(self) -> bool:
+        """MigrationUtils::content_needs_migration: Divi migrates a page only if no builderVersion on it is 5.1.1
+        or newer (blocks without one count as 0.0.0)."""
+        return self._once("migrates", lambda: not any(
+            version_key(v) >= version_key(_MIGRATION_5_1_1) for v in _BUILDER_VERSION_RE.findall(self.source)))
+
+    def flex_grid(self) -> Set[str]:
+        return self._once("flex_grid", lambda: flex_grid_breakpoints(self.source))
+
+    def column_width(self, block) -> Optional[Fraction]:
+        """The rendered width of the nearest layout-form column around a block (an inner column's width scaled by
+        its specialty column's, as Divi's et_pb_column_3_8 class has it); None outside such a column."""
+        parent = self.parents.get(id(block))
+        while parent is not None and parent.name not in ("divi/column", "divi/column-inner"):
+            parent = self.parents.get(id(parent))
+        if parent is None or _desktop_key(parent, "module.decoration.layout", "display") != "block":
+            return None
+        width = _fraction(get_attr(parent, "module.advanced.type"))
+        if width is not None and parent.name == "divi/column-inner":
+            outer = self.parents.get(id(parent))
+            while outer is not None and outer.name != "divi/column":
+                outer = self.parents.get(id(outer))
+            outer_width = _fraction(get_attr(outer, "module.advanced.type")) if outer is not None else None
+            width = width * outer_width if outer_width is not None else width
+        return width
+
+
+def _desktop_key(block, attr: str, key: str):
+    value = get_attr(block, attr)
+    return value.get(key) if isinstance(value, dict) else None
+
+
+def _team_member_forced_to_block(page: _Page, block, bps: Set[str]) -> Set[str]:
+    """Divi decides flex or grid from the desktop display (Module.php); a flex team member in a narrow column is
+    display:block!important on every breakpoint."""
+    display = _desktop_key(block, "module.decoration.layout", "display") or "flex"
+    return bps if display == "flex" and page.column_width(block) in _TEAM_BLOCK_WIDTHS else set()
+
+
+# when -> fn(page, block, breakpoints found) -> the breakpoints at which the value renders nothing.
+_NO_EFFECT_WHEN = {
+    "divi_skips_the_5_1_1_migration": lambda page, block, bps: set() if page.migrates_5_1_1() else bps,
+    "flex_grid_css_not_loaded": lambda page, block, bps: bps - page.flex_grid(),
+    "team_member_forced_to_block": _team_member_forced_to_block,
+}
 
 
 def _legacy(block, path, attr, report) -> None:

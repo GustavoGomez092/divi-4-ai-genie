@@ -1120,7 +1120,7 @@ Group key `decoration.sizing` · used by 61 module(s) · e.g. `module.decoration
 | `aspectRatio` | text |  | R | hover, sticky | JS divi/aspect-ratio: a ratio like 16/9 or auto |
 | `flexGrow` | number |  | R | hover, sticky |  |
 | `flexShrink` | number |  | R | hover, sticky |  |
-| `flexType` | text |  | R | · | JS divi/select-column-class, e.g. 24_24, 12_24 |
+| `flexType` | text |  | R | · | **renders nothing on Divi 5.13.1** (`module.decoration.sizing`, tablet/phone): unless the page loads Divi's flex-grid CSS (it has pricing tables, or a flex row/column that states a `flexType`): set the width with the block's `css` at that breakpoint instead; JS divi/select-column-class, e.g. 24_24, 12_24 |
 | `gridAlignSelf` | text |  | desktop | · |  |
 | `gridColumnEnd` | text |  | R | hover, sticky |  |
 | `gridColumnSpan` | text |  | R | hover, sticky |  |

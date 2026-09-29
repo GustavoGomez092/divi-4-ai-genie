@@ -46,10 +46,13 @@ the JSON-LD stop matching.
 
 ```python
 import json
-pairs = [("Do you provide free estimates?", "Yes. We give you an upfront, flat-rate price before any work begins.")]
+pairs = [("Do you provide free estimates?",
+          "Yes. We give you an upfront, flat-rate price before any work begins, with no hidden fees.")]
 ld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
     {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in pairs]}
-script = '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False, separators=(",", ":")) + "</script>"
+# "</" becomes "<\/" (JSON reads it back as "</"): an answer holding "</script>" can't end the element
+body = json.dumps(ld, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+script = '<script type="application/ld+json">' + body + "</script>"
 # script goes into the code block's content.innerContent; the same q/a strings into the accordion items
 ```
 

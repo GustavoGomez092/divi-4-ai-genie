@@ -5,7 +5,7 @@ inside `divi/placeholder`) and changed so that exactly one validator error appea
 `tests/test_divi5_validate_structure.py` checks the structure and heading codes below, and
 `tests/test_divi5_validate_values.py` the attribute/value ones (the rows from `unknown-attr.html` on). The
 attribute/value pages were written with `divi5_blocks.canonical_json`, so the JSON is WordPress-canonical
-except where the change is the point (`noncanonical-lt.html`). The last four rows are warnings: those pages have
+except where the change is the point (`noncanonical-lt.html`). The last five rows are warnings: those pages have
 no error at all.
 
 | File | Expected code | What was changed |
@@ -43,3 +43,4 @@ Specialty sections follow the Divi 4 rules exactly, with codes named after Divi 
 `module.advanced.specialtyColumns`; `E5_INNER_ROW_PLACEMENT` (Divi 4 `E_INNER_ROW_PLACEMENT`) = `divi/row-inner`
 only inside that column of a specialty section. Other content in the specialty column, and non-column children
 of a specialty section, are `E5_SECTION_TYPE`.
+| `no-effect.html` | `W5_NO_EFFECT` | heading font moved to `title.decoration.font.font`; a `builderVersion` 5.13.1 blurb added whose icon size is written on `imageIcon.advanced.width` (renders nothing on Divi 5.13.1; the size goes in `imageIcon.decoration.sizing` → `iconFontSize`) |

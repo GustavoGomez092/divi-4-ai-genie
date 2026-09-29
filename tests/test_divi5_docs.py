@@ -184,6 +184,35 @@ class GeneratedDocsTest(unittest.TestCase):
         text = (MODULES5 / "text.md").read_text()
         self.assertNotIn("legacy (D4 conversion)", text)
 
+    def test_no_effect_attrs_are_marked(self):
+        # divi5_checks_values.NO_EFFECT (doc-experiments.md §9): paths Divi 5.13.1 renders nothing for.
+        mark = f"renders nothing on Divi {SCHEMA5.meta['divi_version']}"
+
+        def rows(page, attr):
+            return [l for l in (MODULES5 / f"{page}.md").read_text().splitlines() if l.startswith(f"| `{attr}` |")]
+        for attr in ("imageIcon.advanced.width", "imageIcon.advanced.alignment"):
+            found = rows("blurb", attr)
+            self.assertTrue(found, attr)
+            for r in found:
+                self.assertIn(mark, r, attr)
+                self.assertIn("imageIcon.decoration.sizing", r, attr)
+        for attr in ("imageIcon.advanced.placement", "imageIcon.advanced.color"):
+            self.assertNotIn(mark, rows("blurb", attr)[0], attr)
+        for page in ("slider", "fullwidth-slider"):
+            found = rows(page, "module.advanced.text.text")
+            self.assertEqual(len(found), 1, page)
+            self.assertIn(mark, found[0], page)
+            self.assertIn("`divi/slide`", found[0], page)
+        self.assertNotIn(mark, rows("slide", "module.advanced.text.text")[0])
+        team = rows("team-member", "module.decoration.layout")
+        self.assertIn(mark, team[0])
+        self.assertIn("memberImage", team[0])
+        families = (REF5 / "design-families.md").read_text()
+        sizing = families.split('<a id="sizing"></a>', 1)[1].split("\n## ", 1)[0]
+        flex = [l for l in sizing.split("### `….decoration.sizing`\n", 1)[1].splitlines() if l.startswith("| `flexType` |")]
+        self.assertIn(mark, flex[0])
+        self.assertIn("`css`", flex[0])
+
     def test_design_families_prose_and_markers(self):
         text = (REF5 / "design-families.md").read_text()
         head, rest = text.split("<!-- BEGIN GENERATED -->", 1)
@@ -261,6 +290,24 @@ class HandWrittenReferencesTest(unittest.TestCase):
             prose = BLOCK5.sub("", (REF5 / name).read_text())
             stray = [hex(ord(c)) for c in prose if 0xE000 <= ord(c) <= 0xF8FF or ord(c) in (0x2028, 0x2029)]
             self.assertEqual(stray, [], name)
+
+    def test_disabled_on_section_says_each_breakpoint_stands_alone(self):
+        # doc-experiments.md §9: disabledOn desktop "on" hid the module at >=981px only; tablet and phone stayed
+        # visible (no inheritance), phone "off" changed nothing.
+        text = (REF5 / "value-formats.md").read_text()
+        self.assertIn("### Hiding a block per breakpoint: `disabledOn`", text)
+        section = text.split("### Hiding a block per breakpoint: `disabledOn`", 1)[1].split("\n## ", 1)[0]
+        for phrase in ("desktopAbove", "tabletOnly", "does not inherit", "min-width:981px",
+                       "(min-width:768px) and (max-width:980px)", "(max-width:767px)", "doc-experiments.md"):
+            self.assertIn(phrase, section, phrase)
+        self.assertEqual(len(BLOCK5.findall(section)), 1)
+        self.assertIn('"tablet":{"value":"on"},"phone":{"value":"on"}', BLOCK5.findall(section)[0])
+
+    def test_no_effect_code_is_documented(self):
+        text = (REF5 / "value-formats.md").read_text()
+        rows = [l for l in text.splitlines() if l.startswith("| `W5_NO_EFFECT` |")]
+        self.assertEqual(len(rows), 1)
+        self.assertIn("doc-experiments.md", text.split("## Value validator codes", 1)[1])
 
     def test_cited_validator_codes_exist(self):
         scripts = SKILL / "scripts"
@@ -445,16 +492,27 @@ class Divi5RecipesTest(unittest.TestCase):
                 self.assertNotIn(literal, src.lower(), f"{name}: {literal}")
 
     def test_examples_keep_canonical_escapes_in_the_files(self):
-        # Docs hazard: a file writer that decodes \uXXXX would leave raw quotes and tags in the JSON.
+        # Docs hazard: a file writer that decodes \uXXXX would leave raw quotes and tags in the JSON. Every
+        # ```divi5 example of every recipe (the testimonials slider variant and the service-landing page included).
         B = chr(92)
-        for name in SECTIONS5:
-            src = _worked_example(name)
+        examples = _recipe_examples()
+        self.assertGreater(len(examples), len(SECTIONS5))
+        for rel, _page, src in examples:
             if "$variable(" in src:                  # (the trust bar has no reference and no HTML to escape)
-                self.assertIn(B + "u0022", src, name)   # the quotes inside every $variable() reference
-            self.assertNotIn('$variable({"', src, name)
-            self.assertNotIn(B + '"', src, name)
+                self.assertIn(B + "u0022", src, rel)   # the quotes inside every $variable() reference
+            self.assertNotIn('$variable({"', src, rel)
+            self.assertNotIn(B + '"', src, rel)
             doc = d5.parse(src)
-            self.assertEqual("".join(d5.render_block(b) for b in doc.nodes), src, name)   # canonical, byte for byte
+            self.assertEqual("".join(d5.render_block(b) for b in doc.nodes), src, rel)   # canonical, byte for byte
+
+    def test_navy_text_uses_the_navy_global_not_its_hex(self):
+        # References over literals: the sample tokens' navy is the global gcid-r6navy0001 (#0b2a3c).
+        for rel, _page, src in _recipe_examples():
+            self.assertNotIn("#0b2a3c", src.lower(), rel)
+        contact = d5.parse(_worked_example("contact"))
+        form = next(b for b, _p, _x in contact.walk() if b.name == "divi/contact-form")
+        color = d5.get_attr(form, "field.decoration.font.font")["color"]
+        self.assertEqual([r["value"]["name"] for r in d5.variable_refs(color)], ["gcid-r6navy0001"])
 
     def test_orange_buttons_and_tabs_have_a_navy_label_and_a_legible_hover(self):
         # Contrast (Task 16 review ruling): white on the brand orange is 2.8:1 and navy on the old #ea580c hover
@@ -557,6 +615,27 @@ class Divi5RecipesTest(unittest.TestCase):
         self.assertEqual([q["name"] for q in data["mainEntity"]], titles)
         self.assertEqual([q["acceptedAnswer"]["text"] for q in data["mainEntity"]], answers)
         self.assertGreaterEqual(len(titles), 3)
+
+    def test_faq_snippet_builds_the_example_json_ld_and_escapes_closing_tags(self):
+        text = (RECIPES5 / "sections" / "faq.md").read_text()
+        snippet = re.search(r"```python\n(.*?)```", text, re.S).group(1)
+        self.assertIn('.replace("</", "<\\\\/")', snippet)
+        scope = {}
+        exec(snippet, scope)  # the recipe's own code: defines pairs and script
+        answers = {a for _q, a in scope["pairs"]}
+        self.assertIn("Yes. We give you an upfront, flat-rate price before any work begins, with no hidden fees.",
+                      answers)
+        example = next(d5.get_attr(b, "content.innerContent") for b, _p, _x in d5.parse(_worked_example("faq")).walk()
+                       if b.name == "divi/code")
+        entities = json.loads(example[len('<script type="application/ld+json">'):-len("</script>")])["mainEntity"]
+        in_example = {(e["name"], e["acceptedAnswer"]["text"]) for e in entities}
+        self.assertTrue(set(scope["pairs"]) <= in_example, scope["pairs"])   # the snippet's strings are the example's
+        # an answer holding </script> can't end the element early, and the JSON still parses
+        scope = {}
+        exec(snippet.replace("with no hidden fees.", "with no hidden fees.</script><b>x</b>"), scope)
+        body = scope["script"][len('<script type="application/ld+json">'):-len("</script>")]
+        self.assertNotIn("</", body)
+        self.assertIn("</script><b>x</b>", json.loads(body)["mainEntity"][0]["acceptedAnswer"]["text"])
 
     def test_contact_uses_the_contact_form_and_no_signup_fields(self):
         names = [b.name for b, _p, _x in d5.parse(_worked_example("contact")).walk()]
