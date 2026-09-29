@@ -4,7 +4,9 @@ The Divi 5 recipes are the [Divi 4 recipes](../README.md) written as Divi 5 bloc
 the sections, the column splits, the purpose, the SEO notes and the variations. Each Divi 5 file links to its
 shared recipe for those, and holds what changes on Divi 5: the block structure, the **field mapping** (which
 `tokens.json` path feeds which Divi 5 attribute path), the Divi 5 responsive rules, a worked example in canonical
-block markup and a checklist. Read [reference/divi5/page-format.md](../../reference/divi5/page-format.md) first.
+block markup and a checklist. The page recipes (`pages/`) give the section order, rhythm and heading outline
+instead; the service landing page also has a whole-page example. Read
+[reference/divi5/page-format.md](../../reference/divi5/page-format.md) first.
 
 The worked examples use [`sample-tokens.json`](sample-tokens.json): the same fictional "Miami Rapid Plumbing"
 brand as the Divi 4 examples (navy, orange, Montserrat/Lato), stored the way a Divi 5 site stores its design
@@ -175,6 +177,17 @@ print(d.render_block(text))
 | [Tabs](sections/tabs.md) | [tabs](../sections/tabs.md) | `activeTab`/`tab` decoration; navy label on the orange active tab |
 | [Video](sections/video.md) | [video](../sections/video.md) | poster in `thumbnail.innerContent`; the embed iframe loads with the page |
 | [Gallery](sections/gallery.md) | [gallery](../sections/gallery.md) | `galleryIds`; `galleryGrid` column counts on all three breakpoints |
+| [Testimonials](sections/testimonials.md) | [testimonials](../sections/testimonials.md) | grid and slider; placeholders in parentheses, never invented; the portrait prints `alt=""` |
+| [Pricing](sections/pricing.md) | [pricing](../sections/pricing.md) | tables stack only with `flexWrap` and a phone `flexType`; navy prices and a navy label on the orange featured header |
+| [FAQ](sections/faq.md) | [faq](../sections/faq.md) | `h3` questions set on the accordion; `FAQPage` JSON-LD in a code block, generated from the same strings |
+| [CTA band](sections/cta-band.md) | [cta-band](../sections/cta-band.md) | the CTA module's own background set to the band's navy (its default is the accent) |
+| [Contact](sections/contact.md) | [contact](../sections/contact.md) | the contact form, never signup custom fields; full-width fields; form title `h3` |
+| [Team](sections/team.md) | [team](../sections/team.md) | name `h3` (also the photo's `alt`); `css.memberImage` margin under the photo |
+| [Trust bar](sections/trust-bar.md) | [trust-bar](../sections/trust-bar.md) | `alt` in `image.innerContent`; saturate filter with a `hover` state |
+| [Service landing page](pages/service-landing.md) | [service-landing](../pages/service-landing.md) | section order and outline, plus a whole-page example in one `divi/placeholder` |
+| [Local SEO location page](pages/local-seo-location.md) | [local-seo-location](../pages/local-seo-location.md) | section order and outline; the city in the `h1` |
+| [PPC lead gen page](pages/ppc-lead-gen.md) | [ppc-lead-gen](../pages/ppc-lead-gen.md) | the split hero with the contact form on a white card |
+| [Product feature page](pages/product-feature.md) | [product-feature](../pages/product-feature.md) | an `h2` row added above the alternating features |
 | [Change copy](edits/change-copy.md) | [change-copy](../edits/change-copy.md) | `set-attr`, `extract`→edit→`replace` |
 | [Insert section](edits/insert-section.md) | [insert-section](../edits/insert-section.md) | `insert-after`/`insert-before` on a section anchor |
 | [Replace section](edits/replace-section.md) | [replace-section](../edits/replace-section.md) | `replace` a section's span |

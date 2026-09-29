@@ -1,0 +1,88 @@
+# Testimonials (Divi 5)
+
+Purpose, SEO notes and variations: [the shared recipe](../../sections/testimonials.md). This page is its Divi 5
+structure, field mapping and worked examples; how to read them is in the [Divi 5 recipes README](../README.md).
+
+**Never invent testimonials.** Every quote, name, role, company and rating comes word for word from the client's
+brief. The examples hold obvious placeholders in parentheses ("(Customer 1 name)"), never a real-sounding review:
+replace each one from the brief, or drop that testimonial. Don't write placeholders in square brackets: WordPress
+runs `[word …]` inside a module's text as a shortcode (`W5_SHORTCODE_BRACKETS`).
+
+## Structure
+
+Grid (the worked example), for two or three quotes that should all be visible:
+```text
+section (adminLabel "Testimonials")
+├─ row columnStructure "4_4"
+│  └─ column 4_4: heading (h2)
+└─ row columnStructure "1_3,1_3,1_3"
+   ├─ column 1_3: testimonial (portrait, quote, author, role, company)
+   ├─ column 1_3: testimonial
+   └─ column 1_3: testimonial (no portrait)
+```
+
+Slider, for four or more quotes or a tight page:
+```text
+section (adminLabel "Testimonials Slider")
+└─ row columnStructure "4_4"
+   └─ column 4_4: heading (h2) · slider
+      ├─ slide (title h3 = customer name, content = the quote)
+      ├─ slide
+      └─ slide
+```
+
+Every section, row and column carries `module.decoration.layout` → `{"display": "block"}` (a single-column row
+states `columnStructure` `"4_4"`); every block `builderVersion` = `site.divi_version`.
+
+## Field mapping
+| attribute | token path | fallback if the site has none |
+|---|---|---|
+| section `module.decoration.background` → `color`, `module.decoration.spacing` → `padding` | `section_exemplars[adminLabel=Why Choose Us].attrs.module.decoration` (`#ffffff`; 90/60/45px on all three breakpoints) | a light `colors.palette` hex; `spacing.section_padding[2][0]` |
+| heading `title.decoration.font.font` (desktop/tablet/phone) | `module_styles["divi/heading"][section_label=Why Choose Us, column_type=4_4]`: `h2`, Montserrat 700, navy `gcid-r6navy0001`, 40/32/28px | `typography.scale.h2` |
+| testimonial `content.decoration.bodyFont.body.font` (the quote) | no testimonial bundle: `typography.body_font` + `"400"` + `#475569` (the light-section body color), 16px, `lineHeight` 1.7em | same |
+| testimonial `author.decoration.font.font` | `typography.heading_font` + `"700"` + the `h2` color (`gcid-r6navy0001`) | same |
+| testimonial `jobTitle.decoration.font.font`, `company.decoration.font.font` | `typography.body_font` + `"400"` + `#475569`; Divi 5 styles the two separately (Divi 4's `position_font` covered both) | same |
+| testimonial `quoteIcon.decoration.icon` → `color` | the accent, `gcid-primary-color` (decorative) | leave it out |
+| testimonial `portrait.innerContent` → `url` | a photo the client supplied, in the site's Media Library; leave `portrait` out for no photo | — |
+| testimonial `author.innerContent`, `jobTitle.innerContent`, `company.innerContent` → `text` (+ `linkUrl`), `content.innerContent` | the client's brief, word for word: never a token, never invented | — |
+| slider `children.module.decoration.background` → `color` | the pattern's dark band: the navy global `gcid-r6navy0001` (the slides' background; `divi/slider` has no `module.decoration.background`, `E5_UNKNOWN_ATTR`) | the darkest `colors.palette` hex |
+| slider `module.decoration.border` → `radius` | `shapes.radii[0][0]` (`gvid-r6radius01`) | leave it out |
+| slider `arrows.advanced.color` | the orange global `gcid-r6orange001` | the accent |
+| slider `dotNav.decoration.background` → `color` | `#ffffff`: the inactive dots print at 50% opacity, where white stays legible on navy and orange does not | same |
+| slide `title.decoration.font.font` | `headingLevel` `"h3"`, `typography.heading_font` 700, `#ffffff`, 22px | same |
+| slide `content.decoration.bodyFont.body.font` | Lato 400, `#f1f5f9` (the Free Quote CTA text bundle's light color), 18px / 1.7em | `typography.body.color` |
+| slide `module.advanced.text.text` → `orientation` | `"center"` on each slide: on the slider itself it printed nothing (live check) | same |
+
+**The portrait has no alt text.** Divi 5.13.1 renders the testimonial portrait as `<img alt="">` (hard-coded in its
+`TestimonialModule.php`; the Media Library alt is not used, live check), so screen readers skip it as decorative.
+That is right for a face next to the printed name; never let the photo carry information the text doesn't.
+
+## Responsive rules
+
+- The `h2` size varies per breakpoint: `title.decoration.font.font` → `tablet` `{"size": "32px"}`, `phone` `{"size": "28px"}`, from the heading bundle.
+- The section padding copies all three breakpoints of the bundle it comes from; no `_last_edited` flag, the `tablet`/`phone` keys are the switch.
+- The three `1_3` columns stack below 981px, one testimonial per line, with no attribute.
+- The slider needs no responsive attribute: it is one column at every width.
+
+## Worked example (sample-tokens.json)
+
+The grid. The quotes and names are placeholders; a real page copies them from the brief.
+
+```divi5
+<!-- wp:divi/section {"module":{"meta":{"adminLabel":{"desktop":{"value":"Testimonials"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}},"background":{"desktop":{"value":{"color":"#ffffff"}}},"spacing":{"desktop":{"value":{"padding":{"top":"90px","bottom":"90px","syncVertical":"on","syncHorizontal":"off"}}},"tablet":{"value":{"padding":{"top":"60px","bottom":"60px","syncVertical":"on","syncHorizontal":"off"}}},"phone":{"value":{"padding":{"top":"45px","bottom":"45px","syncVertical":"on","syncHorizontal":"off"}}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/row {"module":{"advanced":{"columnStructure":{"desktop":{"value":"4_4"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/column {"module":{"advanced":{"type":{"desktop":{"value":"4_4"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/heading {"title":{"innerContent":{"desktop":{"value":"What Our Customers Say"}},"decoration":{"font":{"font":{"desktop":{"value":{"headingLevel":"h2","family":"Montserrat","weight":"700","color":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-r6navy0001\u0022,\u0022settings\u0022:{}}})$","size":"40px"}},"tablet":{"value":{"size":"32px"}},"phone":{"value":{"size":"28px"}}}}}},"builderVersion":"5.13.1"} /--><!-- /wp:divi/column --><!-- /wp:divi/row --><!-- wp:divi/row {"module":{"advanced":{"columnStructure":{"desktop":{"value":"1_3,1_3,1_3"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/column {"module":{"advanced":{"type":{"desktop":{"value":"1_3"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/testimonial {"author":{"innerContent":{"desktop":{"value":"(Customer 1 name)"}},"decoration":{"font":{"font":{"desktop":{"value":{"family":"Montserrat","weight":"700","color":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-r6navy0001\u0022,\u0022settings\u0022:{}}})$"}}}}}},"jobTitle":{"innerContent":{"desktop":{"value":"(Customer 1 role)"}},"decoration":{"font":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#475569"}}}}}},"company":{"innerContent":{"desktop":{"value":{"text":"(Customer 1 neighborhood or company)"}}},"decoration":{"font":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#475569"}}}}}},"portrait":{"innerContent":{"desktop":{"value":{"url":"https://miamirapidplumbing.example/wp-content/uploads/2026/09/testimonial-customer-1.jpg"}}}},"quoteIcon":{"decoration":{"icon":{"desktop":{"value":{"color":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-primary-color\u0022,\u0022settings\u0022:{}}})$"}}}}},"content":{"innerContent":{"desktop":{"value":"\u003cp\u003e(Customer 1's review, copied word for word from the brief.)\u003c/p\u003e"}},"decoration":{"bodyFont":{"body":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#475569","size":"16px","lineHeight":"1.7em"}}}}}}},"builderVersion":"5.13.1"} /--><!-- /wp:divi/column --><!-- wp:divi/column {"module":{"advanced":{"type":{"desktop":{"value":"1_3"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/testimonial {"author":{"innerContent":{"desktop":{"value":"(Customer 2 name)"}},"decoration":{"font":{"font":{"desktop":{"value":{"family":"Montserrat","weight":"700","color":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-r6navy0001\u0022,\u0022settings\u0022:{}}})$"}}}}}},"jobTitle":{"innerContent":{"desktop":{"value":"(Customer 2 role)"}},"decoration":{"font":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#475569"}}}}}},"company":{"innerContent":{"desktop":{"value":{"text":"(Customer 2 neighborhood or company)"}}},"decoration":{"font":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#475569"}}}}}},"portrait":{"innerContent":{"desktop":{"value":{"url":"https://miamirapidplumbing.example/wp-content/uploads/2026/09/testimonial-customer-2.jpg"}}}},"quoteIcon":{"decoration":{"icon":{"desktop":{"value":{"color":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-primary-color\u0022,\u0022settings\u0022:{}}})$"}}}}},"content":{"innerContent":{"desktop":{"value":"\u003cp\u003e(Customer 2's review, copied word for word from the brief.)\u003c/p\u003e"}},"decoration":{"bodyFont":{"body":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#475569","size":"16px","lineHeight":"1.7em"}}}}}}},"builderVersion":"5.13.1"} /--><!-- /wp:divi/column --><!-- wp:divi/column {"module":{"advanced":{"type":{"desktop":{"value":"1_3"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/testimonial {"author":{"innerContent":{"desktop":{"value":"(Customer 3 name)"}},"decoration":{"font":{"font":{"desktop":{"value":{"family":"Montserrat","weight":"700","color":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-r6navy0001\u0022,\u0022settings\u0022:{}}})$"}}}}}},"jobTitle":{"innerContent":{"desktop":{"value":"(Customer 3 role)"}},"decoration":{"font":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#475569"}}}}}},"company":{"innerContent":{"desktop":{"value":{"text":"(Customer 3 neighborhood or company)"}}},"decoration":{"font":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#475569"}}}}}},"quoteIcon":{"decoration":{"icon":{"desktop":{"value":{"color":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-primary-color\u0022,\u0022settings\u0022:{}}})$"}}}}},"content":{"innerContent":{"desktop":{"value":"\u003cp\u003e(Customer 3's review, copied word for word from the brief.)\u003c/p\u003e"}},"decoration":{"bodyFont":{"body":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#475569","size":"16px","lineHeight":"1.7em"}}}}}}},"builderVersion":"5.13.1"} /--><!-- /wp:divi/column --><!-- /wp:divi/row --><!-- /wp:divi/section -->
+```
+
+### Slider variant
+
+```divi5
+<!-- wp:divi/section {"module":{"meta":{"adminLabel":{"desktop":{"value":"Testimonials Slider"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}},"background":{"desktop":{"value":{"color":"#ffffff"}}},"spacing":{"desktop":{"value":{"padding":{"top":"90px","bottom":"90px","syncVertical":"on","syncHorizontal":"off"}}},"tablet":{"value":{"padding":{"top":"60px","bottom":"60px","syncVertical":"on","syncHorizontal":"off"}}},"phone":{"value":{"padding":{"top":"45px","bottom":"45px","syncVertical":"on","syncHorizontal":"off"}}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/row {"module":{"advanced":{"columnStructure":{"desktop":{"value":"4_4"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/column {"module":{"advanced":{"type":{"desktop":{"value":"4_4"}}},"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/heading {"title":{"innerContent":{"desktop":{"value":"What Our Customers Say"}},"decoration":{"font":{"font":{"desktop":{"value":{"headingLevel":"h2","family":"Montserrat","weight":"700","color":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-r6navy0001\u0022,\u0022settings\u0022:{}}})$","size":"40px"}},"tablet":{"value":{"size":"32px"}},"phone":{"value":{"size":"28px"}}}}}},"builderVersion":"5.13.1"} /--><!-- wp:divi/slider {"children":{"module":{"decoration":{"background":{"desktop":{"value":{"color":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-r6navy0001\u0022,\u0022settings\u0022:{}}})$"}}}}}},"module":{"decoration":{"border":{"desktop":{"value":{"radius":{"sync":"on","topLeft":"$variable({\u0022type\u0022:\u0022content\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gvid-r6radius01\u0022,\u0022settings\u0022:{}}})$","topRight":"$variable({\u0022type\u0022:\u0022content\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gvid-r6radius01\u0022,\u0022settings\u0022:{}}})$","bottomRight":"$variable({\u0022type\u0022:\u0022content\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gvid-r6radius01\u0022,\u0022settings\u0022:{}}})$","bottomLeft":"$variable({\u0022type\u0022:\u0022content\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gvid-r6radius01\u0022,\u0022settings\u0022:{}}})$"}}}}}},"arrows":{"advanced":{"color":{"desktop":{"value":"$variable({\u0022type\u0022:\u0022color\u0022,\u0022value\u0022:{\u0022name\u0022:\u0022gcid-r6orange001\u0022,\u0022settings\u0022:{}}})$"}}}},"dotNav":{"decoration":{"background":{"desktop":{"value":{"color":"#ffffff"}}}}},"builderVersion":"5.13.1"} --><!-- wp:divi/slide {"title":{"innerContent":{"desktop":{"value":"(Customer 1 name), (neighborhood)"}},"decoration":{"font":{"font":{"desktop":{"value":{"headingLevel":"h3","family":"Montserrat","weight":"700","color":"#ffffff","size":"22px"}}}}}},"content":{"innerContent":{"desktop":{"value":"\u003cp\u003e(Customer 1's review, copied word for word from the brief.)\u003c/p\u003e"}},"decoration":{"bodyFont":{"body":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#f1f5f9","size":"18px","lineHeight":"1.7em"}}}}}}},"module":{"advanced":{"text":{"text":{"desktop":{"value":{"orientation":"center"}}}}}},"builderVersion":"5.13.1"} /--><!-- wp:divi/slide {"title":{"innerContent":{"desktop":{"value":"(Customer 2 name), (neighborhood)"}},"decoration":{"font":{"font":{"desktop":{"value":{"headingLevel":"h3","family":"Montserrat","weight":"700","color":"#ffffff","size":"22px"}}}}}},"content":{"innerContent":{"desktop":{"value":"\u003cp\u003e(Customer 2's review, copied word for word from the brief.)\u003c/p\u003e"}},"decoration":{"bodyFont":{"body":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#f1f5f9","size":"18px","lineHeight":"1.7em"}}}}}}},"module":{"advanced":{"text":{"text":{"desktop":{"value":{"orientation":"center"}}}}}},"builderVersion":"5.13.1"} /--><!-- wp:divi/slide {"title":{"innerContent":{"desktop":{"value":"(Customer 3 name), (neighborhood)"}},"decoration":{"font":{"font":{"desktop":{"value":{"headingLevel":"h3","family":"Montserrat","weight":"700","color":"#ffffff","size":"22px"}}}}}},"content":{"innerContent":{"desktop":{"value":"\u003cp\u003e(Customer 3's review, copied word for word from the brief.)\u003c/p\u003e"}},"decoration":{"bodyFont":{"body":{"font":{"desktop":{"value":{"family":"Lato","weight":"400","color":"#f1f5f9","size":"18px","lineHeight":"1.7em"}}}}}}},"module":{"advanced":{"text":{"text":{"desktop":{"value":{"orientation":"center"}}}}}},"builderVersion":"5.13.1"} /--><!-- /wp:divi/slider --><!-- /wp:divi/column --><!-- /wp:divi/row --><!-- /wp:divi/section -->
+```
+
+## Checklist
+- [ ] `python3 scripts/validate.py page.html --tokens tokens.json` — 0 errors, no `W5_UNKNOWN_VARIABLE`/`W5_UNKNOWN_PRESET`; this section alone: `python3 scripts/validate.py section.html --tokens tokens.json --fragment` (`tokens.json` is the target site's own; `recipes/divi5/sample-tokens.json` is only the example's fictional brand)
+- [ ] `python3 scripts/preview.py render page.html --tokens tokens.json --out preview.html` — show the user and **stop until they approve it** ([README §7](../README.md#7-the-verification-loop))
+- [ ] Only after that approval: `python3 scripts/publish.py draft page.html --site "$SITE" --user "$WP_USER" --title "…"` — review its `preview_url` before publishing ([publishing](../../../reference/publishing.md))
+- [ ] exactly one `h2` and no `h1` on this section; each slide title is `h3`
+- [ ] every quote, name, role and rating traces back to the client's brief, word for word — none invented, and no "(placeholder)" left
+- [ ] on the draft, the slider's arrows and dots move between slides
+- [ ] contrast: every text color on its background is at least 4.5:1 (3:1 only for text of 24px, or 19px bold, and up), hover and active states included ([README §2](../README.md#contrast)): navy authors on Divi's default `#f5f5f5` card 13.6:1, `#475569` quote and role on it 6.9:1; slides: `#ffffff` titles on navy 14.9:1, `#f1f5f9` quotes 13.6:1, the orange arrows 5.3:1 and the 50%-white inactive dots 4.8:1 (controls need 3:1); the orange quote mark is decorative

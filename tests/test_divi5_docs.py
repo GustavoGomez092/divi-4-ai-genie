@@ -324,7 +324,9 @@ SAMPLE5 = RECIPES5 / "sample-tokens.json"
 HEROES = ("hero-split", "hero-centered", "hero-background-image", "hero-fullwidth-header")
 CONTENT_SECTIONS = ("services-grid", "alternating-features", "process-steps", "stats-counters", "service-area-list",
                     "tabs", "video", "gallery")
-SECTIONS5 = HEROES + CONTENT_SECTIONS
+CONVERSION_SECTIONS = ("testimonials", "pricing", "faq", "cta-band", "contact", "team", "trust-bar")
+SECTIONS5 = HEROES + CONTENT_SECTIONS + CONVERSION_SECTIONS
+PAGES5 = ("service-landing", "local-seo-location", "ppc-lead-gen", "product-feature")
 STRUCTURE5 = ("divi/section", "divi/row", "divi/column", "divi/row-inner", "divi/column-inner")
 LAYOUT_BLOCK = {"desktop": {"value": {"display": "block"}}}
 import divi5_blocks as d5  # noqa: E402
@@ -417,6 +419,9 @@ class Divi5RecipesTest(unittest.TestCase):
             self.assertEqual(doc.problems, [], rel)
             for block, path, _parent in doc.walk():
                 where = f"{rel}: {path}"
+                if block.name == "divi/placeholder":        # a page's attribute-less wrapper (page-format.md)
+                    self.assertEqual(block.attrs, {}, where)
+                    continue
                 self.assertEqual(block.attrs.get("builderVersion"), version, where)
                 self.assertNotIn("locked", block.attrs, where)
                 self.assertTrue(set(block.attrs.get("modulePreset", [])) <= known, where)
@@ -444,7 +449,9 @@ class Divi5RecipesTest(unittest.TestCase):
         B = chr(92)
         for name in SECTIONS5:
             src = _worked_example(name)
-            self.assertIn(B + "u0022", src, name)   # the quotes inside every $variable() reference
+            if "$variable(" in src:                  # (the trust bar has no reference and no HTML to escape)
+                self.assertIn(B + "u0022", src, name)   # the quotes inside every $variable() reference
+            self.assertNotIn('$variable({"', src, name)
             self.assertNotIn(B + '"', src, name)
             doc = d5.parse(src)
             self.assertEqual("".join(d5.render_block(b) for b in doc.nodes), src, name)   # canonical, byte for byte
@@ -495,6 +502,72 @@ class Divi5RecipesTest(unittest.TestCase):
                 elif cells != header:
                     bad.append((page.relative_to(RECIPES5).as_posix(), n, cells, header))
         self.assertEqual(bad, [])
+
+    def test_every_divi4_recipe_has_a_divi5_counterpart(self):
+        # Task 18: the Divi 5 recipe set is complete, section for section and page for page.
+        for sub in ("sections", "pages"):
+            d4 = sorted(p.name for p in (SKILL / "recipes" / sub).glob("*.md"))
+            d5 = sorted(p.name for p in (RECIPES5 / sub).glob("*.md"))
+            self.assertEqual(d5, d4, sub)
+        self.assertEqual(sorted(p.stem for p in (RECIPES5 / "sections").glob("*.md")), sorted(SECTIONS5))
+        self.assertEqual(sorted(p.stem for p in (RECIPES5 / "pages").glob("*.md")), sorted(PAGES5))
+
+    def test_page_recipes_have_every_part(self):
+        for name in PAGES5:
+            text = (RECIPES5 / "pages" / f"{name}.md").read_text()
+            self.assertIn(f"](../../pages/{name}.md)", text, name)
+            for heading in ("## Sections", "## Rhythm", "## Headings", "## Checklist"):
+                self.assertIn(heading, text, f"{name}: {heading}")
+            sections = text.split("## Sections", 1)[1].split("\n## ", 1)[0]
+            self.assertIn("](../sections/", sections, name)   # reuses the Divi 5 section recipes
+            checklist = text.split("## Checklist", 1)[1]
+            self.assertIn("- [ ] contrast:", checklist, name)
+            self.assertIn("](../README.md#contrast)", checklist, name)
+
+    def test_service_landing_has_a_whole_page_example_with_one_h1(self):
+        text = (RECIPES5 / "pages" / "service-landing.md").read_text()
+        src = BLOCK5.findall(text.split("## Worked example (sample-tokens.json)", 1)[1])[0].strip()
+        doc = d5.parse(src)
+        self.assertEqual(doc.problems, [])
+        self.assertEqual([b.name for b in doc.nodes], ["divi/placeholder"])
+        self.assertEqual(validate_source(src, tokens=self.tokens), [])       # the whole page, not a fragment
+        levels = [v.get("headingLevel") for b, _p, _x in doc.walk()
+                  for v in [(d5.get_attr(b, "title.decoration.font.font") or {})]]
+        self.assertEqual(levels.count("h1"), 1)
+        sections = [b for b in doc.nodes[0].children if b.name in ("divi/section",)]
+        self.assertGreaterEqual(len(sections), 8)
+        self.assertEqual(d5.render_block(doc.nodes[0]), src)                  # canonical, byte for byte
+        self.assertIn(chr(92) + "u0022", src)
+
+    def test_faq_json_ld_is_valid_and_matches_the_accordion(self):
+        src = _worked_example("faq")
+        doc = d5.parse(src)
+        titles, answers, scripts = [], [], []
+        for block, _p, _x in doc.walk():
+            if block.name == "divi/accordion-item":
+                titles.append(d5.get_attr(block, "title.innerContent"))
+                answers.append(re.sub(r"<[^>]+>", "", d5.get_attr(block, "content.innerContent")).strip())
+            if block.name == "divi/code":
+                scripts.append(d5.get_attr(block, "content.innerContent"))
+        self.assertEqual(len(scripts), 1)
+        m = re.fullmatch(r'<script type="application/ld\+json">(.*)</script>', scripts[0], re.S)
+        self.assertTrue(m, scripts[0][:80])
+        data = json.loads(m.group(1))
+        self.assertEqual(data["@type"], "FAQPage")
+        self.assertEqual([q["name"] for q in data["mainEntity"]], titles)
+        self.assertEqual([q["acceptedAnswer"]["text"] for q in data["mainEntity"]], answers)
+        self.assertGreaterEqual(len(titles), 3)
+
+    def test_contact_uses_the_contact_form_and_no_signup_fields(self):
+        names = [b.name for b, _p, _x in d5.parse(_worked_example("contact")).walk()]
+        self.assertIn("divi/contact-form", names)
+        self.assertGreaterEqual(names.count("divi/contact-field"), 3)
+        self.assertFalse([n for n in names if n.startswith("divi/signup")])
+
+    def test_social_proof_recipes_say_never_invent(self):
+        for name in ("testimonials", "pricing", "faq", "team", "stats-counters"):
+            text = (RECIPES5 / "sections" / f"{name}.md").read_text().lower()
+            self.assertIn("never invent", text, name)
 
     def test_readme_indexes_every_divi5_recipe_and_the_sample_tokens(self):
         readme = (RECIPES5 / "README.md").read_text()
