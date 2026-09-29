@@ -238,7 +238,8 @@ The fidelity requirement is the same as the D4 spec's §4.10.
 `preview.py render|serve --exact` for Divi 5 content runs `scripts/preview/preview.mjs` with the Divi version
 from `tokens.json`. It uses the same fetch/cache (`fetch_divi.py`) and the same blueprint and mu-plugin, made
 version-aware. Content is injected as block markup. The default (non-`--exact`) path on Divi 5 is Playground
-until the Python-renderer spike says otherwise (it said GO: see Addendum A), so `render`/`serve` work without `--exact`, and `doctor` checks
+until the Python-renderer spike says otherwise (it did not: Addendum A's Outcome is NO-GO, the engine is parked and
+Playground is the Divi 5 preview), so `render`/`serve` work without `--exact`, and `doctor` checks
 Node. Findings and numbers: `research/divi5/playground.md` (§7 below records the outcome).
 
 ### 4.9 `page_edit.py` and `publish.py`

@@ -151,3 +151,43 @@ Application Password per user, and the postmeta row count):
    `Schema5DumpLiveTest`): without `--exec` the dump exits non-zero, mentions `REQUEST_URI` and keeps the old dump
    (red before the fix: exit 0 and the old file deleted); with it the dump reproduces `research/divi5-schema`
    byte for byte.
+
+## 8. Final review fixes (2026-09-29)
+
+The final whole-branch review's ten items, each fixed with a covering test:
+
+1. `tests/test_preview.py` `Divi5SeedOptionsTest`: the `seed_site_options.php apply` / `restore` writes pass
+   `--user=<admin>`; a failing restore prints the options backup path to stderr before re-raising. Offline guard:
+   `LiveWritesNameTheAdminTest`.
+2. `E5_NONCANONICAL` hint no longer claims page_edit/publish rewrite the JSON; it points at
+   `divi5_blocks.render_block()` / `canonical_json()` (`test_noncanonical_hint_points_at_render_block`).
+3. `page_edit.py set-attr` keeps VALUE as typed on text / html / url / font-family / image leaves (`2024`, `true`,
+   `null` stay strings; a JSON-quoted string is still decoded); other leaves still parse JSON. `change-copy.md` and
+   the script's usage text updated (`test_set_attr_breakpoint_and_json_values`).
+4. New warning `W5_UNTYPED_COLUMN` for a column without `module.advanced.type`, naming a column-count mismatch with
+   `columnStructure` (`test_untyped_columns_warn`). The valid corpus (92 files) and the 122 Divi 5 doc examples are
+   free of it; `check_doc_examples.py` now fails an example that trips it. Documented in `structure.md`.
+5. `preview.py` stages `.txt`, `.seed.css` and `.seed.json` through `<name>.tmp` + `os.replace`
+   (`StageBlockPageAtomicTest`).
+6. `publish.py` recovery hints shell-quote paths and the title (`RecoveryHintQuotingTest`).
+7. `divi_format.GENERATOR_RE` matches both attribute orders and is shared with `tokens5_from_html`
+   (`test_detect_site_generator_meta_either_attribute_order`).
+8. The parked renderer's gate test is an expected failure only for `GateMissed` (the gate numbers); any other
+   exception is an error, and a missing `divi5_render` import errors instead of skipping (`ExpectedGateFailureTest`).
+9. Spec §4.8 points at Addendum A's Outcome (NO-GO; Playground is the Divi 5 preview).
+10. `fetch_divi.theme_dir` and `fetch-divi.mjs ensureDivi` treat `5.14` / `5.14.0` as one cached build
+    (`test_theme_dir_treats_version_spellings_as_one`, `test_ensure_divi_reuses_another_spelling_without_any_http_call`,
+    `test_node_reuses_another_spelling_without_any_http_call`).
+
+**Divi 5.14 download (one attempt, 2 Elegant Themes API calls).** Run as `fetch-divi 5.14` (the version `latest5`
+answered earlier the same day) instead of `latest5`, keeping to 2 calls (check_version_status + download; `latest5`
+adds a third), into a scratch cache (`PP_DIVI_CACHE`) so the tests' newest-cached Divi 5 stays 5.13.1. Result:
+`Fetched Divi 5.14 (32.9 MB) in 2031 ms`; the zip has 3,370 entries, all under the top-level `Divi/`; its
+`style.css` says `Version: 5.14.0` (accepted as 5.14); `doctor` with that cache reports `Divi 5 (block pages): cached
+5.14`, and `theme_dir("5.14.0")` finds `Divi-5.14`. No credentials in any output. The pinned test versions are
+unchanged; the build was not added to the shared cache.
+
+**Results.** Offline suite: `Ran 928 tests`, `OK (skipped=36, expected failures=1)` (the expected failure is the
+parked renderer's gate). `check_doc_examples.py Skill/divi-page-builder`: 105 Divi 4 and 122 Divi 5 examples,
+0 failing. Live `PP_LIVE_TESTS=1 ... -k Divi5SeedOptions`: 6 tests OK (builder CSS 86/86 common, 0 missing, 0 extra;
+`test_live_site_restored` and `test_renders_leave_no_temp_dirs` pass, so the Divi 5 site is back to its prior state).
