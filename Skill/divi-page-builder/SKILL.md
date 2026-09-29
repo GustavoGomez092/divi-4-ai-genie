@@ -81,3 +81,4 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 | `recipes/edits/insert-section.md` | adding a new section without disturbing the rest |
 | `recipes/edits/replace-section.md` | swapping out an entire section for a rebuilt one |
 | `recipes/edits/restyle-to-tokens.md` | bringing off-brand values back in line with `tokens.json` |
+| `recipes/divi5/edits/change-copy.md`, `recipes/divi5/edits/insert-section.md`, `recipes/divi5/edits/replace-section.md`, `recipes/divi5/edits/restyle-to-tokens.md` | Divi 5 edits |

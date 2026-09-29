@@ -161,6 +161,9 @@ A text whose HTML has quotes, `&`, tags and `--`:
   `5.1.1` or even `4.27.9` (`tokens-and-detection.md` §5), and relies on the migrations that version triggers.
   When you edit such a page, change only the blocks you mean to change, and don't change `builderVersion` on the
   blocks you edit either: Divi's render-time migrations depend on it.
+  `scripts/page_edit.py set-attr` keeps it: it re-renders only the block it edits, with that block's
+  `builderVersion` unchanged, while blocks you `replace`/`insert-*` go in exactly as written (it warns when one
+  has no `builderVersion`, and never adds one).
 - `modulePreset` sits next to it; see [value-formats.md → presets](value-formats.md#presets-modulepreset-and-grouppreset).
 
 ## Post meta
