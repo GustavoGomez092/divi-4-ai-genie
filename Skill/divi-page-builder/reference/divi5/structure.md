@@ -116,7 +116,7 @@ Set `module.advanced.columnStructure` on every `divi/row` / `divi/row-inner`: th
 separated. Set `module.advanced.type` on every `divi/column` / `divi/column-inner`. Legal column types: `4_4`,
 `1_2`, `1_3`, `2_3`, `1_4`, `3_4`, `1_5`, `2_5`, `3_5`, `1_6`. `validate.py` reports `E5_COLUMNS` for a type outside
 that list, for widths that don't add up to one row, and for a `columnStructure` that differs from the columns you
-wrote.
+wrote, and warns `W5_UNTYPED_COLUMN` for a column without a type.
 
 **`divi/row`**: the 20 structures of Divi 5's layout picker (the `regular` constants, identical to Divi 4's list):
 
@@ -224,6 +224,7 @@ Divi's generated CSS targets these classes; your own CSS should not. Instead:
 | `E5_SPECIALTY_COLUMN` | error | a specialty section without exactly one column that sets `specialtyColumns` | set it on the one column that holds the inner rows |
 | `E5_INNER_ROW_PLACEMENT` | error | `divi/row-inner` outside a specialty section's specialty column | use a specialty section, or a regular row |
 | `E5_COLUMNS` | error | an illegal column type, widths that don't sum to one row, or `columnStructure` ≠ the columns' types | use the tables above |
+| `W5_UNTYPED_COLUMN` | warning | a `divi/column` / `divi/column-inner` without `module.advanced.type` (its width goes unchecked; the message says when `columnStructure` lists a different number of columns) | set the type on every column |
 | `E5_MULTIPLE_H1` | error | more than one `h1` on the page | one `h1`; set `headingLevel` `h2`… on the others |
 | `W_NO_H1` | warning | no `h1` (not reported with `--fragment`) | make the hero heading the `h1` (`divi/heading` defaults to `h1`) |
 | `W_HEADING_SKIP` | warning | a heading goes two levels deeper than the one before (`h2` → `h4`) | use the next level; blurb titles default to `h4`, accordion items to `h5` |

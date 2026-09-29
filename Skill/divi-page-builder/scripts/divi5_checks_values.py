@@ -578,8 +578,10 @@ def check_attributes5(doc, schema5, report, known_presets=frozenset(), known_var
                 report("error", "E5_NONCANONICAL",
                        f"[{block.name}] attribute JSON is not in WordPress canonical form: it contains raw "
                        + ", ".join(f"'{r}'" for r in reasons), node=block, path=path, value=" ".join(reasons),
-                       hint="write the JSON in WordPress canonical form (validate.py never rewrites; page_edit/publish "
-                            "do): < > & -- and \" inside strings are \\u003c \\u003e \\u0026 \\u002d\\u002d \\u0022")
+                       hint="re-render the block in WordPress canonical form with divi5_blocks.render_block() (or "
+                            "canonical_json() for its attributes); no script rewrites it for you (publish stores "
+                            "the JSON as given, page_edit re-renders only a block it edits): "
+                            "< > & -- and \" inside strings are \\u003c \\u003e \\u0026 \\u002d\\u002d \\u0022")
         if block.name == PLACEHOLDER or not block.name.startswith("divi/") or not isinstance(block.attrs, dict):
             continue
         mod = schema5.module(block.name)

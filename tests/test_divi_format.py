@@ -89,3 +89,18 @@ class VersionTest(unittest.TestCase):
         self.assertEqual((got["divi_version"], got["divi_major"]), ("4.27.4", 4))
         got = self._home_only(b'<meta content="Divi Child v.1.0" name="generator" />')
         self.assertEqual((got["divi_version"], got["divi_major"]), (None, None))
+
+    def test_detect_site_generator_meta_either_attribute_order(self):
+        for html in (b'<meta content="Divi v.5.13.1" name="generator" />',
+                     b'<meta name="generator" content="Divi v.5.13.1" />',
+                     b"<meta name='generator' content='Divi v.5.13.1'>"):
+            with self.subTest(html=html):
+                got = self._home_only(html)
+                self.assertEqual((got["divi_version"], got["divi_major"]), ("5.13.1", 5))
+        got = self._home_only(b'<meta name="generator" content="Divi Child v.1.0" />')
+        self.assertEqual((got["divi_version"], got["divi_major"]), (None, None))
+
+    def test_generator_regex_is_shared_with_tokens5_from_html(self):
+        import divi_format
+        import tokens5_from_html
+        self.assertIs(tokens5_from_html.GENERATOR_RE, divi_format.GENERATOR_RE)

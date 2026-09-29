@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -946,8 +947,8 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
         (backup,) = self.backups(self.cwd)
         self.assertEqual(backup.read_bytes(), original.encode("utf-8"))
         self.assertIn(str(backup), proc.stderr)
-        self.assertIn(f"publish.py publish --page-id 101 --content {backup} --yes", proc.stderr)
-        self.assertIn(f"publish.py draft {backup} --page-id 101", proc.stderr)
+        self.assertIn(f"publish.py publish --page-id 101 --content {shlex.quote(str(backup))} --yes", proc.stderr)
+        self.assertIn(f"publish.py draft {shlex.quote(str(backup))} --page-id 101", proc.stderr)
         self.assertFalse(any(json.loads(c["body"]).get("status") == "publish" for c in FakeWP.calls
                              if c["method"] == "POST" and c["path"] == "/wp-json/wp/v2/pages/101"))
 
@@ -981,7 +982,7 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
         (backup,) = self.backups(page.parent)
         self.assertEqual(backup.read_text(encoding="utf-8"), D5)
         self.assertIn(str(backup), proc.stderr)
-        self.assertIn(f"publish.py draft {page} --page-id 101", proc.stderr)
+        self.assertIn(f"publish.py draft {shlex.quote(str(page))} --page-id 101", proc.stderr)
 
     def test_meta_not_stored_hint_names_the_retry_command(self):
         FakeWP.batch_echo = None
@@ -989,7 +990,7 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
         proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
                             "--content", str(page), "--yes")
         self.assertEqual(proc.returncode, 2)
-        self.assertIn(f"publish.py publish --page-id 101 --content {page} --yes", proc.stderr)
+        self.assertIn(f"publish.py publish --page-id 101 --content {shlex.quote(str(page))} --yes", proc.stderr)
 
     def test_publish_backstop_passes_when_the_published_page_has_the_builder_layout(self):
         FakeWP.page_html = ('<html><body class="page-template-default page page-id-101 et_pb_pagebuilder_layout '
@@ -1040,6 +1041,25 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         self.assertEqual(out.read_bytes(), D5.replace("\n", "\r\n").encode("utf-8"))
         self.assertIn("canonical re-serialization", proc.stderr)
+
+
+class RecoveryHintQuotingTest(unittest.TestCase):
+    """The recovery hint's commands are copy-pasteable: paths and the title are shell-quoted."""
+
+    def test_paths_and_title_are_shell_quoted(self):
+        sys.path.insert(0, str(SCRIPTS))
+        import publish
+        page = "/tmp/My Pages/home $1.html"
+        backup = "/tmp/My Pages/page-7-before-stub.txt"
+        title = 'Say "hi" & $HOME'
+        hint = publish.recovery_hint(7, page, backup, title)
+        q = shlex.quote(page)
+        self.assertIn(f"`publish.py draft {q} --page-id 7 --title {shlex.quote(title)}`", hint)
+        self.assertIn(f"`publish.py publish --page-id 7 --content {q} --yes`", hint)
+        cmd = hint.split("`")[1]
+        self.assertEqual(shlex.split(cmd), ["publish.py", "draft", page, "--page-id", "7", "--title", title])
+        backup_only = publish.recovery_hint(7, None, backup)
+        self.assertIn(f"--content {shlex.quote(backup)} --yes", backup_only)
 
 
 @live_only

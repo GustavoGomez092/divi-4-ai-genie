@@ -255,6 +255,21 @@ class Columns5Test(unittest.TestCase):
         self.assertEqual([(x.code, x.tag, x.value) for x in f], [("E5_COLUMNS", "divi/column", "7_8")])
 
 
+    def test_untyped_columns_warn(self):
+        bare = '<!-- wp:divi/column -->{}<!-- /wp:divi/column -->'
+        src = page(section(row(bare.format(H1) + bare.format("") + bare.format(""), "1_2,1_2")))
+        self.assertEqual(codes(src), [])  # no error: the widths can't be checked
+        f = [x for x in validate_source(src) if x.code == "W5_UNTYPED_COLUMN"]
+        self.assertEqual([(x.level, x.tag) for x in f], [("warning", "divi/column")] * 3)
+        self.assertIn("columnStructure 1_2,1_2 lists 2 column(s), the row has 3", f[0].message)
+        one = page(section(row(bare.format(H1))))
+        f = [x for x in validate_source(one) if x.code == "W5_UNTYPED_COLUMN"]
+        self.assertEqual(len(f), 1)
+        self.assertNotIn("columnStructure", f[0].message)
+        typed = page(section(row(column(H1, "1_2") + column("", "1_2"), "1_2,1_2")))
+        self.assertNotIn("W5_UNTYPED_COLUMN", [x.code for x in validate_source(typed)])
+
+
 class Headings5Test(unittest.TestCase):
     def heading_findings(self, src, **kw):
         return [(f.code, f.tag, f.value) for f in validate_source(src, **kw) if f.code in HEADING_CODES]

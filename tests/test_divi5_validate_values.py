@@ -353,6 +353,14 @@ class CheckAttributesTest(unittest.TestCase):
         vb_backslash = canonical_json(text_attrs("a\\b")).replace("\\u005c", "\\\\")
         self.assertNotIn("E5_NONCANONICAL", codes(page(block("text", None, vb_backslash))))
 
+    def test_noncanonical_hint_points_at_render_block(self):
+        good = canonical_json(text_attrs("<p>a</p>"))
+        f = [x for x in run(page(block("text", None, good.replace("\\u003c", "<"))))
+             if x.code == "E5_NONCANONICAL"]
+        self.assertEqual(len(f), 1)
+        self.assertIn("divi5_blocks.render_block", f[0].hint)
+        self.assertNotIn("page_edit/publish do", f[0].hint)
+
     def test_shortcode_brackets(self):
         self.assertIn("W5_SHORTCODE_BRACKETS", codes(page(block("text", text_attrs("<p>[contact-form]</p>")))))
         self.assertNotIn("W5_SHORTCODE_BRACKETS", codes(page(block("text", text_attrs("<p>&#91;x&#93; [1]</p>")))))

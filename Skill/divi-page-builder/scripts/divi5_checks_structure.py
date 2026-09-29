@@ -65,7 +65,8 @@ def _check_freeform(doc, report) -> None:
 def _check_columns5(row: Block, path: str, cols: List[Block], paths: Dict[int, str], report,
                     structure: Optional[str]) -> None:
     """E5_COLUMNS: illegal column types, widths that don't sum to one row, and a columnStructure that differs from
-    the columns' type sequence (the Divi 4 _check_columns fraction rules)."""
+    the columns' type sequence (the Divi 4 _check_columns fraction rules). W5_UNTYPED_COLUMN: a column without a
+    type, whose width the fraction rules can't check."""
     legal = _legal_column_types()
     types = [_col_type(c) for c in cols]
     for c, t in zip(cols, types):
@@ -73,6 +74,16 @@ def _check_columns5(row: Block, path: str, cols: List[Block], paths: Dict[int, s
             report("error", "E5_COLUMNS", f"Column type '{t}' is not a Divi column type", node=c, path=paths[id(c)],
                    attr="module.advanced.type", value=str(t),
                    hint="Use types such as 4_4, 1_2, 1_3, 2_3, 1_4, 3_4, 1_5, 2_5, 3_5, 1_6.")
+    untyped = [c for c, t in zip(cols, types) if t is None]
+    if untyped:
+        listed = structure.split(",") if structure is not None else None
+        count = (f"; the row's columnStructure {structure} lists {len(listed)} column(s), the row has {len(cols)}"
+                 if listed is not None and len(listed) != len(cols) else "")
+        for c in untyped:
+            report("warning", "W5_UNTYPED_COLUMN", f"[{c.name}] has no module.advanced.type{count}", node=c,
+                   path=paths[id(c)], attr="module.advanced.type",
+                   hint="Set module.advanced.type on every column (4_4, 1_2, 1_3, ...) so the widths add up to one "
+                        "row and match the row's columnStructure.")
     if not cols or any(t is None or t not in legal for t in types):
         return
     fracs = [fraction(t) for t in types]

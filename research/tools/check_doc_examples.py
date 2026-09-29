@@ -5,8 +5,8 @@ Divi 4: every ```divi block (shortcode). Divi 5: every ```divi5 block, plus ```h
 reference/divi5/ and recipes/divi5/ whose content is Divi 5 block markup (other ```html blocks there are
 plain HTML illustrations and are skipped). A ```divi5 block that is not block markup fails.
 
-A block fails on any validation error, and on the heading-outline warnings: W_HEADING_SKIP in any
-block, W_NO_H1 only in whole-page recipes (recipes/pages/, recipes/divi5/pages/). Every other block
+A block fails on any validation error, on W5_UNTYPED_COLUMN (an example column must carry its type), and on
+the heading-outline warnings: W_HEADING_SKIP in any block, W_NO_H1 only in whole-page recipes (recipes/pages/, recipes/divi5/pages/). Every other block
 (section recipes, edit recipes, module reference snippets) is a fragment of a page and is validated with
 fragment=True (validate.py --fragment), which skips the page-level W_NO_H1 (and, for Divi 5,
 W5_NO_PLACEHOLDER).
@@ -29,7 +29,7 @@ OPEN_FENCE_RE = re.compile(r"^```divi[ \t]*$", re.M)
 BLOCK5_RE = re.compile(r"^```divi5\n(.*?)^```", re.S | re.M)
 OPEN_FENCE5_RE = re.compile(r"^```divi5[ \t]*$", re.M)
 HTML_RE = re.compile(r"^```html\n(.*?)^```", re.S | re.M)
-FAILING_WARNINGS = {"W_HEADING_SKIP", "W_NO_H1"}
+FAILING_WARNINGS = {"W_HEADING_SKIP", "W_NO_H1", "W5_UNTYPED_COLUMN"}  # an untyped column: widths unchecked
 DIVI5_DIRS = (("reference", "divi5"), ("recipes", "divi5"))
 
 

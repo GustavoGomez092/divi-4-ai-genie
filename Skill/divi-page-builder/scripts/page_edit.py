@@ -12,8 +12,9 @@ format for the site: Divi 4 shortcode on a Divi 5 site, Divi 5 blocks on a Divi 
 Divi 4 shortcode: PATH looks like et_pb_section[1] > et_pb_row[0] > et_pb_column[2] > et_pb_blurb[0].
 
 Divi 5 blocks (auto-detected): PATH looks like placeholder[0] > section[1] > row[0] > column[2] > blurb[0]; the
-leading "placeholder[0] >" may be left out. set-attr takes a dotted attribute path and a VALUE that is JSON when it
-parses as JSON, otherwise a string:
+leading "placeholder[0] >" may be left out. set-attr takes a dotted attribute path and a VALUE: on a text, html, url or
+font-family leaf it is stored as the string typed ("2024" stays text); elsewhere it is JSON when it parses as JSON,
+otherwise a string:
        page_edit.py PAGE set-attr PATH title.innerContent "New headline"
        page_edit.py PAGE set-attr PATH button.decoration.background '{"color":"#0f172a"}' --state hover
 NAME is an attribute path from the module's reference page (reference/divi5/modules/<module>.md), optionally
@@ -41,6 +42,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from divi_shortcode import build_open_tag, escape_attr_value, parse, replace_span  # noqa: E402
@@ -203,6 +205,32 @@ def _json_or_text(raw: str):
         return raw
 
 
+# Leaf types whose value is a string: set-attr stores VALUE as typed ("2024", "true" and "null" stay text); only a
+# JSON-quoted string ('"2024"') is still decoded. Every other leaf (number, onoff, object, json, ...) parses JSON.
+TEXT_LEAVES = frozenset({"text", "html", "url", "font-family", "image"})
+
+
+def _leaf_type(block, keys) -> Optional[str]:
+    """The schema leaf type set-attr writes at KEYS (<attr>.<breakpoint>.<state>[.<sub-path>]); None when the
+    schema can't type it (a non-responsive key, a module outside the schema)."""
+    if keys[0] == "builderVersion":
+        return "text"
+    mod = divi5_schema.load_schema5().module(block.name)
+    slot = next((i for i in range(1, len(keys) - 1)
+                 if keys[i] in SLOT_BREAKPOINTS and keys[i + 1] in divi5_blocks.STATES), None)
+    if mod is None or slot is None:
+        return None
+    r = mod.resolve(".".join(keys[:slot] + keys[slot + 2:]), keys[slot], keys[slot + 1])
+    return r.leaf.get("type") if r.status == "ok" and r.leaf else None
+
+
+def _attr_value(block, keys, raw: str):
+    if _leaf_type(block, keys) in TEXT_LEAVES:
+        value = _json_or_text(raw)
+        return value if isinstance(value, str) else raw
+    return _json_or_text(raw)
+
+
 # Every key that can sit in a value's breakpoint slot, disabledOn's pseudo-breakpoints included.
 SLOT_BREAKPOINTS = divi5_blocks.BREAKPOINTS + divi5_blocks.DISABLED_ON_BREAKPOINTS
 
@@ -255,8 +283,9 @@ def _slot_keys(block, keys, a) -> list:
 def _set_attr5(ap, a, src, block) -> str:
     if len(a.args) != 3:
         ap.error("set-attr needs PATH NAME VALUE")
-    dotted, value = a.args[1], _json_or_text(a.args[2])
+    dotted = a.args[1]
     keys = _slot_keys(block, dotted.split("."), a)
+    value = _attr_value(block, keys, a.args[2])
     if keys[0] == "builderVersion":
         _warn("changing builderVersion on an existing block changes which render-time migrations Divi runs on it; "
               "leave it as it is unless you mean that")

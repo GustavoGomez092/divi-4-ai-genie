@@ -19,8 +19,9 @@ dance as in Divi 4.
   schema, so it works whether or not the block has that attribute yet, and refuses (exit 2) a path the
   schema doesn't know.
 - `VALUE` is plain text or HTML: `page_edit.py` escapes it canonically for you (`<` becomes `\u003c`, `&` becomes
-  `\u0026`, and so on). A VALUE that parses as JSON is stored as JSON, so quote a number you mean as text
-  (`'"2026"'`).
+  `\u0026`, and so on). On a text, HTML, URL or font-family attribute, VALUE is stored as the string you
+  type (`2026`, `true` and `null` stay text); on the others (numbers, on/off, objects) a VALUE that parses as
+  JSON is stored as JSON (`'{"color":"#111827"}'`).
 - It writes the desktop value (`--breakpoint tablet` / `--breakpoint phone` for the others). A path that goes
   inside a value object (`button.innerContent.text`) changes that one key and keeps the others (`linkUrl`).
 - Only the block you edit is rewritten, in WordPress's canonical form, with its `builderVersion` unchanged;

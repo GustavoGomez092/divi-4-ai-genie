@@ -18,7 +18,9 @@ _JSON_BLOCK = re.compile(r"<!--\s+/?wp:(?:(?!-->).)*-->", re.S)
 _SHORTCODE = re.compile(r"\[et_pb_[a-z0-9_]+[\s\]/]")
 _VERSION = re.compile(r"^\s*Version:\s*([0-9][0-9.]*)", re.M)
 _ASSET_VER = re.compile(r"/themes/Divi/[^\"'?\s]*\?ver=([0-9]+\.[0-9][0-9.]*)")
-_GENERATOR = re.compile(r'<meta content="Divi v\.([0-9][0-9.]*)" name="generator"')
+# The theme's generator meta tag, in either attribute order (shared with tokens5_from_html).
+GENERATOR_RE = re.compile(r"""<meta\s+(?:content=["']Divi v\.([0-9][0-9.]*)["']\s+name=["']generator["']"""
+                          r"""|name=["']generator["']\s+content=["']Divi v\.([0-9][0-9.]*)["'])""")
 # Markers only Divi 5 front-end output carries (see research/tools/divi5/detect_divi.py).
 _D5_HTML_MARKERS = re.compile(
     r"/includes/builder-5/"
@@ -57,6 +59,11 @@ def _default_fetch(url: str) -> bytes:
         return resp.read()
 
 
+def generator_versions(html: str) -> list:
+    """Every Divi version a generator meta tag names (content= first or name= first)."""
+    return [a or b for a, b in GENERATOR_RE.findall(html)]
+
+
 def detect_site(url: str, fetch: Optional[Callable[[str], bytes]] = None) -> dict:
     fetch = fetch or _default_fetch
     base = url.rstrip("/")
@@ -73,7 +80,7 @@ def detect_site(url: str, fetch: Optional[Callable[[str], bytes]] = None) -> dic
     versions = _ASSET_VER.findall(html)
     if not versions:
         # Active theme name+version; only trusted when the theme is Divi itself (not a child theme).
-        versions = _GENERATOR.findall(html)
+        versions = generator_versions(html)
     v = max(versions, key=lambda s: tuple(int(x) for x in s.split(".") if x.isdigit())) if versions else None
     major = major_from_version(v)
     if _D5_HTML_MARKERS.search(html):

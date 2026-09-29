@@ -22,13 +22,11 @@ from collections import Counter
 from typing import Dict, Iterator, List, Optional, Tuple
 from urllib.parse import parse_qs, unquote, urljoin, urlsplit
 
-from divi_format import _ASSET_VER
+from divi_format import _ASSET_VER, GENERATOR_RE
 
 COMMENT_RE = re.compile(r"/\*.*?\*/", re.S)
 DOC_CSS_RE = re.compile(r"<style[^>]*>(.*?)</style>|<link\b[^>]*>", re.S | re.I)
 HREF_RE = re.compile(r"""href=["']([^"']+)["']""")
-GENERATOR_RE = re.compile(r"""<meta\s+(?:content=["']Divi v\.([0-9][0-9.]*)["']\s+name=["']generator["']"""
-                          r"""|name=["']generator["']\s+content=["']Divi v\.([0-9][0-9.]*)["'])""")
 PRESET_CLASS_RE = re.compile(r"\.preset--(module|group)--([A-Za-z0-9_-]+)")
 HSL_FROM_RE = re.compile(
     r"^hsl\(\s*from\s+var\(--(gcid-[\w-]+)\)\s+calc\(h\s*([+-])\s*([\d.]+)\)\s+"

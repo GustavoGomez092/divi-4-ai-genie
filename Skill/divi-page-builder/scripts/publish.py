@@ -47,6 +47,7 @@ import base64
 import json
 import mimetypes
 import re
+import shlex
 import sys
 import time
 import urllib.error
@@ -371,9 +372,9 @@ def recovery_hint(page_id, page_file=None, backup=None, title=None) -> str:
     if backup:
         parts.append(f"Its previous content is saved in {backup}.")
     if source:
-        t = title.replace('"', '\\"') if title else "…"
-        parts.append(f'Retry with `publish.py draft {source} --page-id {page_id} --title "{t}"` (keeps it a draft) '
-                     f"or, once approved, `publish.py publish --page-id {page_id} --content {source} --yes`.")
+        src, t = shlex.quote(str(source)), shlex.quote(title) if title else "…"
+        parts.append(f"Retry with `publish.py draft {src} --page-id {page_id} --title {t}` (keeps it a draft) "
+                     f"or, once approved, `publish.py publish --page-id {page_id} --content {src} --yes`.")
     else:
         parts.append(f"Retry with `publish.py draft PAGE --page-id {page_id} --title …` using your page file.")
     return " ".join(parts)

@@ -132,11 +132,22 @@ class VerbsOnConvertedPage(unittest.TestCase):
         block = divi5_blocks.parse(out).find(HEADING)
         self.assertEqual(divi5_blocks.get_attr(block, "title.decoration.font.font", breakpoint="tablet"),
                          {"size": "40px"})
-        # a bare word is a string; valid JSON is decoded; a quoted JSON string stays a string
-        for raw, want in (("Hello", "Hello"), ("42", 42), ('"42"', "42"), ("#fff", "#fff")):
+        # a text leaf keeps VALUE as typed (numbers, true, null stay text); a quoted JSON string is decoded
+        for raw, want in (("Hello", "Hello"), ("2024", "2024"), ("42", "42"), ('"42"', "42"), ("true", "true"),
+                          ("null", "null"), ("#fff", "#fff"), ('{"a":1}', '{"a":1}')):
             out = ok(self, PAGE, "set-attr", HEADING, "title.innerContent", raw)
             self.assertEqual(divi5_blocks.get_attr(divi5_blocks.parse(out).find(HEADING), "title.innerContent"),
                              want)
+        # url and font-family leaves too
+        out = ok(self, PAGE, "set-attr", BUTTON, "button.innerContent.linkUrl", "404")
+        self.assertEqual(divi5_blocks.get_attr(divi5_blocks.parse(out).find(BUTTON), "button.innerContent")["linkUrl"],
+                         "404")
+        out = ok(self, PAGE, "set-attr", HEADING, "title.decoration.font.font.family", "1942")
+        self.assertEqual(divi5_blocks.get_attr(divi5_blocks.parse(out).find(HEADING),
+                                               "title.decoration.font.font")["family"], "1942")
+        # a number leaf still parses JSON
+        out = ok(self, PAGE, "set-attr", HEADING, "module.decoration.zIndex", "5")
+        self.assertEqual(divi5_blocks.get_attr(divi5_blocks.parse(out).find(HEADING), "module.decoration.zIndex"), 5)
 
     def test_set_attr_non_responsive_key(self):
         out = ok(self, PAGE, "set-attr", HEADING, "modulePreset", '["default"]')
