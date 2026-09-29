@@ -152,6 +152,17 @@
     }
    }
   },
+  "list.advanced.layout": {
+   "sub": {
+    "markerStyle": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    }
+   }
+  },
   "list.decoration.font": {
    "family": "font",
    "prefix": ""

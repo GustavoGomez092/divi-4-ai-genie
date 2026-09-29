@@ -4,7 +4,9 @@ A module's `attrs` maps each responsive attribute path (what divi5_blocks.iter_l
 `title.decoration.font.font`) to either an inline leaf spec or a family reference `{"family", "prefix"}` into
 schema5/families5.json. `Schema5.leaf_spec(spec)` turns either into a leaf table {sub_path: leaf}, where the
 sub_path is the key path inside the attribute's value object ("" = the whole value). A leaf is
-`{type, options?, units?, multiple?, open?, bp, states, note?}`; the types are listed in families5.json `_types`.
+`{type, options?, units?, multiple?, open?, breakpoints_extra?, bp, states, note?}`; the types are listed in
+families5.json `_types`. breakpoints_extra lists pseudo-breakpoints a leaf accepts besides _meta.breakpoints_all
+(disabledOn: desktopAbove, tabletOnly).
 """
 from __future__ import annotations
 
@@ -49,9 +51,14 @@ def _children(table: Dict[str, dict], key: str) -> Dict[str, dict]:
 def _composite(table: Dict[str, dict]) -> dict:
     """Leaf spec for an object value made of the leaves in `table`."""
     states: List[str] = []
+    extra: List[str] = []
     for leaf in table.values():
         states.extend(s for s in leaf["states"] if s not in states)
-    return {"type": "object", "sub": table, "bp": any(leaf["bp"] for leaf in table.values()), "states": states}
+        extra.extend(b for b in leaf.get("breakpoints_extra", ()) if b not in extra)
+    out = {"type": "object", "sub": table, "bp": any(leaf["bp"] for leaf in table.values()), "states": states}
+    if extra:
+        out["breakpoints_extra"] = extra
+    return out
 
 
 def _covering(table: Dict[str, dict], sub: str) -> Optional[Tuple[str, dict]]:
@@ -61,9 +68,9 @@ def _covering(table: Dict[str, dict], sub: str) -> Optional[Tuple[str, dict]]:
     - the nearest ancestor entry whose value holds `sub`: a structured leaf (spacing, icon, radius, gradient), or
       an opaque object/json that has no declared sub-leaves or is marked open (then `sub` is typed json).
     """
-    if sub in table and not (table[sub]["type"] == "object" and _has_children(table, sub)):
+    if sub in table and not _has_children(table, sub):
         return sub, table[sub]
-    if _has_children(table, sub):
+    if _has_children(table, sub):  # an object value (a declared scalar beside it is handled by _walk)
         leaf = _composite(_children(table, sub))
         if sub in table:
             leaf["states"] = list(dict.fromkeys(table[sub]["states"] + leaf["states"]))
@@ -118,7 +125,8 @@ class ModuleSchema5:
         return None
 
     def _status(self, leaf: dict, breakpoint: Optional[str], state: Optional[str]) -> str:
-        if breakpoint is None or breakpoint not in self._schema.breakpoints_all:
+        if breakpoint is None or (breakpoint not in self._schema.breakpoints_all
+                                  and breakpoint not in leaf.get("breakpoints_extra", ())):
             return "bad_breakpoint"
         if state is None or state not in leaf["states"]:
             return "bad_state"

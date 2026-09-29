@@ -65,6 +65,13 @@
    ],
    "type": "object"
   },
+  "children.spacer.advanced.displayElementsOnSpacer": {
+   "bp": false,
+   "states": [
+    "value"
+   ],
+   "type": "onoff"
+  },
   "connector.decoration.background": {
    "family": "background",
    "prefix": ""
@@ -474,6 +481,22 @@
    ],
    "type": "onoff"
   },
+  "marker.advanced": {
+   "sub": {
+    "position": {
+     "bp": false,
+     "options": [
+      "center",
+      "end",
+      "start"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    }
+   }
+  },
   "marker.advanced.position": {
    "sub": {
     "position": {
@@ -755,7 +778,9 @@
      "options": [
       "alternating",
       "bottom",
-      "top"
+      "top",
+      "left",
+      "right"
      ],
      "states": [
       "value"
@@ -773,7 +798,9 @@
      "bp": true,
      "options": [
       "bottom",
-      "top"
+      "top",
+      "left",
+      "right"
      ],
      "states": [
       "value"
@@ -979,6 +1006,10 @@
   },
   "track.decoration.boxShadow": {
    "family": "box-shadow",
+   "prefix": ""
+  },
+  "track.decoration.layout": {
+   "family": "layout",
    "prefix": ""
   },
   "track.decoration.sizing": {

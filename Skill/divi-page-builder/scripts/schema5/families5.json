@@ -2971,15 +2971,19 @@
    "key": "decoration.conditions"
   },
   "disabled-on": {
-   "_notes": "D4 disabled_on through convertDisabledOnBreakpoint: an object keyed by breakpoint/disabledOn item (desktopAbove, tabletOnly, phone, ...) with on/off",
+   "_notes": "divi/disabled-on (JS group wr/Ar): a responsive attr whose per-breakpoint value is \"on\" (disabled) or \"off\". Divi's converter (AdvancedOptionConversion::convertDisabledOnBreakpoint) writes the D4 items as the pseudo-breakpoints desktopAbove / tabletOnly (index.json breakpoints.disabledOnItems), which the VB migrates on edit; both forms are valid.",
    "attrs": {
     "": {
      "": {
       "bp": true,
+      "breakpoints_extra": [
+       "desktopAbove",
+       "tabletOnly"
+      ],
       "states": [
        "value"
       ],
-      "type": "object"
+      "type": "onoff"
      }
     }
    },

@@ -257,6 +257,16 @@
    ],
    "type": "onoff"
   },
+  "elements.advanced.showReply": {
+   "bp": true,
+   "note": "untyped: out-of-scope module, no evidence",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "object"
+  },
   "field.advanced.focus.background": {
    "sub": {
     "backgroundColor": {

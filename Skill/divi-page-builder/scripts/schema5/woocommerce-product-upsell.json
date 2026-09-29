@@ -9,13 +9,15 @@
   },
   "content.advanced.columnsNumber": {
    "bp": false,
+   "note": "render default dynamic added",
    "options": [
     "1",
     "2",
     "3",
     "4",
     "5",
-    "6"
+    "6",
+    "dynamic"
    ],
    "states": [
     "value"

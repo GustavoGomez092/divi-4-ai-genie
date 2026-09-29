@@ -278,6 +278,16 @@ class AttrTest(unittest.TestCase):
         values = {(p, bp, st): v for p, bp, st, v in iter_leaves(attrs)}
         self.assertEqual(values[("title.decoration.font.font", "desktop", "hover")], {"x": 1})
 
+    def test_iter_leaves_disabled_on_pseudo_breakpoints(self):
+        # Divi's converter (AdvancedOptionConversion::convertDisabledOnBreakpoint) writes the D4 disabled_on
+        # items desktopAbove / tabletOnly as breakpoint keys (index.json breakpoints.disabledOnItems).
+        attrs = {"module": {"decoration": {"disabledOn": {"phone": {"value": "on"}, "tabletOnly": {"value": "off"},
+                                                          "desktopAbove": {"value": "on"}}}}}
+        got = sorted((p, bp, st, v) for p, bp, st, v in iter_leaves(attrs))
+        self.assertEqual(got, [("module.decoration.disabledOn", "desktopAbove", "value", "on"),
+                               ("module.decoration.disabledOn", "phone", "value", "on"),
+                               ("module.decoration.disabledOn", "tabletOnly", "value", "off")])
+
     def test_iter_leaves_on_fixtures_hits_breakpoint_states(self):
         doc = parse(SIMPLE)
         leaves = [(p, bp, st, v) for b, _, _ in doc.walk() for p, bp, st, v in iter_leaves(b.attrs)]

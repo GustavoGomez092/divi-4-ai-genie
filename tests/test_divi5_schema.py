@@ -176,6 +176,81 @@ class Schema5Test(unittest.TestCase):
         self.assertIn("divi/row-inner", self.schema.module("column").children)
         self.assertIsNone(self.schema.module("blurb").children)
 
+    def test_disabled_on_native_and_converter_forms(self):
+        # native VB form: a per-breakpoint "on"/"off"; converter form adds the desktopAbove/tabletOnly pseudo-breakpoints
+        native = ('<!-- wp:divi/text {"module":{"decoration":{"disabledOn":{"desktop":{"value":"off"},'
+                  '"phone":{"value":"on"}}}},"builderVersion":"5.13.1"} /-->')
+        converted = ('<!-- wp:divi/text {"module":{"decoration":{"disabledOn":{"phone":{"value":"on"},'
+                     '"tabletOnly":{"value":"off"},"desktopAbove":{"value":"on"}}}}} /-->')
+        for src in (native, converted):
+            (block, _, _), = parse(src).walk()
+            mod = self.schema.module(block.name)
+            leaves = [x for x in iter_leaves(block.attrs) if x[0] == "module.decoration.disabledOn"]
+            self.assertTrue(leaves)
+            for attr, bp, st, value in leaves:
+                (r, v), = mod.walk_value(attr, bp, st, value)
+                self.assertEqual((r.status, r.leaf["type"], v in ("on", "off")), ("ok", "onoff", True), (bp, st))
+        text = self.schema.module("text")
+        self.assertEqual(text.resolve("module.decoration.disabledOn", "desktop", "hover").status, "bad_state")
+        # the pseudo-breakpoints belong to disabledOn only
+        self.assertEqual(text.resolve("module.decoration.sizing", "tabletOnly", "value").status, "bad_breakpoint")
+
+    def test_render_defaults_resolve_and_fit(self):
+        """Divi's own render defaults (schema5 `defaults`) are valid content: they resolve and fit enum/onoff."""
+        bad = []
+        for name in self.schema.names():
+            mod = self.schema.module(name)
+            for attr, resp in mod.defaults.items():
+                for bp, states in resp.items():
+                    for st, value in states.items():
+                        for r, v in mod.walk_value(attr, bp, st, value):
+                            if r.status != "ok":
+                                bad.append((name, attr, r.sub_path, bp, st, r.status))
+                                continue
+                            if v in ("", None) or variable_refs(v):
+                                continue
+                            vals = v if isinstance(v, list) and r.leaf.get("multiple") else [v]
+                            if r.leaf["type"] == "enum" and not all(x in r.leaf["options"] for x in vals):
+                                bad.append((name, attr, r.sub_path, v, r.leaf["options"]))
+                            if r.leaf["type"] == "onoff" and v not in ("on", "off"):
+                                bad.append((name, attr, r.sub_path, v, "onoff"))
+        self.assertEqual(bad, [])
+
+    def test_module_json_field_paths_resolve(self):
+        """Every field module.json declares for an in-scope module is an accepted path with its declared states."""
+        from collections import defaultdict
+        sys.path.insert(0, str(TOOLS5))
+        from build_schema5 import field_items, group_roots
+        misses = []
+        for name in self.schema.names():
+            if not self.schema.in_scope(name):
+                continue
+            data = json.loads((SCHEMA5_RAW / "modules" / f"{name[5:]}.json").read_text())
+            items = defaultdict(list)
+            field_items(data["attributes"], items)
+            field_items(data["settings"], items)
+            mod = self.schema.module(name)
+            for (attr, sub) in sorted(items):
+                path = f"{attr}.{sub}" if sub else attr
+                r = mod.resolve(path, "desktop", "value")
+                if r.status != "ok":
+                    misses.append((name, path, r.status))
+            # option groups module.json places with a group component (e.g. timeline track.decoration.layout)
+            for prefix, key in sorted(group_roots(data["settings"]) | group_roots(data["attributes"])):
+                root = f"{prefix}.{key}"
+                if not any(a == root or a.startswith(root + ".") for a in mod.attrs):
+                    misses.append((name, root, "group root missing"))
+        self.assertEqual(misses, [])
+
+    def test_scalar_or_object_value_descends(self):
+        toc = self.schema.module("table-of-contents")
+        got = [(r.status, r.sub_path, r.leaf["type"]) for r, _ in
+               toc.walk_value("title.innerContent", "desktop", "value", {"text": "Contents"})]
+        self.assertEqual(got, [("ok", "text", "text")])
+        got = [(r.status, r.sub_path, r.leaf["type"]) for r, _ in
+               toc.walk_value("title.innerContent", "desktop", "value", "Contents")]
+        self.assertEqual(got, [("ok", None, "text")])
+
     def test_build_is_deterministic(self):
         with tempfile.TemporaryDirectory() as tmp:
             subprocess.run([sys.executable, str(TOOLS5 / "build_schema5.py"), str(SCHEMA5_RAW),

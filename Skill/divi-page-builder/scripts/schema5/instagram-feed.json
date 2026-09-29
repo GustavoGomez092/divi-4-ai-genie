@@ -61,6 +61,17 @@
     }
    }
   },
+  "feed.advanced.config": {
+   "sub": {
+    "lightbox": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    }
+   }
+  },
   "feed.advanced.link": {
    "family": "link",
    "prefix": ""

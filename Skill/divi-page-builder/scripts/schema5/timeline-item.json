@@ -298,6 +298,23 @@
    ],
    "type": "onoff"
   },
+  "marker.advanced": {
+   "sub": {
+    "position": {
+     "bp": false,
+     "options": [
+      "center",
+      "default",
+      "end",
+      "start"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    }
+   }
+  },
   "marker.advanced.position": {
    "sub": {
     "position": {

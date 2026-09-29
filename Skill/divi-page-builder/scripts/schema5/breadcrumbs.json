@@ -418,6 +418,16 @@
     "value"
    ],
    "type": "json"
+  },
+  "trail.advanced.htmlTag": {
+   "bp": true,
+   "note": "untyped: out-of-scope module, no evidence",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "object"
   }
  },
  "category": "module",

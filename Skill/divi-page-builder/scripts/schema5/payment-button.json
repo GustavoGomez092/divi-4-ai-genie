@@ -87,6 +87,88 @@
    "family": "spacing",
    "prefix": ""
   },
+  "button.innerContent": {
+   "sub": {
+    "amount": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "amountMode": {
+     "bp": false,
+     "options": [
+      "fixed",
+      "user-defined"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "cancelUrl": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "url"
+    },
+    "currency": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "description": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "environment": {
+     "bp": false,
+     "options": [
+      "live",
+      "sandbox"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
+    "openInNewTab": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "onoff"
+    },
+    "provider": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "resourceId": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "text"
+    },
+    "returnUrl": {
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "type": "url"
+    }
+   }
+  },
   "css": {
    "sub": {
     "after": {

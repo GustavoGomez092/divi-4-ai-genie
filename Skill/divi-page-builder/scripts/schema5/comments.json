@@ -382,7 +382,6 @@
    "sub": {
     "radius": {
      "bp": true,
-     "note": "typed from Divi 4 border_radii_fields_focus (border-radius)",
      "states": [
       "value",
       "hover",

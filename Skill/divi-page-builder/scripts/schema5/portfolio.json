@@ -339,15 +339,11 @@
   },
   "portfolio.advanced.layout": {
    "bp": false,
-   "note": "typed from Divi 4 fullwidth (select)",
-   "options": [
-    "on",
-    "off"
-   ],
+   "note": "typed from Divi 4 fullwidth (select); D5 render default 'fullwidth' is not a D4 option, so the D5 control differs",
    "states": [
     "value"
    ],
-   "type": "enum"
+   "type": "text"
   },
   "portfolio.advanced.showCategories": {
    "bp": true,

@@ -62,8 +62,25 @@ def short(name):
 # ---- union path model -------------------------------------------------------------------------------------
 
 def module_pairs(data):
-    """(attrName, subName|None, strong) declared for one module: expander leaves (strong) + conversion targets."""
+    """(attrName, subName|None, strong) declared for one module: expander leaves (strong), module.json field items
+    (strong: Divi's own settings UI writes them) and conversion targets (weak)."""
     pairs = {(i["attrName"], i.get("subName") or None, True) for i in data["leaves"].values()}
+    items = defaultdict(list)
+    field_items(data.get("attributes") or {}, items)
+    field_items(data.get("settings") or {}, items)
+    pairs |= {(attr, sub or None, True) for attr, sub in items}
+    # render defaults are values Divi itself merges into every block, so their paths are valid content: they add
+    # attrs the other sources miss, and sub-leaves of attrs declared with sub-leaves (a whole-valued attr, e.g. an
+    # icon picker, already covers its value)
+    declared = defaultdict(set)
+    for attr, sub, _ in pairs:
+        declared[attr].add(sub)
+    for attr, resp in flatten_defaults((data.get("defaults") or {}).get("render")).items():
+        if declared.get(attr) == {None}:
+            continue
+        for states in resp.values():
+            for value in states.values():
+                pairs |= {(attr, sub, True) for sub in _value_paths(value)}
     for target in ((data.get("conversion") or {}).get("attributeMap") or {}).values():
         if not isinstance(target, str) or "*" not in target:
             continue
@@ -111,7 +128,7 @@ class Families:
         if spec.get("type") not in self.types:
             raise SystemExit(f"families5.json: {where} has type {spec.get('type')!r}, not one of _types")
         out = {"type": spec["type"], "bp": spec.get("bp", True), "states": list(spec.get("states", DEFAULT_STATES))}
-        for k in ("options", "units", "multiple", "open", "note"):
+        for k in ("options", "units", "multiple", "open", "breakpoints_extra", "note"):
             if k in spec:
                 out[k] = spec[k]
         if "add" in spec:
@@ -188,6 +205,23 @@ def field_items(node, out, attr=None):
             field_items(v, out, attr)
 
 
+def group_roots(node, out=None):
+    """(prefix, key) of every option group module.json places through a group component's props.attrName."""
+    out = set() if out is None else out
+    if isinstance(node, dict):
+        comp = node.get("component")
+        if isinstance(comp, dict) and comp.get("type") == "group":
+            m = GROUP_ROOT.match(str((comp.get("props") or {}).get("attrName") or ""))
+            if m and not m.group(3):
+                out.add((m.group(1), m.group(2)))
+        for v in node.values():
+            group_roots(v, out)
+    elif isinstance(node, list):
+        for v in node:
+            group_roots(v, out)
+    return out
+
+
 def option_keys(opts):
     if isinstance(opts, dict) and opts:
         return [str(k) for k in opts]
@@ -200,6 +234,27 @@ def states_from(features, default=True):
     hover = features.get("hover", default)
     sticky = features.get("sticky", default)
     return ["value"] + (["hover"] if hover else []) + (["sticky"] if sticky else [])
+
+
+def from_components(items, rules):
+    """One leaf for all module.json field items declared for the same (attrName, subName): options, units and
+    states are the union (a module can declare the same field in several groups with different option sets)."""
+    leaves = [leaf for leaf in (from_component(i, rules) for i in items) if leaf]
+    if not leaves:
+        return None
+    types = {leaf["type"] for leaf in leaves}
+    out = dict(leaves[0])
+    if len(types) > 1:
+        out = {"type": "json" if types & {"json", "object"} else "text", "bp": True,
+               "note": f"module.json declares this field with several controls ({', '.join(sorted(types))})"}
+    out["bp"] = any(leaf["bp"] for leaf in leaves)
+    out["states"] = [s for s in ("value", "hover", "sticky") if any(s in leaf["states"] for leaf in leaves)]
+    for key in ("options", "units"):
+        if len(types) == 1 and all(key in leaf for leaf in leaves):
+            out[key] = list(dict.fromkeys(v for leaf in leaves for v in leaf.get(key, ())))
+    if out["type"] == "enum" and not out.get("options"):
+        out["type"] = "text"
+    return out
 
 
 def from_component(item, rules):
@@ -270,6 +325,18 @@ def _is_responsive(d):
             and all(isinstance(v, dict) and v for v in d.values()))
 
 
+def _value_paths(value, prefix=""):
+    """Dotted key paths of the leaves inside a default value (None = the whole value is a scalar/list); an empty
+    object (PHP [] or {}) declares nothing."""
+    if value in ([], {}):
+        return
+    if isinstance(value, dict):
+        for k, v in value.items():
+            yield from _value_paths(v, f"{prefix}.{k}" if prefix else k)
+    else:
+        yield prefix or None
+
+
 def flatten_defaults(node, prefix=""):
     out = {}
     if not isinstance(node, dict):
@@ -310,6 +377,51 @@ def with_form_states(leaf):
     if "hover" not in leaf["states"]:
         return leaf
     return dict(leaf, states=leaf["states"] + [s for s in FORM_STATES if s not in leaf["states"]])
+
+
+def _default_values(value, prefix=""):
+    if isinstance(value, dict) and value:
+        for k, v in value.items():
+            yield from _default_values(v, f"{prefix}.{k}" if prefix else k)
+    else:
+        yield prefix, value
+
+
+def fit_defaults(slug, attrs, defaults, families, problems):
+    """Make enum leaves accept Divi's own render defaults. An inline enum typed from module.json gains the default
+    value as an option; one typed from a Divi 4 field (whose options the default contradicts, so the D5 control
+    differs) becomes text. A family enum that rejects a default is reported, to be fixed in families5.json."""
+    for attr, resp in defaults.items():
+        spec = attrs.get(attr)
+        if spec is None:
+            continue
+        if "family" in spec:
+            table = families[spec["family"]][spec["prefix"]]
+        else:
+            table = spec["sub"] if "sub" in spec else {"": spec}
+        for states in resp.values():
+            for value in states.values():
+                for sub, v in _default_values(value):
+                    hit = lookup_key(table, sub)
+                    if hit is None or hit[1]["type"] != "enum" or not isinstance(v, (str, list)) or v in ("", []):
+                        continue
+                    key, leaf = hit
+                    vals = v if isinstance(v, list) and leaf.get("multiple") else [v]
+                    missing = [x for x in vals if isinstance(x, str) and "$variable(" not in x
+                               and x not in leaf["options"]]
+                    if not missing:
+                        continue
+                    if "family" in spec:
+                        problems.append(f"{slug}: render default {attr} {sub} = {v!r} is not an option of family "
+                                        f"{spec['family']}")
+                    elif str(leaf.get("note", "")).startswith("typed from Divi 4"):
+                        leaf["type"] = "text"
+                        leaf.pop("options", None)
+                        leaf["note"] += f"; D5 render default {v!r} is not a D4 option, so the D5 control differs"
+                    else:
+                        leaf["options"] = leaf["options"] + missing
+                        leaf["note"] = (leaf.get("note", "") + "; " if leaf.get("note") else "") + \
+                            f"render default {', '.join(missing)} added"
 
 
 def build(dump_dir, families_path, out_dir, report=False):
@@ -412,6 +524,8 @@ def build(dump_dir, families_path, out_dir, report=False):
                     eff[new] = set(eff[attr])
                     alias_of[new] = attr
         roots = {(mm.group(1), mm.group(2)) for mm in (GROUP_ROOT.match(a) for a in eff) if mm}
+        roots |= {r for r in group_roots(data.get("settings") or {}) | group_roots(data.get("attributes") or {})
+                  if r[1] in catalogue}
         forms = form_roots(data)
         attrs = {}
         for prefix, key in sorted(roots):
@@ -458,7 +572,7 @@ def build(dump_dir, families_path, out_dir, report=False):
                 if hit is None and attr == "css":
                     hit = sub, css_leaf
                 if hit is None and fi.get((src_attr, sub)):
-                    leaf = from_component(fi[(src_attr, sub)][0], comp_rules)
+                    leaf = from_components(fi[(src_attr, sub)], comp_rules)
                     why = f"component {fi[(src_attr, sub)][0]['component'].get('name')}"
                     hit = (sub, leaf) if leaf else None
                 if hit is None:
@@ -483,11 +597,13 @@ def build(dump_dir, families_path, out_dir, report=False):
             if not table:
                 continue
             attrs[attr] = table[""] if set(table) == {""} else {"sub": table}
+        defaults = flatten_defaults((data.get("defaults") or {}).get("render"))
+        fit_defaults(slug, attrs, defaults, pruned, offenders if in_scope else report_lines)
         css = sorted(eff.get("css", ()))
         modules_out[slug] = {
             "name": m["name"], "d4": m.get("d4Shortcode"), "category": m.get("category"), "scope": scopes[slug],
             "children": children[slug] or None, "parents": sorted(parents[slug]), "attrs": attrs,
-            "css": [c for c in css if c], "defaults": flatten_defaults((data.get("defaults") or {}).get("render")),
+            "css": [c for c in css if c], "defaults": defaults,
         }
 
     for key in sorted(used_keys_in_scope):
@@ -519,6 +635,7 @@ def build(dump_dir, families_path, out_dir, report=False):
                                           for n, f in src["families"].items()}})
     write("_meta.json", {"divi_version": index["divi_version"], "breakpoints_default": BREAKPOINTS_DEFAULT,
                          "breakpoints_all": BREAKPOINTS_ALL, "states": index["states"], "scopes_in": SCOPES_IN,
+                         "breakpoints_disabled_on": sorted((index.get("breakpoints") or {}).get("disabledOnItems") or {}),
                          "generated_by": "build_schema5.py"})
     for stale in out_dir.glob("*.json"):
         if stale.name not in written:

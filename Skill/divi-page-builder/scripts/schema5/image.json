@@ -223,6 +223,15 @@
    "family": "elements",
    "prefix": "structure"
   },
+  "module.advanced.forceFullwidth": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "onoff"
+  },
   "module.advanced.html": {
    "family": "html",
    "prefix": ""

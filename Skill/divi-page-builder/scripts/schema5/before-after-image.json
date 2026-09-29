@@ -39,6 +39,15 @@
     }
    }
   },
+  "afterLabel.innerContent": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "text"
+  },
   "beforeImage.decoration.border": {
    "family": "border",
    "prefix": ""
@@ -70,6 +79,15 @@
      "type": "image"
     }
    }
+  },
+  "beforeLabel.innerContent": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "text"
   },
   "css": {
    "sub": {

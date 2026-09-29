@@ -7,6 +7,10 @@
    ],
    "type": "text"
   },
+  "button.decoration.background": {
+   "family": "background",
+   "prefix": ""
+  },
   "button.decoration.button": {
    "family": "button",
    "prefix": ""
@@ -53,10 +57,12 @@
   },
   "content.advanced.pageType": {
    "bp": true,
+   "note": "render default dynamic added",
    "options": [
     "cart",
     "checkout",
-    "product"
+    "product",
+    "dynamic"
    ],
    "states": [
     "value",

@@ -85,6 +85,15 @@
    ],
    "type": "onoff"
   },
+  "arrows.advanced.showArrows": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "onoff"
+  },
   "arrows.advanced.size": {
    "bp": true,
    "states": [
@@ -288,6 +297,15 @@
    ],
    "type": "onoff"
   },
+  "dotNav.advanced.showDots": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "onoff"
+  },
   "dotNav.advanced.size": {
    "bp": true,
    "states": [
@@ -381,6 +399,15 @@
     "sticky"
    ],
    "type": "number"
+  },
+  "module.advanced.speed": {
+   "bp": true,
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "length"
   },
   "module.advanced.transitionSpeed": {
    "bp": true,

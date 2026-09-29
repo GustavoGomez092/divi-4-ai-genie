@@ -1154,10 +1154,19 @@
   },
   "disabled-on": {
    "key": "decoration.disabledOn",
-   "_notes": "D4 disabled_on through convertDisabledOnBreakpoint: an object keyed by breakpoint/disabledOn item (desktopAbove, tabletOnly, phone, ...) with on/off",
+   "_notes": "divi/disabled-on (JS group wr/Ar): a responsive attr whose per-breakpoint value is \"on\" (disabled) or \"off\". Divi's converter (AdvancedOptionConversion::convertDisabledOnBreakpoint) writes the D4 items as the pseudo-breakpoints desktopAbove / tabletOnly (index.json breakpoints.disabledOnItems), which the VB migrates on edit; both forms are valid.",
    "attrs": {
     "": {
-     "": "object-static"
+     "": {
+      "type": "onoff",
+      "states": [
+       "value"
+      ],
+      "breakpoints_extra": [
+       "desktopAbove",
+       "tabletOnly"
+      ]
+     }
     }
    }
   },
@@ -2398,6 +2407,18 @@
       "hover"
      ],
      "add": "icon object part (see unicode)"
+    },
+    "target": {
+     "type": "enum",
+     "bp": false,
+     "states": [
+      "value"
+     ],
+     "options": [
+      "on",
+      "off"
+     ],
+     "note": "render default off; D4-style new-tab flag"
     }
    }
   },
@@ -2422,6 +2443,62 @@
    "pin.innerContent": {
     "lat": "number",
     "lng": "number"
+   }
+  },
+  "charts": {
+   "_notes": "Divi 5-only charts: the legend/tooltip option groups are module-library.js components (divi/charts-legend-*, divi/charts-tooltip-*) not expanded by the dump; paths come from the render defaults, types from the JS field configs (position options literal) and the value shapes; unclear option lists -> text",
+   "chart.advanced.legend.layout": {
+    "align": "text",
+    "position": {
+     "type": "enum",
+     "options": [
+      "top",
+      "left",
+      "bottom",
+      "right",
+      "chartArea"
+     ]
+    }
+   },
+   "chart.advanced.legend.markers": {
+    "boxHeight": "length",
+    "boxWidth": "length",
+    "padding": "length",
+    "pointStyle": {
+     "type": "text",
+     "note": "JS select circle/cross/star/triangle/...; list not pinned"
+    },
+    "usePointStyle": "onoff"
+   },
+   "chart.advanced.tooltip.box": {
+    "backgroundColor": "color",
+    "borderColor": "color",
+    "borderWidth": "length",
+    "cornerRadius": "length",
+    "padding": "length"
+   },
+   "chart.advanced.tooltip.colorBoxes": {
+    "boxHeight": "length",
+    "boxWidth": "length",
+    "displayColors": "onoff"
+   }
+  },
+  "image": {
+   "_notes": "render default module.advanced.forceFullwidth off",
+   "module.advanced.forceFullwidth": {
+    "": "onoff"
+   }
+  },
+  "table-of-contents": {
+   "_notes": "JS select Marker Style: ordered/unordered/hidden (hidden key not pinned) -> text",
+   "list.advanced.layout": {
+    "markerStyle": {
+     "type": "text",
+     "bp": false,
+     "states": [
+      "value"
+     ]
+    }
    }
   }
  },

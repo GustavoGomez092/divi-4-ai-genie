@@ -31,9 +31,11 @@ _WP_ESCAPE_RE = re.compile(r'\\\\|--|<|>|&|\\"')
 _INT64 = (-2 ** 63, 2 ** 63 - 1)
 
 BREAKPOINTS = ("desktop", "tablet", "phone", "phoneWide", "tabletWide", "widescreen", "ultraWide")
+# Pseudo-breakpoints Divi's converter writes into module.decoration.disabledOn (convertDisabledOnBreakpoint).
+DISABLED_ON_BREAKPOINTS = ("desktopAbove", "tabletOnly")
 STATES = ("value", "hover", "sticky", "focus", "checked", "active", "disabled")
 NON_RESPONSIVE = ("builderVersion", "modulePreset", "groupPreset", "locked")
-_BP_SET, _STATE_SET = frozenset(BREAKPOINTS), frozenset(STATES)
+_BP_SET, _STATE_SET = frozenset(BREAKPOINTS + DISABLED_ON_BREAKPOINTS), frozenset(STATES)
 
 
 @dataclass

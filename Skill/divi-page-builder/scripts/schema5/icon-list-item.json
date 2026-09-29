@@ -149,6 +149,18 @@
      ],
      "type": "object"
     },
+    "target": {
+     "bp": false,
+     "note": "render default off; D4-style new-tab flag",
+     "options": [
+      "on",
+      "off"
+     ],
+     "states": [
+      "value"
+     ],
+     "type": "enum"
+    },
     "title": {
      "bp": true,
      "states": [

@@ -13,6 +13,10 @@
   "tablet",
   "phone"
  ],
+ "breakpoints_disabled_on": [
+  "desktopAbove",
+  "tabletOnly"
+ ],
  "divi_version": "5.13.1",
  "generated_by": "build_schema5.py",
  "scopes_in": [

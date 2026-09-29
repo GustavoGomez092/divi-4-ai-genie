@@ -309,6 +309,85 @@
     }
    }
   },
+  "chart.advanced.legend.layout": {
+   "sub": {
+    "align": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "position": {
+     "bp": true,
+     "options": [
+      "top",
+      "left",
+      "bottom",
+      "right",
+      "chartArea"
+     ],
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "enum"
+    }
+   }
+  },
+  "chart.advanced.legend.markers": {
+   "sub": {
+    "boxHeight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "boxWidth": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "padding": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "pointStyle": {
+     "bp": true,
+     "note": "JS select circle/cross/star/triangle/...; list not pinned",
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "text"
+    },
+    "usePointStyle": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "onoff"
+    }
+   }
+  },
   "chart.advanced.legend.textEffects": {
    "sub": {
     "fillType": {
@@ -592,6 +671,19 @@
       "sticky"
      ],
      "type": "length"
+    }
+   }
+  },
+  "chart.advanced.legend.title": {
+   "sub": {
+    "color": {
+     "bp": false,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
     }
    }
   },
@@ -1624,6 +1716,86 @@
       "sticky"
      ],
      "type": "length"
+    }
+   }
+  },
+  "chart.advanced.tooltip.box": {
+   "sub": {
+    "backgroundColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "borderColor": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "color"
+    },
+    "borderWidth": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "cornerRadius": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "padding": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    }
+   }
+  },
+  "chart.advanced.tooltip.colorBoxes": {
+   "sub": {
+    "boxHeight": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "boxWidth": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "length"
+    },
+    "displayColors": {
+     "bp": true,
+     "states": [
+      "value",
+      "hover",
+      "sticky"
+     ],
+     "type": "onoff"
     }
    }
   },

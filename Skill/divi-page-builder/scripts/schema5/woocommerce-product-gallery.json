@@ -144,6 +144,16 @@
    ],
    "type": "json"
   },
+  "image.advanced.galleryOrderby": {
+   "bp": true,
+   "note": "untyped: out-of-scope module, no evidence",
+   "states": [
+    "value",
+    "hover",
+    "sticky"
+   ],
+   "type": "object"
+  },
   "image.decoration.border": {
    "family": "border",
    "prefix": ""
