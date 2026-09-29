@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from _paths import SCHEMA5_RAW, SCRIPTS, TOOLS5, d5_fixtures
+from _paths import SCHEMA5_RAW, SCRIPTS, TOOLS5, d5_fixtures, live5_only, wp5
 from divi5_blocks import iter_leaves, parse, variable_refs
 from divi5_schema import load_schema5
 
@@ -272,6 +272,38 @@ class Schema5Test(unittest.TestCase):
             self.assertEqual(proc.returncode, 1)
             self.assertIn("decoration.background", proc.stdout + proc.stderr)
             self.assertIn("color", proc.stdout + proc.stderr)
+
+
+REST_CONTEXT = '--exec=$_SERVER["REQUEST_URI"]="/wp-json/";'
+
+
+@live5_only
+class Schema5DumpLiveTest(unittest.TestCase):
+    """dump-schema.php against divi-5-test.local. Opt-in: PP_LIVE_TESTS=1 and the site running. Writes only to temp
+    dirs; the site is read, never changed."""
+
+    def test_dump_reproduces_the_committed_schema(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            proc = wp5(REST_CONTEXT, "eval-file", TOOLS5 / "dump-schema.php", tmp, timeout=600)
+            self.assertEqual(proc.returncode, 0, proc.stdout[-500:] + proc.stderr[-500:])
+            got = sorted(p.relative_to(tmp) for p in Path(tmp).rglob("*.json"))
+            self.assertEqual(got, sorted(p.relative_to(SCHEMA5_RAW) for p in SCHEMA5_RAW.rglob("*.json")))
+            for rel in got:
+                with self.subTest(str(rel)):
+                    self.assertEqual((Path(tmp) / rel).read_bytes(), (SCHEMA5_RAW / rel).read_bytes())
+
+    def test_dump_without_rest_context_refuses_and_keeps_the_old_dump(self):
+        """Regression: without the REST-context --exec Divi registers modules lazily, so the dump used to "succeed"
+        with every core module registered:false (87 of 118 files differing) after deleting the previous dump."""
+        with tempfile.TemporaryDirectory() as tmp:
+            old = Path(tmp) / "modules" / "text.json"
+            old.parent.mkdir()
+            old.write_text("{}")
+            proc = wp5("eval-file", TOOLS5 / "dump-schema.php", tmp, timeout=600)
+            self.assertNotEqual(proc.returncode, 0, proc.stdout[-500:])
+            self.assertIn("REQUEST_URI", proc.stderr)
+            self.assertTrue(old.exists(), "the previous dump must not be deleted")
+            self.assertFalse((Path(tmp) / "index.json").exists())
 
 
 if __name__ == "__main__":

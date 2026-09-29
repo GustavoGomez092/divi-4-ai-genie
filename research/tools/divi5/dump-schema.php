@@ -33,6 +33,11 @@ use ET\Builder\Packages\ModuleLibrary\ModuleRegistration;
 use ET\Builder\Packages\ModuleUtils\ModuleUtils;
 
 $out_dir = isset( $args[0] ) ? rtrim( $args[0], '/' ) : getcwd() . '/divi5-schema';
+// Without the REST-context --exec, Divi registers modules lazily and the dump would silently mark every core
+// module registered:false. Refuse before touching the previous dump.
+if ( ! WP_Block_Type_Registry::get_instance()->is_registered( 'divi/section' ) ) {
+	WP_CLI::error( 'divi/section is not registered: run with --exec=\'$_SERVER["REQUEST_URI"]="/wp-json/";\' (see the header of this file).' );
+}
 if ( ! is_dir( "$out_dir/modules" ) ) {
 	mkdir( "$out_dir/modules", 0755, true );
 }

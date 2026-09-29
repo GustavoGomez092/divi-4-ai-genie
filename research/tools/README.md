@@ -20,7 +20,7 @@ The Divi 5 schema and docs come from the LocalWP site `divi-5-test.local` (site 
 
 | Purpose | Command |
 |---|---|
-| 1. Dump Divi 5's schema | `LOCAL_SITE_ID=fTZ3hcgdI LOCAL_SITE_PATH="$HOME/Local Sites/divi-5-test/app/public" research/tools/wp-local.sh eval-file research/tools/divi5/dump-schema.php "$PWD/research/divi5-schema"` |
+| 1. Dump Divi 5's schema | `LOCAL_SITE_ID=fTZ3hcgdI LOCAL_SITE_PATH="$HOME/Local Sites/divi-5-test/app/public" research/tools/wp-local.sh --exec='$_SERVER["REQUEST_URI"]="/wp-json/";' eval-file research/tools/divi5/dump-schema.php "$PWD/research/divi5-schema"` (the `--exec` makes Divi register every module; without it the script refuses) |
 | 2. Compile the Divi 5 validator schema | `python3 research/tools/divi5/build_schema5.py research/divi5-schema research/tools/divi5/families5.json Skill/divi-page-builder/scripts/schema5` |
 | 3. Generate the Divi 5 module docs | `python3 research/tools/divi5/generate_docs5.py research/divi5-schema Skill/divi-page-builder --notes research/tools/divi5/notes` |
 | 4. Check every doc/recipe example (Divi 4 and 5) | `python3 research/tools/check_doc_examples.py Skill/divi-page-builder` |
