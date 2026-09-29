@@ -1,4 +1,8 @@
-"""Generated Divi 5 module references and design-family tables (research/tools/divi5/generate_docs5.py)."""
+"""Generated Divi 5 module references and design-family tables (research/tools/divi5/generate_docs5.py), the
+hand-written references, and the Divi 5 recipes (recipes/divi5/, research/tools/divi5/port_recipe.py)."""
+import contextlib
+import io
+import json
 import re
 import shutil
 import sys
@@ -6,7 +10,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from _paths import SCHEMA5_RAW, SKILL, TOOLS5
+from _paths import FIXTURES5, SCHEMA5_RAW, SKILL, TOOLS5
 from check_doc_examples import check, count_blocks
 from divi5_schema import load_schema5
 from validate import validate_source
@@ -312,6 +316,277 @@ class Divi5DocExamplesTest(unittest.TestCase):
             (Path(tmp) / "g.md").write_text("# T\n\n```divi5\n" + self.GOOD + "```\n")
             fails = check(Path(tmp))
         self.assertEqual([(str(p), label) for p, label, _ in fails], [("g.md", "fence-mismatch")])
+
+
+
+RECIPES5 = SKILL / "recipes" / "divi5"
+SAMPLE5 = RECIPES5 / "sample-tokens.json"
+HEROES = ("hero-split", "hero-centered", "hero-background-image", "hero-fullwidth-header")
+STRUCTURE5 = ("divi/section", "divi/row", "divi/column", "divi/row-inner", "divi/column-inner")
+LAYOUT_BLOCK = {"desktop": {"value": {"display": "block"}}}
+import divi5_blocks as d5  # noqa: E402
+import port_recipe  # noqa: E402  (research/tools/divi5, on sys.path above)
+
+
+def _recipe_examples():
+    """(relative path, is_page, source) of every ```divi5 example in recipes/divi5/{sections,pages}."""
+    out = []
+    for sub in ("sections", "pages"):
+        for md in sorted((RECIPES5 / sub).glob("*.md")):
+            for src in BLOCK5.findall(md.read_text()):
+                out.append((md.relative_to(SKILL).as_posix(), sub == "pages", src.strip()))
+    return out
+
+
+def _strings(node):
+    if isinstance(node, dict):
+        for v in node.values():
+            yield from _strings(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _strings(v)
+    elif isinstance(node, str):
+        yield node
+
+
+def _worked_example(name):
+    text = (RECIPES5 / "sections" / f"{name}.md").read_text()
+    part = text.split("## Worked example (sample-tokens.json)", 1)[1]
+    return BLOCK5.findall(part)[0].strip()
+
+
+class Divi5RecipesTest(unittest.TestCase):
+    """recipes/divi5/: sample tokens, the recipe files and their worked examples (Task 16 onward)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tokens = json.loads(SAMPLE5.read_text())
+
+    def test_sample_tokens_are_divi5_tokens_of_the_schema_version(self):
+        site = self.tokens["site"]
+        self.assertEqual(site["divi_major"], 5)
+        self.assertEqual(site["divi_version"], SCHEMA5.meta["divi_version"])
+        self.assertEqual(site["content_format"], "blocks")
+        self.assertTrue(self.tokens["colors"]["global"])
+        self.assertTrue(self.tokens["variables"])
+        self.assertTrue(self.tokens["presets"])
+        self.assertTrue(self.tokens["module_styles"])
+        self.assertTrue(self.tokens["section_exemplars"])
+        self.assertIn("extract_tokens.py", self.tokens["_note"])
+
+    def test_sample_token_ids_come_from_the_fixtures(self):
+        # Never invent an id: every gcid/gvid/preset id in the sample tokens is one the fixture HTML or the
+        # brand-kit fixture content uses.
+        fixtures = "".join(p.read_text() for p in (FIXTURES5 / "html").glob("*.html"))
+        fixtures += (FIXTURES5 / "converted" / "brand-kit.html").read_text()
+        ids = set(self.tokens["colors"]["global"]) | set(self.tokens["variables"])
+        ids |= {p["id"] for lst in self.tokens["presets"].values() for p in lst}
+        ids |= {p["id"] for lst in self.tokens.get("group_presets", {}).values() for p in lst}
+        for i in ids:
+            self.assertIn(i, fixtures, i)
+
+    def test_hero_recipes_have_every_part(self):
+        for name in HEROES:
+            text = (RECIPES5 / "sections" / f"{name}.md").read_text()
+            self.assertIn(f"](../../sections/{name}.md)", text, name)
+            for heading in ("## Structure", "## Field mapping", "## Responsive rules",
+                            "## Worked example (sample-tokens.json)", "## Checklist"):
+                self.assertIn(heading, text, f"{name}: {heading}")
+            self.assertTrue(_worked_example(name), name)
+
+    def test_every_divi5_section_recipe_has_a_divi4_original(self):
+        for md in (RECIPES5 / "sections").glob("*.md"):
+            self.assertTrue((SKILL / "recipes" / "sections" / md.name).exists(), md.name)
+            self.assertIn(f"](../../sections/{md.name})", md.read_text(), md.name)
+
+    def test_recipe_examples_validate_against_the_sample_tokens_without_findings(self):
+        examples = _recipe_examples()
+        self.assertGreaterEqual(len(examples), len(HEROES))
+        for rel, page, src in examples:
+            findings = [(f.level, f.code, f.attr) for f in validate_source(src, tokens=self.tokens, fragment=not page)]
+            self.assertEqual(findings, [], rel)
+
+    def test_recipe_examples_use_the_layout_form_and_the_schema_version(self):
+        version = SCHEMA5.meta["divi_version"]
+        known = {p["id"] for lst in self.tokens["presets"].values() for p in lst}
+        for rel, _page, src in _recipe_examples():
+            doc = d5.parse(src)
+            self.assertEqual(doc.problems, [], rel)
+            for block, path, _parent in doc.walk():
+                where = f"{rel}: {path}"
+                self.assertEqual(block.attrs.get("builderVersion"), version, where)
+                self.assertNotIn("locked", block.attrs, where)
+                self.assertTrue(set(block.attrs.get("modulePreset", [])) <= known, where)
+                if block.name in STRUCTURE5:
+                    self.assertEqual(d5.get_attr(block, "module.decoration.layout", None, None), LAYOUT_BLOCK, where)
+                if block.name in ("divi/row", "divi/row-inner"):
+                    self.assertTrue(d5.get_attr(block, "module.advanced.columnStructure"), where)
+                if block.name in ("divi/column", "divi/column-inner"):
+                    self.assertTrue(d5.get_attr(block, "module.advanced.type"), where)
+
+    def test_hero_examples_reference_the_sample_tokens_ids_not_their_values(self):
+        # References over literals: the sample tokens hold global colors for the brand navy and orange and a
+        # section-padding variable, so the heroes reference them and never repeat the literal values.
+        for name in HEROES:
+            src = _worked_example(name)
+            refs = {r["value"]["name"] for b, _p, _x in d5.parse(src).walk() for v in _strings(b.attrs)
+                    for r in d5.variable_refs(v)}
+            self.assertIn("gcid-r6navy0001", refs, name)
+            self.assertIn("gvid-r6secpad01", refs, name)
+            for literal in ("#0b2a3c", "#f97316", "96px"):
+                self.assertNotIn(literal, src.lower(), f"{name}: {literal}")
+
+    def test_examples_keep_canonical_escapes_in_the_files(self):
+        # Docs hazard: a file writer that decodes \uXXXX would leave raw quotes and tags in the JSON.
+        B = chr(92)
+        for name in HEROES:
+            src = _worked_example(name)
+            self.assertIn(B + "u0022", src, name)   # the quotes inside every $variable() reference
+            self.assertNotIn(B + '"', src, name)
+            doc = d5.parse(src)
+            self.assertEqual("".join(d5.render_block(b) for b in doc.nodes), src, name)   # canonical, byte for byte
+
+    def test_readme_indexes_every_divi5_recipe_and_the_sample_tokens(self):
+        readme = (RECIPES5 / "README.md").read_text()
+        self.assertIn("](sample-tokens.json)", readme)
+        self.assertIn("stored as `" + chr(92) + "u0022`", readme)   # docs hazard: the escape must survive
+        for md in sorted(RECIPES5.rglob("*.md")):
+            if md.name != "README.md":
+                self.assertIn(f"]({md.relative_to(RECIPES5).as_posix()})", readme, md.name)
+
+    def test_readme_and_recipe_links_resolve(self):
+        broken = []
+        for page in sorted(RECIPES5.rglob("*.md")):
+            for link in LINK.findall(page.read_text()):
+                if link.startswith(("http://", "https://")):
+                    continue
+                target, _, anchor = link.partition("#")
+                path = (page.parent / target).resolve() if target else page
+                if not path.exists() or (anchor and path.suffix == ".md" and anchor not in _anchors(path)):
+                    broken.append((page.relative_to(RECIPES5).as_posix(), link))
+        self.assertEqual(broken, [])
+
+
+CONVERTED = FIXTURES5 / "converted" / "brand-kit.html"
+NAVY_REF = '$variable({"type":"color","value":{"name":"gcid-r6navy0001","settings":{}}})$'
+
+
+class PortRecipeTest(unittest.TestCase):
+    """research/tools/divi5/port_recipe.py, offline (the conversion step is exercised live in Task 16's report)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tokens = json.loads(SAMPLE5.read_text())
+
+    def test_extracts_the_divi4_worked_example(self):
+        text = (SKILL / "recipes" / "sections" / "hero-split.md").read_text()
+        src = port_recipe.extract_example(text)
+        self.assertTrue(src.startswith("[et_pb_section"))
+        self.assertTrue(src.endswith("[/et_pb_section]"))
+
+    def _cleaned(self, source=None):
+        return port_recipe.clean(source or CONVERTED.read_text(), "hero-split", self.tokens)
+
+    def test_clean_sets_the_schema_version_and_drops_locked_and_default_presets(self):
+        src = CONVERTED.read_text().replace('"modulePreset":["default"]', '"modulePreset":["default"],"locked":"off"', 1)
+        sections = self._cleaned(src)
+        self.assertEqual([s.name for s in sections], ["divi/section"] * 5)   # the placeholder wrapper is removed
+        for s in sections:
+            for block, _p, _x in d5.parse(d5.render_block(s)).walk():
+                self.assertEqual(block.attrs["builderVersion"], SCHEMA5.meta["divi_version"])
+                self.assertNotIn("locked", block.attrs)
+                self.assertNotEqual(block.attrs.get("modulePreset"), ["default"])
+                self.assertEqual(list(block.attrs)[-1], "builderVersion")
+
+    def test_clean_keeps_known_presets_and_drops_unknown_ones(self):
+        known = CONVERTED.read_text()
+        cta = [b for s in self._cleaned(known) for b, _p, _x in d5.parse(d5.render_block(s)).walk()
+               if b.attrs.get("modulePreset")]
+        self.assertEqual([b.attrs["modulePreset"] for b in cta], [["11111111-2222-3333-4444-555555555555"]])
+        unknown = known.replace("11111111-2222-3333-4444-555555555555", "99999999-2222-3333-4444-555555555555")
+        self.assertFalse([b for s in self._cleaned(unknown) for b, _p, _x in d5.parse(d5.render_block(s)).walk()
+                          if b.attrs.get("modulePreset")])
+
+    def test_clean_replaces_literals_with_references_by_role(self):
+        out = "".join(d5.render_block(s) for s in self._cleaned())
+        doc = d5.parse(out)
+        hero = doc.find("section[0]")
+        self.assertEqual(d5.get_attr(hero, "module.decoration.background")["color"], NAVY_REF)
+        # #ffffff has no global in the sample tokens: it stays literal
+        heading = doc.find("section[0] > row[0] > column[0] > heading[0]")
+        self.assertEqual(d5.get_attr(heading, "title.decoration.font.font")["color"], "#ffffff")
+        self.assertNotIn("#0b2a3c", out.lower())
+
+    def test_clean_drops_render_defaults_empty_values_and_module_layout(self):
+        doc = d5.parse("".join(d5.render_block(s) for s in self._cleaned()))
+        hero = doc.find("section[0]")
+        padding = d5.get_attr(hero, "module.decoration.spacing")["padding"]
+        self.assertNotIn("right", padding)
+        self.assertEqual(padding["top"], "96px")
+        heading = doc.find("section[0] > row[0] > column[0] > heading[0]")
+        self.assertIsNone(d5.get_attr(heading, "module.decoration.layout"))       # modules need no layout
+        self.assertEqual(d5.get_attr(heading, "title.decoration.font.font")["headingLevel"], "h1")  # kept: SEO
+        column = doc.find("section[0] > row[0] > column[0]")
+        self.assertEqual(d5.get_attr(column, "module.decoration.layout"), LAYOUT_BLOCK["desktop"]["value"])
+        button = doc.find("section[2] > row[0] > column[0] > button[0]")
+        self.assertEqual(d5.get_attr(button, "button.decoration.button"), {"enable": "on"})
+        src = ('<!-- wp:divi/section {"module":{"decoration":{"layout":{"desktop":{"value":{"display":"block"}}}}},'
+               '"builderVersion":"5.0.0"} --><!-- wp:divi/row {"module":{"advanced":{"columnStructure":{"desktop":'
+               '{"value":"4_4"}}}}} --><!-- wp:divi/column {"module":{"advanced":{"type":{"desktop":{"value":"4_4"}}}}} '
+               '--><!-- wp:divi/button {"button":{"innerContent":{"desktop":{"value":{"text":"Go","linkUrl":"/"}}},'
+               '"decoration":{"button":{"desktop":{"value":{"enable":"on","icon":{"enable":"on"}}}}}},'
+               '"module":{"advanced":{"html":{"desktop":{"value":{"elementType":"a"}}}}}} /--><!-- /wp:divi/column '
+               '--><!-- /wp:divi/row --><!-- /wp:divi/section -->')
+        doc = d5.parse("".join(d5.render_block(s) for s in port_recipe.clean(src, "x", self.tokens)))
+        button = doc.find("section[0] > row[0] > column[0] > button[0]")
+        self.assertEqual(d5.get_attr(button, "button.decoration.button"), {"enable": "on"})   # icon default gone
+        self.assertNotIn("module", button.attrs)                                              # html default gone
+        row = doc.find("section[0] > row[0]")
+        self.assertEqual(d5.get_attr(row, "module.decoration.layout"), {"display": "block"})  # layout form added
+
+    def test_clean_regenerates_attribute_row_ids_deterministically(self):
+        rows = {"desktop": {"value": {"attributes": [
+            {"id": "4f1c2b7e-9a53-4d2e-8f61-0c7b5e2a9d14", "name": "class", "value": "a", "adminLabel": "A"},
+            {"id": "4f1c2b7e-9a53-4d2e-8f61-0c7b5e2a9d14", "name": "data-x", "value": "b", "adminLabel": "B"}]}}}
+        text = d5.new_block("text", {"content": {"innerContent": {"desktop": {"value": "<p>x</p>"}}},
+                                     "module": {"decoration": {"attributes": rows}}})
+        col = d5.new_block("column", {"module": {"advanced": {"type": {"desktop": {"value": "4_4"}}}}}, [text])
+        row = d5.new_block("row", {"module": {"advanced": {"columnStructure": {"desktop": {"value": "4_4"}}}}}, [col])
+        src = d5.render_block(d5.new_block("section", {}, [row]))
+
+        def ids(name):
+            doc = d5.parse("".join(d5.render_block(s) for s in port_recipe.clean(src, name, self.tokens)))
+            got = d5.get_attr(doc.find("section[0] > row[0] > column[0] > text[0]"), "module.decoration.attributes")
+            return [r["id"] for r in got["attributes"]]
+        first = ids("hero-split")
+        self.assertEqual(first, ids("hero-split"))
+        self.assertNotEqual(first, ids("hero-centered"))
+        self.assertEqual(len(set(first)), 2)
+        self.assertNotIn("4f1c2b7e-9a53-4d2e-8f61-0c7b5e2a9d14", first)
+        import uuid
+        self.assertEqual(first[0], str(uuid.uuid5(uuid.NAMESPACE_URL, "divi-genie/recipes/divi5/hero-split/0")))
+
+    def test_main_writes_a_validated_draft_and_never_overwrites(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            converted = Path(tmp) / "converted.html"
+            converted.write_text(CONVERTED.read_text())
+            out = Path(tmp) / "hero-split.md"
+            argv = [str(SKILL / "recipes" / "sections" / "hero-split.md"), "--converted", str(converted),
+                    "--out", str(out), "--tokens", str(SAMPLE5)]
+            with contextlib.redirect_stdout(io.StringIO()) as so:
+                self.assertEqual(port_recipe.main(argv), 0)
+            self.assertIn("0 error(s)", so.getvalue())
+            draft = out.read_text()
+            self.assertIn("](../../sections/hero-split.md)", draft)
+            for heading in ("## Structure", "## Field mapping", "## Responsive rules",
+                            "## Worked example (sample-tokens.json)", "## Checklist"):
+                self.assertIn(heading, draft)
+            example = BLOCK5.findall(draft)[0].strip()
+            self.assertEqual([f.code for f in validate_source(example, fragment=True) if f.level == "error"], [])
+            with contextlib.redirect_stderr(io.StringIO()) as se:
+                self.assertEqual(port_recipe.main(argv), 1)
+            self.assertIn("--force", se.getvalue())
+            self.assertEqual(out.read_text(), draft)
 
 
 if __name__ == "__main__":
