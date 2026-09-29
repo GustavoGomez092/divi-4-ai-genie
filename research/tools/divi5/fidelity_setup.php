@@ -1,20 +1,27 @@
 <?php
 // Task 13 token fidelity: seed known Divi 5 design data + one source page, and undo it byte-for-byte.
 // Based on r6_setup.php / r6_restore.php (research/divi5/tokens-and-detection.md §3).
-//   wp-local.sh eval-file research/tools/divi5/fidelity_setup.php snapshot            -> {"touched": {option: md5|null}, "all": {option: md5}}
-//   wp-local.sh eval-file research/tools/divi5/fidelity_setup.php setup BACKUP.json   -> JSON {page_id, url, ids}
-//   wp-local.sh eval-file research/tools/divi5/fidelity_setup.php restore BACKUP.json -> JSON {deleted, touched}
-// setup writes BACKUP.json (the raw wp_options rows of every option it touches: value bytes + autoload, or absent)
-// before changing anything, and refuses to run when BACKUP.json already exists (an unrestored earlier run).
+//   wp-local.sh eval-file research/tools/divi5/fidelity_setup.php snapshot
+//       -> {"touched": {option: md5|null}, "all": {option: md5}, "caches": {feature cache option: raw value|null}}
+//   wp-local.sh eval-file research/tools/divi5/fidelity_setup.php setup BACKUP.json --user=<admin>   -> {page_id, url}
+//   wp-local.sh eval-file research/tools/divi5/fidelity_setup.php restore BACKUP.json --user=<admin> -> {deleted, touched}
+// setup refuses (no writes) when BACKUP.json already exists (an unrestored earlier run) or when the seeded ids are
+// already in the options (a seeded site whose backup was lost: restoring from a new backup would keep the seed).
+// It then writes BACKUP.json, mode 0600 (the raw wp_options rows of every option it touches: value bytes + autoload,
+// or absent), before changing anything.
 // restore writes those rows back verbatim (deleting options that did not exist), deletes every "D5TEST fidelity"
-// page (and its et-cache directory) and marks the rest of Divi's static CSS stale. Used by tests/test_divi5_tokens_fidelity.py. Throwaway test site only.
+// page, trashed ones included (and its et-cache directory), marks the rest of Divi's static CSS stale and deletes
+// Divi's feature caches (Divi's own invalidation; they rebuild on the next view). Used by
+// tests/test_divi5_tokens_fidelity.py. Throwaway test site only.
 use ET\Builder\Packages\GlobalData\GlobalData;
 use ET\Builder\Packages\GlobalData\GlobalPreset;
 
 // The design-data options setup writes. Divi also deletes its _et_builder_{da,gf}_feature_cache options when these
 // change; those are caches any request rebuilds (or drops), so they are not backed up.
 const D5F_OPTIONS = [ 'et_divi', 'et_divi_global_variables', 'et_divi_builder_global_presets_d5' ];
+const D5F_CACHES  = [ '_et_builder_da_feature_cache', '_et_builder_gf_feature_cache' ];
 const D5F_TITLE   = 'D5TEST fidelity';
+const D5F_IDS     = [ 'gcid-d5f', 'gvid-d5f', 'd5fbtnpreset1', 'd5ffontpreset1' ]; // every seeded id starts with one
 
 $mode = $args[0] ?? '';
 $file = $args[1] ?? '';
@@ -40,12 +47,16 @@ function d5f_snapshot() {
 		$all[ $r['option_name'] ] = md5( $r['autoload'] . "\0" . $r['option_value'] );
 	}
 	ksort( $all );
-	return [ 'touched' => $touched, 'all' => $all ];
+	$caches = [];
+	foreach ( d5f_rows( D5F_CACHES ) as $name => $row ) {
+		$caches[ $name ] = $row ? base64_decode( $row['value_b64'] ) : null;
+	}
+	return [ 'touched' => $touched, 'all' => $all, 'caches' => $caches ];
 }
 
 function d5f_pages() {
 	return array_values( array_filter(
-		get_posts( [ 'post_type' => 'page', 'post_status' => 'any', 'numberposts' => -1 ] ),
+		get_posts( [ 'post_type' => 'page', 'post_status' => [ 'any', 'trash' ], 'numberposts' => -1 ] ),
 		function ( $p ) { return 0 === strpos( $p->post_title, D5F_TITLE ); }
 	) );
 }
@@ -84,13 +95,25 @@ if ( 'restore' === $mode ) {
 	if ( class_exists( 'ET_Core_PageResource' ) ) { // the home page's cached :root colors named the seeded ones
 		ET_Core_PageResource::remove_static_resources( 'all', 'all', true );
 	}
+	foreach ( D5F_CACHES as $name ) { delete_option( $name ); } // may hold the seeded data; Divi rebuilds them
 	echo wp_json_encode( [ 'deleted' => $deleted, 'touched' => d5f_snapshot()['touched'] ] );
 	return;
 }
 
 if ( 'setup' !== $mode || ! $file ) { WP_CLI::error( 'usage: fidelity_setup.php snapshot | setup BACKUP.json | restore BACKUP.json' ); }
 if ( file_exists( $file ) ) { WP_CLI::error( "$file exists: restore that earlier run first" ); }
-if ( false === file_put_contents( $file, wp_json_encode( [ 'rows' => d5f_rows( D5F_OPTIONS ) ] ) ) ) { WP_CLI::error( "cannot write $file" ); }
+$rows = d5f_rows( D5F_OPTIONS );
+foreach ( $rows as $name => $row ) {
+	foreach ( D5F_IDS as $id ) {
+		if ( $row && false !== strpos( base64_decode( $row['value_b64'] ), $id ) ) {
+			WP_CLI::error( "option $name already holds seeded id $id: an earlier run was not restored and its backup is lost; clean the site by hand" );
+		}
+	}
+}
+$umask = umask( 0077 );
+$wrote = file_put_contents( $file, wp_json_encode( [ 'rows' => $rows ] ) );
+umask( $umask );
+if ( false === $wrote || ! chmod( $file, 0600 ) ) { WP_CLI::error( "cannot write $file" ); }
 wp_set_current_user( 1 );
 
 $now = gmdate( 'Y-m-d\TH:i:s.000\Z' );

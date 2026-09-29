@@ -38,8 +38,10 @@ NAVY, CORAL, CORAL_LIGHT = "gcid-d5fnavy0001", "gcid-d5fcoral001", "gcid-d5fcora
 RADIUS, FONT = "gvid-d5fradius01", "gvid-d5ffont0001"
 TOKEN_CODES = {"W5_UNKNOWN_PRESET", "W5_UNKNOWN_VARIABLE", "W_OFF_PALETTE_COLOR", "W_OFF_BRAND_FONT",
                "W_OFF_SCALE_SPACING"}
-# Divi's feature caches: deleted when the design data changes, rebuilt (or dropped) by any later request.
-VOLATILE_OPTIONS = {"_et_builder_da_feature_cache", "_et_builder_gf_feature_cache"}
+# Divi's feature caches: restore deletes them (Divi's own invalidation) and any later request may rebuild them, so
+# their bytes are not compared; instead they must hold nothing seeded (SEEDED) once restored.
+FEATURE_CACHES = {"_et_builder_da_feature_cache", "_et_builder_gf_feature_cache"}
+SEEDED = ("gcid-d5f", "gvid-d5f", BUTTON_PRESET, FONT_PRESET, "Montserrat")
 VAR_RE = re.compile(r"var\(--([\w-]+)(?:,[^()]*)?\)")
 
 
@@ -52,6 +54,12 @@ def _wp(*args):
 
 def _setup_php(*args):
     return json.loads(_wp("eval-file", SETUP, *args).splitlines()[-1])
+
+
+def _fidelity_pages():
+    """Ids of every "D5TEST fidelity" page, trashed ones included."""
+    return wp5("post", "list", "--post_type=page", "--post_status=any,trash", "--s=D5TEST fidelity",
+               "--field=ID").stdout.split()
 
 
 def _get(url):
@@ -99,14 +107,17 @@ class Divi5TokensFidelityTest(unittest.TestCase):
     def _sweep(cls):
         """Undo an interrupted earlier run: its backup, its pages, its Application Password."""
         if BACKUP.exists():
-            _setup_php("restore", BACKUP)
+            _setup_php("restore", BACKUP, f"--user={cls.admin}")
             BACKUP.unlink()
-        for pid in wp5("post", "list", "--post_type=page", "--post_status=any", "--s=D5TEST fidelity",
-                       "--field=ID").stdout.split():
-            wp5("post", "delete", pid, "--force")
+        for pid in _fidelity_pages():
+            wp5("post", "delete", pid, "--force", f"--user={cls.admin}")
+        cls._delete_app_passwords()
+
+    @classmethod
+    def _delete_app_passwords(cls):
         for uuid in wp5("user", "application-password", "list", cls.admin, f"--name={APP_NAME}",
                         "--field=uuid").stdout.split():
-            wp5("user", "application-password", "delete", cls.admin, uuid)
+            wp5("user", "application-password", "delete", cls.admin, uuid, f"--user={cls.admin}")
 
     @classmethod
     def setUpClass(cls):
@@ -115,10 +126,11 @@ class Divi5TokensFidelityTest(unittest.TestCase):
         cls.before = _setup_php("snapshot")
         cls.tmp = Path(tempfile.mkdtemp())
         try:
-            cls.password = _wp("user", "application-password", "create", cls.admin, APP_NAME, "--porcelain")
+            cls.password = _wp("user", "application-password", "create", cls.admin, APP_NAME, "--porcelain",
+                               f"--user={cls.admin}")
             cls.keys = cls.tmp / "keys.json"  # never the user's own keys.json
             cls.keys.write_text(json.dumps({"keys": []}))
-            src = _setup_php("setup", BACKUP)
+            src = _setup_php("setup", BACKUP, f"--user={cls.admin}")
             cls.src_id, cls.src_url = src["page_id"], src["url"]
             cls.tokens_path = cls.tmp / "tokens.json"
             run = cls.script("extract_tokens.py", "--site", SITE5_URL, "--user", cls.admin, "--page", cls.src_id,
@@ -136,13 +148,11 @@ class Divi5TokensFidelityTest(unittest.TestCase):
         problems = []
         if BACKUP.exists():
             try:
-                cls.restored = _setup_php("restore", BACKUP)
+                cls.restored = _setup_php("restore", BACKUP, f"--user={cls.admin}")
                 BACKUP.unlink()
             except Exception as exc:  # keep the backup for the next run's sweep
                 problems.append(f"restore failed, backup kept at {BACKUP}: {exc}")
-        for uuid in wp5("user", "application-password", "list", cls.admin, f"--name={APP_NAME}",
-                        "--field=uuid").stdout.split():
-            wp5("user", "application-password", "delete", cls.admin, uuid)
+        cls._delete_app_passwords()
         shutil.rmtree(cls.tmp, ignore_errors=True)
         return problems
 
@@ -153,11 +163,14 @@ class Divi5TokensFidelityTest(unittest.TestCase):
         if after["touched"] != cls.before["touched"]:
             problems.append(f"touched options differ after restore: {cls.before['touched']} -> {after['touched']}")
         changed = sorted(k for k in set(after["all"]) | set(cls.before["all"])
-                         if k not in VOLATILE_OPTIONS and after["all"].get(k) != cls.before["all"].get(k))
+                         if k not in FEATURE_CACHES and after["all"].get(k) != cls.before["all"].get(k))
         if changed:
             problems.append(f"options changed by the run: {changed}")
-        left = wp5("post", "list", "--post_type=page", "--post_status=any", "--s=D5TEST fidelity",
-                   "--field=ID").stdout.split()
+        for name, value in after["caches"].items():  # absent (deleted by restore) or rebuilt, never seeded
+            leaked = [m for m in SEEDED if value is not None and m in value]
+            if leaked:
+                problems.append(f"{name} still holds seeded data after restore: {leaked}")
+        left = _fidelity_pages()
         if left:
             problems.append(f"D5TEST fidelity pages left: {left}")
         if problems:
@@ -225,6 +238,18 @@ class Divi5TokensFidelityTest(unittest.TestCase):
         pad = self.tokens["spacing"]["section_padding"]
         self.assertEqual(pad, [[{"top": "72px", "right": "", "bottom": "72px", "left": ""}, 1]])
 
+    # ---- setup safety ---------------------------------------------------------------------------------------------
+
+    def test_backup_is_private_and_setup_refuses_a_seeded_site(self):
+        self.assertEqual(BACKUP.stat().st_mode & 0o777, 0o600)
+        other = self.tmp / "second-backup.json"  # e.g. a run whose backup file was lost (another TMPDIR)
+        pages, touched = _fidelity_pages(), _setup_php("snapshot")["touched"]
+        out = wp5("eval-file", SETUP, "setup", other, f"--user={self.admin}")
+        self.assertNotEqual(out.returncode, 0)
+        self.assertIn("already holds seeded id", out.stderr)
+        self.assertFalse(other.exists())
+        self.assertEqual((_fidelity_pages(), _setup_php("snapshot")["touched"]), (pages, touched))  # no writes
+
     # ---- a page composed from the tokens renders like the source ------------------------------------------------
 
     def compose(self):
@@ -273,9 +298,11 @@ class Divi5TokensFidelityTest(unittest.TestCase):
         src_html, src_css = _page_css(self.src_url)
         new_html, new_css = _page_css(copy_url)
 
-        # the markup carries the same preset class and custom class
+        # the markup carries the same preset classes and custom class
         self.assertRegex(new_html, rf'<a class="[^"]*\bet_pb_button_0\b[^"]*\bd5f-cta\b[^"]*'
                                    rf'\bpreset--module--divi-button--{BUTTON_PRESET}\b')
+        self.assertRegex(new_html, rf'<div class="[^"]*\bet_pb_heading_0\b[^"]*'
+                                   rf'\bpreset--group--divi-heading--divi-font--\w+--{FONT_PRESET}\b')
 
         # the preset-- rules, and the module's own printed CSS, are identical on both pages
         for needle in (rf"preset--module--divi-button--{BUTTON_PRESET}\b", r"\.et_pb_button_0(?![\w-])",
