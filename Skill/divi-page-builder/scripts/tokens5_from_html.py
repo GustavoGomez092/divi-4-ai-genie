@@ -35,6 +35,7 @@ HSL_FROM_RE = re.compile(
     r"(?:max\(\s*0\s*,\s*calc\(s\s*([+-])\s*([\d.]+)\)\s*\)|calc\(s\s*([+-])\s*([\d.]+)\))\s+"
     r"calc\(l\s*([+-])\s*([\d.]+)\)\s*(?:/\s*([\d.]+%?))?\s*\)$")
 VAR_ALIAS_RE = re.compile(r"^var\(--(gcid-[\w-]+)\)$")
+URL_RE = re.compile(r"""^url\(\s*(["']?)(.*?)\1\s*\)$""", re.I | re.S)
 # Customizer role -> (global color id, Divi's default value).
 CUSTOMIZER = {"primary": ("gcid-primary-color", "#2ea3f2"), "secondary": ("gcid-secondary-color", "#2ea3f2"),
               "heading": ("gcid-heading-color", "#666666"), "body": ("gcid-body-color", "#666666"),
@@ -61,7 +62,7 @@ def _walk_css(css: str, media: Optional[str] = None) -> Iterator[Tuple[Optional[
         while k < n and depth:
             depth += {"{": 1, "}": -1}.get(css[k], 0)
             k += 1
-        body = css[j + 1:k - 1]
+        body = css[j + 1:k - 1] if depth == 0 else css[j + 1:]  # an unterminated block runs to EOF
         if prelude.startswith("@"):
             name = prelude.split(None, 1)[0].lower()
             if name in ("@media", "@supports"):
@@ -72,9 +73,33 @@ def _walk_css(css: str, media: Optional[str] = None) -> Iterator[Tuple[Optional[
         i = k
 
 
+def _split_decls(body: str) -> Iterator[str]:
+    """The `;`-separated declarations of a rule body; a `;` inside quotes or parentheses (`url(data:…;base64,…)`)
+    does not split."""
+    start, depth, quote, i = 0, 0, "", 0
+    while i < len(body):
+        c = body[i]
+        if quote:
+            if c == "\\":
+                i += 1
+            elif c == quote:
+                quote = ""
+        elif c in "'\"":
+            quote = c
+        elif c == "(":
+            depth += 1
+        elif c == ")":
+            depth = max(0, depth - 1)
+        elif c == ";" and not depth:
+            yield body[start:i]
+            start = i + 1
+        i += 1
+    yield body[start:]
+
+
 def _decls(body: str) -> Dict[str, str]:
     out = {}
-    for part in body.split(";"):
+    for part in _split_decls(body):
         if ":" not in part:
             continue
         prop, value = part.split(":", 1)
@@ -176,8 +201,9 @@ def _resolve(name: str, raw: Dict[str, str], seen=()) -> Tuple[Optional[str], Op
 
 def _variable(value: str) -> dict:
     v = value.strip()
-    if v.lower().startswith("url("):
-        return {"value": v[4:-1].strip().strip("'\""), "kind": "images"}
+    m = URL_RE.match(v)
+    if m:
+        return {"value": m.group(2), "kind": "images"}
     if "gradient(" in v:
         return {"value": v, "kind": "gradients"}
     if v[:1] in ("'", '"'):

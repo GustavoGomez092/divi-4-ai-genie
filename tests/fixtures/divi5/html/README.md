@@ -22,9 +22,12 @@ variable reference. The site's options were restored with `r6_restore.php` and b
 
 Divi's licensed CSS is **not** included. Each page was cut down, by script, to:
 
-- the `<style class="et-vb-global-data …">` blocks (only `:root` custom properties: `--et_global_*`, `--gvid-*`);
-- the `:root{--gcid-…}` rule, and the page's own module/preset rules that reference `--gcid-`/`--gvid-` or a
-  `preset--*` class, copied into a neutral `<style id="fixture-page-inline-css">` block;
+- the `<style class="et-vb-global-data …">` blocks, reduced to their `:root` custom properties (`--et_global_*`,
+  `--gvid-*`; the `body{…}` rule Divi prints after them was dropped);
+- the `:root{--gcid-…}` rule, every rule naming a `preset--*` class (including the button preset's `:after` rule),
+  and the page's own module rules whose value is a `var(--gcid-…)`/`var(--gvid-…)` reference (section background and
+  padding, text color), copied into a neutral `<style id="fixture-page-inline-css">` block. No other page rule is
+  kept;
 - the Google Fonts `<link>`, the Divi generator meta and one `themes/Divi/…?ver=5.13.1` script tag (the version
   signal), and the home page's `et-cache` `<link>`;
 - minimal markup: the section/row/column/module wrappers with their order and preset classes.

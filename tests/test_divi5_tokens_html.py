@@ -124,6 +124,26 @@ class VariablesTest(unittest.TestCase):
         self.assertEqual(tokens5_from_html(html)["variables"]["gvid-g1"]["kind"], "gradients")
 
 
+class CssParsingTest(unittest.TestCase):
+    def test_unterminated_rule_at_eof_keeps_its_last_character(self):
+        g = tokens5_from_html("<style>:root{--gcid-a: #fff</style>")["colors"]["global"]
+        self.assertEqual(g["gcid-a"]["value"], "#fff")
+
+    def test_semicolon_inside_url_does_not_split_the_declaration(self):
+        html = "<style>:root{--gvid-img: url(data:image/png;base64,iVBORw0KGgo=);--gvid-n: 4px;}</style>"
+        v = tokens5_from_html(html)["variables"]
+        self.assertEqual(v["gvid-img"], {"value": "data:image/png;base64,iVBORw0KGgo=", "kind": "images"})
+        self.assertEqual(v["gvid-n"], {"value": "4px", "kind": "numbers"})
+
+    def test_semicolon_inside_a_quoted_url_or_string(self):
+        html = ("<style>:root{--gvid-img: url(\"data:image/svg+xml;utf8,<svg/>\");"
+                "--gvid-f: 'A;B Sans';--gvid-n: 2px}</style>")
+        v = tokens5_from_html(html)["variables"]
+        self.assertEqual(v["gvid-img"]["value"], "data:image/svg+xml;utf8,<svg/>")
+        self.assertEqual(v["gvid-f"], {"value": "A;B Sans", "kind": "fonts"})
+        self.assertEqual(v["gvid-n"]["value"], "2px")
+
+
 class PresetCssTest(unittest.TestCase):
     def test_module_preset_declarations(self):
         p = tokens5_from_html(TRACE_HTML)["presets_css"]["r6btnpreset1"]
@@ -324,6 +344,37 @@ class ExtractOnlineTest(unittest.TestCase):
         self.assertIn(HOME_CSS_URL, self.urls)     # its et-cache stylesheet is followed
         self.assertIn("gvid-r6unusedn1", t["variables"])  # leaked by the reference-free home page
         self.assertEqual(t["colors"]["global"]["gcid-r6navy0001"]["value"], "#0B2A3C")
+
+
+class ExtractShortcodeOnDivi5SiteTest(unittest.TestCase):
+    """A Divi 5 site whose sampled pages are all Divi 4 shortcode: Divi 5 tokens, no module styles, a warning."""
+
+    def fake_get(self, url, auth=""):
+        if "/wp-json/wp/v2/pages/23" in url:
+            self.urls.append(url)
+            return json.dumps({"id": 23, "link": TRACE_URL,
+                               "content": {"raw": D4_SHORTCODE.read_text()}}).encode()
+        return ExtractOnlineTest.fake_get(self, url, auth)
+
+    def test_all_shortcode_pages_on_a_divi5_site(self):
+        self.urls = []
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "tokens.json"
+            with mock.patch("extract_tokens._get", side_effect=self.fake_get), \
+                    mock.patch.dict("os.environ", {"WP_APP_PASSWORD": "pw"}), \
+                    redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()) as err:
+                rc = main(["--site", SITE, "--user", "u", "--page", "23", "--out", str(out)])
+            self.assertEqual(rc, 0, err.getvalue())
+            t = json.loads(out.read_text())
+        self.assertEqual((t["site"]["divi_major"], t["site"]["content_format"]), (5, "shortcode"))
+        self.assertEqual(t["site"]["source_pages"], [{"id": 23, "url": TRACE_URL, "format": "shortcode"}])
+        self.assertEqual((t["module_styles"], t["typography"]["scale"], t["colors"]["palette"],
+                          t["section_exemplars"]), ({}, {}, [], []))
+        self.assertIn(f"warning: page 23 ({TRACE_URL}) is shortcode content on a Divi 5 site: it adds no module "
+                      "styles (convert it in the Visual Builder first)", err.getvalue())
+        # the site-wide design data still comes from the public HTML
+        self.assertEqual(t["colors"]["global"]["gcid-r6navy0001"]["value"], "#0B2A3C")
+        self.assertEqual(t["presets"]["divi/button"][0]["id"], "r6btnpreset1")
 
 
 class FixtureHygieneTest(unittest.TestCase):

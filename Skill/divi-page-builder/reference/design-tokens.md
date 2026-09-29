@@ -65,8 +65,10 @@ python3 scripts/extract_tokens.py --key "Client A" --page 12 --page 34 --out tok
   fetch fails, extraction still proceeds with a warning on stderr — you just don't get the
   Customizer-derived tokens.
 
-**Offline** (no network access; parses a content file you already have — useful for testing, or
-when you only have an export of the page content and no live site to fetch CSS from):
+**Offline** (no credentials and no REST call; parses a content file you already have — useful for testing, or
+when you only have an export of the page content). Without `--url` it makes no network access at all; with `--url`
+it still fetches that public URL for its CSS (on Divi 5 also the site's home page and their same-origin `et-cache`
+stylesheets, §7.2):
 
 ```bash
 python3 scripts/extract_tokens.py \
@@ -251,6 +253,11 @@ from outside, and it can be *referenced* by id instead of copied. The research b
   else gets the Divi 4 extractor, whose output is unchanged (§2–§6).
 - A Divi 4 shortcode page sampled on a Divi 5 site is listed in `site.source_pages` with `format: "shortcode"` and
   a warning; it adds no module styles. Sample block pages, or have the page converted in the Visual Builder first.
+- Online, a Divi 5 site whose sampled pages are **all** shortcode still gets Divi 5 tokens (`divi_major: 5`,
+  `content_format: "shortcode"`, the site-wide colors, variables and preset CSS from the public HTML) but an empty
+  `module_styles` (and no scale, palette or section exemplars from content): sample block pages, or migrate the
+  pages to Divi 5 first. (Offline there is no site detection, so a shortcode `--content-file` gets the Divi 4
+  extractor.)
 
 ### 7.2 Where the style lives, and what is recovered
 
