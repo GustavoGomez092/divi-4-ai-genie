@@ -1,0 +1,4 @@
+- `title.innerContent` is an object, not a string: `{"text": "…", "url": "…", "target": "off"|"on"}` (Divi 4 `title`, `url`, `url_new_window`). Only `divi/heading` and a few others take a plain string title.
+- Icon or image: in `imageIcon.innerContent`, `useIcon: "on"` shows `icon` (an icon object `{"unicode", "type", "weight"}`, see [icons.md](../../icons.md)); the default `"off"` shows the image `src` (give it an `alt`). Set only the one you use.
+- The title renders as `h4` by default. In a grid of blurbs under an `h2` section heading, set `title.decoration.font.font` → `{"headingLevel": "h3"}` so the outline doesn't skip a level.
+- `imageIcon.advanced.placement` is `top` (default) or `left`; `left` suits compact feature lists. The icon color is `imageIcon.advanced.color` (default: the site's primary global color).

@@ -1,0 +1,2 @@
+- `title.innerContent` is a plain string (the heading text), not an object.
+- The level defaults to `h1`. A page has exactly one `h1` (a second one is `E5_MULTIPLE_H1`), so set `title.decoration.font.font` → `{"headingLevel": "h2"}` (or lower) on every other heading, without skipping levels (`W_HEADING_SKIP`).

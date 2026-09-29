@@ -52,6 +52,7 @@ Write Divi 4 pages as raw shortcode (the exact `post_content` Divi stores), styl
 | `reference/design-tokens.md` | extracting and applying a site's styles |
 | `reference/publishing.md` | uploading images, creating drafts, editing live pages |
 | `reference/preview.md` | local preview setup and limits |
+| `reference/divi5/modules/README.md`, `reference/divi5/design-families.md` | Divi 5 sites: module attributes; shared styling families |
 | `recipes/README.md` | how recipes map tokens to fields |
 | `recipes/sections/alternating-features.md` | zigzagging photo/copy feature blocks below a hero |
 | `recipes/sections/contact.md` | lead-capture form paired with an optional map |

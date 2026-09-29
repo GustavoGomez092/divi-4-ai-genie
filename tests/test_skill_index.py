@@ -14,8 +14,11 @@ class SkillIndexTest(unittest.TestCase):
         self.assertLessEqual(len(m.group(1)), 500)
 
     def test_every_reference_and_recipe_is_indexed(self):
+        # Generated per-module pages are reached through their index (reference/modules/README.md,
+        # reference/divi5/modules/README.md), which is itself indexed.
         files = [p.relative_to(SKILL).as_posix() for p in SKILL.rglob("*.md")
-                 if p.name != "SKILL.md" and "reference/modules/et_pb_" not in p.as_posix()]
+                 if p.name != "SKILL.md" and "reference/modules/et_pb_" not in p.as_posix()
+                 and not ("reference/divi5/modules/" in p.as_posix() and p.name != "README.md")]
         missing = [f for f in files if f not in self.text]
         self.assertEqual(missing, [])
 
