@@ -495,8 +495,9 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
     unknown: Set[str] = set()
     warned_bp: Set[Tuple[str, str]] = set()
     for attr, bp, st, value in _leaves(attrs):
+        rep = _scoped(report, bp, st)
         for s in _strings(value):
-            _check_variables(s, block, path, attr, report, known_vars)
+            _check_variables(s, block, path, attr, rep, known_vars)
         if bp is None:
             res = mod.resolve(attr, None, None)
             if res.status == "nonresponsive":
@@ -504,16 +505,16 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
             if res.status == "unknown_attr":
                 if attr not in unknown:
                     unknown.add(attr)
-                    _unknown(block, path, attr, value, mod.attrs, report)
+                    _unknown(block, path, attr, value, mod.attrs, rep)
             else:
-                report("error", "E5_BAD_BREAKPOINT", f"{attr} is not wrapped in a breakpoint and state",
+                rep("error", "E5_BAD_BREAKPOINT", f"{attr} is not wrapped in a breakpoint and state",
                        node=block, path=path, attr=attr, value=_show(value),
                        hint='Divi 5 values are stored as {"desktop":{"value":…}}.')
             continue
         seen[attr].add((bp, st))
         if bp in DISABLED_BREAKPOINTS and (attr, bp) not in warned_bp:
             warned_bp.add((attr, bp))
-            report("warning", "W5_BREAKPOINT_DISABLED",
+            rep("warning", "W5_BREAKPOINT_DISABLED",
                    f"{attr} sets the {bp} breakpoint, which Divi 5 ships switched off", node=block, path=path,
                    attr=attr, value=bp, hint="Its values apply only once the site enables that breakpoint "
                                              "(Divi > Theme Options > Breakpoints); use desktop/tablet/phone.")
@@ -524,21 +525,21 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
                     continue
                 unknown.add(full)
                 if res.attr_path is None:
-                    _unknown(block, path, attr, value, mod.attrs, report)
+                    _unknown(block, path, attr, value, mod.attrs, rep)
                 else:
                     table = schema5.leaf_spec(mod.attrs[res.attr_path]) if res.attr_path in mod.attrs else {}
-                    _unknown(block, path, full, v, [f"{res.attr_path}.{k}" for k in table if k], report)
+                    _unknown(block, path, full, v, [f"{res.attr_path}.{k}" for k in table if k], rep)
             elif res.status == "bad_breakpoint":
-                report("error", "E5_BAD_BREAKPOINT", f"'{bp}' is not a Divi breakpoint ({full})", node=block,
+                rep("error", "E5_BAD_BREAKPOINT", f"'{bp}' is not a Divi breakpoint ({full})", node=block,
                        path=path, attr=full, value=bp,
                        hint="Breakpoints are desktop, tablet, phone (and phoneWide, tabletWide, widescreen, "
                             "ultraWide when enabled).")
             elif res.status == "bad_state":
                 allowed = ", ".join(res.leaf["states"]) if res.leaf else "value"
-                report("error", "E5_BAD_STATE", f"State '{st}' is not allowed on {full} (allowed: {allowed})",
+                rep("error", "E5_BAD_STATE", f"State '{st}' is not allowed on {full} (allowed: {allowed})",
                        node=block, path=path, attr=full, value=st)
             else:
-                _check_leaf(block, path, full, bp, res.leaf, v, report, site_host)
+                _check_leaf(block, path, full, bp, res.leaf, v, rep, site_host)
     for attr, pairs in seen.items():
         if attr in unknown or ("desktop", "value") in pairs or attr.endswith("disabledOn"):
             continue
@@ -548,6 +549,18 @@ def _check_block(block, path, mod, schema5, report, known_presets, known_vars, s
             report("warning", "W5_HOVER_WITHOUT_DESKTOP",
                    f"{attr} sets {', '.join(extra)} but no desktop.value", node=block, path=path, attr=attr,
                    value=",".join(extra), hint="Set the desktop value too; the other breakpoints and states vary it.")
+
+
+def _scoped(report, bp, st):
+    """report, but every finding's attr gets ':<breakpoint>:<state>' appended (the baseline key of a block finding:
+    dotted path + ':' + breakpoint + ':' + state). Non-responsive values keep the bare path."""
+    if bp is None:
+        return report
+
+    def scoped(level, code, message, node=None, path="", offset=None, attr="", value="", hint=""):
+        report(level, code, message, node=node, path=path, offset=offset,
+               attr=f"{attr}:{bp}:{st}" if attr else attr, value=value, hint=hint)
+    return scoped
 
 
 def _unknown(block, path, attr, value, candidates, report) -> None:

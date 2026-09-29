@@ -218,7 +218,7 @@ class CheckAttributesTest(unittest.TestCase):
         f = [f for f in run(page(block("text", text_attrs(contnt={"innerContent": {"desktop": {"value": "x"}}}))))
              if f.code == "E5_UNKNOWN_ATTR"]
         self.assertEqual(len(f), 1)
-        self.assertEqual(f[0].attr, "contnt.innerContent")
+        self.assertEqual(f[0].attr, "contnt.innerContent:desktop:value")
         self.assertIn("content", f[0].hint)
 
     def test_unknown_attr_reported_once_across_breakpoints(self):
@@ -226,12 +226,12 @@ class CheckAttributesTest(unittest.TestCase):
         spacing = {"desktop": {"value": {"marginz": {"top": "1px"}}}, "tablet": {"value": {"marginz": {"top": "2px"}}}}
         attrs = text_attrs(contnt={"innerContent": bogus}, module={"decoration": {"spacing": spacing}})
         f = [f.attr for f in run(page(block("text", attrs))) if f.code == "E5_UNKNOWN_ATTR"]
-        self.assertEqual(f, ["contnt.innerContent", "module.decoration.spacing.marginz"])
+        self.assertEqual(f, ["contnt.innerContent:desktop:value", "module.decoration.spacing.marginz:desktop:value"])
 
     def test_unknown_key_inside_object_value(self):
         attrs = text_attrs(module={"decoration": {"spacing": {"desktop": {"value": {"marginz": {"top": "1px"}}}}}})
         f = [f for f in run(page(block("text", attrs))) if f.code == "E5_UNKNOWN_ATTR"]
-        self.assertEqual([x.attr for x in f], ["module.decoration.spacing.marginz"])
+        self.assertEqual([x.attr for x in f], ["module.decoration.spacing.marginz:desktop:value"])
 
     def test_missing_breakpoint_wrapper(self):
         attrs = text_attrs()
@@ -272,7 +272,7 @@ class CheckAttributesTest(unittest.TestCase):
         attrs = {"builderVersion": V, "title": {"innerContent": {"desktop": {"value": "Hi"}},
                                                 "decoration": {"font": {"font": font}}}}
         f = [f for f in run(page(block("heading", attrs))) if f.code == "E5_BAD_BREAKPOINT"]
-        self.assertEqual([x.attr for x in f], ["title.decoration.font.font.headingLevel"])
+        self.assertEqual([x.attr for x in f], ["title.decoration.font.font.headingLevel:tablet:value"])
 
     def test_disabled_breakpoints_warn(self):
         attrs = text_attrs()
@@ -291,7 +291,7 @@ class CheckAttributesTest(unittest.TestCase):
         attrs = text_attrs(module={"decoration": {"background": {"desktop": {"value": {"color": "bluish"}}}}})
         f = [f for f in run(page(block("text", attrs))) if f.code == "E5_BAD_VALUE"]
         self.assertEqual(len(f), 1)
-        self.assertEqual(f[0].attr, "module.decoration.background.color")
+        self.assertEqual(f[0].attr, "module.decoration.background.color:desktop:value")
         self.assertEqual(f[0].value, "bluish")
 
     def test_bad_variable_anywhere(self):

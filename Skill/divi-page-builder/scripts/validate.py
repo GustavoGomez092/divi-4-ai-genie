@@ -27,6 +27,7 @@ from divi_shortcode import parse  # noqa: E402
 import divi5_blocks  # noqa: E402
 from divi5_checks_structure import check_headings5, check_structure5  # noqa: E402
 from divi5_checks_values import check_attributes5  # noqa: E402
+from divi5_checks_tokens import check_tokens5  # noqa: E402
 from divi5_schema import load_schema5  # noqa: E402
 
 
@@ -77,6 +78,8 @@ def _validate_blocks(source: str, fragment: bool, tokens: Optional[dict], site_u
     check_structure5(doc, schema5, report, fragment=fragment)
     check_headings5(doc, schema5, report, fragment=fragment)
     check_attributes5(doc, schema5, report, **_tokens5(tokens, site_url))
+    if tokens:
+        check_tokens5(doc, schema5, tokens, report)
     return report.findings
 
 
