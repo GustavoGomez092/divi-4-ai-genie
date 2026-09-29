@@ -14,10 +14,11 @@ system:
 |---|---|---|
 | brand navy (backgrounds, dark text) | global color `gcid-r6navy0001` | `#0B2A3C` |
 | brand orange (buttons, icons) | global color `gcid-r6orange001` | `#F97316` |
+| light orange (button hover) | global color `gcid-r6orangelt1`, derived from the orange (`l + 30`) | `#FDCDAB` |
 | accent (Customizer primary color) | `gcid-primary-color` | `#F97316` |
 | hero section padding | number variable `gvid-r6secpad01` | `clamp(48px, 8vw, 96px)` |
 | corner radius | number variable `gvid-r6radius01` | `12px` |
-| primary button look | module preset `r6btnpreset1` (its CSS is in the tokens) | orange, white text, 12px corners |
+| primary button look | module preset `r6btnpreset1` (its CSS is in the tokens) | orange, white text, 12px corners (the examples don't use it: [contrast](#contrast)) |
 | "Free Quote CTA" button | module preset `11111111-2222-3333-4444-555555555555` (converted from Divi 4; `css: null`) | unknown |
 
 The ids are opaque: `r6…` comes from the test fixture the ids were captured from; a real site's ids are random
@@ -75,8 +76,8 @@ Write the reference whenever the site has an id for the role, and the literal ot
    `button.decoration.background.color`. A `colors.palette` entry with `global` says the same.
 3. **Accent, heading, body and link colors** that no global covers use the Customizer ids, which always exist:
    the eyebrow's orange is the accent, `gcid-primary-color`.
-4. **Everything else is literal**, from the tokens: `#ffffff` headings, the `#cbd5e1` body copy, the `#ea580c`
-   hover (none of them has an id).
+4. **Everything else is literal**, from the tokens: `#ffffff` headings, the `#cbd5e1` body copy, the `#475569`
+   body text on light sections (none of them has an id).
 
 An id not in `tokens.json` renders as nothing, and an unknown preset id also drops the module's default preset
 styling: never invent one (`W5_UNKNOWN_VARIABLE`, `W5_UNKNOWN_PRESET`). A global color can be adjusted with
@@ -84,10 +85,35 @@ styling: never invent one (`W5_UNKNOWN_VARIABLE`, `W5_UNKNOWN_PRESET`). A global
 photo with the brand navy that way. Use it only for a shade of a brand color that has no id of its own.
 
 **Presets.** A bundle's `module_preset` goes on the new block as `modulePreset`, with the bundle's `attrs` next to
-it. `r6btnpreset1` supplies the orange, the white label and the 12px corners; the Hero button bundle adds only
-the hover color (with the same desktop color, since a hover state needs one). A preset whose `css` is `null` is
-still a real id whose look is unknown: keep it with its bundle's attrs, as the CTA button does with
-`11111111-2222-3333-4444-555555555555`. To get the site's default look, write no `modulePreset` at all.
+it, unless the preset's `css` fails the contrast check below. `r6btnpreset1` is such a preset: its `css` sets a
+white label (`color: #ffffff`) on the orange, so the split hero leaves it out and writes the orange, the navy
+label and the radius variable itself. A preset whose `css` is `null` is still a real id whose look is unknown:
+keep it with its bundle's attrs, as the CTA button does with `11111111-2222-3333-4444-555555555555` (its bundle
+sets the label color itself). To get the site's default look, write no `modulePreset` at all.
+
+### Contrast
+
+Every text color must reach **4.5:1** against its background (WCAG AA; 3:1 only for text of 24px, or 19px bold,
+and up), in every state that shows text: a hover that changes the background counts. Check a preset's `css`
+declarations too. The brand pairs in the sample, measured:
+
+| text on background | ratio | use |
+|---|---|---|
+| white on orange `#F97316` | 2.8:1 | never (the `r6btnpreset1` look) |
+| white on the old hover `#ea580c` | 3.6:1 | never |
+| navy `#0B2A3C` on orange `#F97316` | 5.3:1 | button and active-tab labels |
+| navy on `#ea580c` | 4.2:1 | never: so the hover is the light orange instead |
+| navy on light orange `gcid-r6orangelt1` (`#FDCDAB`) | 10.3:1 | button hover |
+| orange on white | 2.8:1 | not for text (links, numerals); decorative icons only |
+| orange on navy | 5.3:1 | the eyebrow |
+| white on navy | 14.9:1 | hero headings |
+| `#cbd5e1` on navy | 10.0:1 | hero body copy |
+| navy on white / on `#f1f5f9` | 14.9:1 / 13.6:1 | headings, numbers, links |
+| `#475569` on white / on `#f1f5f9` | 7.6:1 / 6.9:1 | body text |
+
+So on the brand orange the label is the navy global (`gcid-r6navy0001`, whose `roles` include
+`button.decoration.font.font.color`), and the hover is `gcid-r6orangelt1`. On a real site, compute the ratios
+for its own colors (resolve each `$variable` through `colors.global`) before writing a button, link or tab.
 
 ## 3. Choosing a `module_styles` bundle by context
 
@@ -102,8 +128,8 @@ Each bundle's `contexts` say where the site used it: `section_label`, `section_t
 
 `module_styles["divi/button"]` in the sample has two bundles, both on navy sections: `[Hero, 1_2]` (preset
 `r6btnpreset1`, white label) and `[Free Quote CTA, 4_4]` (preset `11111111-…`, navy label). The split hero's button
-takes the first; the centered and background-image heroes have one `4_4` column, so they take the second, as on
-Divi 4.
+takes the first (without its preset, [contrast](#contrast)); the centered and background-image heroes have one
+`4_4` column, so they take the second, as on Divi 4.
 
 ## 4. Section exemplars
 
@@ -126,7 +152,9 @@ invent a different split or a pixel row width.
 ```python
 import divi5_blocks as d
 navy = '$variable({"type":"color","value":{"name":"gcid-r6navy0001","settings":{}}})$'
-text = d.new_block("text", {"content": {"innerContent": {"desktop": {"value": "<p>Hello</p>"}}},
+text = d.new_block("text", {"content": {"innerContent": {"desktop": {"value": "<p>Hello</p>"}},
+                                        "decoration": {"bodyFont": {"body": {"font": {
+                                            "desktop": {"value": {"color": navy}}}}}}},
                             "builderVersion": "5.13.1"})
 print(d.render_block(text))
 ```
@@ -135,10 +163,18 @@ print(d.render_block(text))
 
 | Recipe | Divi 4 original | Divi 5 specifics |
 |---|---|---|
-| [Hero split](sections/hero-split.md) | [hero-split](../sections/hero-split.md) | preset button, radius variable on the image |
+| [Hero split](sections/hero-split.md) | [hero-split](../sections/hero-split.md) | the bundle's button without its white-label preset; radius variable on the image |
 | [Hero centered](sections/hero-centered.md) | [hero-centered](../sections/hero-centered.md) | `sizing.maxWidth` + `alignment` to center the copy block |
 | [Hero background image](sections/hero-background-image.md) | [hero-background-image](../sections/hero-background-image.md) | background `image` + a navy gradient from the global color with `opacity` |
 | [Hero fullwidth header](sections/hero-fullwidth-header.md) | [hero-fullwidth-header](../sections/hero-fullwidth-header.md) | fullwidth section; the module's own background must be set |
+| [Services grid](sections/services-grid.md) | [services-grid](../sections/services-grid.md) | blurb `h3` titles linked through `title.innerContent.url`; icon size and alignment in `imageIcon.decoration.sizing` |
+| [Alternating features](sections/alternating-features.md) | [alternating-features](../sections/alternating-features.md) | `disabledOn` on all three breakpoints; the stacked copy covers tablet too |
+| [Process steps](sections/process-steps.md) | [process-steps](../sections/process-steps.md) | the numeral as a navy-on-orange badge (orange text on white fails contrast) |
+| [Stats counters](sections/stats-counters.md) | [stats-counters](../sections/stats-counters.md) | the number-counter bundle; `enablePercentSign` `"off"` except on a percentage |
+| [Service area list](sections/service-area-list.md) | [service-area-list](../sections/service-area-list.md) | links in `bodyFont.link.font`: navy, bold, underlined |
+| [Tabs](sections/tabs.md) | [tabs](../sections/tabs.md) | `activeTab`/`tab` decoration; navy label on the orange active tab |
+| [Video](sections/video.md) | [video](../sections/video.md) | poster in `thumbnail.innerContent`; the embed iframe loads with the page |
+| [Gallery](sections/gallery.md) | [gallery](../sections/gallery.md) | `galleryIds`; `galleryGrid` column counts on all three breakpoints |
 | [Change copy](edits/change-copy.md) | [change-copy](../edits/change-copy.md) | `set-attr`, `extract`→edit→`replace` |
 | [Insert section](edits/insert-section.md) | [insert-section](../edits/insert-section.md) | `insert-after`/`insert-before` on a section anchor |
 | [Replace section](edits/replace-section.md) | [replace-section](../edits/replace-section.md) | `replace` a section's span |

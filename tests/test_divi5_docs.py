@@ -322,6 +322,9 @@ class Divi5DocExamplesTest(unittest.TestCase):
 RECIPES5 = SKILL / "recipes" / "divi5"
 SAMPLE5 = RECIPES5 / "sample-tokens.json"
 HEROES = ("hero-split", "hero-centered", "hero-background-image", "hero-fullwidth-header")
+CONTENT_SECTIONS = ("services-grid", "alternating-features", "process-steps", "stats-counters", "service-area-list",
+                    "tabs", "video", "gallery")
+SECTIONS5 = HEROES + CONTENT_SECTIONS
 STRUCTURE5 = ("divi/section", "divi/row", "divi/column", "divi/row-inner", "divi/column-inner")
 LAYOUT_BLOCK = {"desktop": {"value": {"display": "block"}}}
 import divi5_blocks as d5  # noqa: E402
@@ -385,8 +388,8 @@ class Divi5RecipesTest(unittest.TestCase):
         for i in ids:
             self.assertIn(i, fixtures, i)
 
-    def test_hero_recipes_have_every_part(self):
-        for name in HEROES:
+    def test_section_recipes_have_every_part(self):
+        for name in SECTIONS5:
             text = (RECIPES5 / "sections" / f"{name}.md").read_text()
             self.assertIn(f"](../../sections/{name}.md)", text, name)
             for heading in ("## Structure", "## Field mapping", "## Responsive rules",
@@ -439,12 +442,41 @@ class Divi5RecipesTest(unittest.TestCase):
     def test_examples_keep_canonical_escapes_in_the_files(self):
         # Docs hazard: a file writer that decodes \uXXXX would leave raw quotes and tags in the JSON.
         B = chr(92)
-        for name in HEROES:
+        for name in SECTIONS5:
             src = _worked_example(name)
             self.assertIn(B + "u0022", src, name)   # the quotes inside every $variable() reference
             self.assertNotIn(B + '"', src, name)
             doc = d5.parse(src)
             self.assertEqual("".join(d5.render_block(b) for b in doc.nodes), src, name)   # canonical, byte for byte
+
+    def test_orange_buttons_and_tabs_have_a_navy_label_and_a_legible_hover(self):
+        # Contrast (Task 16 review ruling): white on the brand orange is 2.8:1 and navy on the old #ea580c hover
+        # 4.2:1, both below WCAG AA; the examples put a navy label on orange and hover to the light orange.
+        orange = {ORANGE_REF, ACCENT_REF}
+        checked = 0
+        for rel, _page, src in _recipe_examples():
+            self.assertNotIn("r6btnpreset1", src, rel)            # its css is a white label on the orange
+            self.assertNotIn("#ea580c", src.lower(), rel)
+            for block, path, _x in d5.parse(src).walk():
+                pairs = [(f"{el}.decoration.background", f"{el}.decoration.font.font")
+                         for el in ("button", "buttonOne", "buttonTwo")] + \
+                        [("activeTab.decoration.background", "activeTab.decoration.font.font")]
+                for bg_attr, font_attr in pairs:
+                    bg = d5.get_attr(block, bg_attr, None, None) or {}
+                    if (bg.get("desktop", {}).get("value") or {}).get("color") not in orange:
+                        continue
+                    checked += 1
+                    font = d5.get_attr(block, font_attr) or {}
+                    self.assertEqual(font.get("color"), NAVY_REF, f"{rel}: {path} {font_attr}")
+                    hover = (bg["desktop"].get("hover") or {}).get("color")
+                    self.assertIn(hover, (None, ORANGE_LT_REF), f"{rel}: {path} {bg_attr} hover")
+        self.assertGreaterEqual(checked, 5)
+
+    def test_section_recipes_check_contrast(self):
+        for name in SECTIONS5:
+            checklist = (RECIPES5 / "sections" / f"{name}.md").read_text().split("## Checklist", 1)[1]
+            self.assertIn("- [ ] contrast:", checklist, name)
+            self.assertIn("](../README.md#contrast)", checklist, name)
 
     def test_readme_indexes_every_divi5_recipe_and_the_sample_tokens(self):
         readme = (RECIPES5 / "README.md").read_text()
@@ -469,6 +501,9 @@ class Divi5RecipesTest(unittest.TestCase):
 
 CONVERTED = FIXTURES5 / "converted" / "brand-kit.html"
 NAVY_REF = '$variable({"type":"color","value":{"name":"gcid-r6navy0001","settings":{}}})$'
+ORANGE_REF = '$variable({"type":"color","value":{"name":"gcid-r6orange001","settings":{}}})$'
+ORANGE_LT_REF = '$variable({"type":"color","value":{"name":"gcid-r6orangelt1","settings":{}}})$'
+ACCENT_REF = '$variable({"type":"color","value":{"name":"gcid-primary-color","settings":{}}})$'
 
 
 class PortRecipeTest(unittest.TestCase):
@@ -587,6 +622,24 @@ class PortRecipeTest(unittest.TestCase):
                 self.assertEqual(port_recipe.main(argv), 1)
             self.assertIn("--force", se.getvalue())
             self.assertEqual(out.read_text(), draft)
+
+    def test_main_fails_when_the_port_does_not_validate_but_still_writes_the_draft(self):
+        bad = ('<!-- wp:divi/section {"builderVersion":"5.0.0"} --><!-- wp:divi/row {"module":{"advanced":'
+               '{"columnStructure":{"desktop":{"value":"4_4"}}}}} --><!-- wp:divi/column {"module":{"advanced":'
+               '{"type":{"desktop":{"value":"4_4"}}}}} --><!-- wp:divi/heading {"title":{"innerContent":{"desktop":'
+               '{"value":"Hi"}},"decoration":{"font":{"font":{"desktop":{"value":{"headingLevel":"h2",'
+               '"size":"big"}}}}}}} /--><!-- /wp:divi/column --><!-- /wp:divi/row --><!-- /wp:divi/section -->')
+        with tempfile.TemporaryDirectory() as tmp:
+            converted = Path(tmp) / "converted.html"
+            converted.write_text(bad)
+            out = Path(tmp) / "hero-split.md"
+            argv = [str(SKILL / "recipes" / "sections" / "hero-split.md"), "--converted", str(converted),
+                    "--out", str(out), "--tokens", str(SAMPLE5)]
+            with contextlib.redirect_stdout(io.StringIO()) as so:
+                self.assertEqual(port_recipe.main(argv), 1)
+            self.assertIn("E5_BAD_VALUE", so.getvalue())
+            self.assertIn("1 error(s)", so.getvalue())
+            self.assertIn("E5_BAD_VALUE", out.read_text())      # the draft is written, findings in its comment
 
 
 if __name__ == "__main__":

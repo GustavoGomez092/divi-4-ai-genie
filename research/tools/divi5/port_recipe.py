@@ -16,7 +16,8 @@
    fonts and lengths with the tokens' `$variable()$` reference when a global color or variable has that exact
    value *and* is used in that role (its `roles`); give custom attribute rows fresh ids,
    uuid5(NAMESPACE_URL, "divi-genie/recipes/divi5/<recipe>/<n>").
-4. Validate it (validate_source, fragment mode, against the tokens) and print the findings.
+4. Validate it (validate_source, fragment mode, against the tokens) and print the findings; any error makes the
+   exit status 1 (the draft is still written, the findings in its comment, for the human pass to fix).
 5. Write a draft recipes/divi5/sections/<name>.md: pointer to the shared recipe, structure tree, field-mapping
    and responsive stubs listing what the example sets, the canonical worked example, the Divi 5 checklist.
    An existing file is never overwritten without --force (it has had its human pass).
@@ -378,7 +379,7 @@ def main(argv=None) -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(draft(name, title, sections, findings), encoding="utf-8")
     print(f"wrote {out}")
-    return 0
+    return 1 if errors else 0
 
 
 if __name__ == "__main__":
