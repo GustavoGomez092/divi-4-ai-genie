@@ -1,15 +1,17 @@
-# Divi 4 AI Genie
+# Divi 4 AI Genie (now with Divi 5)
 
-Divi 4 AI Genie is an AI skill that builds and edits Divi 4 pages in your client's own style. It
-reads the site's fonts, colors and spacing, writes the page in native Divi shortcode, checks it
-for errors and shows you a local preview. Only after you approve does it save a WordPress draft,
+Divi 4 AI Genie is an AI skill that builds and edits **Divi 4 and Divi 5** pages in your client's own
+style. It detects which Divi the site runs, reads the site's fonts, colors and spacing (on Divi 5, its
+global colors, design variables and presets too), writes the page in Divi's native format (shortcode
+on Divi 4, `wp:divi/*` blocks on Divi 5), checks it for errors and shows you a local preview. Only after you approve does it save a WordPress draft,
 and it never publishes without your OK.
 
-Ask for it by name ("use Divi Genie to…") or just describe a Divi page task; either way the agent picks it up.
+Ask for it by name ("use Divi Genie to…", "Divi 5 AI Genie…") or just describe a Divi page task; either way
+the agent picks it up.
 
 It's a skill, not a plugin: you install it into an AI coding agent (Claude Code, claude.ai, or any
 agent that can read a `SKILL.md` file), and the agent uses it to write, check and push Divi
-shortcode for you, in a terminal, next to your other tools.
+pages for you, in a terminal, next to your other tools.
 
 ## Table of contents
 
@@ -31,24 +33,30 @@ There are no fill-in-the-blank templates. Every section is composed field-by-fie
 module attributes, styled from the target site's own extracted design tokens, and validated against
 Divi's real module schema before anything is written or shown.
 
-**What it's for:** Divi 4 sites, authored as raw `et_pb_*` shortcode (the exact `post_content`
-Divi's own builder stores).
+**What it's for:**
+- **Divi 4** sites, authored as raw `et_pb_*` shortcode (the exact `post_content` Divi's own
+  builder stores).
+- **Divi 5** sites, authored as `<!-- wp:divi/… -->` blocks in WordPress's canonical JSON (again
+  exactly what Divi 5 stores), with their own module reference, recipes and validator. Colors,
+  spacing and presets are *referenced* from the site's design system (global colors, design
+  variables, presets) by id rather than copied. It never writes Divi 4 shortcode on a Divi 5 site,
+  or blocks on a Divi 4 site; `publish.py` refuses either mismatch.
 
 **What it's not for:**
-- **Divi 5** sites (block-based format) — this skill only speaks Divi 4's shortcode grammar.
 - **Theme Builder** templates (global headers/footers/archive layouts).
 - **WooCommerce** product page layouts.
 
 ### The end-to-end workflow
 
 1. **Intake** — the AI gets the content brief, the site URL, and whether this is a new page or an
-   edit. For an edit, it fetches the page's current content first.
+   edit, and detects whether the site runs Divi 4 or Divi 5 (everything after follows that
+   version's reference and recipes). For an edit, it fetches the page's current content first.
 2. **Tokens** — it reuses an existing `tokens.json` for the site, or extracts one from the site's
    own live pages (colors, fonts, spacing, per-module styles).
 3. **Outline approval** — it maps your brief onto a set of section recipes and shows you the
    planned outline before writing anything. **You approve the outline before it writes a single
    module.**
-4. **Compose** — it writes each section's shortcode, pulling every color, font, spacing value and
+4. **Compose** — it writes each section's shortcode (Divi 4) or blocks (Divi 5), pulling every color, font, spacing value and
    button style from `tokens.json` rather than inventing one.
 5. **Validate** — it checks the page against Divi's module schema (structure, attributes, value
    formats, heading outline) until there are zero blocking errors.
@@ -65,8 +73,8 @@ Divi's own builder stores).
 | Requirement | Notes |
 |---|---|
 | **Python 3.10+** | Standard library only — no `pip install` for anything the skill ships. |
-| **Node 20+** | Only needed for `--exact` (the real-Divi Playground preview). The default preview doesn't need it. |
-| **A Divi 4 site with the REST API reachable** | The standard WordPress REST API (`/wp-json/wp/v2/...`), enabled by default. |
+| **Node 20+** | Needed for every **Divi 5** preview (Divi 5 pages always render on the real Divi 5 theme in WordPress Playground), and for `--exact` on Divi 4. The default Divi 4 preview doesn't need it. |
+| **A Divi 4 or Divi 5 site with the REST API reachable** | The standard WordPress REST API (`/wp-json/wp/v2/...`), enabled by default. Divi 5 support was built and tested against Divi 5.13.1. |
 | **An Elegant Themes account** (username + API key) | Lets the previewer download a real copy of Divi once; after that it's cached and works offline for that version. The API key is in your Elegant Themes Members Area → **Account → API Key**. Put it in `keys.json`'s `elegant_themes` section (below), or env `ET_USERNAME`/`ET_API_KEY`. |
 
 ## Install
@@ -118,13 +126,14 @@ python3 scripts/preview.py doctor
 ```
 
 This reports the Python interpreter, the cache directory, which Divi versions are already cached,
-whether Node is present (only needed for `--exact`), and whether Elegant Themes credentials are
+whether Node is present (needed for `--exact` and for Divi 5 pages), and whether Elegant Themes credentials are
 available and where from (`env`, `keys.json`, or `none`). Then warm the cache with a real Divi
 download, with your Elegant Themes credentials in `keys.json`'s `elegant_themes` section (see
 [Connect your sites](#connect-your-sites-keysjson) below):
 
 ```bash
-python3 scripts/preview.py fetch-divi latest
+python3 scripts/preview.py fetch-divi latest     # Divi 4
+python3 scripts/preview.py fetch-divi latest5    # Divi 5 (about 35 MB), if you work on Divi 5 sites
 ```
 
 Or, without a `keys.json`, env vars work the same way (and always take priority over the file):
@@ -287,12 +296,14 @@ and, for a new site, an existing page built with Divi whose design the new page 
 - *"Edit the About page on client.com — update the second paragraph to mention our new 24/7
   hotline."*
 - *"Add a testimonials section to the homepage, right after the hero."*
+- *"Divi 5 AI Genie: build a PPC landing page for 'Client B' (a Divi 5 site) in its global colors and
+  presets."* (The version is detected either way; naming it just makes the request explicit.)
 - *"Restyle the pricing section on client.com to match its current brand tokens — it looks like it
   drifted off-brand."*
 
 What the AI asks you for, and when:
 
-1. It shows you a **section outline** before writing any shortcode, and waits for a yes.
+1. It shows you a **section outline** before writing any shortcode or blocks, and waits for a yes.
 2. It gives you a **local preview link** (a file path or a `http://127.0.0.1:PORT/...` URL) and
    stops — nothing has touched the site yet. It applies any changes you ask for and re-shows the
    preview until you approve it.
@@ -303,16 +314,18 @@ What the AI asks you for, and when:
 ## Command reference
 
 Run any script with `--help` (and any subcommand with its own `--help`) for the full flag list —
-this table covers the common path.
+this table covers the common path. Every script detects the page format (Divi 4 shortcode or Divi 5
+blocks) and handles both.
 
 | Script | Key subcommands / flags | Purpose |
 |---|---|---|
-| `scripts/extract_tokens.py` | `--key NAME` / `--site URL --user USER` (env `WP_APP_PASSWORD`), `--page ID` (repeatable), `--shortcode-file FILE --url URL` (offline), `--out FILE` | Extract a site's design tokens (colors, fonts, spacing, module styles) into `tokens.json`, from live REST pages or an offline shortcode file. |
-| `scripts/validate.py` | `PAGE`, `--tokens FILE`, `--baseline FILE`, `--site-url URL`, `--fragment`, `--json` | Validate shortcode against Divi's module schema: structure, heading outline, attributes, value formats, and (with `--tokens`) off-brand values. `--baseline` only fails on *new* errors versus an original page. |
+| `scripts/divi_format.py` | `site URL`, `content PAGE` | Which Divi a site runs (`{divi_version, divi_major, evidence}`, from public files only), and whether a page file is `shortcode`, `blocks`, `mixed` or `empty`. |
+| `scripts/extract_tokens.py` | `--key NAME` / `--site URL --user USER` (env `WP_APP_PASSWORD`), `--page ID` (repeatable), `--shortcode-file FILE --url URL` (offline), `--out FILE` | Extract a site's design tokens (colors, fonts, spacing, module styles; on Divi 5 also the global colors, design variables and preset ids) into `tokens.json`, from live REST pages or an offline page file. |
+| `scripts/validate.py` | `PAGE`, `--tokens FILE`, `--baseline FILE`, `--site-url URL`, `--fragment`, `--json` | Validate a page against Divi's module schema (the Divi 4 or Divi 5 one, by format): structure, heading outline, attributes, value formats, and (with `--tokens`) off-brand values. `--baseline` only fails on *new* errors versus an original page. |
 | `scripts/page_edit.py` | `PAGE outline` / `extract PATH` / `replace PATH FILE` / `insert-after PATH FILE` / `insert-before PATH FILE` / `set-attr PATH NAME VALUE` / `delete PATH`, `--out FILE` | Surgical edits to one node of a page by path (e.g. `et_pb_section[1] > et_pb_row[0] > et_pb_column[2]`); everything outside the targeted node stays byte-identical. |
 | `scripts/preview.py` | `render PAGE [--out FILE]`, `serve [--pages DIR] [--port N]`, `doctor`, `fetch-divi VERSION`; `render`/`serve`/`doctor`/`fetch-divi` all take `--keys PATH`, and `render`/`serve` also take `--tokens FILE`, `--divi VER`, `--no-js`, `--exact` | Default (pure-Python, stdlib-only) local preview: one standalone HTML file, or a live-reload server. `--exact` hands off to the Node preview for full fidelity, passing it the same resolved Elegant Themes credentials. |
-| `scripts/preview/preview.mjs` | `serve [--pages DIR] [--port N]`, `render LAYOUT.txt [--out FILE]`, `fetch-divi VER\|latest`, `doctor`; both take `--divi VER` / `--tokens FILE` | The real Divi 4 theme running on WordPress Playground (Node 20+, WebAssembly PHP). Invoked automatically by `preview.py ... --exact`. |
-| `scripts/publish.py` | `keys`, `fetch --page-id ID --out FILE`, `media FILE --alt TEXT`, `draft PAGE --title T [--page-id ID] [--baseline F] [--tokens F] [--page-fields JSON]`, `publish --page-id ID --yes [--content F] [--status publish]` | Push to WordPress over REST: list configured sites, fetch a page's current content, upload one image, save a draft (validates + uploads local images first), and publish (requires `--yes`). |
+| `scripts/preview/preview.mjs` | `serve [--pages DIR] [--port N]`, `render LAYOUT.txt [--out FILE]`, `fetch-divi VER\|latest`, `doctor`; both take `--divi VER` / `--tokens FILE` | The real Divi theme running on WordPress Playground (Node 20+, WebAssembly PHP). Invoked automatically by `preview.py ... --exact` on Divi 4 and for every Divi 5 page (seeded with the site's global colors, variables and preset CSS from `--tokens`). |
+| `scripts/publish.py` | `keys`, `fetch --page-id ID --out FILE`, `media FILE --alt TEXT`, `draft PAGE --title T [--page-id ID] [--baseline F] [--tokens F] [--page-fields JSON]`, `publish --page-id ID --yes [--content F] [--status publish]` | Push to WordPress over REST: list configured sites, fetch a page's current content, upload one image, save a draft (validates + uploads local images first; on Divi 5 also sets the builder meta a plain REST save can't), and publish (requires `--yes`). |
 
 ## Safety
 
@@ -329,6 +342,9 @@ this table covers the common path.
 - **Credentials are never printed.** `publish.py keys` lists `name`/`site`/`user` only, never the
   password; HTTP error messages include only the method/path and WordPress's own error code —
   never a password or a URL containing one.
+- **The right format for the site.** `publish.py draft`/`publish` detect the site's Divi version and
+  refuse Divi 4 shortcode on a Divi 5 site (it would render through a degraded legacy path) and
+  Divi 5 blocks on a Divi 4 site.
 - **The local preview never uploads anything or talks to WordPress.** `preview.py render`/`serve`
   only reads local files (the page, `tokens.json`, local images) and a cached Divi copy — nothing
   is sent to the client's site until `publish.py draft` runs, and that only happens after you
@@ -348,14 +364,18 @@ Skill/divi-page-builder/          the product: install this folder as the skill
 │   ├── design-tokens.md          extracting and applying a site's own style
 │   ├── publishing.md             uploading images, drafts, editing a live page, keys.json
 │   ├── preview.md                local preview setup, fidelity, and limits
-│   └── modules/                  one file per Divi module (64 modules), every field documented
+│   ├── modules/                  one file per Divi module (64 modules), every field documented
+│   └── divi5/                    the Divi 5 counterparts: page-format, structure, value-formats,
+│                                  design-families, and modules/ (64 blocks, every attribute path)
 ├── recipes/
-│   ├── README.md                 how a recipe maps tokens to fields
+│   ├── README.md                 how a recipe maps tokens to fields, and the recipe index
 │   ├── sections/                 19 single-section patterns (hero, CTA, FAQ, pricing, …)
 │   ├── pages/                    4 full-page compositions (service landing, PPC, local SEO, …)
-│   └── edits/                    4 edit patterns (change copy, insert/replace a section, restyle)
-└── scripts/                      validate.py, extract_tokens.py, page_edit.py, preview.py,
-                                   preview/preview.mjs, publish.py, wp_keys.py, and their internals
+│   ├── edits/                    4 edit patterns (change copy, insert/replace a section, restyle)
+│   └── divi5/                    the same 27 recipes as Divi 5 blocks, with their own README/index
+└── scripts/                      divi_format.py, validate.py, extract_tokens.py, page_edit.py,
+                                   preview.py, preview/preview.mjs, publish.py, wp_keys.py, and
+                                   their internals (schema/ for Divi 4, schema5/ for Divi 5)
 
 research/                         maintainer tooling: schema extraction, doc generation, fidelity
                                    harness against real Divi (see research/tools/README.md)
@@ -365,7 +385,7 @@ tests/                            the test suite (unittest), plus fixtures for v
 
 ## Limitations
 
-- **The preview uses stock Divi defaults, not the client's Customizer settings or global
+- **On Divi 4, the preview uses stock Divi defaults, not the client's Customizer settings or global
   presets.** Neither the default preview nor `--exact` applies the client's Customizer values,
   Global Colors, or global presets — a page that leans on those will look more generic in preview
   than it does live. The WordPress draft preview is the only one that reflects them.
@@ -376,6 +396,14 @@ tests/                            the test suite (unittest), plus fixtures for v
 - **The schema is Divi 4.27.x.** Module fields and behavior were extracted from a Divi 4.27
   install; a materially different Divi 4 version could have fields this skill doesn't know about
   yet.
+- **The Divi 5 schema is Divi 5.13.1.** Divi 5 is still moving; a newer release can add attributes
+  (the validator then reports them as unknown) until the schema is regenerated (see
+  [Development](#development)). The Divi 5 preview seeds the site's global colors, design variables
+  and preset CSS from `tokens.json`, but not its Customizer settings; check the draft's
+  `preview_url` for those.
+- **Divi 4 content on a Divi 5 site isn't converted.** `publish.py` refuses a shortcode page for a
+  Divi 5 site, and token extraction learns nothing from one; convert the page in Divi 5's Visual
+  Builder first, then the skill edits its blocks.
 
 ## Development
 
@@ -392,7 +420,12 @@ install) or the Elegant Themes API and are opt-in:
 PP_LIVE_TESTS=1 python3 -m unittest discover -s tests
 ```
 
-Check every `divi` fenced code example in the skill's docs and recipes actually validates:
+The Divi 5 live tests (`test_divi5_publish_live`, `test_divi5_tokens_fidelity`, `test_divi5_judge`)
+run against a second LocalWP site, `divi-5-test.local` (Divi 5.13.1, site id `fTZ3hcgdI`), with the
+same `PP_LIVE_TESTS=1`. They also need that site started: when `http://divi-5-test.local` doesn't
+answer they are skipped, so the Divi 4 site alone still gives a clean live run.
+
+Check every `divi` and `divi5` fenced code example in the skill's docs and recipes actually validates:
 
 ```bash
 python3 research/tools/check_doc_examples.py Skill/divi-page-builder
@@ -408,6 +441,18 @@ python3 research/tools/generate_docs.py research/divi-schema Skill/divi-page-bui
 validator schema, generate docs, then check examples and run tests — see
 `research/tools/README.md` for the full command list.)
 
+After a Divi 5 update, the same sequence runs against `divi-5-test.local`:
+
+```bash
+LOCAL_SITE_ID=fTZ3hcgdI LOCAL_SITE_PATH="$HOME/Local Sites/divi-5-test/app/public" \
+  research/tools/wp-local.sh eval-file research/tools/divi5/dump-schema.php "$PWD/research/divi5-schema"
+python3 research/tools/divi5/build_schema5.py research/divi5-schema research/tools/divi5/families5.json Skill/divi-page-builder/scripts/schema5
+python3 research/tools/divi5/generate_docs5.py research/divi5-schema Skill/divi-page-builder --notes research/tools/divi5/notes
+python3 research/tools/check_doc_examples.py Skill/divi-page-builder
+```
+
+The check covers the `divi` (Divi 4) and `divi5` fenced examples alike.
+
 ## Troubleshooting
 
 | Symptom | Cause | Fix |
@@ -420,4 +465,6 @@ validator schema, generate docs, then check examples and run tests — see
 | `401 Unauthorized` from `publish.py`/`extract_tokens.py` | Wrong username/Application Password, or Application Passwords disabled on that site. | Re-check the Application Password (not the account login password); confirm `wp_is_application_passwords_available()` isn't disabled. |
 | `403 Forbidden`, `rest_cannot_edit` | Credentials are valid but that WordPress user lacks `edit_post`/`publish_pages` capability on the target page. | Use an Editor/Administrator account, or grant the missing capability. |
 | `draft --page-id` refuses with an error about a live page | The target page is currently `publish`, `future`, or `private` — forcing it back to `draft` would take it offline. | Create a review copy without `--page-id`, get approval, then apply the edit with `publish --page-id ID --content edited.txt --yes` instead. |
+| `preview: Divi 5 block pages render on the real Divi 5 theme …`, exit 2 | Node 20+ is missing: Divi 5 pages have no Python preview. | Install Node ≥ 20 (and `fetch-divi latest5` once). |
+| `publish.py` refuses: "this is Divi 4 shortcode; the site runs Divi 5" (or the reverse) | The page file's format doesn't match the site's Divi version. | Write the page in the site's format (`python3 scripts/divi_format.py site URL` tells which). |
 | `keys.json is readable by other users; run chmod 600 <path>` | The file's permissions allow other local users to read it. | `chmod 600 ~/.config/divi-page-builder/keys.json` (or wherever your `--keys`/`DIVI_KEYS_FILE` points). |
