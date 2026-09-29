@@ -6,6 +6,7 @@ deleted afterwards, as are the uploaded media and the throwaway Application Pass
 import json
 import os
 import re
+import shutil
 import struct
 import subprocess
 import sys
@@ -55,7 +56,9 @@ class Divi5PublishLiveTest(unittest.TestCase):
         Path(self.keys).write_text(json.dumps({"keys": []}))
 
     def tearDown(self):
-        for pid in self.pages + self.media:
+        # every D5TEST page, including one a failed (non-zero) draft left behind without printing its id
+        swept = wp5("post", "list", "--post_type=page", "--post_status=any", "--s=D5TEST", "--field=ID").stdout.split()
+        for pid in dict.fromkeys([*map(str, self.pages), *swept, *map(str, self.media)]):
             wp5("post", "delete", pid, "--force", f"--user={self.admin}")
         uuids = wp5("user", "application-password", "list", self.admin, f"--name={APP_NAME}", "--field=uuid")
         for uuid in uuids.stdout.split():
@@ -77,6 +80,11 @@ class Divi5PublishLiveTest(unittest.TestCase):
                 self.pages.append(out["id"])
             self.media.extend(u["id"] for u in out["uploaded"])
         return proc
+
+    def tmpdir(self) -> Path:
+        d = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, d, True)
+        return Path(d)
 
     def stored(self, pid):
         return self.wp("post", "get", pid, "--field=post_content")
@@ -111,7 +119,7 @@ class Divi5PublishLiveTest(unittest.TestCase):
 
         # publish --content on the live page: its meta is read from the front end (REST can't show it)
         edited = source.replace("Emergency", "Urgent", 1)
-        page = Path(tempfile.mkdtemp()) / "edited.html"
+        page = self.tmpdir() / "edited.html"
         page.write_text(edited, encoding="utf-8")
         proc = self.publish_py("publish", "--page-id", pid, "--content", page, "--yes")
         self.assertEqual(proc.returncode, 0, proc.stderr)
@@ -131,8 +139,21 @@ class Divi5PublishLiveTest(unittest.TestCase):
         self.assertEqual(self.wp("post", "get", pid, "--field=post_status"), "draft")
         self.assertNotIn("[et_pb_section]", self.stored(pid))
 
+    def test_publish_without_content_sets_the_meta_before_making_a_draft_public(self):
+        proc = self.draft(FIXTURE)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        pid = json.loads(proc.stdout)["id"]
+        self.wp("post", "meta", "delete", pid, "_et_pb_use_builder", f"--user={self.admin}")  # e.g. a failed draft
+        proc = self.publish_py("publish", "--page-id", pid, "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stderr)  # includes the post-publish front-end backstop
+        self.assertEqual(json.loads(proc.stdout)["status"], "publish")
+        self.assertEqual(self.meta(pid), "on")
+        classes = _body_classes(self.front_end(pid))
+        self.assertIn("et_pb_pagebuilder_layout", classes)
+        self.assertNotIn("[et_pb_section]", self.stored(pid))
+
     def test_local_block_image_is_uploaded_and_rewritten(self):
-        tmp = Path(tempfile.mkdtemp())
+        tmp = self.tmpdir()
         (tmp / "d5test-hero.png").write_bytes(_png())
         page = tmp / "page.html"
         with open(page, "w", encoding="utf-8", newline="") as fh:

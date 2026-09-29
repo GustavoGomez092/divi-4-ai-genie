@@ -32,7 +32,9 @@ for a Divi 5 site and blocks for a Divi 4 site (an undetectable version only war
 problems are refused. On Divi 5 the builder meta `_et_pb_use_builder=on` cannot be set by a plain REST save, so
 `draft` creates (or, for an existing draft without the meta, overwrites) the page with a Divi 4 stub, then sends
 one /batch/v1 request (touch the title; set content + meta) and checks the stored meta, exit 2 if it is not
-`on`. `publish --content` sends content only and refuses a page whose meta is known to be off. Page files are
+`on`. `publish` on a page that isn't live yet runs the same stub + batch (with --content, or the page's current
+content) before changing the status; on a live page `--content` sends content only and refuses when the meta is
+known off; a Divi 5 page left published is checked on its public HTML (exit 2 without the builder layout). Page files are
 read and written byte-exact (CRLF kept) for block content. See reference/publishing.md, "Divi 5".
 Exit status: 0 ok, 1 validation errors or refused, 2 usage/HTTP/I-O error.
 """
@@ -337,8 +339,8 @@ def front_end_state(page):
 
 
 def _stub_hint(page_id) -> str:
-    return (f"Page {page_id} is a draft that may still hold the Divi 4 stub (any earlier content is in its "
-            f"revisions); rerun with --page-id {page_id} to retry.")
+    return (f"Page {page_id} is still unpublished and may hold the Divi 4 stub (any earlier content is in its "
+            f"revisions, if revisions are enabled); rerun with --page-id {page_id} to retry.")
 
 
 def _check_batch(responses, page_id):
@@ -378,6 +380,16 @@ class MetaNotStored(Exception):
     pass
 
 
+def stub_then_meta(wp, page_id, stub_body, title, content):
+    """Write the Divi 4 stub (stub_body carries it), then builder_meta_sequence. Only for pages that are not live.
+    Returns the read-back page, or None after printing META_NOT_STORED (the caller exits 2)."""
+    wp.request("POST", f"/pages/{page_id}", json_body=stub_body)
+    try:
+        return builder_meta_sequence(wp, page_id, title, content)
+    except MetaNotStored:
+        return None
+
+
 def _draft_output(wp, page, uploaded):
     _print({"id": page["id"], "status": page.get("status", "draft"), "link": page.get("link", ""),
             "preview_url": _preview_url(page.get("link", "")),
@@ -399,43 +411,69 @@ def _divi5_draft(wp, a, content, current, page_fields, uploaded):
     elif a.slug:
         stub["slug"] = a.slug
     stub.update(page_fields)
-    page = wp.request("POST", f"/pages/{a.page_id}" if a.page_id else "/pages", json_body=stub)
-    try:
-        back = builder_meta_sequence(wp, page["id"], a.title, content)
-    except MetaNotStored:
+    if a.page_id:
+        page = dict(current, id=a.page_id)
+        back = stub_then_meta(wp, a.page_id, stub, a.title, content)
+    else:
+        page = wp.request("POST", "/pages", json_body=stub)
+        try:
+            back = builder_meta_sequence(wp, page["id"], a.title, content)
+        except MetaNotStored:
+            back = None
+    if back is None:
         print(f"page {page['id']} (draft): {META_NOT_STORED}", file=sys.stderr)
         return 2
     _draft_output(wp, {**page, **{k: back[k] for k in ("status", "link") if back.get(k)}}, uploaded)
     return 0
 
 
-def _divi5_publish_refusal(current, page_id) -> bool:
-    """publish --content on Divi 5 never touches the builder meta; refuse a page where it is known to be off."""
+def _divi5_publish_plan(current, page_id) -> str:
+    """How publish sends Divi 5 content: "direct" (content/status only; the meta is on, or a live Divi 5 page whose
+    meta REST can't show), "stub" (a page that isn't live and whose meta isn't known to be on: set it with the
+    verified stub + batch first, then change the status), or "refuse" (a live page whose meta is off or can't be
+    confirmed: its content is never swapped for the stub)."""
     status = current.get("status")
     state = meta_state(current)
     if state is None and status == "publish":
         state = front_end_state(current)
     if state == "on":
-        return False
+        return "direct"
+    if status not in LIVE_STATUSES:
+        return "stub"
     divi5_page = divi_format.detect_content((current.get("content") or {}).get("raw") or "") == "blocks"
     if state is None and divi5_page:
         print(f"publish.py: note: could not read _et_pb_use_builder for page {page_id} (REST shows it only for "
               f"pages holding Divi 4 content); a content update leaves it as it is.", file=sys.stderr)
-        return False
+        return "direct"
     why = "is not on" if state == "off" else "could not be confirmed (and the page does not hold Divi 5 blocks)"
-    if status in LIVE_STATUSES:
-        print(f"page {page_id} is {status} (live) and its _et_pb_use_builder meta {why}: with Divi 5 content it "
-              f"would render inside the theme's title+sidebar template. Setting that meta over REST means swapping "
-              f"the page's content for a Divi 4 stub first, which is never done to a live page. Set it in "
-              f"WordPress instead: open the page once in the Divi builder and save, or "
-              f"`wp post meta update {page_id} _et_pb_use_builder on --user=<admin>`; or build a new draft with "
-              f"publish.py draft (no --page-id), review it, and publish that. See reference/publishing.md, "
-              f"Divi 5.", file=sys.stderr)
-    else:
-        print(f"page {page_id} is {status} and its _et_pb_use_builder meta {why}. Set it first with "
-              f"`publish.py draft PAGE --page-id {page_id} --title …` (safe on a draft), then publish. See "
-              f"reference/publishing.md, Divi 5.", file=sys.stderr)
-    return True
+    print(f"page {page_id} is {status} (live) and its _et_pb_use_builder meta {why}: with Divi 5 content it "
+          f"would render inside the theme's title+sidebar template. Setting that meta over REST means swapping "
+          f"the page's content for a Divi 4 stub first, which is never done to a live page. Set it in "
+          f"WordPress instead: open the page once in the Divi builder and save, or "
+          f"`wp post meta update {page_id} _et_pb_use_builder on --user=<admin>`; or build a new draft with "
+          f"publish.py draft (no --page-id), review it, and publish that. See reference/publishing.md, "
+          f"Divi 5.", file=sys.stderr)
+    return "refuse"
+
+
+def _page_title(current, page_id) -> str:
+    title = (current.get("title") or {}).get("raw") if isinstance(current.get("title"), dict) else None
+    if not isinstance(title, str):
+        raise PublishError(f"GET /pages/{page_id}?context=edit returned no title.raw; cannot re-save the title "
+                           f"for the builder-meta batch")
+    return title
+
+
+def _backstop(page) -> int:
+    """After a Divi 5 page went public: its public HTML must carry the builder layout."""
+    if page.get("status") != "publish" or front_end_state(page) != "off":
+        return 0
+    print(f"page {page['id']} is now published, but its public page lacks et_pb_pagebuilder_layout: "
+          f"_et_pb_use_builder is not on, so it renders inside the theme's title+sidebar template. Fix it now: open "
+          f"the page once in the Divi builder and save, or `wp post meta update {page['id']} _et_pb_use_builder on "
+          f"--user=<admin>`, or switch it back to draft. See reference/publishing.md → Divi 5 builder meta.",
+          file=sys.stderr)
+    return 2
 
 
 def cmd_draft(wp, a):
@@ -484,12 +522,16 @@ def cmd_publish(wp, a):
     current = wp.request("GET", f"/pages/{a.page_id}?context=edit")
     status = current.get("status")
     keep_visibility = status in KEEP_VISIBILITY and a.status != "publish"
+    current_raw = (current.get("content") or {}).get("raw") or ""
+    divi5 = kind == "blocks" or (not a.content and divi_format.detect_content(current_raw) == "blocks")
+    plan = None
     if a.content:
         page_path = Path(a.content)
         if blocking_errors(source, a.content, baseline=_baseline(a, current), verb="publish"):
             return 1
         if kind == "blocks":
-            if _divi5_publish_refusal(current, a.page_id):
+            plan = _divi5_publish_plan(current, a.page_id)
+            if plan == "refuse":
                 return 1
             content, _uploaded = upload_local_images5(wp, source, page_path.resolve().parent)
             body = {"content": content}
@@ -505,9 +547,17 @@ def cmd_publish(wp, a):
                   file=sys.stderr)
             return 1
         body = {"status": "publish"}
+        if divi5 and status not in LIVE_STATUSES and meta_state(current) != "on":
+            plan, content = "stub", current_raw
+    if plan == "stub":
+        # Not live yet: set the builder meta with the verified sequence, and only then make the page public.
+        if stub_then_meta(wp, a.page_id, {"content": D4_STUB}, _page_title(current, a.page_id), content) is None:
+            print(f"page {a.page_id} ({status}, not published): {META_NOT_STORED}", file=sys.stderr)
+            return 2
+        body = {"status": "publish"}
     page = wp.request("POST", f"/pages/{a.page_id}", json_body=body)
     _print({"id": page["id"], "status": page.get("status", ""), "link": page.get("link", "")})
-    return 0
+    return _backstop(page) if divi5 else 0
 
 
 def cmd_keys(a) -> int:

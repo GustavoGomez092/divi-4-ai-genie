@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -29,9 +30,11 @@ class FakeWP(BaseHTTPRequestHandler):
     page_meta = None          # None: GET /pages/101 has no "meta" (the D4 fake's response, unchanged)
     page_link = None          # None: "http://fake/?page_id=101"
     page_html = None          # front-end HTML served for /?page_id=101 (None: 404)
+    page_title = None         # title.raw in GET /pages/101 (None: no "title", the D4 fake's response)
     batch_echo = "on"         # _et_pb_use_builder echoed by the batch's second response (None: key absent)
     batch_statuses = (200, 200)
     batch_http_error = False  # the whole /batch/v1 request fails (400)
+    readback_meta = None      # meta a GET shows after a batch content write (None: like the real site, no key)
 
     def log_message(self, *args):
         pass
@@ -80,6 +83,8 @@ class FakeWP(BaseHTTPRequestHandler):
                     "link": FakeWP.page_link or "http://fake/?page_id=101", "content": {"raw": FakeWP.page_raw}}
             if FakeWP.page_meta is not None:
                 page["meta"] = FakeWP.page_meta
+            if FakeWP.page_title is not None:
+                page["title"] = {"raw": FakeWP.page_title, "rendered": FakeWP.page_title}
             return self._reply(200, page)
         self._reply(404, {"code": "rest_no_route", "message": "No route"})
 
@@ -107,7 +112,9 @@ class FakeWP(BaseHTTPRequestHandler):
                     meta["_et_pb_use_builder"] = FakeWP.batch_echo
                 if "content" in req["body"]:
                     FakeWP.page_raw = req["body"]["content"]
-                    if FakeWP.page_meta is not None:
+                    if FakeWP.readback_meta is not None:
+                        FakeWP.page_meta = FakeWP.readback_meta
+                    elif FakeWP.page_meta is not None:
                         # like the real site: a GET of Divi 5 content can't show the (unregistered) key
                         FakeWP.page_meta = {"footnotes": ""}
                 rbody = ({"id": 101, "status": "draft", "meta": meta} if code == 200
@@ -132,6 +139,8 @@ def _reset_fake():
     FakeWP.batch_echo = "on"
     FakeWP.batch_statuses = (200, 200)
     FakeWP.batch_http_error = False
+    FakeWP.readback_meta = None
+    FakeWP.page_title = None
 
 
 class PublishFakeServerTest(unittest.TestCase):
@@ -606,6 +615,7 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
         _reset_fake()
         FakeWP.divi_version = "5.13.1"
         FakeWP.page_raw = D5
+        FakeWP.page_title = "Existing Title"
 
     def run_cli(self, *args):
         env = dict(os.environ, WP_APP_PASSWORD=PASSWORD, DIVI_KEYS_FILE=self.empty_keys_path)
@@ -614,7 +624,7 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
 
     def _file(self, text, name="page.html"):
         d = tempfile.mkdtemp()
-        self.addCleanup(lambda: __import__("shutil").rmtree(d, ignore_errors=True))
+        self.addCleanup(shutil.rmtree, d, True)
         path = Path(d) / name
         with open(path, "w", encoding="utf-8", newline="") as fh:
             fh.write(text)
@@ -732,8 +742,14 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
         self.assertIn(META_MSG, proc.stderr)
         self.assertIn("101", proc.stderr)
 
-    def test_meta_read_back_off_exits_2(self):
+    def test_batch_echo_off_exits_2(self):
         FakeWP.batch_echo = ""
+        proc = self.draft(D5)
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn(META_MSG, proc.stderr)
+
+    def test_get_read_back_showing_off_exits_2_even_when_the_echo_said_on(self):
+        FakeWP.readback_meta = {"_et_pb_use_builder": ""}
         proc = self.draft(D5)
         self.assertEqual(proc.returncode, 2)
         self.assertIn(META_MSG, proc.stderr)
@@ -853,14 +869,74 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
         self.assertIn("could not read _et_pb_use_builder", proc.stderr)
         self.assertEqual(self.body(1), {"content": D5})
 
-    def test_publish_content_draft_with_meta_off_is_refused(self):
-        FakeWP.page_raw = STUB
-        FakeWP.page_meta = {"_et_pb_use_builder": ""}
+    STUB_THEN_PUBLISH = [("GET", "/wp-json/wp/v2/pages/101?context=edit"), ("POST", "/wp-json/wp/v2/pages/101"),
+                         ("POST", "/wp-json/batch/v1"), ("GET", "/wp-json/wp/v2/pages/101?context=edit"),
+                         ("POST", "/wp-json/wp/v2/pages/101")]
+
+    def _assert_stub_then_publish(self, content):
+        self.assertEqual(self.rest(), self.STUB_THEN_PUBLISH)
+        self.assertEqual(self.body(1), {"content": STUB})
+        self.assertEqual(self.body(2), {"requests": [
+            {"method": "POST", "path": "/wp/v2/pages/101", "body": {"title": "Existing Title"}},
+            {"method": "POST", "path": "/wp/v2/pages/101",
+             "body": {"content": content, "meta": {"_et_pb_use_builder": "on"}}}]})
+        self.assertEqual(self.body(4), {"status": "publish"})
+
+    def test_publish_content_draft_with_unknown_meta_sets_it_before_publishing(self):
+        for meta in (None, {"_et_pb_use_builder": ""}):
+            with self.subTest(meta=meta):
+                _reset_fake()
+                FakeWP.divi_version, FakeWP.page_raw, FakeWP.page_title, FakeWP.page_meta = \
+                    "5.13.1", D5, "Existing Title", meta
+                edited = D5.replace("Emergency", "Urgent", 1)
+                proc = self.publish(edited)
+                self.assertEqual(proc.returncode, 0, proc.stderr)
+                self._assert_stub_then_publish(edited)
+                self.assertEqual(json.loads(proc.stdout)["status"], "publish")
+
+    def test_publish_without_content_draft_with_unknown_meta_resends_current_content_with_meta(self):
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101", "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self._assert_stub_then_publish(D5)
+
+    def test_publish_meta_not_stored_exits_2_and_the_page_stays_a_draft(self):
+        FakeWP.batch_echo = None
+        for args in ((), ("--content", str(self._file(D5)))):
+            with self.subTest(args=args):
+                FakeWP.calls.clear()
+                FakeWP.page_raw, FakeWP.page_meta = D5, None
+                proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101",
+                                    "--yes", *args)
+                self.assertEqual(proc.returncode, 2)
+                self.assertIn(META_MSG, proc.stderr)
+                self.assertEqual(self.rest(), self.STUB_THEN_PUBLISH[:4])  # the status change is never sent
+                self.assertIn("not published", proc.stderr)
+
+    def test_publish_backstop_exits_2_when_the_published_page_lacks_the_builder_layout(self):
+        FakeWP.page_meta = {"_et_pb_use_builder": "on"}
+        FakeWP.page_html = ('<html><body class="page-template-default page page-id-101 et_right_sidebar">'
+                            '</body></html>')
         proc = self.publish(D5)
-        self.assertEqual(proc.returncode, 1)
-        self.assertIn("publish.py draft", proc.stderr)
-        self.assertIn("--page-id 101", proc.stderr)
-        self.assertEqual([m for m, _ in self.rest()], ["GET"])
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn("et_pb_pagebuilder_layout", proc.stderr)
+        self.assertIn("101", proc.stderr)
+        self.assertIn("/?page_id=101", FakeWP.probes)
+
+    def test_publish_backstop_passes_when_the_published_page_has_the_builder_layout(self):
+        FakeWP.page_html = ('<html><body class="page-template-default page page-id-101 et_pb_pagebuilder_layout '
+                            'et_no_sidebar"></body></html>')
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101", "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertIn("/?page_id=101", FakeWP.probes)
+
+    def test_publish_without_content_divi4_page_is_unchanged(self):
+        FakeWP.page_raw = GOOD
+        proc = self.run_cli("publish", "--site", self.site, "--user", "editor", "--page-id", "101", "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual(self.rest(), [("GET", "/wp-json/wp/v2/pages/101?context=edit"),
+                                       ("POST", "/wp-json/wp/v2/pages/101")])
+        self.assertEqual(self.body(1), {"status": "publish"})
+        self.assertEqual(FakeWP.probes, [])
 
     # --- local images in blocks -------------------------------------------------------------------
     def test_draft_uploads_local_block_image_and_rewrites_src(self):
@@ -888,8 +964,9 @@ class Divi5PublishFakeServerTest(unittest.TestCase):
     # --- fetch ------------------------------------------------------------------------------------
     def test_fetch_blocks_notes_canonical_raw_and_writes_bytes_exactly(self):
         FakeWP.page_raw = D5.replace("\n", "\r\n")
-        out = Path(tempfile.mkdtemp()) / "original.html"
-        self.addCleanup(lambda: out.unlink(missing_ok=True))
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, True)
+        out = Path(tmp) / "original.html"
         proc = self.run_cli("fetch", "--site", self.site, "--user", "editor", "--page-id", "101", "--out", str(out))
         self.assertEqual(proc.returncode, 0, proc.stderr)
         self.assertEqual(out.read_bytes(), D5.replace("\n", "\r\n").encode("utf-8"))

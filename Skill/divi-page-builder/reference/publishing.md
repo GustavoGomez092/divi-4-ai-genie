@@ -242,15 +242,21 @@ What `publish.py` does with the meta:
 | `draft --page-id` | draft or pending | off, or not shown (the usual case for a Divi 5 page) | stub overwrite, batch, read-back |
 | `draft --page-id` | live (publish, future, private) | — | refused, exit 1, as for Divi 4 (never swap a live page's content) |
 | `publish --content` | any | shown as `on`, or (for a published page) the public page's body has `et_pb_pagebuilder_layout` | one `POST /pages/ID {content}` plus `status: "publish"` unless the page is private or scheduled. No `meta`: a content update leaves it as it is. |
-| `publish --content` | any | off (shown off, or the public page lacks `et_pb_pagebuilder_layout`) | **refused**, exit 1. A live page: set the meta in WordPress (open the page once in the Divi builder and save, or `wp post meta update ID _et_pb_use_builder on --user=<admin>`), or publish a reviewed draft copy instead. A draft: run `publish.py draft PAGE --page-id ID --title …` first. |
-| `publish --content` | any | unknown, and the page holds Divi 5 blocks | proceeds with a note (typical after `draft`, which verified the meta) |
-| `publish --content` | any | unknown, and the page holds no Divi 5 blocks | **refused**, exit 1 (it never had the builder meta) |
-| `publish` without `--content` | any | — | unchanged from Divi 4 (status only) |
+| `publish --content` | draft or pending | off, or not shown | stub overwrite `{content: stub}`, batch (the new content + meta), check, and only then `POST /pages/ID {status: "publish"}`. If the meta didn't stick: exit 2 and the page is still unpublished. |
+| `publish` without `--content` | draft or pending holding Divi 5 blocks | off, or not shown | the same, re-sending the page's current `content.raw` with the meta, then the status change |
+| `publish --content` | live | off (shown off, or the public page lacks `et_pb_pagebuilder_layout`) | **refused**, exit 1: set the meta in WordPress (open the page once in the Divi builder and save, or `wp post meta update ID _et_pb_use_builder on --user=<admin>`), or publish a reviewed draft copy instead. |
+| `publish --content` | live | unknown, and the page holds Divi 5 blocks | proceeds with a note |
+| `publish --content` | live | unknown, and the page holds no Divi 5 blocks | **refused**, exit 1 (it never had the builder meta) |
+| `publish` without `--content` | live, or a page without Divi 5 blocks | — | unchanged from Divi 4 (status only) |
 
-**When the meta doesn't stick** `draft` exits 2 with "WordPress did not store _et_pb_use_builder=on; the page will
+**Backstop.** Whenever `publish` leaves a Divi 5 page published, it reads the public page. If the body lacks
+`et_pb_pagebuilder_layout` (and carries the page's own `page-id-ID`), it exits 2 and says how to fix it. The page is
+live at that point, so fix it at once: set the meta or switch the page back to draft.
+
+**When the meta doesn't stick** `draft` (and `publish`, before any status change) exits 2 with "WordPress did not store _et_pb_use_builder=on; the page will
 render inside the theme's title+sidebar template. See reference/publishing.md → Divi 5 builder meta." The page is
-a draft holding the real content. A failed batch (exit 2) names the page, which may still hold the stub; any earlier
-content is in its revisions. Either way, rerun `draft … --page-id ID` to retry, or set the meta with WP-CLI
+still unpublished and holds the real content. A failed batch (exit 2) names the page, which may still hold the stub;
+any earlier content is in its revisions, if revisions are enabled. Either way, rerun `draft … --page-id ID` to retry, or set the meta with WP-CLI
 (`wp post meta update ID _et_pb_use_builder on --user=<admin>`; always pass `--user`, see CSS below). If Divi changes
 how it registers the key, the live test catches it.
 

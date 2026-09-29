@@ -448,5 +448,8 @@ Verified live on divi-5-test.local (WP 7.1.2, Divi 5.13.1), Application Password
    `entry-title`, no `#sidebar`, no `et_d4_element`.
 
 Control: the same batch **without** a D4 stub in the page (first request re-renders D5 content) stores nothing.
+Echo probe (Task 10 fix round, 2026-09-28): stub page + the same batch with **no `meta`** in the second item →
+both responses show `_et_pb_use_builder: ""` and `wp post meta get` is empty, so the second response's echo reads
+the stored value (no registered default of `on`) and `"on"` there proves the write.
 Cost: one extra revision holding the stub. Only needed when the meta isn't already `on` (new pages; pages
 never opened in Divi). For a live page lacking the meta, prefer the stub-in-batch only on drafts/copies.
