@@ -1,0 +1,1281 @@
+{
+    "attributes": {
+        "module": {
+            "selector": "{{selector}}",
+            "settings": {
+                "advanced": {
+                    "html": []
+                },
+                "decoration": {
+                    "animation": [],
+                    "attributes": [],
+                    "conditions": [],
+                    "disabledOn": {
+                        "component": {
+                            "props": {
+                                "fields": {
+                                    "disabledOnGroup": {
+                                        "render": false
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "filters": [],
+                    "interactions": [],
+                    "order": [],
+                    "overflow": [],
+                    "position": [],
+                    "sticky": {
+                        "groupType": "group-item",
+                        "item": {
+                            "component": {
+                                "name": "divi/sticky",
+                                "props": {
+                                    "grouped": false
+                                },
+                                "type": "group"
+                            },
+                            "groupSlug": "advancedScrollModule",
+                            "priority": 10,
+                            "render": true
+                        }
+                    },
+                    "transform": [],
+                    "transition": [],
+                    "zIndex": []
+                },
+                "meta": {
+                    "meta": []
+                }
+            },
+            "styleProps": {
+                "position": {
+                    "important": {
+                        "desktop": {
+                            "value": {
+                                "position": true
+                            }
+                        }
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "overlay": {
+            "selector": "{{selector}} .et_pb_video_overlay_hover:hover",
+            "settings": {
+                "decoration": {
+                    "background": {
+                        "groupType": "group-item",
+                        "item": {
+                            "attrName": "overlay.decoration.background",
+                            "component": {
+                                "name": "divi/color-picker",
+                                "type": "field"
+                            },
+                            "description": "Pick a color to use for the overlay that appears behind the play icon when hovering over the video.",
+                            "features": {
+                                "dynamicContent": {
+                                    "type": "color"
+                                }
+                            },
+                            "groupSlug": "designOverlay",
+                            "label": "Overlay Background Color",
+                            "priority": 10,
+                            "render": true,
+                            "subName": "color"
+                        }
+                    }
+                },
+                "innerContent": {
+                    "groupType": "group-items",
+                    "items": {
+                        "image": {
+                            "attrName": "thumbnail.innerContent",
+                            "category": "basic_option",
+                            "component": {
+                                "name": "divi/composite"
+                            },
+                            "description": "Upload your desired image, or type in the URL to the image you would like to display over your video. You can also generate a still image from your video.",
+                            "features": {
+                                "dynamicContent": {
+                                    "type": "image"
+                                },
+                                "preset": "content",
+                                "sticky": false
+                            },
+                            "groupSlug": "contentOverlay",
+                            "label": "Overlay Image",
+                            "priority": 10,
+                            "render": true,
+                            "subName": "src"
+                        }
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "playIcon": {
+            "selector": "{{selector}} .et_pb_video_overlay .et_pb_video_play",
+            "settings": {
+                "decoration": {
+                    "icon": {
+                        "groupType": "group-item",
+                        "item": {
+                            "attrName": "playIcon.decoration.icon",
+                            "component": {
+                                "name": "divi/icon",
+                                "props": {
+                                    "fieldLabel": "Play Icon",
+                                    "fields": {
+                                        "icon": {
+                                            "render": true
+                                        }
+                                    },
+                                    "grouped": false
+                                },
+                                "type": "group"
+                            },
+                            "groupSlug": "designControls",
+                            "label": "Play Icon",
+                            "priority": 10,
+                            "render": true
+                        }
+                    }
+                }
+            },
+            "styleProps": {
+                "icon": {
+                    "important": {
+                        "desktop": {
+                            "value": {
+                                "color": true,
+                                "content": true,
+                                "font-family": true,
+                                "font-weight": true
+                            }
+                        }
+                    },
+                    "propertySelectors": {
+                        "desktop": {
+                            "value": {
+                                "color": "{{selector}}.et_pb_slide .et_pb_video_play",
+                                "content": "{{selector}}.et_pb_slide .et_pb_video_play:before",
+                                "font-family": "{{selector}}.et_pb_slide .et_pb_video_play:before",
+                                "font-weight": "{{selector}}.et_pb_slide .et_pb_video_play:before"
+                            }
+                        }
+                    },
+                    "selector": "{{selector}}.et_pb_slide .et_pb_video_play"
+                }
+            },
+            "supportsCustomAttributes": true,
+            "type": "object"
+        },
+        "sliderControls": {
+            "settings": {
+                "advanced": {
+                    "color": {
+                        "groupType": "group-item",
+                        "item": {
+                            "attrName": "sliderControls.advanced",
+                            "component": {
+                                "name": "divi/select",
+                                "props": {
+                                    "options": {
+                                        "dark": {
+                                            "label": "Dark"
+                                        },
+                                        "light": {
+                                            "label": "Light"
+                                        }
+                                    }
+                                },
+                                "type": "field"
+                            },
+                            "defaultAttr": {
+                                "desktop": {
+                                    "value": {
+                                        "color": "light"
+                                    }
+                                }
+                            },
+                            "description": "This setting will make your slider arrows either light or dark in color.",
+                            "groupSlug": "designControls",
+                            "label": "Slider Arrows Color",
+                            "priority": 10,
+                            "render": true,
+                            "subName": "color"
+                        }
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "video": {
+            "attributes": {
+                "class": "et_pb_video_box"
+            },
+            "childrenSanitizer": "et_core_esc_previously",
+            "selector": "{{selector}} .et_pb_video_wrap .et_pb_video_box",
+            "settings": {
+                "innerContent": {
+                    "groupType": "group-items",
+                    "items": {
+                        "video": {
+                            "attrName": "video.innerContent",
+                            "category": "basic_option",
+                            "component": {
+                                "name": "divi/upload",
+                                "props": {
+                                    "chooseText": "Choose a Video MP4 File",
+                                    "dataType": "video",
+                                    "uploadButtonText": "Upload a Video"
+                                },
+                                "type": "field"
+                            },
+                            "description": "Upload your desired video in .MP4 format, or type in the URL to the video you would like to display.",
+                            "features": {
+                                "preset": "content",
+                                "sticky": false
+                            },
+                            "groupSlug": "contentVideo",
+                            "label": "Video MP4 File Or Youtube URL",
+                            "priority": 10,
+                            "render": true,
+                            "subName": "src"
+                        },
+                        "webm": {
+                            "attrName": "video.innerContent",
+                            "category": "basic_option",
+                            "component": {
+                                "name": "divi/upload",
+                                "props": {
+                                    "chooseText": "Choose a Video WEBM File",
+                                    "dataType": "video",
+                                    "uploadButtonText": "Upload a Video"
+                                },
+                                "type": "field"
+                            },
+                            "description": "Upload the .WEBM version of your video here. All uploaded videos should be in both .MP4 .WEBM formats to ensure maximum compatibility in all browsers.",
+                            "features": {
+                                "preset": "content",
+                                "sticky": false
+                            },
+                            "groupSlug": "contentVideo",
+                            "label": "Video WEBM File",
+                            "priority": 10,
+                            "render": true,
+                            "subName": "webm"
+                        }
+                    }
+                }
+            },
+            "tagName": "div",
+            "type": "object"
+        }
+    },
+    "conversion": {
+        "attributeMap": {
+            "_builder_version": "builderVersion",
+            "_module_preset": "modulePreset",
+            "admin_label": "module.meta.adminLabel.*",
+            "allow_player_pause": "module.decoration.background.*.video.allowPlayerPause",
+            "background_blend": "module.decoration.background.*.image.blend",
+            "background_color": "module.decoration.background.*.color",
+            "background_color_gradient_direction": "module.decoration.background.*.gradient.direction",
+            "background_color_gradient_direction_radial": "module.decoration.background.*.gradient.directionRadial",
+            "background_color_gradient_overlays_image": "module.decoration.background.*.gradient.overlaysImage",
+            "background_color_gradient_repeat": "module.decoration.background.*.gradient.repeat",
+            "background_color_gradient_stops": "module.decoration.background.*.gradient.stops",
+            "background_color_gradient_type": "module.decoration.background.*.gradient.type",
+            "background_color_gradient_unit": "module.decoration.background.*.gradient.length",
+            "background_enable_color": "module.decoration.background.*.enableColor",
+            "background_enable_image": "module.decoration.background.*.image.enabled",
+            "background_enable_mask_style": "module.decoration.background.*.mask.enabled",
+            "background_enable_pattern_style": "module.decoration.background.*.pattern.enabled",
+            "background_enable_video_mp4": "module.decoration.background.*.video.enabledMp4",
+            "background_enable_video_webm": "module.decoration.background.*.video.enabledWebm",
+            "background_horizontal_offset": "module.decoration.background.*.image.horizontalOffset",
+            "background_image": "module.decoration.background.*.image.url",
+            "background_image_height": "module.decoration.background.*.image.height",
+            "background_image_width": "module.decoration.background.*.image.width",
+            "background_layout": "sliderControls.advanced.*.color",
+            "background_mask_aspect_ratio": "module.decoration.background.*.mask.aspectRatio",
+            "background_mask_blend_mode": "module.decoration.background.*.mask.blend",
+            "background_mask_color": "module.decoration.background.*.mask.color",
+            "background_mask_height": "module.decoration.background.*.mask.height",
+            "background_mask_horizontal_offset": "module.decoration.background.*.mask.horizontalOffset",
+            "background_mask_position": "module.decoration.background.*.mask.position",
+            "background_mask_size": "module.decoration.background.*.mask.size",
+            "background_mask_style": "module.decoration.background.*.mask.style",
+            "background_mask_transform": "module.decoration.background.*.mask.transform",
+            "background_mask_vertical_offset": "module.decoration.background.*.mask.verticalOffset",
+            "background_mask_width": "module.decoration.background.*.mask.width",
+            "background_pattern_blend_mode": "module.decoration.background.*.pattern.blend",
+            "background_pattern_color": "module.decoration.background.*.pattern.color",
+            "background_pattern_height": "module.decoration.background.*.pattern.height",
+            "background_pattern_horizontal_offset": "module.decoration.background.*.pattern.horizontalOffset",
+            "background_pattern_repeat": "module.decoration.background.*.pattern.repeat",
+            "background_pattern_repeat_origin": "module.decoration.background.*.pattern.repeatOrigin",
+            "background_pattern_size": "module.decoration.background.*.pattern.size",
+            "background_pattern_style": "module.decoration.background.*.pattern.style",
+            "background_pattern_transform": "module.decoration.background.*.pattern.transform",
+            "background_pattern_vertical_offset": "module.decoration.background.*.pattern.verticalOffset",
+            "background_pattern_width": "module.decoration.background.*.pattern.width",
+            "background_position": "module.decoration.background.*.image.position",
+            "background_repeat": "module.decoration.background.*.image.repeat",
+            "background_size": "module.decoration.background.*.image.size",
+            "background_vertical_offset": "module.decoration.background.*.image.verticalOffset",
+            "background_video_height": "module.decoration.background.*.video.height",
+            "background_video_mp4": "module.decoration.background.*.video.mp4",
+            "background_video_pause_outside_viewport": "module.decoration.background.*.video.pauseOutsideViewport",
+            "background_video_webm": "module.decoration.background.*.video.webm",
+            "background_video_width": "module.decoration.background.*.video.width",
+            "body_all_caps": "content.decoration.bodyFont.body.font.*.capitalization",
+            "body_font": "content.decoration.bodyFont.body.font.*",
+            "body_font_size": "content.decoration.bodyFont.body.font.*.size",
+            "body_letter_spacing": "content.decoration.bodyFont.body.font.*.letterSpacing",
+            "body_line_height": "content.decoration.bodyFont.body.font.*.lineHeight",
+            "body_link_all_caps": "content.decoration.bodyFont.link.font.*.capitalization",
+            "body_link_font": "content.decoration.bodyFont.link.font.*",
+            "body_link_font_size": "content.decoration.bodyFont.link.font.*.size",
+            "body_link_letter_spacing": "content.decoration.bodyFont.link.font.*.letterSpacing",
+            "body_link_line_height": "content.decoration.bodyFont.link.font.*.lineHeight",
+            "body_link_text_align": "content.decoration.bodyFont.link.font.*.textAlign",
+            "body_link_text_color": "content.decoration.bodyFont.link.font.*.color",
+            "body_link_text_shadow_blur_strength": "content.decoration.bodyFont.link.textShadow.*.blur",
+            "body_link_text_shadow_color": "content.decoration.bodyFont.link.textShadow.*.color",
+            "body_link_text_shadow_horizontal_length": "content.decoration.bodyFont.link.textShadow.*.horizontal",
+            "body_link_text_shadow_style": "content.decoration.bodyFont.link.textShadow.*.style",
+            "body_link_text_shadow_vertical_length": "content.decoration.bodyFont.link.textShadow.*.vertical",
+            "body_ol_all_caps": "content.decoration.bodyFont.ol.font.*.capitalization",
+            "body_ol_font": "content.decoration.bodyFont.ol.font.*",
+            "body_ol_font_size": "content.decoration.bodyFont.ol.font.*.size",
+            "body_ol_letter_spacing": "content.decoration.bodyFont.ol.font.*.letterSpacing",
+            "body_ol_line_height": "content.decoration.bodyFont.ol.font.*.lineHeight",
+            "body_ol_text_align": "content.decoration.bodyFont.ol.font.*.textAlign",
+            "body_ol_text_color": "content.decoration.bodyFont.ol.font.*.color",
+            "body_ol_text_shadow_blur_strength": "content.decoration.bodyFont.ol.textShadow.*.blur",
+            "body_ol_text_shadow_color": "content.decoration.bodyFont.ol.textShadow.*.color",
+            "body_ol_text_shadow_horizontal_length": "content.decoration.bodyFont.ol.textShadow.*.horizontal",
+            "body_ol_text_shadow_style": "content.decoration.bodyFont.ol.textShadow.*.style",
+            "body_ol_text_shadow_vertical_length": "content.decoration.bodyFont.ol.textShadow.*.vertical",
+            "body_quote_all_caps": "content.decoration.bodyFont.quote.font.*.capitalization",
+            "body_quote_font": "content.decoration.bodyFont.quote.font.*",
+            "body_quote_font_size": "content.decoration.bodyFont.quote.font.*.size",
+            "body_quote_letter_spacing": "content.decoration.bodyFont.quote.font.*.letterSpacing",
+            "body_quote_line_height": "content.decoration.bodyFont.quote.font.*.lineHeight",
+            "body_quote_text_align": "content.decoration.bodyFont.quote.font.*.textAlign",
+            "body_quote_text_color": "content.decoration.bodyFont.quote.font.*.color",
+            "body_quote_text_shadow_blur_strength": "content.decoration.bodyFont.quote.textShadow.*.blur",
+            "body_quote_text_shadow_color": "content.decoration.bodyFont.quote.textShadow.*.color",
+            "body_quote_text_shadow_horizontal_length": "content.decoration.bodyFont.quote.textShadow.*.horizontal",
+            "body_quote_text_shadow_style": "content.decoration.bodyFont.quote.textShadow.*.style",
+            "body_quote_text_shadow_vertical_length": "content.decoration.bodyFont.quote.textShadow.*.vertical",
+            "body_text_align": "content.decoration.bodyFont.body.font.*.textAlign",
+            "body_text_color": "content.decoration.bodyFont.body.font.*.color",
+            "body_text_shadow_blur_strength": "content.decoration.bodyFont.body.textShadow.*.blur",
+            "body_text_shadow_color": "content.decoration.bodyFont.body.textShadow.*.color",
+            "body_text_shadow_horizontal_length": "content.decoration.bodyFont.body.textShadow.*.horizontal",
+            "body_text_shadow_style": "content.decoration.bodyFont.body.textShadow.*.style",
+            "body_text_shadow_vertical_length": "content.decoration.bodyFont.body.textShadow.*.vertical",
+            "body_ul_all_caps": "content.decoration.bodyFont.ul.font.*.capitalization",
+            "body_ul_font": "content.decoration.bodyFont.ul.font.*",
+            "body_ul_font_size": "content.decoration.bodyFont.ul.font.*.size",
+            "body_ul_letter_spacing": "content.decoration.bodyFont.ul.font.*.letterSpacing",
+            "body_ul_line_height": "content.decoration.bodyFont.ul.font.*.lineHeight",
+            "body_ul_text_align": "content.decoration.bodyFont.ul.font.*.textAlign",
+            "body_ul_text_color": "content.decoration.bodyFont.ul.font.*.color",
+            "body_ul_text_shadow_blur_strength": "content.decoration.bodyFont.ul.textShadow.*.blur",
+            "body_ul_text_shadow_color": "content.decoration.bodyFont.ul.textShadow.*.color",
+            "body_ul_text_shadow_horizontal_length": "content.decoration.bodyFont.ul.textShadow.*.horizontal",
+            "body_ul_text_shadow_style": "content.decoration.bodyFont.ul.textShadow.*.style",
+            "body_ul_text_shadow_vertical_length": "content.decoration.bodyFont.ul.textShadow.*.vertical",
+            "border_color_all": "module.decoration.border.*.styles.all.color",
+            "border_color_bottom": "module.decoration.border.*.styles.bottom.color",
+            "border_color_left": "module.decoration.border.*.styles.left.color",
+            "border_color_right": "module.decoration.border.*.styles.right.color",
+            "border_color_top": "module.decoration.border.*.styles.top.color",
+            "border_radii": "module.decoration.border.*.radius",
+            "border_style_all": "module.decoration.border.*.styles.all.style",
+            "border_style_bottom": "module.decoration.border.*.styles.bottom.style",
+            "border_style_left": "module.decoration.border.*.styles.left.style",
+            "border_style_right": "module.decoration.border.*.styles.right.style",
+            "border_style_top": "module.decoration.border.*.styles.top.style",
+            "border_width_all": "module.decoration.border.*.styles.all.width",
+            "border_width_bottom": "module.decoration.border.*.styles.bottom.width",
+            "border_width_left": "module.decoration.border.*.styles.left.width",
+            "border_width_right": "module.decoration.border.*.styles.right.width",
+            "border_width_top": "module.decoration.border.*.styles.top.width",
+            "box_shadow_blur": "module.decoration.boxShadow.*.blur",
+            "box_shadow_color": "module.decoration.boxShadow.*.color",
+            "box_shadow_horizontal": "module.decoration.boxShadow.*.horizontal",
+            "box_shadow_position": "module.decoration.boxShadow.*.position",
+            "box_shadow_spread": "module.decoration.boxShadow.*.spread",
+            "box_shadow_style": "module.decoration.boxShadow.*.style",
+            "box_shadow_vertical": "module.decoration.boxShadow.*.vertical",
+            "content": "content.*",
+            "custom_css_after": "css.*.after",
+            "custom_css_before": "css.*.before",
+            "custom_css_free_form": "css.*.freeForm",
+            "custom_css_main_element": "css.*.mainElement",
+            "custom_margin": "module.decoration.spacing.*.margin",
+            "custom_padding": "module.decoration.spacing.*.padding",
+            "display_conditions": "module.decoration.conditions.*",
+            "filter_blur": "module.decoration.filters.*.blur",
+            "filter_brightness": "module.decoration.filters.*.brightness",
+            "filter_contrast": "module.decoration.filters.*.contrast",
+            "filter_hue_rotate": "module.decoration.filters.*.hueRotate",
+            "filter_invert": "module.decoration.filters.*.invert",
+            "filter_opacity": "module.decoration.filters.*.opacity",
+            "filter_saturate": "module.decoration.filters.*.saturate",
+            "filter_sepia": "module.decoration.filters.*.sepia",
+            "font_icon": "playIcon.decoration.icon.*",
+            "height": "module.decoration.sizing.*.height",
+            "horizontal_offset": "module.decoration.position.*.offset.horizontal",
+            "hover_transition_delay": "module.decoration.transition.*.delay",
+            "hover_transition_duration": "module.decoration.transition.*.duration",
+            "hover_transition_speed_curve": "module.decoration.transition.*.speedCurve",
+            "icon_font_size": "playIcon.decoration.icon.*.size",
+            "image_src": "thumbnail.innerContent.*.src",
+            "link_option_url": "module.advanced.link.*.url",
+            "link_option_url_new_window": "module.advanced.link.*.target",
+            "max_height": "module.decoration.sizing.*.maxHeight",
+            "max_width": "module.decoration.sizing.*.maxWidth",
+            "min_height": "module.decoration.sizing.*.minHeight",
+            "mix_blend_mode": "module.decoration.filters.*.blendMode",
+            "module_alignment": "module.decoration.sizing.*.alignment",
+            "nonconvertible": "nonconvertible",
+            "overflow-x": "module.decoration.overflow.*.x",
+            "overflow-y": "module.decoration.overflow.*.y",
+            "parallax": "module.decoration.background.*.image.parallax.enabled",
+            "parallax_method": "module.decoration.background.*.image.parallax.method",
+            "play_icon_color": "playIcon.decoration.icon.*.color",
+            "position_origin_a": "module.decoration.position.*.origin.absolute",
+            "position_origin_f": "module.decoration.position.*.origin.fixed",
+            "position_origin_r": "module.decoration.position.*.origin.relative",
+            "positioning": "module.decoration.position.*.mode",
+            "shortcodeName": "shortcodeName",
+            "show_image_overlay": "overlay.advanced.*.showImageOverlay",
+            "src": "video.innerContent.*.src",
+            "src_webm": "video.innerContent.*.webm",
+            "text_orientation": "module.advanced.text.text.*.orientation",
+            "text_shadow_blur_strength": "module.advanced.text.textShadow.*.blur",
+            "text_shadow_color": "module.advanced.text.textShadow.*.color",
+            "text_shadow_horizontal_length": "module.advanced.text.textShadow.*.horizontal",
+            "text_shadow_style": "module.advanced.text.textShadow.*.style",
+            "text_shadow_vertical_length": "module.advanced.text.textShadow.*.vertical",
+            "thumbnail_overlay_color": "overlay.decoration.background.*.color",
+            "title_text": "module.decoration.background.*.image.title",
+            "transform_origin": "module.decoration.transform.*.origin",
+            "transform_rotate": "module.decoration.transform.*.rotate",
+            "transform_scale": "module.decoration.transform.*.scale",
+            "transform_scale_linked": "module.decoration.transform.*.scale.linked",
+            "transform_skew": "module.decoration.transform.*.skew",
+            "transform_skew_linked": "module.decoration.transform.*.skew.linked",
+            "transform_translate": "module.decoration.transform.*.translate",
+            "transform_translate_linked": "module.decoration.transform.*.translate.linked",
+            "use_background_color_gradient": "module.decoration.background.*.gradient.enabled",
+            "use_icon_font_size": "playIcon.decoration.icon.*.useSize",
+            "vertical_offset": "module.decoration.position.*.offset.vertical",
+            "width": "module.decoration.sizing.*.width",
+            "z_index": "module.decoration.zIndex.*"
+        },
+        "conditionalAttributeConversionFunctionMap": [],
+        "nonResponsiveAttributes": [],
+        "optionEnableMap": {
+            "allow_player_pause": "background",
+            "background_blend": "background",
+            "background_color": "background",
+            "background_color_gradient_direction": "background",
+            "background_color_gradient_direction_radial": "background",
+            "background_color_gradient_overlays_image": "background",
+            "background_color_gradient_repeat": "background",
+            "background_color_gradient_stops": "background",
+            "background_color_gradient_type": "background",
+            "background_color_gradient_unit": "background",
+            "background_enable_color": "background",
+            "background_enable_image": "background",
+            "background_enable_mask_style": "background",
+            "background_enable_pattern_style": "background",
+            "background_enable_video_mp4": "background",
+            "background_enable_video_webm": "background",
+            "background_horizontal_offset": "background",
+            "background_image": "background",
+            "background_image_height": "background",
+            "background_image_width": "background",
+            "background_mask_aspect_ratio": "background",
+            "background_mask_blend_mode": "background",
+            "background_mask_color": "background",
+            "background_mask_height": "background",
+            "background_mask_horizontal_offset": "background",
+            "background_mask_position": "background",
+            "background_mask_size": "background",
+            "background_mask_style": "background",
+            "background_mask_transform": "background",
+            "background_mask_vertical_offset": "background",
+            "background_mask_width": "background",
+            "background_pattern_blend_mode": "background",
+            "background_pattern_color": "background",
+            "background_pattern_height": "background",
+            "background_pattern_horizontal_offset": "background",
+            "background_pattern_repeat": "background",
+            "background_pattern_repeat_origin": "background",
+            "background_pattern_size": "background",
+            "background_pattern_style": "background",
+            "background_pattern_transform": "background",
+            "background_pattern_vertical_offset": "background",
+            "background_pattern_width": "background",
+            "background_position": "background",
+            "background_repeat": "background",
+            "background_size": "background",
+            "background_vertical_offset": "background",
+            "background_video_height": "background",
+            "background_video_mp4": "background",
+            "background_video_pause_outside_viewport": "background",
+            "background_video_webm": "background",
+            "background_video_width": "background",
+            "parallax": "background",
+            "parallax_method": "background",
+            "title_text": "background",
+            "use_background_color_gradient": "background"
+        },
+        "valueExpansionFunctionMap": {
+            "background_color_gradient_stops": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertGradientStops",
+            "background_mask_transform": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertSvgTransform",
+            "background_pattern_transform": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertSvgTransform",
+            "background_position": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertBackgroundPosition",
+            "body_all_caps": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertAllCaps",
+            "body_font": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertFont",
+            "body_link_all_caps": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertAllCaps",
+            "body_link_font": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertFont",
+            "body_ol_all_caps": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertAllCaps",
+            "body_ol_font": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertFont",
+            "body_quote_all_caps": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertAllCaps",
+            "body_quote_font": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertFont",
+            "body_ul_all_caps": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertAllCaps",
+            "body_ul_font": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertFont",
+            "border_radii": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertBorderRadii",
+            "custom_margin": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertSpacing",
+            "custom_padding": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertSpacing",
+            "display_conditions": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convert_conditions",
+            "font_icon": "convertFontIcon",
+            "transform_origin": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertTransform",
+            "transform_rotate": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertTransform",
+            "transform_scale": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertTransform",
+            "transform_skew": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertTransform",
+            "transform_translate": "ET\\Builder\\Packages\\Conversion\\AdvancedOptionConversion::convertTransform"
+        }
+    },
+    "conversionOutline": {
+        "advanced": {
+            "admin_label": "module.meta.adminLabel",
+            "background": "module.decoration.background",
+            "borders": {
+                "default": "module.decoration.border"
+            },
+            "box_shadow": {
+                "default": "module.decoration.boxShadow"
+            },
+            "display_conditions": "module.decoration.conditions",
+            "filters": {
+                "default": "module.decoration.filters"
+            },
+            "fonts": {
+                "body": "content.decoration.bodyFont.body",
+                "body_link": "content.decoration.bodyFont.link",
+                "body_ol": "content.decoration.bodyFont.ol",
+                "body_quote": "content.decoration.bodyFont.quote",
+                "body_ul": "content.decoration.bodyFont.ul"
+            },
+            "height": "module.decoration.sizing",
+            "link_options": "module.advanced.link",
+            "margin_padding": "module.decoration.spacing",
+            "max_width": "module.decoration.sizing",
+            "overflow": "module.decoration.overflow",
+            "position_fields": "module.decoration.position",
+            "text": "module.advanced.text",
+            "text_shadow": {
+                "default": "module.advanced.text.textShadow"
+            },
+            "transform": "module.decoration.transform",
+            "transition": "module.decoration.transition",
+            "z_index": "module.decoration.zIndex"
+        },
+        "css": {
+            "after": "css.*.after",
+            "before": "css.*.before",
+            "free_form": "css.*.freeForm",
+            "main_element": "css.*.mainElement"
+        },
+        "module": {
+            "background_layout": "sliderControls.advanced.*.color",
+            "font_icon": "playIcon.decoration.icon.*",
+            "icon_font_size": "playIcon.decoration.icon.*.size",
+            "image_src": "thumbnail.innerContent.*.src",
+            "play_icon_color": "playIcon.decoration.icon.*.color",
+            "show_image_overlay": "overlay.advanced.*.showImageOverlay",
+            "src": "video.innerContent.*.src",
+            "src_webm": "video.innerContent.*.webm",
+            "thumbnail_overlay_color": "overlay.decoration.background.*.color",
+            "use_icon_font_size": "playIcon.decoration.icon.*.useSize"
+        },
+        "valueExpansionFunctionMap": {
+            "font_icon": "convertFontIcon"
+        }
+    },
+    "defaults": {
+        "printedStyle": [],
+        "render": {
+            "module": {
+                "meta": {
+                    "adminLabel": {
+                        "desktop": {
+                            "value": "Video Slider Item"
+                        }
+                    }
+                }
+            },
+            "overlay": {
+                "advanced": {
+                    "desktop": {
+                        "value": {
+                            "showImageOverlay": "off"
+                        }
+                    }
+                }
+            },
+            "playIcon": {
+                "decoration": {
+                    "icon": {
+                        "desktop": {
+                            "value": {
+                                "size": "96px",
+                                "useSize": "off"
+                            }
+                        }
+                    }
+                }
+            },
+            "sliderControls": {
+                "advanced": {
+                    "desktop": {
+                        "value": {
+                            "color": "dark"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "leaves": {
+        "css__after": {
+            "attrName": "css",
+            "inPresetMap": false,
+            "preset": [
+                "style"
+            ],
+            "subName": "after"
+        },
+        "css__before": {
+            "attrName": "css",
+            "inPresetMap": false,
+            "preset": [
+                "style"
+            ],
+            "subName": "before"
+        },
+        "css__freeForm": {
+            "attrName": "css",
+            "inPresetMap": false,
+            "preset": [
+                "style"
+            ],
+            "subName": "freeForm"
+        },
+        "css__mainElement": {
+            "attrName": "css",
+            "inPresetMap": false,
+            "preset": [
+                "style"
+            ],
+            "subName": "mainElement"
+        },
+        "module.advanced.html__elementType": {
+            "attrName": "module.advanced.html",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "elementType"
+        },
+        "module.advanced.html__htmlAfter": {
+            "attrName": "module.advanced.html",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "htmlAfter"
+        },
+        "module.advanced.html__htmlBefore": {
+            "attrName": "module.advanced.html",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "htmlBefore"
+        },
+        "module.decoration.animation__delay": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "delay"
+        },
+        "module.decoration.animation__direction": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "direction"
+        },
+        "module.decoration.animation__duration": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "duration"
+        },
+        "module.decoration.animation__intensity.flip": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "intensity.flip"
+        },
+        "module.decoration.animation__intensity.fold": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "intensity.fold"
+        },
+        "module.decoration.animation__intensity.roll": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "intensity.roll"
+        },
+        "module.decoration.animation__intensity.slide": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "intensity.slide"
+        },
+        "module.decoration.animation__intensity.zoom": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "intensity.zoom"
+        },
+        "module.decoration.animation__repeat": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "repeat"
+        },
+        "module.decoration.animation__speedCurve": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "speedCurve"
+        },
+        "module.decoration.animation__startingOpacity": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "startingOpacity"
+        },
+        "module.decoration.animation__style": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "style"
+        },
+        "module.decoration.attributes": {
+            "attrName": "module.decoration.attributes",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ]
+        },
+        "module.decoration.conditions": {
+            "attrName": "module.decoration.conditions",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ]
+        },
+        "module.decoration.disabledOn": {
+            "attrName": "module.decoration.disabledOn",
+            "inPresetMap": false,
+            "preset": [
+                "style",
+                "html"
+            ]
+        },
+        "module.decoration.filters__backdropBlur": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropBlur"
+        },
+        "module.decoration.filters__backdropInvert": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropInvert"
+        },
+        "module.decoration.filters__backdropSepia": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropSepia"
+        },
+        "module.decoration.filters__blendMode": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "blendMode"
+        },
+        "module.decoration.filters__blur": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "blur"
+        },
+        "module.decoration.filters__brightness": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "brightness"
+        },
+        "module.decoration.filters__contrast": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "contrast"
+        },
+        "module.decoration.filters__hueRotate": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "hueRotate"
+        },
+        "module.decoration.filters__invert": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "invert"
+        },
+        "module.decoration.filters__opacity": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "opacity"
+        },
+        "module.decoration.filters__saturate": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "saturate"
+        },
+        "module.decoration.filters__sepia": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "sepia"
+        },
+        "module.decoration.interactions": {
+            "attrName": "module.decoration.interactions",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ]
+        },
+        "module.decoration.overflow__x": {
+            "attrName": "module.decoration.overflow",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "x"
+        },
+        "module.decoration.overflow__y": {
+            "attrName": "module.decoration.overflow",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "y"
+        },
+        "module.decoration.position__mode": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mode"
+        },
+        "module.decoration.position__offset.horizontal": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "offset.horizontal"
+        },
+        "module.decoration.position__offset.vertical": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "offset.vertical"
+        },
+        "module.decoration.position__origin.absolute": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "origin.absolute"
+        },
+        "module.decoration.position__origin.fixed": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "origin.fixed"
+        },
+        "module.decoration.position__origin.relative": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "origin.relative"
+        },
+        "module.decoration.sticky__limit.bottom": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "limit.bottom"
+        },
+        "module.decoration.sticky__limit.top": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "limit.top"
+        },
+        "module.decoration.sticky__offset.bottom": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "offset.bottom"
+        },
+        "module.decoration.sticky__offset.surrounding": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "offset.surrounding"
+        },
+        "module.decoration.sticky__offset.top": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "offset.top"
+        },
+        "module.decoration.sticky__position": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "position"
+        },
+        "module.decoration.sticky__transition": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "transition"
+        },
+        "module.decoration.transform__origin": {
+            "attrName": "module.decoration.transform",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "origin"
+        },
+        "module.decoration.transform__rotate": {
+            "attrName": "module.decoration.transform",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "rotate"
+        },
+        "module.decoration.transform__scale": {
+            "attrName": "module.decoration.transform",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "scale"
+        },
+        "module.decoration.transform__skew": {
+            "attrName": "module.decoration.transform",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "skew"
+        },
+        "module.decoration.transform__translate": {
+            "attrName": "module.decoration.transform",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "translate"
+        },
+        "module.decoration.transition__delay": {
+            "attrName": "module.decoration.transition",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "delay"
+        },
+        "module.decoration.transition__duration": {
+            "attrName": "module.decoration.transition",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "duration"
+        },
+        "module.decoration.transition__speedCurve": {
+            "attrName": "module.decoration.transition",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "speedCurve"
+        },
+        "module.decoration.zIndex": {
+            "attrName": "module.decoration.zIndex",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ]
+        },
+        "module.meta.adminLabel": {
+            "attrName": "module.meta.adminLabel",
+            "inPresetMap": true,
+            "preset": "meta"
+        },
+        "module.meta.meta.forceVisible": {
+            "attrName": "module.meta.meta.forceVisible",
+            "inPresetMap": true,
+            "preset": "meta"
+        },
+        "module.meta.meta.tocListHeading": {
+            "attrName": "module.meta.meta.tocListHeading",
+            "inPresetMap": true,
+            "preset": "meta"
+        },
+        "overlay.decoration.background__color": {
+            "attrName": "overlay.decoration.background",
+            "inPresetMap": false,
+            "preset": [
+                "style"
+            ],
+            "subName": "color"
+        },
+        "playIcon.decoration.icon": {
+            "attrName": "playIcon.decoration.icon",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ]
+        },
+        "playIcon.decoration.icon__color": {
+            "attrName": "playIcon.decoration.icon",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "color"
+        },
+        "playIcon.decoration.icon__size": {
+            "attrName": "playIcon.decoration.icon",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "size"
+        },
+        "playIcon.decoration.icon__useSize": {
+            "attrName": "playIcon.decoration.icon",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "useSize"
+        },
+        "sliderControls.advanced.color__color": {
+            "attrName": "sliderControls.advanced.color",
+            "inPresetMap": false,
+            "preset": [
+                "style"
+            ],
+            "subName": "color"
+        },
+        "sliderControls.advanced__color": {
+            "attrName": "sliderControls.advanced",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "color"
+        },
+        "thumbnail.innerContent__src": {
+            "attrName": "thumbnail.innerContent",
+            "inPresetMap": true,
+            "preset": "content",
+            "subName": "src"
+        },
+        "video.innerContent__src": {
+            "attrName": "video.innerContent",
+            "inPresetMap": true,
+            "preset": "content",
+            "subName": "src"
+        },
+        "video.innerContent__webm": {
+            "attrName": "video.innerContent",
+            "inPresetMap": true,
+            "preset": "content",
+            "subName": "webm"
+        }
+    },
+    "module": {
+        "category": "child-module",
+        "d4Shortcode": "et_pb_video_slider_item",
+        "description": "A single video entry inside a Video Slider module.",
+        "folder": "video-slider-item",
+        "name": "divi/video-slider-item",
+        "registered": true,
+        "title": "Video Slider Item",
+        "titles": "Video Slider Items"
+    },
+    "settings": {
+        "advanced": "auto",
+        "design": "auto",
+        "groups": {
+            "contentOverlay": {
+                "component": {
+                    "name": "divi/composite",
+                    "props": {
+                        "groupLabel": "Overlay"
+                    }
+                },
+                "groupName": "contentOverlay",
+                "panel": "content",
+                "priority": 10
+            },
+            "contentVideo": {
+                "component": {
+                    "name": "divi/composite",
+                    "props": {
+                        "groupLabel": "Video"
+                    }
+                },
+                "groupName": "contentVideo",
+                "panel": "content",
+                "priority": 10
+            },
+            "designControls": {
+                "component": {
+                    "name": "divi/composite",
+                    "props": {
+                        "groupLabel": "Controls"
+                    }
+                },
+                "groupName": "controls",
+                "panel": "design",
+                "priority": 10
+            }
+        }
+    }
+}

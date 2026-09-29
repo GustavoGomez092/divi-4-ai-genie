@@ -1,0 +1,66 @@
+{
+    "attributes": {
+        "className": {
+            "type": "string"
+        },
+        "layoutContent": {
+            "type": "string"
+        },
+        "lock": {
+            "type": "object"
+        },
+        "metadata": {
+            "type": "object"
+        },
+        "style": {
+            "type": "object"
+        }
+    },
+    "conversion": null,
+    "conversionOutline": [],
+    "defaults": {
+        "printedStyle": [],
+        "render": []
+    },
+    "leaves": {
+        "css__after": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "after"
+        },
+        "css__before": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "before"
+        },
+        "css__freeForm": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "freeForm"
+        },
+        "css__mainElement": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mainElement"
+        }
+    },
+    "module": {
+        "folder": null,
+        "name": "divi/layout",
+        "registered": true,
+        "title": ""
+    },
+    "settings": []
+}

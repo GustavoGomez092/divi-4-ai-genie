@@ -1,0 +1,1513 @@
+{
+    "breakpoints": {
+        "disabledOnItems": {
+            "desktopAbove": {
+                "enable": true,
+                "name": "desktopAbove",
+                "order": 45
+            },
+            "tabletOnly": {
+                "enable": true,
+                "name": "tabletOnly",
+                "order": 25
+            }
+        },
+        "items": {
+            "desktop": {
+                "baseDevice": true,
+                "enable": true,
+                "name": "desktop",
+                "order": 50
+            },
+            "phone": {
+                "enable": true,
+                "maxWidth": {
+                    "default": 767,
+                    "value": "767px"
+                },
+                "name": "phone",
+                "order": 10
+            },
+            "phoneWide": {
+                "enable": false,
+                "maxWidth": {
+                    "default": 860,
+                    "value": "860px"
+                },
+                "name": "phoneWide",
+                "order": 20
+            },
+            "tablet": {
+                "enable": true,
+                "maxWidth": {
+                    "default": 980,
+                    "value": "980px"
+                },
+                "name": "tablet",
+                "order": 30
+            },
+            "tabletWide": {
+                "enable": false,
+                "maxWidth": {
+                    "default": 1024,
+                    "value": "1024px"
+                },
+                "name": "tabletWide",
+                "order": 40
+            },
+            "ultraWide": {
+                "enable": false,
+                "minWidth": {
+                    "default": 1440,
+                    "value": "1440px"
+                },
+                "name": "ultraWide",
+                "order": 70
+            },
+            "widescreen": {
+                "enable": false,
+                "minWidth": {
+                    "default": 1280,
+                    "value": "1280px"
+                },
+                "name": "widescreen",
+                "order": 60
+            }
+        }
+    },
+    "divi_version": "5.13.1",
+    "modules": {
+        "accordion": {
+            "attr_count": 6,
+            "category": "module",
+            "childrenName": [
+                "divi/accordion-item"
+            ],
+            "d4Shortcode": "et_pb_accordion",
+            "folder": "accordion",
+            "has_conversion_map": true,
+            "leaf_count": 574,
+            "name": "divi/accordion",
+            "registered": true,
+            "title": "Accordion"
+        },
+        "accordion-item": {
+            "attr_count": 6,
+            "category": "child-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_accordion_item",
+            "folder": "accordion-item",
+            "has_conversion_map": true,
+            "leaf_count": 570,
+            "name": "divi/accordion-item",
+            "registered": true,
+            "title": "Accordion Item"
+        },
+        "audio": {
+            "attr_count": 7,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_audio",
+            "folder": "audio",
+            "has_conversion_map": true,
+            "leaf_count": 382,
+            "name": "divi/audio",
+            "registered": true,
+            "title": "Audio"
+        },
+        "before-after-image": {
+            "attr_count": 7,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_before_after_image",
+            "folder": "before-after-image",
+            "has_conversion_map": false,
+            "leaf_count": 448,
+            "name": "divi/before-after-image",
+            "registered": true,
+            "title": "Before/After Image"
+        },
+        "blog": {
+            "attr_count": 13,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_blog",
+            "folder": "blog",
+            "has_conversion_map": true,
+            "leaf_count": 740,
+            "name": "divi/blog",
+            "registered": true,
+            "title": "Blog"
+        },
+        "blurb": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_blurb",
+            "folder": "blurb",
+            "has_conversion_map": true,
+            "leaf_count": 658,
+            "name": "divi/blurb",
+            "registered": true,
+            "title": "Blurb"
+        },
+        "breadcrumbs": {
+            "attr_count": 6,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": null,
+            "folder": "breadcrumbs",
+            "has_conversion_map": false,
+            "leaf_count": 781,
+            "name": "divi/breadcrumbs",
+            "registered": true,
+            "title": "Breadcrumbs"
+        },
+        "button": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_button",
+            "folder": "button",
+            "has_conversion_map": true,
+            "leaf_count": 434,
+            "name": "divi/button",
+            "registered": true,
+            "title": "Button"
+        },
+        "canvas-portal": {
+            "attr_count": 3,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_canvas_portal",
+            "folder": "canvas-portal",
+            "has_conversion_map": true,
+            "leaf_count": 175,
+            "name": "divi/canvas-portal",
+            "registered": true,
+            "title": "Canvas Portal"
+        },
+        "charts": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_charts",
+            "folder": "charts",
+            "has_conversion_map": false,
+            "leaf_count": 401,
+            "name": "divi/charts",
+            "registered": true,
+            "title": "Chart"
+        },
+        "circle-counter": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_circle_counter",
+            "folder": "circle-counter",
+            "has_conversion_map": true,
+            "leaf_count": 320,
+            "name": "divi/circle-counter",
+            "registered": true,
+            "title": "Circle Counter"
+        },
+        "code": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_code",
+            "folder": "code",
+            "has_conversion_map": true,
+            "leaf_count": 197,
+            "name": "divi/code",
+            "registered": true,
+            "title": "Code"
+        },
+        "column": {
+            "attr_count": 1,
+            "category": "structure",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_column",
+            "folder": "column",
+            "has_conversion_map": true,
+            "leaf_count": 215,
+            "name": "divi/column",
+            "registered": true,
+            "title": "Column"
+        },
+        "column-inner": {
+            "attr_count": 1,
+            "category": "structure",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_column_inner",
+            "folder": "column-inner",
+            "has_conversion_map": true,
+            "leaf_count": 170,
+            "name": "divi/column-inner",
+            "registered": true,
+            "title": "Inner Column"
+        },
+        "comments": {
+            "attr_count": 8,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_comments",
+            "folder": "comments",
+            "has_conversion_map": true,
+            "leaf_count": 1007,
+            "name": "divi/comments",
+            "registered": true,
+            "title": "Comments"
+        },
+        "contact-field": {
+            "attr_count": 7,
+            "category": "child-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_contact_field",
+            "folder": "contact-field",
+            "has_conversion_map": true,
+            "leaf_count": 765,
+            "name": "divi/contact-field",
+            "registered": true,
+            "title": "Field"
+        },
+        "contact-form": {
+            "attr_count": 9,
+            "category": "module",
+            "childrenName": [
+                "divi/contact-field"
+            ],
+            "d4Shortcode": "et_pb_contact_form",
+            "folder": "contact-form",
+            "has_conversion_map": true,
+            "leaf_count": 1092,
+            "name": "divi/contact-form",
+            "registered": true,
+            "title": "Contact Form"
+        },
+        "contact-form-7": {
+            "attr_count": 12,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_contact_form_7",
+            "folder": "contact-form-7",
+            "has_conversion_map": false,
+            "leaf_count": 2389,
+            "name": "divi/contact-form-7",
+            "registered": false,
+            "title": "Contact Form 7 Styler"
+        },
+        "countdown-timer": {
+            "attr_count": 6,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_countdown_timer",
+            "folder": "countdown-timer",
+            "has_conversion_map": true,
+            "leaf_count": 404,
+            "name": "divi/countdown-timer",
+            "registered": true,
+            "title": "Countdown Timer"
+        },
+        "counter": {
+            "attr_count": 4,
+            "category": "child-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_counter",
+            "folder": "counter",
+            "has_conversion_map": true,
+            "leaf_count": 303,
+            "name": "divi/counter",
+            "registered": true,
+            "title": "Bar Counter"
+        },
+        "counters": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": [
+                "divi/counter"
+            ],
+            "d4Shortcode": "et_pb_counters",
+            "folder": "counters",
+            "has_conversion_map": true,
+            "leaf_count": 316,
+            "name": "divi/counters",
+            "registered": true,
+            "title": "Bar Counters"
+        },
+        "cta": {
+            "attr_count": 4,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_cta",
+            "folder": "cta",
+            "has_conversion_map": true,
+            "leaf_count": 821,
+            "name": "divi/cta",
+            "registered": true,
+            "title": "Call To Action"
+        },
+        "divider": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_divider",
+            "folder": "divider",
+            "has_conversion_map": true,
+            "leaf_count": 194,
+            "name": "divi/divider",
+            "registered": true,
+            "title": "Divider"
+        },
+        "dropdown": {
+            "attr_count": 1,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_dropdown",
+            "folder": "dropdown",
+            "has_conversion_map": false,
+            "leaf_count": 213,
+            "name": "divi/dropdown",
+            "registered": true,
+            "title": "Dropdown"
+        },
+        "filterable-portfolio": {
+            "attr_count": 10,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_filterable_portfolio",
+            "folder": "filterable-portfolio",
+            "has_conversion_map": true,
+            "leaf_count": 465,
+            "name": "divi/filterable-portfolio",
+            "registered": true,
+            "title": "Filterable Portfolio"
+        },
+        "fullwidth-code": {
+            "attr_count": 2,
+            "category": "fullwidth-module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_fullwidth_code",
+            "folder": "fullwidth-code",
+            "has_conversion_map": true,
+            "leaf_count": 197,
+            "name": "divi/fullwidth-code",
+            "registered": true,
+            "title": "Fullwidth Code"
+        },
+        "fullwidth-header": {
+            "attr_count": 10,
+            "category": "fullwidth-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_fullwidth_header",
+            "folder": "fullwidth-header",
+            "has_conversion_map": true,
+            "leaf_count": 1242,
+            "name": "divi/fullwidth-header",
+            "registered": true,
+            "title": "Hero"
+        },
+        "fullwidth-image": {
+            "attr_count": 2,
+            "category": "fullwidth-module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_fullwidth_image",
+            "folder": "fullwidth-image",
+            "has_conversion_map": true,
+            "leaf_count": 198,
+            "name": "divi/fullwidth-image",
+            "registered": true,
+            "title": "Fullwidth Image"
+        },
+        "fullwidth-map": {
+            "attr_count": 2,
+            "category": "fullwidth-module",
+            "childrenName": [
+                "divi/map-pin"
+            ],
+            "d4Shortcode": "et_pb_fullwidth_map",
+            "folder": "fullwidth-map",
+            "has_conversion_map": true,
+            "leaf_count": 205,
+            "name": "divi/fullwidth-map",
+            "registered": true,
+            "title": "Fullwidth Map"
+        },
+        "fullwidth-menu": {
+            "attr_count": 9,
+            "category": "fullwidth-module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_fullwidth_menu",
+            "folder": "fullwidth-menu",
+            "has_conversion_map": true,
+            "leaf_count": 378,
+            "name": "divi/fullwidth-menu",
+            "registered": true,
+            "title": "Fullwidth Menu"
+        },
+        "fullwidth-portfolio": {
+            "attr_count": 8,
+            "category": "fullwidth-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_fullwidth_portfolio",
+            "folder": "fullwidth-portfolio",
+            "has_conversion_map": true,
+            "leaf_count": 422,
+            "name": "divi/fullwidth-portfolio",
+            "registered": true,
+            "title": "Post Carousel"
+        },
+        "fullwidth-post-content": {
+            "attr_count": 2,
+            "category": "fullwidth-module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_fullwidth_post_content",
+            "folder": "fullwidth-post-content",
+            "has_conversion_map": true,
+            "leaf_count": 707,
+            "name": "divi/fullwidth-post-content",
+            "registered": true,
+            "title": "Fullwidth Post Content"
+        },
+        "fullwidth-post-slider": {
+            "attr_count": 11,
+            "category": "fullwidth-module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_fullwidth_post_slider",
+            "folder": "fullwidth-post-slider",
+            "has_conversion_map": true,
+            "leaf_count": 924,
+            "name": "divi/fullwidth-post-slider",
+            "registered": true,
+            "title": "Fullwidth Post Slider"
+        },
+        "fullwidth-post-title": {
+            "attr_count": 5,
+            "category": "fullwidth-module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_fullwidth_post_title",
+            "folder": "fullwidth-post-title",
+            "has_conversion_map": true,
+            "leaf_count": 305,
+            "name": "divi/fullwidth-post-title",
+            "registered": true,
+            "title": "Fullwidth Post Title"
+        },
+        "fullwidth-slider": {
+            "attr_count": 9,
+            "category": "fullwidth-module",
+            "childrenName": [
+                "divi/slide"
+            ],
+            "d4Shortcode": "et_pb_fullwidth_slider",
+            "folder": "fullwidth-slider",
+            "has_conversion_map": true,
+            "leaf_count": 887,
+            "name": "divi/fullwidth-slider",
+            "registered": true,
+            "title": "Fullwidth Slider"
+        },
+        "gallery": {
+            "attr_count": 8,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_gallery",
+            "folder": "gallery",
+            "has_conversion_map": true,
+            "leaf_count": 421,
+            "name": "divi/gallery",
+            "registered": true,
+            "title": "Gallery"
+        },
+        "global-layout": {
+            "attr_count": 0,
+            "category": "structure",
+            "childrenName": null,
+            "d4Shortcode": null,
+            "folder": "global-layout",
+            "has_conversion_map": false,
+            "leaf_count": 4,
+            "name": "divi/global-layout",
+            "registered": false,
+            "title": "Global Layout"
+        },
+        "gravity-forms": {
+            "attr_count": 20,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": null,
+            "folder": "gravity-forms",
+            "has_conversion_map": false,
+            "leaf_count": 2841,
+            "name": "divi/gravity-forms",
+            "registered": false,
+            "title": "Gravity Form"
+        },
+        "group": {
+            "attr_count": 1,
+            "category": "structure",
+            "childrenName": [],
+            "d4Shortcode": null,
+            "folder": "group",
+            "has_conversion_map": true,
+            "leaf_count": 215,
+            "name": "divi/group",
+            "registered": true,
+            "title": "Group"
+        },
+        "group-carousel": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": [
+                "divi/group"
+            ],
+            "d4Shortcode": null,
+            "folder": "group-carousel",
+            "has_conversion_map": false,
+            "leaf_count": 525,
+            "name": "divi/group-carousel",
+            "registered": true,
+            "title": "Group Carousel"
+        },
+        "heading": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_heading",
+            "folder": "heading",
+            "has_conversion_map": true,
+            "leaf_count": 269,
+            "name": "divi/heading",
+            "registered": true,
+            "title": "Heading"
+        },
+        "icon": {
+            "attr_count": 3,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_icon",
+            "folder": "icon",
+            "has_conversion_map": true,
+            "leaf_count": 207,
+            "name": "divi/icon",
+            "registered": true,
+            "title": "Icon"
+        },
+        "icon-list": {
+            "attr_count": 3,
+            "category": "module",
+            "childrenName": [
+                "divi/icon-list-item"
+            ],
+            "d4Shortcode": "et_pb_icon_list",
+            "folder": "icon-list",
+            "has_conversion_map": false,
+            "leaf_count": 346,
+            "name": "divi/icon-list",
+            "registered": true,
+            "title": "Icon List"
+        },
+        "icon-list-item": {
+            "attr_count": 3,
+            "category": "child-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_icon_list_item",
+            "folder": "icon-list-item",
+            "has_conversion_map": false,
+            "leaf_count": 349,
+            "name": "divi/icon-list-item",
+            "registered": true,
+            "title": "Icon List Item"
+        },
+        "image": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_image",
+            "folder": "image",
+            "has_conversion_map": true,
+            "leaf_count": 230,
+            "name": "divi/image",
+            "registered": true,
+            "title": "Image"
+        },
+        "imagely-gallery": {
+            "attr_count": 11,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": null,
+            "folder": "imagely-gallery",
+            "has_conversion_map": false,
+            "leaf_count": 808,
+            "name": "divi/imagely-gallery",
+            "registered": false,
+            "title": "Imagely Gallery"
+        },
+        "instagram-feed": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_instagram_feed",
+            "folder": "instagram-feed",
+            "has_conversion_map": false,
+            "leaf_count": 767,
+            "name": "divi/instagram-feed",
+            "registered": true,
+            "title": "Instagram Feed"
+        },
+        "layout": {
+            "attr_count": 5,
+            "category": null,
+            "childrenName": null,
+            "d4Shortcode": null,
+            "folder": null,
+            "has_conversion_map": false,
+            "leaf_count": 4,
+            "name": "divi/layout",
+            "registered": true,
+            "title": ""
+        },
+        "link": {
+            "attr_count": 3,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_link",
+            "folder": "link",
+            "has_conversion_map": false,
+            "leaf_count": 336,
+            "name": "divi/link",
+            "registered": true,
+            "title": "Link"
+        },
+        "login": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_login",
+            "folder": "login",
+            "has_conversion_map": true,
+            "leaf_count": 1057,
+            "name": "divi/login",
+            "registered": true,
+            "title": "Login"
+        },
+        "lottie": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_lottie",
+            "folder": "lottie",
+            "has_conversion_map": false,
+            "leaf_count": 230,
+            "name": "divi/lottie",
+            "registered": true,
+            "title": "Lottie"
+        },
+        "map": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [
+                "divi/map-pin"
+            ],
+            "d4Shortcode": "et_pb_map",
+            "folder": "map",
+            "has_conversion_map": true,
+            "leaf_count": 235,
+            "name": "divi/map",
+            "registered": true,
+            "title": "Map"
+        },
+        "map-pin": {
+            "attr_count": 3,
+            "category": "child-module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_map_pin",
+            "folder": "map-pin",
+            "has_conversion_map": true,
+            "leaf_count": 27,
+            "name": "divi/map-pin",
+            "registered": true,
+            "title": "Map Pin"
+        },
+        "menu": {
+            "attr_count": 10,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_menu",
+            "folder": "menu",
+            "has_conversion_map": true,
+            "leaf_count": 403,
+            "name": "divi/menu",
+            "registered": true,
+            "title": "Menu"
+        },
+        "number-counter": {
+            "attr_count": 3,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_number_counter",
+            "folder": "number-counter",
+            "has_conversion_map": true,
+            "leaf_count": 316,
+            "name": "divi/number-counter",
+            "registered": true,
+            "title": "Number Counter"
+        },
+        "payment-button": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": null,
+            "folder": "payment-button",
+            "has_conversion_map": false,
+            "leaf_count": 421,
+            "name": "divi/payment-button",
+            "registered": true,
+            "title": "Payment Button"
+        },
+        "portfolio": {
+            "attr_count": 8,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_portfolio",
+            "folder": "portfolio",
+            "has_conversion_map": true,
+            "leaf_count": 416,
+            "name": "divi/portfolio",
+            "registered": true,
+            "title": "Portfolio"
+        },
+        "post-content": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_post_content",
+            "folder": "post-content",
+            "has_conversion_map": true,
+            "leaf_count": 741,
+            "name": "divi/post-content",
+            "registered": true,
+            "title": "Post Content"
+        },
+        "post-filter": {
+            "attr_count": 7,
+            "category": "module",
+            "childrenName": [
+                "divi/post-filter-item"
+            ],
+            "d4Shortcode": "et_pb_post_filter",
+            "folder": "post-filter",
+            "has_conversion_map": false,
+            "leaf_count": 754,
+            "name": "divi/post-filter",
+            "registered": true,
+            "title": "Post Filter"
+        },
+        "post-filter-item": {
+            "attr_count": 8,
+            "category": "child-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_post_filter_item",
+            "folder": "post-filter-item",
+            "has_conversion_map": false,
+            "leaf_count": 766,
+            "name": "divi/post-filter-item",
+            "registered": true,
+            "title": "Post Filter Item"
+        },
+        "post-nav": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_post_nav",
+            "folder": "post-nav",
+            "has_conversion_map": true,
+            "leaf_count": 255,
+            "name": "divi/post-nav",
+            "registered": true,
+            "title": "Pagination"
+        },
+        "post-slider": {
+            "attr_count": 11,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_post_slider",
+            "folder": "post-slider",
+            "has_conversion_map": true,
+            "leaf_count": 977,
+            "name": "divi/post-slider",
+            "registered": true,
+            "title": "Post Slider"
+        },
+        "post-title": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_post_title",
+            "folder": "post-title",
+            "has_conversion_map": true,
+            "leaf_count": 389,
+            "name": "divi/post-title",
+            "registered": true,
+            "title": "Post Title"
+        },
+        "pricing-table": {
+            "attr_count": 8,
+            "category": "child-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_pricing_table",
+            "folder": "pricing-table",
+            "has_conversion_map": true,
+            "leaf_count": 1018,
+            "name": "divi/pricing-table",
+            "registered": true,
+            "title": "Pricing Table"
+        },
+        "pricing-tables": {
+            "attr_count": 16,
+            "category": "module",
+            "childrenName": [
+                "divi/pricing-table"
+            ],
+            "d4Shortcode": "et_pb_pricing_tables",
+            "folder": "pricing-tables",
+            "has_conversion_map": true,
+            "leaf_count": 1038,
+            "name": "divi/pricing-tables",
+            "registered": true,
+            "title": "Pricing Tables"
+        },
+        "row": {
+            "attr_count": 1,
+            "category": "structure",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_row",
+            "folder": "row",
+            "has_conversion_map": true,
+            "leaf_count": 217,
+            "name": "divi/row",
+            "registered": true,
+            "title": "Row"
+        },
+        "row-inner": {
+            "attr_count": 1,
+            "category": "structure",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_row_inner",
+            "folder": "row-inner",
+            "has_conversion_map": true,
+            "leaf_count": 192,
+            "name": "divi/row-inner",
+            "registered": true,
+            "title": "Inner Row"
+        },
+        "search": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_search",
+            "folder": "search",
+            "has_conversion_map": true,
+            "leaf_count": 409,
+            "name": "divi/search",
+            "registered": true,
+            "title": "Search"
+        },
+        "section": {
+            "attr_count": 5,
+            "category": "structure",
+            "childrenName": [
+                "divi/row"
+            ],
+            "d4Shortcode": "et_pb_section",
+            "folder": "section",
+            "has_conversion_map": true,
+            "leaf_count": 398,
+            "name": "divi/section",
+            "registered": true,
+            "title": "Section"
+        },
+        "shop": {
+            "attr_count": 12,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_shop",
+            "folder": "woocommerce/products",
+            "has_conversion_map": false,
+            "leaf_count": 555,
+            "name": "divi/shop",
+            "registered": false,
+            "title": "Woo Products"
+        },
+        "shortcode-module": {
+            "attr_count": 4,
+            "category": "unsupported",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_unsupported",
+            "folder": null,
+            "has_conversion_map": false,
+            "leaf_count": 4,
+            "name": "divi/shortcode-module",
+            "registered": true,
+            "title": "Shortcode Module"
+        },
+        "sidebar": {
+            "attr_count": 4,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_sidebar",
+            "folder": "sidebar",
+            "has_conversion_map": true,
+            "leaf_count": 316,
+            "name": "divi/sidebar",
+            "registered": true,
+            "title": "Sidebar"
+        },
+        "signup": {
+            "attr_count": 12,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_signup",
+            "folder": "signup",
+            "has_conversion_map": true,
+            "leaf_count": 1374,
+            "name": "divi/signup",
+            "registered": true,
+            "title": "Email Optin"
+        },
+        "signup-custom-field": {
+            "attr_count": 6,
+            "category": "child-module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_signup_custom_field",
+            "folder": "signup-custom-field",
+            "has_conversion_map": true,
+            "leaf_count": 687,
+            "name": "divi/signup-custom-field",
+            "registered": true,
+            "title": "Custom Field"
+        },
+        "slide": {
+            "attr_count": 10,
+            "category": "child-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_slide",
+            "folder": "slide",
+            "has_conversion_map": true,
+            "leaf_count": 845,
+            "name": "divi/slide",
+            "registered": true,
+            "title": "Slide"
+        },
+        "slider": {
+            "attr_count": 9,
+            "category": "module",
+            "childrenName": [
+                "divi/slide"
+            ],
+            "d4Shortcode": "et_pb_slider",
+            "folder": "slider",
+            "has_conversion_map": true,
+            "leaf_count": 951,
+            "name": "divi/slider",
+            "registered": true,
+            "title": "Slider"
+        },
+        "social-media-follow": {
+            "attr_count": 4,
+            "category": "module",
+            "childrenName": [
+                "divi/social-media-follow-network"
+            ],
+            "d4Shortcode": "et_pb_social_media_follow",
+            "folder": "social-media-follow",
+            "has_conversion_map": true,
+            "leaf_count": 519,
+            "name": "divi/social-media-follow",
+            "registered": true,
+            "title": "Social Media Follow"
+        },
+        "social-media-follow-network": {
+            "attr_count": 5,
+            "category": "child-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_social_media_follow_network",
+            "folder": "social-media-follow-item",
+            "has_conversion_map": true,
+            "leaf_count": 362,
+            "name": "divi/social-media-follow-network",
+            "registered": true,
+            "title": "Social Network"
+        },
+        "svg": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_svg",
+            "folder": "svg",
+            "has_conversion_map": false,
+            "leaf_count": 226,
+            "name": "divi/svg",
+            "registered": true,
+            "title": "SVG"
+        },
+        "tab": {
+            "attr_count": 3,
+            "category": "child-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_tab",
+            "folder": "tab",
+            "has_conversion_map": true,
+            "leaf_count": 461,
+            "name": "divi/tab",
+            "registered": true,
+            "title": "Tab"
+        },
+        "table-of-contents": {
+            "attr_count": 11,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_table_of_contents",
+            "folder": "table-of-contents",
+            "has_conversion_map": false,
+            "leaf_count": 666,
+            "name": "divi/table-of-contents",
+            "registered": true,
+            "title": "Table of Contents"
+        },
+        "tabs": {
+            "attr_count": 4,
+            "category": "module",
+            "childrenName": [
+                "divi/tab"
+            ],
+            "d4Shortcode": "et_pb_tabs",
+            "folder": "tabs",
+            "has_conversion_map": true,
+            "leaf_count": 632,
+            "name": "divi/tabs",
+            "registered": true,
+            "title": "Tabs"
+        },
+        "team-member": {
+            "attr_count": 6,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_team_member",
+            "folder": "team-member",
+            "has_conversion_map": true,
+            "leaf_count": 634,
+            "name": "divi/team-member",
+            "registered": true,
+            "title": "Person"
+        },
+        "testimonial": {
+            "attr_count": 8,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_testimonial",
+            "folder": "testimonial",
+            "has_conversion_map": true,
+            "leaf_count": 678,
+            "name": "divi/testimonial",
+            "registered": true,
+            "title": "Testimonial"
+        },
+        "text": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_text",
+            "folder": "text",
+            "has_conversion_map": true,
+            "leaf_count": 736,
+            "name": "divi/text",
+            "registered": true,
+            "title": "Text"
+        },
+        "timeline": {
+            "attr_count": 17,
+            "category": "module",
+            "childrenName": [
+                "divi/timeline-item"
+            ],
+            "d4Shortcode": "et_pb_timeline",
+            "folder": "timeline",
+            "has_conversion_map": false,
+            "leaf_count": 1862,
+            "name": "divi/timeline",
+            "registered": true,
+            "title": "Timeline"
+        },
+        "timeline-item": {
+            "attr_count": 8,
+            "category": "child-module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_timeline_item",
+            "folder": "timeline-item",
+            "has_conversion_map": false,
+            "leaf_count": 965,
+            "name": "divi/timeline-item",
+            "registered": true,
+            "title": "Timeline Item"
+        },
+        "toggle": {
+            "attr_count": 8,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_toggle",
+            "folder": "toggle",
+            "has_conversion_map": true,
+            "leaf_count": 579,
+            "name": "divi/toggle",
+            "registered": true,
+            "title": "Toggle"
+        },
+        "tooltip": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": null,
+            "folder": "tooltip",
+            "has_conversion_map": false,
+            "leaf_count": 466,
+            "name": "divi/tooltip",
+            "registered": true,
+            "title": "Tooltip"
+        },
+        "video": {
+            "attr_count": 4,
+            "category": "module",
+            "childrenName": [],
+            "d4Shortcode": "et_pb_video",
+            "folder": "video",
+            "has_conversion_map": true,
+            "leaf_count": 208,
+            "name": "divi/video",
+            "registered": true,
+            "title": "Video"
+        },
+        "video-slider": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": [
+                "divi/video-slider-item"
+            ],
+            "d4Shortcode": "et_pb_video_slider",
+            "folder": "video-slider",
+            "has_conversion_map": true,
+            "leaf_count": 191,
+            "name": "divi/video-slider",
+            "registered": true,
+            "title": "Video Slider"
+        },
+        "video-slider-item": {
+            "attr_count": 5,
+            "category": "child-module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_video_slider_item",
+            "folder": "video-slider-item",
+            "has_conversion_map": true,
+            "leaf_count": 72,
+            "name": "divi/video-slider-item",
+            "registered": true,
+            "title": "Video Slider Item"
+        },
+        "woocommerce-breadcrumb": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_breadcrumb",
+            "folder": "woocommerce/breadcrumb",
+            "has_conversion_map": false,
+            "leaf_count": 446,
+            "name": "divi/woocommerce-breadcrumb",
+            "registered": false,
+            "title": "Woo Breadcrumbs"
+        },
+        "woocommerce-cart-notice": {
+            "attr_count": 6,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_cart_notice",
+            "folder": "woocommerce/cart-notice",
+            "has_conversion_map": false,
+            "leaf_count": 891,
+            "name": "divi/woocommerce-cart-notice",
+            "registered": false,
+            "title": "Woo Notice"
+        },
+        "woocommerce-cart-products": {
+            "attr_count": 13,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_cart_products",
+            "folder": "woocommerce/cart-products",
+            "has_conversion_map": false,
+            "leaf_count": 974,
+            "name": "divi/woocommerce-cart-products",
+            "registered": false,
+            "title": "Woo Cart Products"
+        },
+        "woocommerce-cart-totals": {
+            "attr_count": 9,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_cart_totals",
+            "folder": "woocommerce/cart-totals",
+            "has_conversion_map": false,
+            "leaf_count": 797,
+            "name": "divi/woocommerce-cart-totals",
+            "registered": false,
+            "title": "Woo Cart Totals"
+        },
+        "woocommerce-checkout-additional-info": {
+            "attr_count": 4,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_checkout_additional_info",
+            "folder": "woocommerce/checkout-information",
+            "has_conversion_map": false,
+            "leaf_count": 272,
+            "name": "divi/woocommerce-checkout-additional-info",
+            "registered": false,
+            "title": "Woo Checkout Information"
+        },
+        "woocommerce-checkout-billing": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_checkout_billing",
+            "folder": "woocommerce/checkout-billing",
+            "has_conversion_map": false,
+            "leaf_count": 346,
+            "name": "divi/woocommerce-checkout-billing",
+            "registered": false,
+            "title": "Woo Checkout Billing"
+        },
+        "woocommerce-checkout-order-details": {
+            "attr_count": 7,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_checkout_order_details",
+            "folder": "woocommerce/checkout-order-details",
+            "has_conversion_map": false,
+            "leaf_count": 609,
+            "name": "divi/woocommerce-checkout-order-details",
+            "registered": false,
+            "title": "Woo Checkout Details"
+        },
+        "woocommerce-checkout-payment-info": {
+            "attr_count": 7,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_checkout_payment_info",
+            "folder": "woocommerce/checkout-payment-info",
+            "has_conversion_map": false,
+            "leaf_count": 898,
+            "name": "divi/woocommerce-checkout-payment-info",
+            "registered": false,
+            "title": "Woo Checkout Payment"
+        },
+        "woocommerce-checkout-shipping": {
+            "attr_count": 6,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_checkout_shipping",
+            "folder": "woocommerce/checkout-shipping",
+            "has_conversion_map": false,
+            "leaf_count": 274,
+            "name": "divi/woocommerce-checkout-shipping",
+            "registered": false,
+            "title": "Woo Checkout Shipping"
+        },
+        "woocommerce-cross-sells": {
+            "attr_count": 3,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_cross_sells",
+            "folder": "woocommerce/cross-sells",
+            "has_conversion_map": false,
+            "leaf_count": 282,
+            "name": "divi/woocommerce-cross-sells",
+            "registered": false,
+            "title": "Woo Cross Sells"
+        },
+        "woocommerce-product-add-to-cart": {
+            "attr_count": 7,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_add_to_cart",
+            "folder": "woocommerce/product-add-to-cart",
+            "has_conversion_map": false,
+            "leaf_count": 372,
+            "name": "divi/woocommerce-product-add-to-cart",
+            "registered": false,
+            "title": "Woo Product Add To Cart"
+        },
+        "woocommerce-product-additional-info": {
+            "attr_count": 8,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_additional_info",
+            "folder": "woocommerce/product-additional-info",
+            "has_conversion_map": false,
+            "leaf_count": 604,
+            "name": "divi/woocommerce-product-additional-info",
+            "registered": false,
+            "title": "Woo Product Information"
+        },
+        "woocommerce-product-description": {
+            "attr_count": 2,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_description",
+            "folder": "woocommerce/product-description",
+            "has_conversion_map": false,
+            "leaf_count": 701,
+            "name": "divi/woocommerce-product-description",
+            "registered": false,
+            "title": "Woo Product Description"
+        },
+        "woocommerce-product-gallery": {
+            "attr_count": 10,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_gallery",
+            "folder": "woocommerce/product-gallery",
+            "has_conversion_map": false,
+            "leaf_count": 405,
+            "name": "divi/woocommerce-product-gallery",
+            "registered": false,
+            "title": "Woo Product Gallery"
+        },
+        "woocommerce-product-images": {
+            "attr_count": 6,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_images",
+            "folder": "woocommerce/product-images",
+            "has_conversion_map": false,
+            "leaf_count": 348,
+            "name": "divi/woocommerce-product-images",
+            "registered": false,
+            "title": "Woo Product Images"
+        },
+        "woocommerce-product-meta": {
+            "attr_count": 4,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_meta",
+            "folder": "woocommerce/product-meta",
+            "has_conversion_map": false,
+            "leaf_count": 428,
+            "name": "divi/woocommerce-product-meta",
+            "registered": false,
+            "title": "Woo Product Meta"
+        },
+        "woocommerce-product-price": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_price",
+            "folder": "woocommerce/product-price",
+            "has_conversion_map": false,
+            "leaf_count": 318,
+            "name": "divi/woocommerce-product-price",
+            "registered": false,
+            "title": "Woo Product Price"
+        },
+        "woocommerce-product-rating": {
+            "attr_count": 6,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_rating",
+            "folder": "woocommerce/product-rating",
+            "has_conversion_map": false,
+            "leaf_count": 290,
+            "name": "divi/woocommerce-product-rating",
+            "registered": false,
+            "title": "Woo Product Rating"
+        },
+        "woocommerce-product-reviews": {
+            "attr_count": 11,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_reviews",
+            "folder": "woocommerce/product-reviews",
+            "has_conversion_map": false,
+            "leaf_count": 653,
+            "name": "divi/woocommerce-product-reviews",
+            "registered": false,
+            "title": "Woo Product Reviews"
+        },
+        "woocommerce-product-stock": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_stock",
+            "folder": "woocommerce/product-stock",
+            "has_conversion_map": false,
+            "leaf_count": 332,
+            "name": "divi/woocommerce-product-stock",
+            "registered": false,
+            "title": "Woo Product Stock"
+        },
+        "woocommerce-product-tabs": {
+            "attr_count": 5,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_tabs",
+            "folder": "woocommerce/product-tabs",
+            "has_conversion_map": false,
+            "leaf_count": 474,
+            "name": "divi/woocommerce-product-tabs",
+            "registered": false,
+            "title": "Woo Product Tabs"
+        },
+        "woocommerce-product-title": {
+            "attr_count": 3,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_title",
+            "folder": "woocommerce/product-title",
+            "has_conversion_map": false,
+            "leaf_count": 242,
+            "name": "divi/woocommerce-product-title",
+            "registered": false,
+            "title": "Woo Product Title"
+        },
+        "woocommerce-product-upsell": {
+            "attr_count": 12,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_upsells",
+            "folder": "woocommerce/product-upsell",
+            "has_conversion_map": false,
+            "leaf_count": 552,
+            "name": "divi/woocommerce-product-upsell",
+            "registered": false,
+            "title": "Woo Product Upsell"
+        },
+        "woocommerce-related-products": {
+            "attr_count": 12,
+            "category": "module",
+            "childrenName": null,
+            "d4Shortcode": "et_pb_wc_related_products",
+            "folder": "woocommerce/related-products",
+            "has_conversion_map": false,
+            "leaf_count": 553,
+            "name": "divi/woocommerce-related-products",
+            "registered": false,
+            "title": "Woo Related Products"
+        }
+    },
+    "states": [
+        "value",
+        "hover",
+        "focus",
+        "checked",
+        "active",
+        "sticky"
+    ]
+}

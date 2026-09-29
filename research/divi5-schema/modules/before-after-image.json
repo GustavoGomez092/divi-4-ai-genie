@@ -1,0 +1,4241 @@
+{
+    "attributes": {
+        "afterImage": {
+            "elementType": "image",
+            "selector": "{{selector}} .et_pb_after_image img",
+            "settings": {
+                "decoration": {
+                    "image": {
+                        "component": {
+                            "name": "divi/image",
+                            "props": {
+                                "attrName": "afterImage",
+                                "dynamicSubgroupHost": true,
+                                "groupLabel": "After Image",
+                                "grouped": true,
+                                "presetGroup": "divi/image"
+                            },
+                            "type": "group"
+                        },
+                        "groupName": "image",
+                        "groupType": "group",
+                        "panel": "design",
+                        "priority": 10
+                    }
+                },
+                "innerContent": {
+                    "groupType": "group-items",
+                    "items": {
+                        "afterImageSrc": {
+                            "attrName": "afterImage.innerContent",
+                            "category": "basic_option",
+                            "component": {
+                                "name": "divi/upload",
+                                "props": {
+                                    "syncImageData": {
+                                        "alt": true,
+                                        "id": true,
+                                        "src": true,
+                                        "titleText": true
+                                    }
+                                },
+                                "type": "field"
+                            },
+                            "description": "Upload the \"after\" image.",
+                            "features": {
+                                "dynamicContent": {
+                                    "type": "image"
+                                },
+                                "hover": true,
+                                "preset": "content",
+                                "responsive": true,
+                                "sticky": false
+                            },
+                            "groupSlug": "contentImages",
+                            "label": "After Image",
+                            "priority": 20,
+                            "render": true,
+                            "subName": "src"
+                        }
+                    }
+                }
+            },
+            "styleProps": {
+                "fit": {
+                    "selector": "{{selector}} .et_pb_after_image img"
+                },
+                "selector": "{{selector}} .et_pb_after_image",
+                "sizing": {
+                    "propertySelectors": {
+                        "desktop": {
+                            "value": {
+                                "aspect-ratio": "{{selector}} .et_pb_after_image img",
+                                "height": "{{selector}} .et_pb_after_image img",
+                                "max-height": "{{selector}} .et_pb_after_image img"
+                            }
+                        }
+                    }
+                }
+            },
+            "supportsCustomAttributes": true,
+            "type": "object"
+        },
+        "afterLabel": {
+            "attributes": {
+                "class": "et_pb_before_after_image_label et_pb_after_label"
+            },
+            "childrenSanitizer": "et_core_esc_previously",
+            "inlineEditor": "plainText",
+            "selector": "{{selector}} .et_pb_after_label",
+            "settings": {
+                "innerContent": {
+                    "item": {
+                        "attrName": "afterLabel.innerContent",
+                        "category": "basic_option",
+                        "component": {
+                            "name": "divi/text",
+                            "type": "field"
+                        },
+                        "description": "Label for the \"after\" image.",
+                        "features": {
+                            "dynamicContent": {
+                                "type": "text"
+                            },
+                            "preset": "content"
+                        },
+                        "groupSlug": "contentLabels",
+                        "label": "After Label",
+                        "priority": 20,
+                        "render": true
+                    }
+                }
+            },
+            "supportsCustomAttributes": true,
+            "tagName": "div",
+            "type": "object"
+        },
+        "beforeImage": {
+            "elementType": "image",
+            "selector": "{{selector}} .et_pb_before_image img",
+            "settings": {
+                "decoration": {
+                    "image": {
+                        "component": {
+                            "name": "divi/image",
+                            "props": {
+                                "attrName": "beforeImage",
+                                "dynamicSubgroupHost": true,
+                                "groupLabel": "Before Image",
+                                "grouped": true,
+                                "presetGroup": "divi/image"
+                            },
+                            "type": "group"
+                        },
+                        "groupName": "image",
+                        "groupType": "group",
+                        "panel": "design",
+                        "priority": 10
+                    }
+                },
+                "innerContent": {
+                    "groupType": "group-items",
+                    "items": {
+                        "beforeImageSrc": {
+                            "attrName": "beforeImage.innerContent",
+                            "category": "basic_option",
+                            "component": {
+                                "name": "divi/upload",
+                                "props": {
+                                    "syncImageData": {
+                                        "alt": true,
+                                        "id": true,
+                                        "src": true,
+                                        "titleText": true
+                                    }
+                                },
+                                "type": "field"
+                            },
+                            "description": "Upload the \"before\" image.",
+                            "features": {
+                                "dynamicContent": {
+                                    "type": "image"
+                                },
+                                "hover": true,
+                                "preset": "content",
+                                "responsive": true,
+                                "sticky": false
+                            },
+                            "groupSlug": "contentImages",
+                            "label": "Before Image",
+                            "priority": 10,
+                            "render": true,
+                            "subName": "src"
+                        }
+                    }
+                }
+            },
+            "styleProps": {
+                "fit": {
+                    "selector": "{{selector}} .et_pb_before_image img"
+                },
+                "selector": "{{selector}} .et_pb_before_image",
+                "sizing": {
+                    "propertySelectors": {
+                        "desktop": {
+                            "value": {
+                                "aspect-ratio": "{{selector}} .et_pb_before_image img",
+                                "height": "{{selector}} .et_pb_before_image img",
+                                "max-height": "{{selector}} .et_pb_before_image img"
+                            }
+                        }
+                    }
+                }
+            },
+            "supportsCustomAttributes": true,
+            "type": "object"
+        },
+        "beforeLabel": {
+            "attributes": {
+                "class": "et_pb_before_after_image_label et_pb_before_label"
+            },
+            "childrenSanitizer": "et_core_esc_previously",
+            "inlineEditor": "plainText",
+            "selector": "{{selector}} .et_pb_before_label",
+            "settings": {
+                "innerContent": {
+                    "item": {
+                        "attrName": "beforeLabel.innerContent",
+                        "category": "basic_option",
+                        "component": {
+                            "name": "divi/text",
+                            "type": "field"
+                        },
+                        "description": "Label for the \"before\" image.",
+                        "features": {
+                            "dynamicContent": {
+                                "type": "text"
+                            },
+                            "preset": "content"
+                        },
+                        "groupSlug": "contentLabels",
+                        "label": "Before Label",
+                        "priority": 10,
+                        "render": true
+                    }
+                }
+            },
+            "supportsCustomAttributes": true,
+            "tagName": "div",
+            "type": "object"
+        },
+        "labels": {
+            "selector": "{{selector}} .et_pb_before_label, {{selector}} .et_pb_after_label",
+            "settings": {
+                "decoration": {
+                    "background": {
+                        "groupType": "group-item",
+                        "item": {
+                            "component": {
+                                "name": "divi/background",
+                                "props": {
+                                    "fieldLabel": "Labels",
+                                    "grouped": true
+                                },
+                                "type": "group"
+                            },
+                            "groupSlug": "designLabels",
+                            "priority": 40,
+                            "render": true
+                        }
+                    },
+                    "border": {
+                        "groupType": "group-item",
+                        "item": {
+                            "component": {
+                                "name": "divi/border",
+                                "props": {
+                                    "fieldLabel": "Labels",
+                                    "grouped": true
+                                },
+                                "type": "group"
+                            },
+                            "groupSlug": "designLabels",
+                            "priority": 30,
+                            "render": true
+                        }
+                    },
+                    "font": {
+                        "groupType": "group-item",
+                        "item": {
+                            "component": {
+                                "name": "divi/font",
+                                "props": {
+                                    "fieldLabel": "Label",
+                                    "grouped": true
+                                },
+                                "type": "group"
+                            },
+                            "groupSlug": "designLabels",
+                            "priority": 10,
+                            "render": true
+                        }
+                    },
+                    "spacing": {
+                        "groupType": "group-item",
+                        "item": {
+                            "component": {
+                                "name": "divi/spacing",
+                                "props": {
+                                    "fieldLabel": "Labels",
+                                    "grouped": true
+                                },
+                                "type": "group"
+                            },
+                            "groupSlug": "designLabels",
+                            "priority": 20,
+                            "render": true
+                        }
+                    }
+                }
+            },
+            "styleProps": {
+                "background": {
+                    "selectors": {
+                        "desktop": {
+                            "hover": "{{selector}}{{:hover}} .et_pb_before_label, {{selector}}{{:hover}} .et_pb_after_label",
+                            "value": "{{selector}} .et_pb_before_label, {{selector}} .et_pb_after_label"
+                        }
+                    }
+                },
+                "border": {
+                    "selectors": {
+                        "desktop": {
+                            "hover": "{{selector}}{{:hover}} .et_pb_before_label, {{selector}}{{:hover}} .et_pb_after_label",
+                            "value": "{{selector}} .et_pb_before_label, {{selector}} .et_pb_after_label"
+                        }
+                    }
+                },
+                "font": {
+                    "selectors": {
+                        "desktop": {
+                            "hover": "{{selector}}{{:hover}} .et_pb_before_label, {{selector}}{{:hover}} .et_pb_after_label",
+                            "value": "{{selector}} .et_pb_before_label, {{selector}} .et_pb_after_label"
+                        }
+                    }
+                },
+                "spacing": {
+                    "selectors": {
+                        "desktop": {
+                            "hover": "{{selector}}{{:hover}} .et_pb_before_label, {{selector}}{{:hover}} .et_pb_after_label",
+                            "value": "{{selector}} .et_pb_before_label, {{selector}} .et_pb_after_label"
+                        }
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "module": {
+            "selector": "{{selector}}",
+            "settings": {
+                "advanced": {
+                    "elements": [],
+                    "html": [],
+                    "link": [],
+                    "loop": []
+                },
+                "decoration": {
+                    "animation": [],
+                    "attributes": [],
+                    "background": [],
+                    "border": [],
+                    "boxShadow": [],
+                    "conditions": [],
+                    "disabledOn": [],
+                    "filters": [],
+                    "interactions": [],
+                    "layout": [],
+                    "order": [],
+                    "overflow": [],
+                    "position": [],
+                    "scroll": [],
+                    "sizing": [],
+                    "spacing": [],
+                    "sticky": [],
+                    "transform": [],
+                    "transition": [],
+                    "zIndex": []
+                },
+                "meta": {
+                    "meta": []
+                }
+            },
+            "styleProps": [],
+            "type": "object"
+        },
+        "slider": {
+            "selector": "{{selector}}",
+            "settings": {
+                "advanced": {
+                    "arrowColor": {
+                        "groupType": "group-item",
+                        "item": {
+                            "attrName": "slider.advanced.arrowColor",
+                            "category": "color_option",
+                            "component": {
+                                "name": "divi/color-picker",
+                                "type": "field"
+                            },
+                            "description": "Choose a color for the slider arrows inside the circle.",
+                            "features": {
+                                "dynamicContent": {
+                                    "type": "color"
+                                },
+                                "hover": true,
+                                "responsive": true,
+                                "sticky": false
+                            },
+                            "groupSlug": "designSlider",
+                            "label": "Arrow Color",
+                            "priority": 20,
+                            "render": true
+                        }
+                    },
+                    "color": {
+                        "groupType": "group-item",
+                        "item": {
+                            "attrName": "slider.advanced.color",
+                            "category": "color_option",
+                            "component": {
+                                "name": "divi/color-picker",
+                                "type": "field"
+                            },
+                            "description": "Choose a color for the slider circle and line.",
+                            "features": {
+                                "dynamicContent": {
+                                    "type": "color"
+                                },
+                                "hover": true,
+                                "responsive": true,
+                                "sticky": false
+                            },
+                            "groupSlug": "designSlider",
+                            "label": "Slider Color",
+                            "priority": 10,
+                            "render": true
+                        }
+                    },
+                    "orientation": {
+                        "groupType": "group-item",
+                        "item": {
+                            "attrName": "slider.advanced.orientation",
+                            "category": "configuration",
+                            "component": {
+                                "name": "divi/select",
+                                "props": {
+                                    "defaultValue": "horizontal",
+                                    "options": {
+                                        "horizontal": {
+                                            "label": "Horizontal"
+                                        },
+                                        "vertical": {
+                                            "label": "Vertical"
+                                        }
+                                    }
+                                },
+                                "type": "field"
+                            },
+                            "description": "Choose whether the slider moves horizontally or vertically.",
+                            "features": {
+                                "hover": false,
+                                "preset": [
+                                    "style"
+                                ],
+                                "responsive": false,
+                                "sticky": false
+                            },
+                            "groupSlug": "designSlider",
+                            "label": "Orientation",
+                            "priority": 5,
+                            "render": true
+                        }
+                    },
+                    "position": {
+                        "groupType": "group-item",
+                        "item": {
+                            "attrName": "slider.advanced.position",
+                            "category": "configuration",
+                            "component": {
+                                "name": "divi/range",
+                                "props": {
+                                    "cssProperty": "order",
+                                    "defaultValue": "50",
+                                    "maxLimit": 100,
+                                    "minLimit": 0
+                                },
+                                "type": "field"
+                            },
+                            "defaultAttr": {
+                                "desktop": {
+                                    "value": "50%"
+                                }
+                            },
+                            "description": "Set the position of the slider (0-100).",
+                            "features": {
+                                "dynamicContent": {
+                                    "type": "number"
+                                },
+                                "hover": false,
+                                "preset": [
+                                    "style"
+                                ],
+                                "responsive": false,
+                                "sticky": false
+                            },
+                            "groupSlug": "designSlider",
+                            "label": "Position",
+                            "priority": 8,
+                            "render": true
+                        }
+                    }
+                }
+            },
+            "type": "object"
+        }
+    },
+    "conversion": null,
+    "conversionOutline": [],
+    "defaults": {
+        "printedStyle": [],
+        "render": {
+            "module": {
+                "decoration": {
+                    "spacing": {
+                        "desktop": {
+                            "value": {
+                                "margin": {
+                                    "bottom": "0px"
+                                }
+                            }
+                        }
+                    }
+                },
+                "meta": {
+                    "adminLabel": {
+                        "desktop": {
+                            "value": "Before/After Image"
+                        }
+                    }
+                }
+            },
+            "slider": {
+                "advanced": {
+                    "orientation": {
+                        "desktop": {
+                            "value": "horizontal"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "leaves": {
+        "afterImage.decoration.border__radius": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "radius"
+        },
+        "afterImage.decoration.border__styles": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles"
+        },
+        "afterImage.decoration.border__styles.all.color": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.color"
+        },
+        "afterImage.decoration.border__styles.all.style": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.style"
+        },
+        "afterImage.decoration.border__styles.all.width": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.width"
+        },
+        "afterImage.decoration.border__styles.bottom.color": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.color"
+        },
+        "afterImage.decoration.border__styles.bottom.style": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.style"
+        },
+        "afterImage.decoration.border__styles.bottom.width": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.width"
+        },
+        "afterImage.decoration.border__styles.left.color": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.color"
+        },
+        "afterImage.decoration.border__styles.left.style": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.style"
+        },
+        "afterImage.decoration.border__styles.left.width": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.width"
+        },
+        "afterImage.decoration.border__styles.right.color": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.color"
+        },
+        "afterImage.decoration.border__styles.right.style": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.style"
+        },
+        "afterImage.decoration.border__styles.right.width": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.width"
+        },
+        "afterImage.decoration.border__styles.top.color": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.color"
+        },
+        "afterImage.decoration.border__styles.top.style": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.style"
+        },
+        "afterImage.decoration.border__styles.top.width": {
+            "attrName": "afterImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.width"
+        },
+        "afterImage.decoration.boxShadow__blur": {
+            "attrName": "afterImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "blur"
+        },
+        "afterImage.decoration.boxShadow__color": {
+            "attrName": "afterImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "color"
+        },
+        "afterImage.decoration.boxShadow__horizontal": {
+            "attrName": "afterImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "horizontal"
+        },
+        "afterImage.decoration.boxShadow__position": {
+            "attrName": "afterImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "position"
+        },
+        "afterImage.decoration.boxShadow__spread": {
+            "attrName": "afterImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "spread"
+        },
+        "afterImage.decoration.boxShadow__style": {
+            "attrName": "afterImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "style"
+        },
+        "afterImage.decoration.boxShadow__vertical": {
+            "attrName": "afterImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "vertical"
+        },
+        "afterImage.decoration.filters__backdropBlur": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropBlur"
+        },
+        "afterImage.decoration.filters__backdropInvert": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropInvert"
+        },
+        "afterImage.decoration.filters__backdropSepia": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropSepia"
+        },
+        "afterImage.decoration.filters__blendMode": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "blendMode"
+        },
+        "afterImage.decoration.filters__blur": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "blur"
+        },
+        "afterImage.decoration.filters__brightness": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "brightness"
+        },
+        "afterImage.decoration.filters__contrast": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "contrast"
+        },
+        "afterImage.decoration.filters__hueRotate": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "hueRotate"
+        },
+        "afterImage.decoration.filters__invert": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "invert"
+        },
+        "afterImage.decoration.filters__opacity": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "opacity"
+        },
+        "afterImage.decoration.filters__saturate": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "saturate"
+        },
+        "afterImage.decoration.filters__sepia": {
+            "attrName": "afterImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "sepia"
+        },
+        "afterImage.decoration.fit__objectFit": {
+            "attrName": "afterImage.decoration.fit",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "objectFit"
+        },
+        "afterImage.decoration.fit__objectPosition": {
+            "attrName": "afterImage.decoration.fit",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "objectPosition"
+        },
+        "afterImage.decoration.sizing__alignSelf": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "alignSelf"
+        },
+        "afterImage.decoration.sizing__alignment": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "alignment"
+        },
+        "afterImage.decoration.sizing__aspectRatio": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "aspectRatio"
+        },
+        "afterImage.decoration.sizing__flexGrow": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "flexGrow"
+        },
+        "afterImage.decoration.sizing__flexShrink": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "flexShrink"
+        },
+        "afterImage.decoration.sizing__flexType": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "flexType"
+        },
+        "afterImage.decoration.sizing__gridAlignSelf": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridAlignSelf"
+        },
+        "afterImage.decoration.sizing__gridColumnEnd": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnEnd"
+        },
+        "afterImage.decoration.sizing__gridColumnSpan": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnSpan"
+        },
+        "afterImage.decoration.sizing__gridColumnStart": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnStart"
+        },
+        "afterImage.decoration.sizing__gridJustifySelf": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridJustifySelf"
+        },
+        "afterImage.decoration.sizing__gridRowEnd": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowEnd"
+        },
+        "afterImage.decoration.sizing__gridRowSpan": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowSpan"
+        },
+        "afterImage.decoration.sizing__gridRowStart": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowStart"
+        },
+        "afterImage.decoration.sizing__height": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "height"
+        },
+        "afterImage.decoration.sizing__maxHeight": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "maxHeight"
+        },
+        "afterImage.decoration.sizing__maxWidth": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "maxWidth"
+        },
+        "afterImage.decoration.sizing__minHeight": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "minHeight"
+        },
+        "afterImage.decoration.sizing__size": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "size"
+        },
+        "afterImage.decoration.sizing__width": {
+            "attrName": "afterImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "width"
+        },
+        "afterImage.innerContent__src": {
+            "attrName": "afterImage.innerContent",
+            "inPresetMap": true,
+            "preset": "content",
+            "subName": "src"
+        },
+        "beforeImage.decoration.border__radius": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "radius"
+        },
+        "beforeImage.decoration.border__styles": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles"
+        },
+        "beforeImage.decoration.border__styles.all.color": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.color"
+        },
+        "beforeImage.decoration.border__styles.all.style": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.style"
+        },
+        "beforeImage.decoration.border__styles.all.width": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.width"
+        },
+        "beforeImage.decoration.border__styles.bottom.color": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.color"
+        },
+        "beforeImage.decoration.border__styles.bottom.style": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.style"
+        },
+        "beforeImage.decoration.border__styles.bottom.width": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.width"
+        },
+        "beforeImage.decoration.border__styles.left.color": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.color"
+        },
+        "beforeImage.decoration.border__styles.left.style": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.style"
+        },
+        "beforeImage.decoration.border__styles.left.width": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.width"
+        },
+        "beforeImage.decoration.border__styles.right.color": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.color"
+        },
+        "beforeImage.decoration.border__styles.right.style": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.style"
+        },
+        "beforeImage.decoration.border__styles.right.width": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.width"
+        },
+        "beforeImage.decoration.border__styles.top.color": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.color"
+        },
+        "beforeImage.decoration.border__styles.top.style": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.style"
+        },
+        "beforeImage.decoration.border__styles.top.width": {
+            "attrName": "beforeImage.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.width"
+        },
+        "beforeImage.decoration.boxShadow__blur": {
+            "attrName": "beforeImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "blur"
+        },
+        "beforeImage.decoration.boxShadow__color": {
+            "attrName": "beforeImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "color"
+        },
+        "beforeImage.decoration.boxShadow__horizontal": {
+            "attrName": "beforeImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "horizontal"
+        },
+        "beforeImage.decoration.boxShadow__position": {
+            "attrName": "beforeImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "position"
+        },
+        "beforeImage.decoration.boxShadow__spread": {
+            "attrName": "beforeImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "spread"
+        },
+        "beforeImage.decoration.boxShadow__style": {
+            "attrName": "beforeImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "style"
+        },
+        "beforeImage.decoration.boxShadow__vertical": {
+            "attrName": "beforeImage.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "vertical"
+        },
+        "beforeImage.decoration.filters__backdropBlur": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropBlur"
+        },
+        "beforeImage.decoration.filters__backdropInvert": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropInvert"
+        },
+        "beforeImage.decoration.filters__backdropSepia": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropSepia"
+        },
+        "beforeImage.decoration.filters__blendMode": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "blendMode"
+        },
+        "beforeImage.decoration.filters__blur": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "blur"
+        },
+        "beforeImage.decoration.filters__brightness": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "brightness"
+        },
+        "beforeImage.decoration.filters__contrast": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "contrast"
+        },
+        "beforeImage.decoration.filters__hueRotate": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "hueRotate"
+        },
+        "beforeImage.decoration.filters__invert": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "invert"
+        },
+        "beforeImage.decoration.filters__opacity": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "opacity"
+        },
+        "beforeImage.decoration.filters__saturate": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "saturate"
+        },
+        "beforeImage.decoration.filters__sepia": {
+            "attrName": "beforeImage.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "sepia"
+        },
+        "beforeImage.decoration.fit__objectFit": {
+            "attrName": "beforeImage.decoration.fit",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "objectFit"
+        },
+        "beforeImage.decoration.fit__objectPosition": {
+            "attrName": "beforeImage.decoration.fit",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "objectPosition"
+        },
+        "beforeImage.decoration.sizing__alignSelf": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "alignSelf"
+        },
+        "beforeImage.decoration.sizing__alignment": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "alignment"
+        },
+        "beforeImage.decoration.sizing__aspectRatio": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "aspectRatio"
+        },
+        "beforeImage.decoration.sizing__flexGrow": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "flexGrow"
+        },
+        "beforeImage.decoration.sizing__flexShrink": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "flexShrink"
+        },
+        "beforeImage.decoration.sizing__flexType": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "flexType"
+        },
+        "beforeImage.decoration.sizing__gridAlignSelf": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridAlignSelf"
+        },
+        "beforeImage.decoration.sizing__gridColumnEnd": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnEnd"
+        },
+        "beforeImage.decoration.sizing__gridColumnSpan": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnSpan"
+        },
+        "beforeImage.decoration.sizing__gridColumnStart": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnStart"
+        },
+        "beforeImage.decoration.sizing__gridJustifySelf": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridJustifySelf"
+        },
+        "beforeImage.decoration.sizing__gridRowEnd": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowEnd"
+        },
+        "beforeImage.decoration.sizing__gridRowSpan": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowSpan"
+        },
+        "beforeImage.decoration.sizing__gridRowStart": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowStart"
+        },
+        "beforeImage.decoration.sizing__height": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "height"
+        },
+        "beforeImage.decoration.sizing__maxHeight": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "maxHeight"
+        },
+        "beforeImage.decoration.sizing__maxWidth": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "maxWidth"
+        },
+        "beforeImage.decoration.sizing__minHeight": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "minHeight"
+        },
+        "beforeImage.decoration.sizing__size": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "size"
+        },
+        "beforeImage.decoration.sizing__width": {
+            "attrName": "beforeImage.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "width"
+        },
+        "beforeImage.innerContent__src": {
+            "attrName": "beforeImage.innerContent",
+            "inPresetMap": true,
+            "preset": "content",
+            "subName": "src"
+        },
+        "css__after": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "after"
+        },
+        "css__before": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "before"
+        },
+        "css__freeForm": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "freeForm"
+        },
+        "css__mainElement": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mainElement"
+        },
+        "labels.decoration.background__color": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "color"
+        },
+        "labels.decoration.background__gradient": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient"
+        },
+        "labels.decoration.background__gradient.direction": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.direction"
+        },
+        "labels.decoration.background__gradient.directionRadial": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.directionRadial"
+        },
+        "labels.decoration.background__gradient.enabled": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.enabled"
+        },
+        "labels.decoration.background__gradient.length": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.length"
+        },
+        "labels.decoration.background__gradient.overlaysImage": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.overlaysImage"
+        },
+        "labels.decoration.background__gradient.repeat": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.repeat"
+        },
+        "labels.decoration.background__gradient.type": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.type"
+        },
+        "labels.decoration.background__image.blend": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "image.blend"
+        },
+        "labels.decoration.background__image.height": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.height"
+        },
+        "labels.decoration.background__image.horizontalOffset": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.horizontalOffset"
+        },
+        "labels.decoration.background__image.parallax.enabled": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html",
+                "script"
+            ],
+            "subName": "image.parallax.enabled"
+        },
+        "labels.decoration.background__image.parallax.method": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "image.parallax.method"
+        },
+        "labels.decoration.background__image.position": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.position"
+        },
+        "labels.decoration.background__image.repeat": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.repeat"
+        },
+        "labels.decoration.background__image.size": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.size"
+        },
+        "labels.decoration.background__image.url": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "image.url"
+        },
+        "labels.decoration.background__image.verticalOffset": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.verticalOffset"
+        },
+        "labels.decoration.background__image.width": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.width"
+        },
+        "labels.decoration.background__mask.aspectRatio": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "mask.aspectRatio"
+        },
+        "labels.decoration.background__mask.blend": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.blend"
+        },
+        "labels.decoration.background__mask.color": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "mask.color"
+        },
+        "labels.decoration.background__mask.enabled": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "mask.enabled"
+        },
+        "labels.decoration.background__mask.height": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.height"
+        },
+        "labels.decoration.background__mask.horizontalOffset": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.horizontalOffset"
+        },
+        "labels.decoration.background__mask.position": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.position"
+        },
+        "labels.decoration.background__mask.size": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.size"
+        },
+        "labels.decoration.background__mask.style": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "mask.style"
+        },
+        "labels.decoration.background__mask.transform": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "mask.transform"
+        },
+        "labels.decoration.background__mask.verticalOffset": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.verticalOffset"
+        },
+        "labels.decoration.background__mask.width": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.width"
+        },
+        "labels.decoration.background__pattern.blend": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.blend"
+        },
+        "labels.decoration.background__pattern.color": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "pattern.color"
+        },
+        "labels.decoration.background__pattern.enabled": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "pattern.enabled"
+        },
+        "labels.decoration.background__pattern.height": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.height"
+        },
+        "labels.decoration.background__pattern.horizontalOffset": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.horizontalOffset"
+        },
+        "labels.decoration.background__pattern.repeat": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.repeat"
+        },
+        "labels.decoration.background__pattern.repeatOrigin": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.repeatOrigin"
+        },
+        "labels.decoration.background__pattern.size": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.size"
+        },
+        "labels.decoration.background__pattern.style": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "pattern.style"
+        },
+        "labels.decoration.background__pattern.transform": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "pattern.transform"
+        },
+        "labels.decoration.background__pattern.verticalOffset": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.verticalOffset"
+        },
+        "labels.decoration.background__pattern.width": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.width"
+        },
+        "labels.decoration.background__video.allowPlayerPause": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.allowPlayerPause"
+        },
+        "labels.decoration.background__video.height": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.height"
+        },
+        "labels.decoration.background__video.mp4": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.mp4"
+        },
+        "labels.decoration.background__video.pauseOutsideViewport": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.pauseOutsideViewport"
+        },
+        "labels.decoration.background__video.webm": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.webm"
+        },
+        "labels.decoration.background__video.width": {
+            "attrName": "labels.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.width"
+        },
+        "labels.decoration.border__radius": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "radius"
+        },
+        "labels.decoration.border__styles": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles"
+        },
+        "labels.decoration.border__styles.all.color": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.color"
+        },
+        "labels.decoration.border__styles.all.style": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.style"
+        },
+        "labels.decoration.border__styles.all.width": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.width"
+        },
+        "labels.decoration.border__styles.bottom.color": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.color"
+        },
+        "labels.decoration.border__styles.bottom.style": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.style"
+        },
+        "labels.decoration.border__styles.bottom.width": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.width"
+        },
+        "labels.decoration.border__styles.left.color": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.color"
+        },
+        "labels.decoration.border__styles.left.style": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.style"
+        },
+        "labels.decoration.border__styles.left.width": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.width"
+        },
+        "labels.decoration.border__styles.right.color": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.color"
+        },
+        "labels.decoration.border__styles.right.style": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.style"
+        },
+        "labels.decoration.border__styles.right.width": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.width"
+        },
+        "labels.decoration.border__styles.top.color": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.color"
+        },
+        "labels.decoration.border__styles.top.style": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.style"
+        },
+        "labels.decoration.border__styles.top.width": {
+            "attrName": "labels.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.width"
+        },
+        "labels.decoration.font.font__capitalization": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "capitalization"
+        },
+        "labels.decoration.font.font__color": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "color"
+        },
+        "labels.decoration.font.font__columnCount": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "columnCount"
+        },
+        "labels.decoration.font.font__columnGap": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "columnGap"
+        },
+        "labels.decoration.font.font__family": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "family"
+        },
+        "labels.decoration.font.font__hyphens": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "hyphens"
+        },
+        "labels.decoration.font.font__letterSpacing": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "letterSpacing"
+        },
+        "labels.decoration.font.font__lineColor": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "lineColor"
+        },
+        "labels.decoration.font.font__lineHeight": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "lineHeight"
+        },
+        "labels.decoration.font.font__lineStyle": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "lineStyle"
+        },
+        "labels.decoration.font.font__lineThickness": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "lineThickness"
+        },
+        "labels.decoration.font.font__opticalSizing": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "opticalSizing"
+        },
+        "labels.decoration.font.font__size": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "size"
+        },
+        "labels.decoration.font.font__style": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "style"
+        },
+        "labels.decoration.font.font__textAlign": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "textAlign"
+        },
+        "labels.decoration.font.font__textWrap": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "textWrap"
+        },
+        "labels.decoration.font.font__underlineOffset": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "underlineOffset"
+        },
+        "labels.decoration.font.font__weight": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "weight"
+        },
+        "labels.decoration.font.font__weightFineTune": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "weightFineTune"
+        },
+        "labels.decoration.font.font__writingMode": {
+            "attrName": "labels.decoration.font.font",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "writingMode"
+        },
+        "labels.decoration.font.textEffects__fillType": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "fillType"
+        },
+        "labels.decoration.font.textEffects__gradient": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gradient"
+        },
+        "labels.decoration.font.textEffects__gradient.direction": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gradient.direction"
+        },
+        "labels.decoration.font.textEffects__gradient.directionRadial": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gradient.directionRadial"
+        },
+        "labels.decoration.font.textEffects__gradient.length": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gradient.length"
+        },
+        "labels.decoration.font.textEffects__gradient.repeat": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gradient.repeat"
+        },
+        "labels.decoration.font.textEffects__gradient.type": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gradient.type"
+        },
+        "labels.decoration.font.textEffects__imageFill.blend": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "imageFill.blend"
+        },
+        "labels.decoration.font.textEffects__imageFill.height": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "imageFill.height"
+        },
+        "labels.decoration.font.textEffects__imageFill.horizontalOffset": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "imageFill.horizontalOffset"
+        },
+        "labels.decoration.font.textEffects__imageFill.position": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "imageFill.position"
+        },
+        "labels.decoration.font.textEffects__imageFill.repeat": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "imageFill.repeat"
+        },
+        "labels.decoration.font.textEffects__imageFill.size": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "imageFill.size"
+        },
+        "labels.decoration.font.textEffects__imageFill.url": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "imageFill.url"
+        },
+        "labels.decoration.font.textEffects__imageFill.verticalOffset": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "imageFill.verticalOffset"
+        },
+        "labels.decoration.font.textEffects__imageFill.width": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "imageFill.width"
+        },
+        "labels.decoration.font.textEffects__strokeColor": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "strokeColor"
+        },
+        "labels.decoration.font.textEffects__strokePosition": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "strokePosition"
+        },
+        "labels.decoration.font.textEffects__strokeWidth": {
+            "attrName": "labels.decoration.font.textEffects",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "strokeWidth"
+        },
+        "labels.decoration.font.textShadow__blur": {
+            "attrName": "labels.decoration.font.textShadow",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "blur"
+        },
+        "labels.decoration.font.textShadow__color": {
+            "attrName": "labels.decoration.font.textShadow",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "color"
+        },
+        "labels.decoration.font.textShadow__horizontal": {
+            "attrName": "labels.decoration.font.textShadow",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "horizontal"
+        },
+        "labels.decoration.font.textShadow__style": {
+            "attrName": "labels.decoration.font.textShadow",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "style"
+        },
+        "labels.decoration.font.textShadow__vertical": {
+            "attrName": "labels.decoration.font.textShadow",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "vertical"
+        },
+        "labels.decoration.spacing__margin": {
+            "attrName": "labels.decoration.spacing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "margin"
+        },
+        "labels.decoration.spacing__padding": {
+            "attrName": "labels.decoration.spacing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "padding"
+        },
+        "module.advanced.elements.structure": {
+            "attrName": "module.advanced.elements.structure",
+            "inPresetMap": true,
+            "preset": "content"
+        },
+        "module.advanced.html__elementType": {
+            "attrName": "module.advanced.html",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "elementType"
+        },
+        "module.advanced.html__htmlAfter": {
+            "attrName": "module.advanced.html",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "htmlAfter"
+        },
+        "module.advanced.html__htmlBefore": {
+            "attrName": "module.advanced.html",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "htmlBefore"
+        },
+        "module.advanced.link__target": {
+            "attrName": "module.advanced.link",
+            "inPresetMap": true,
+            "preset": "content",
+            "subName": "target"
+        },
+        "module.advanced.link__url": {
+            "attrName": "module.advanced.link",
+            "inPresetMap": true,
+            "preset": "content",
+            "subName": "url"
+        },
+        "module.advanced.loop__enable": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "enable"
+        },
+        "module.advanced.loop__excludeCurrentPost": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "excludeCurrentPost"
+        },
+        "module.advanced.loop__excludePostWithSpecificTerms": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "excludePostWithSpecificTerms"
+        },
+        "module.advanced.loop__excludeSpecificPosts": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "excludeSpecificPosts"
+        },
+        "module.advanced.loop__ignoreStickysPost": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "ignoreStickysPost"
+        },
+        "module.advanced.loop__includePostWithSpecificTerms": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "includePostWithSpecificTerms"
+        },
+        "module.advanced.loop__includeSpecificPosts": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "includeSpecificPosts"
+        },
+        "module.advanced.loop__metaQuery": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "metaQuery"
+        },
+        "module.advanced.loop__order": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "order"
+        },
+        "module.advanced.loop__orderBy": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "orderBy"
+        },
+        "module.advanced.loop__postOffset": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "postOffset"
+        },
+        "module.advanced.loop__postPerPage": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "postPerPage"
+        },
+        "module.advanced.loop__queryType": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "queryType"
+        },
+        "module.advanced.loop__subTypes": {
+            "attrName": "module.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "subTypes"
+        },
+        "module.decoration.animation__delay": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "delay"
+        },
+        "module.decoration.animation__direction": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "direction"
+        },
+        "module.decoration.animation__duration": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "duration"
+        },
+        "module.decoration.animation__intensity.flip": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "intensity.flip"
+        },
+        "module.decoration.animation__intensity.fold": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "intensity.fold"
+        },
+        "module.decoration.animation__intensity.roll": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "intensity.roll"
+        },
+        "module.decoration.animation__intensity.slide": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "intensity.slide"
+        },
+        "module.decoration.animation__intensity.zoom": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "intensity.zoom"
+        },
+        "module.decoration.animation__repeat": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "repeat"
+        },
+        "module.decoration.animation__speedCurve": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "speedCurve"
+        },
+        "module.decoration.animation__startingOpacity": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "startingOpacity"
+        },
+        "module.decoration.animation__style": {
+            "attrName": "module.decoration.animation",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "style"
+        },
+        "module.decoration.attributes": {
+            "attrName": "module.decoration.attributes",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ]
+        },
+        "module.decoration.background__color": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "color"
+        },
+        "module.decoration.background__gradient": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient"
+        },
+        "module.decoration.background__gradient.direction": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.direction"
+        },
+        "module.decoration.background__gradient.directionRadial": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.directionRadial"
+        },
+        "module.decoration.background__gradient.enabled": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.enabled"
+        },
+        "module.decoration.background__gradient.length": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.length"
+        },
+        "module.decoration.background__gradient.overlaysImage": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.overlaysImage"
+        },
+        "module.decoration.background__gradient.repeat": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.repeat"
+        },
+        "module.decoration.background__gradient.type": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "gradient.type"
+        },
+        "module.decoration.background__image.blend": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "image.blend"
+        },
+        "module.decoration.background__image.height": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.height"
+        },
+        "module.decoration.background__image.horizontalOffset": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.horizontalOffset"
+        },
+        "module.decoration.background__image.parallax.enabled": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html",
+                "script"
+            ],
+            "subName": "image.parallax.enabled"
+        },
+        "module.decoration.background__image.parallax.method": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "image.parallax.method"
+        },
+        "module.decoration.background__image.position": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.position"
+        },
+        "module.decoration.background__image.repeat": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.repeat"
+        },
+        "module.decoration.background__image.size": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.size"
+        },
+        "module.decoration.background__image.url": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "image.url"
+        },
+        "module.decoration.background__image.verticalOffset": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.verticalOffset"
+        },
+        "module.decoration.background__image.width": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "image.width"
+        },
+        "module.decoration.background__mask.aspectRatio": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "mask.aspectRatio"
+        },
+        "module.decoration.background__mask.blend": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.blend"
+        },
+        "module.decoration.background__mask.color": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "mask.color"
+        },
+        "module.decoration.background__mask.enabled": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "mask.enabled"
+        },
+        "module.decoration.background__mask.height": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.height"
+        },
+        "module.decoration.background__mask.horizontalOffset": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.horizontalOffset"
+        },
+        "module.decoration.background__mask.position": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.position"
+        },
+        "module.decoration.background__mask.size": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.size"
+        },
+        "module.decoration.background__mask.style": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "mask.style"
+        },
+        "module.decoration.background__mask.transform": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "mask.transform"
+        },
+        "module.decoration.background__mask.verticalOffset": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.verticalOffset"
+        },
+        "module.decoration.background__mask.width": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mask.width"
+        },
+        "module.decoration.background__pattern.blend": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.blend"
+        },
+        "module.decoration.background__pattern.color": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "pattern.color"
+        },
+        "module.decoration.background__pattern.enabled": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "pattern.enabled"
+        },
+        "module.decoration.background__pattern.height": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.height"
+        },
+        "module.decoration.background__pattern.horizontalOffset": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.horizontalOffset"
+        },
+        "module.decoration.background__pattern.repeat": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.repeat"
+        },
+        "module.decoration.background__pattern.repeatOrigin": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.repeatOrigin"
+        },
+        "module.decoration.background__pattern.size": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.size"
+        },
+        "module.decoration.background__pattern.style": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "pattern.style"
+        },
+        "module.decoration.background__pattern.transform": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "pattern.transform"
+        },
+        "module.decoration.background__pattern.verticalOffset": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.verticalOffset"
+        },
+        "module.decoration.background__pattern.width": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "pattern.width"
+        },
+        "module.decoration.background__video.allowPlayerPause": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.allowPlayerPause"
+        },
+        "module.decoration.background__video.height": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.height"
+        },
+        "module.decoration.background__video.mp4": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.mp4"
+        },
+        "module.decoration.background__video.pauseOutsideViewport": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.pauseOutsideViewport"
+        },
+        "module.decoration.background__video.webm": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.webm"
+        },
+        "module.decoration.background__video.width": {
+            "attrName": "module.decoration.background",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "video.width"
+        },
+        "module.decoration.border__radius": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "radius"
+        },
+        "module.decoration.border__styles": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles"
+        },
+        "module.decoration.border__styles.all.color": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.color"
+        },
+        "module.decoration.border__styles.all.style": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.style"
+        },
+        "module.decoration.border__styles.all.width": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.all.width"
+        },
+        "module.decoration.border__styles.bottom.color": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.color"
+        },
+        "module.decoration.border__styles.bottom.style": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.style"
+        },
+        "module.decoration.border__styles.bottom.width": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.bottom.width"
+        },
+        "module.decoration.border__styles.left.color": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.color"
+        },
+        "module.decoration.border__styles.left.style": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.style"
+        },
+        "module.decoration.border__styles.left.width": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.left.width"
+        },
+        "module.decoration.border__styles.right.color": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.color"
+        },
+        "module.decoration.border__styles.right.style": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.style"
+        },
+        "module.decoration.border__styles.right.width": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.right.width"
+        },
+        "module.decoration.border__styles.top.color": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.color"
+        },
+        "module.decoration.border__styles.top.style": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.style"
+        },
+        "module.decoration.border__styles.top.width": {
+            "attrName": "module.decoration.border",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "styles.top.width"
+        },
+        "module.decoration.boxShadow__blur": {
+            "attrName": "module.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "blur"
+        },
+        "module.decoration.boxShadow__color": {
+            "attrName": "module.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "color"
+        },
+        "module.decoration.boxShadow__horizontal": {
+            "attrName": "module.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "horizontal"
+        },
+        "module.decoration.boxShadow__position": {
+            "attrName": "module.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "position"
+        },
+        "module.decoration.boxShadow__spread": {
+            "attrName": "module.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "spread"
+        },
+        "module.decoration.boxShadow__style": {
+            "attrName": "module.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "style"
+        },
+        "module.decoration.boxShadow__vertical": {
+            "attrName": "module.decoration.boxShadow",
+            "inPresetMap": true,
+            "preset": [
+                "html",
+                "style"
+            ],
+            "subName": "vertical"
+        },
+        "module.decoration.conditions": {
+            "attrName": "module.decoration.conditions",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ]
+        },
+        "module.decoration.disabledOn": {
+            "attrName": "module.decoration.disabledOn",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ]
+        },
+        "module.decoration.filters__backdropBlur": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropBlur"
+        },
+        "module.decoration.filters__backdropInvert": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropInvert"
+        },
+        "module.decoration.filters__backdropSepia": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "backdropSepia"
+        },
+        "module.decoration.filters__blendMode": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "blendMode"
+        },
+        "module.decoration.filters__blur": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "blur"
+        },
+        "module.decoration.filters__brightness": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "brightness"
+        },
+        "module.decoration.filters__contrast": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "contrast"
+        },
+        "module.decoration.filters__hueRotate": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "hueRotate"
+        },
+        "module.decoration.filters__invert": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "invert"
+        },
+        "module.decoration.filters__opacity": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "opacity"
+        },
+        "module.decoration.filters__saturate": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "saturate"
+        },
+        "module.decoration.filters__sepia": {
+            "attrName": "module.decoration.filters",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "sepia"
+        },
+        "module.decoration.interactions": {
+            "attrName": "module.decoration.interactions",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ]
+        },
+        "module.decoration.layout__alignContent": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "alignContent"
+        },
+        "module.decoration.layout__alignItems": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "alignItems"
+        },
+        "module.decoration.layout__collapseEmptyColumns": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "collapseEmptyColumns"
+        },
+        "module.decoration.layout__columnGap": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "columnGap"
+        },
+        "module.decoration.layout__display": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style",
+                "html"
+            ],
+            "subName": "display"
+        },
+        "module.decoration.layout__flexDirection": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "flexDirection"
+        },
+        "module.decoration.layout__flexWrap": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "flexWrap"
+        },
+        "module.decoration.layout__gridAutoColumns": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridAutoColumns"
+        },
+        "module.decoration.layout__gridAutoFlow": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridAutoFlow"
+        },
+        "module.decoration.layout__gridAutoRows": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridAutoRows"
+        },
+        "module.decoration.layout__gridColumnCount": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnCount"
+        },
+        "module.decoration.layout__gridColumnMinWidth": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnMinWidth"
+        },
+        "module.decoration.layout__gridColumnWidth": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnWidth"
+        },
+        "module.decoration.layout__gridColumnWidths": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnWidths"
+        },
+        "module.decoration.layout__gridDensity": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridDensity"
+        },
+        "module.decoration.layout__gridJustifyItems": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridJustifyItems"
+        },
+        "module.decoration.layout__gridOffsetRules": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridOffsetRules"
+        },
+        "module.decoration.layout__gridRowCount": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowCount"
+        },
+        "module.decoration.layout__gridRowHeight": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowHeight"
+        },
+        "module.decoration.layout__gridRowHeights": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowHeights"
+        },
+        "module.decoration.layout__gridRowMinHeight": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowMinHeight"
+        },
+        "module.decoration.layout__gridTemplateColumns": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridTemplateColumns"
+        },
+        "module.decoration.layout__gridTemplateRows": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridTemplateRows"
+        },
+        "module.decoration.layout__justifyContent": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "justifyContent"
+        },
+        "module.decoration.layout__rowGap": {
+            "attrName": "module.decoration.layout",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "rowGap"
+        },
+        "module.decoration.overflow__x": {
+            "attrName": "module.decoration.overflow",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "x"
+        },
+        "module.decoration.overflow__y": {
+            "attrName": "module.decoration.overflow",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "y"
+        },
+        "module.decoration.position__mode": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mode"
+        },
+        "module.decoration.position__offset.horizontal": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "offset.horizontal"
+        },
+        "module.decoration.position__offset.vertical": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "offset.vertical"
+        },
+        "module.decoration.position__origin.absolute": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "origin.absolute"
+        },
+        "module.decoration.position__origin.fixed": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "origin.fixed"
+        },
+        "module.decoration.position__origin.relative": {
+            "attrName": "module.decoration.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "origin.relative"
+        },
+        "module.decoration.scroll__blur": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "blur"
+        },
+        "module.decoration.scroll__blur.enable": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "blur.enable"
+        },
+        "module.decoration.scroll__fade": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "fade"
+        },
+        "module.decoration.scroll__fade.enable": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "fade.enable"
+        },
+        "module.decoration.scroll__horizontalMotion": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "horizontalMotion"
+        },
+        "module.decoration.scroll__horizontalMotion.enable": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "horizontalMotion.enable"
+        },
+        "module.decoration.scroll__motionTriggerStart": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "motionTriggerStart"
+        },
+        "module.decoration.scroll__rotating": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "rotating"
+        },
+        "module.decoration.scroll__rotating.enable": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "rotating.enable"
+        },
+        "module.decoration.scroll__scaling": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "scaling"
+        },
+        "module.decoration.scroll__scaling.enable": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "scaling.enable"
+        },
+        "module.decoration.scroll__verticalMotion": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "verticalMotion"
+        },
+        "module.decoration.scroll__verticalMotion.enable": {
+            "attrName": "module.decoration.scroll",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "verticalMotion.enable"
+        },
+        "module.decoration.sizing__alignSelf": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "alignSelf"
+        },
+        "module.decoration.sizing__alignment": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "alignment"
+        },
+        "module.decoration.sizing__aspectRatio": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "aspectRatio"
+        },
+        "module.decoration.sizing__flexGrow": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "flexGrow"
+        },
+        "module.decoration.sizing__flexShrink": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "flexShrink"
+        },
+        "module.decoration.sizing__flexType": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "flexType"
+        },
+        "module.decoration.sizing__gridAlignSelf": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridAlignSelf"
+        },
+        "module.decoration.sizing__gridColumnEnd": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnEnd"
+        },
+        "module.decoration.sizing__gridColumnSpan": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnSpan"
+        },
+        "module.decoration.sizing__gridColumnStart": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridColumnStart"
+        },
+        "module.decoration.sizing__gridJustifySelf": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridJustifySelf"
+        },
+        "module.decoration.sizing__gridRowEnd": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowEnd"
+        },
+        "module.decoration.sizing__gridRowSpan": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowSpan"
+        },
+        "module.decoration.sizing__gridRowStart": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "gridRowStart"
+        },
+        "module.decoration.sizing__height": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "height"
+        },
+        "module.decoration.sizing__maxHeight": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "maxHeight"
+        },
+        "module.decoration.sizing__maxWidth": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "maxWidth"
+        },
+        "module.decoration.sizing__minHeight": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "minHeight"
+        },
+        "module.decoration.sizing__size": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "size"
+        },
+        "module.decoration.sizing__width": {
+            "attrName": "module.decoration.sizing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "width"
+        },
+        "module.decoration.spacing__margin": {
+            "attrName": "module.decoration.spacing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "margin"
+        },
+        "module.decoration.spacing__padding": {
+            "attrName": "module.decoration.spacing",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "padding"
+        },
+        "module.decoration.sticky__limit.bottom": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "limit.bottom"
+        },
+        "module.decoration.sticky__limit.top": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "limit.top"
+        },
+        "module.decoration.sticky__offset.bottom": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "offset.bottom"
+        },
+        "module.decoration.sticky__offset.surrounding": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "offset.surrounding"
+        },
+        "module.decoration.sticky__offset.top": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "offset.top"
+        },
+        "module.decoration.sticky__position": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "position"
+        },
+        "module.decoration.sticky__transition": {
+            "attrName": "module.decoration.sticky",
+            "inPresetMap": true,
+            "preset": [
+                "script"
+            ],
+            "subName": "transition"
+        },
+        "module.decoration.transform__origin": {
+            "attrName": "module.decoration.transform",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "origin"
+        },
+        "module.decoration.transform__rotate": {
+            "attrName": "module.decoration.transform",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "rotate"
+        },
+        "module.decoration.transform__scale": {
+            "attrName": "module.decoration.transform",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "scale"
+        },
+        "module.decoration.transform__skew": {
+            "attrName": "module.decoration.transform",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "skew"
+        },
+        "module.decoration.transform__translate": {
+            "attrName": "module.decoration.transform",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "translate"
+        },
+        "module.decoration.transition__delay": {
+            "attrName": "module.decoration.transition",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "delay"
+        },
+        "module.decoration.transition__duration": {
+            "attrName": "module.decoration.transition",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "duration"
+        },
+        "module.decoration.transition__speedCurve": {
+            "attrName": "module.decoration.transition",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "speedCurve"
+        },
+        "module.decoration.zIndex": {
+            "attrName": "module.decoration.zIndex",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ]
+        },
+        "module.meta.adminLabel": {
+            "attrName": "module.meta.adminLabel",
+            "inPresetMap": true,
+            "preset": "meta"
+        },
+        "module.meta.meta.forceVisible": {
+            "attrName": "module.meta.meta.forceVisible",
+            "inPresetMap": true,
+            "preset": "meta"
+        },
+        "module.meta.meta.tocListHeading": {
+            "attrName": "module.meta.meta.tocListHeading",
+            "inPresetMap": true,
+            "preset": "meta"
+        },
+        "slider.advanced.arrowColor": {
+            "attrName": "slider.advanced.arrowColor",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ]
+        },
+        "slider.advanced.color": {
+            "attrName": "slider.advanced.color",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ]
+        },
+        "slider.advanced.orientation": {
+            "attrName": "slider.advanced.orientation",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ]
+        },
+        "slider.advanced.position": {
+            "attrName": "slider.advanced.position",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ]
+        }
+    },
+    "module": {
+        "category": "module",
+        "childrenName": [],
+        "customCssFields": [],
+        "d4Shortcode": "et_pb_before_after_image",
+        "description": "Stack two images so visitors can drag a slider to compare a before and after state.",
+        "folder": "before-after-image",
+        "moduleClassName": "et_pb_before_after_image",
+        "moduleOrderClassName": "et_pb_before_after_image",
+        "name": "divi/before-after-image",
+        "registered": true,
+        "title": "Before/After Image",
+        "titles": "Before/After Images"
+    },
+    "settings": {
+        "advanced": "auto",
+        "content": "auto",
+        "design": "auto",
+        "groups": {
+            "contentImages": {
+                "component": {
+                    "name": "divi/composite",
+                    "props": {
+                        "groupLabel": "Images"
+                    }
+                },
+                "groupName": "images",
+                "multiElements": true,
+                "panel": "content",
+                "priority": 10
+            },
+            "contentLabels": {
+                "component": {
+                    "name": "divi/composite",
+                    "props": {
+                        "groupLabel": "Labels"
+                    }
+                },
+                "groupName": "labels",
+                "multiElements": true,
+                "panel": "content",
+                "priority": 20
+            },
+            "designLabels": {
+                "component": {
+                    "name": "divi/composite",
+                    "props": {
+                        "clipboardCategory": "style",
+                        "dynamicSubgroupExcludedComponents": [
+                            "divi/box-shadow"
+                        ],
+                        "dynamicSubgroupHost": true,
+                        "groupLabel": "Labels"
+                    }
+                },
+                "groupName": "labels",
+                "multiElements": false,
+                "panel": "design",
+                "priority": 30
+            },
+            "designSlider": {
+                "component": {
+                    "name": "divi/composite",
+                    "props": {
+                        "clipboardCategory": "style",
+                        "groupLabel": "Slider"
+                    }
+                },
+                "groupName": "slider",
+                "multiElements": false,
+                "panel": "design",
+                "priority": 40
+            }
+        }
+    }
+}

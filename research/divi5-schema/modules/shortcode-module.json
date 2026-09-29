@@ -1,0 +1,65 @@
+{
+    "attributes": {
+        "className": {
+            "type": "string"
+        },
+        "lock": {
+            "type": "object"
+        },
+        "metadata": {
+            "type": "object"
+        },
+        "style": {
+            "type": "object"
+        }
+    },
+    "conversion": null,
+    "conversionOutline": [],
+    "defaults": {
+        "printedStyle": [],
+        "render": []
+    },
+    "leaves": {
+        "css__after": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "after"
+        },
+        "css__before": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "before"
+        },
+        "css__freeForm": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "freeForm"
+        },
+        "css__mainElement": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mainElement"
+        }
+    },
+    "module": {
+        "category": "unsupported",
+        "d4Shortcode": "et_pb_unsupported",
+        "folder": null,
+        "name": "divi/shortcode-module",
+        "registered": true,
+        "title": "Shortcode Module"
+    },
+    "settings": []
+}

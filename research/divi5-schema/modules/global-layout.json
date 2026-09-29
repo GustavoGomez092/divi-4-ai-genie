@@ -1,0 +1,53 @@
+{
+    "attributes": [],
+    "conversion": null,
+    "conversionOutline": [],
+    "defaults": {
+        "printedStyle": [],
+        "render": []
+    },
+    "leaves": {
+        "css__after": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "after"
+        },
+        "css__before": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "before"
+        },
+        "css__freeForm": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "freeForm"
+        },
+        "css__mainElement": {
+            "attrName": "css",
+            "inPresetMap": true,
+            "preset": [
+                "style"
+            ],
+            "subName": "mainElement"
+        }
+    },
+    "module": {
+        "category": "structure",
+        "description": "Embeds a reusable layout that updates everywhere it appears when edited in one place.",
+        "folder": "global-layout",
+        "name": "divi/global-layout",
+        "registered": false,
+        "title": "Global Layout",
+        "titles": "Global Layouts"
+    },
+    "settings": []
+}

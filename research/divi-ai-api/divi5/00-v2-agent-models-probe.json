@@ -1,0 +1,15 @@
+{
+ "endpoint": "v2/agent/models/text",
+ "client": "probe",
+ "headers": {
+  "Authorization": "Bearer <ET_USERNAME>:<API_KEY>",
+  "X-Product-Version": "5.13.1",
+  "Content-Type": "application/json"
+ },
+ "status": 401,
+ "elapsed_s": 0.3,
+ "request": null,
+ "response": {
+  "ai_error_message": "Invalid credentials."
+ }
+}

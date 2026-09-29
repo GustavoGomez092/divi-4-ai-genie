@@ -1,0 +1,407 @@
+{
+    "attributes": {
+        "content": {
+            "attributes": {
+                "class": "infowindow"
+            },
+            "elementType": "content",
+            "selector": "{{selector}} .infowindow",
+            "settings": {
+                "innerContent": {
+                    "groupType": "group-item",
+                    "item": {
+                        "attrName": "content.innerContent",
+                        "category": "basic_option",
+                        "component": {
+                            "name": "divi/richtext",
+                            "type": "field"
+                        },
+                        "description": "Here you can define the content that will be placed within the infobox for the pin.",
+                        "features": {
+                            "dynamicContent": {
+                                "type": "text"
+                            },
+                            "preset": [
+                                "style"
+                            ],
+                            "sticky": false
+                        },
+                        "groupSlug": "contentText",
+                        "label": "Body",
+                        "priority": 10,
+                        "render": true
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "pin": {
+            "selector": "{{selector}}",
+            "settings": {
+                "advanced": {
+                    "html": [],
+                    "loop": []
+                },
+                "innerContent": {
+                    "groupType": "group-item",
+                    "item": {
+                        "attrName": "pin.innerContent",
+                        "category": "basic_option",
+                        "component": {
+                            "name": "divi/map",
+                            "props": {
+                                "hasMarker": false,
+                                "hideUpdateButton": false,
+                                "readonly": false
+                            },
+                            "type": "field"
+                        },
+                        "description": "Enter an address for this map pin, and the address will be geocoded and displayed on the map below.",
+                        "features": {
+                            "dynamicContent": {
+                                "type": "text"
+                            },
+                            "hover": false,
+                            "preset": "content",
+                            "responsive": false,
+                            "sticky": false
+                        },
+                        "groupSlug": "contentMap",
+                        "label": "Map Pin Address",
+                        "priority": 10,
+                        "render": true
+                    }
+                },
+                "meta": {
+                    "meta": []
+                }
+            },
+            "type": "object"
+        },
+        "title": {
+            "childrenSanitizer": "et_core_esc_previously",
+            "inlineEditor": "plainText",
+            "selector": "{{selector}} h3",
+            "settings": {
+                "innerContent": {
+                    "groupType": "group-item",
+                    "item": {
+                        "attrName": "title.innerContent",
+                        "category": "basic_option",
+                        "component": {
+                            "name": "divi/text",
+                            "type": "field"
+                        },
+                        "description": "The title will be used within the tab button for this tab.",
+                        "features": {
+                            "dynamicContent": {
+                                "type": "text"
+                            },
+                            "preset": "content",
+                            "sticky": false
+                        },
+                        "groupSlug": "contentText",
+                        "label": "Title",
+                        "priority": 10,
+                        "render": true
+                    }
+                }
+            },
+            "tagName": "h3",
+            "type": "object"
+        }
+    },
+    "conversion": {
+        "attributeMap": {
+            "_builder_version": "builderVersion",
+            "_module_preset": "modulePreset",
+            "content": "content.innerContent.*",
+            "inline_fonts": "content.decoration.inlineFont.*.families",
+            "nonconvertible": "nonconvertible",
+            "pin_address": "pin.innerContent.*.address",
+            "pin_address_lat": "pin.innerContent.*.lat",
+            "pin_address_lng": "pin.innerContent.*.lng",
+            "shortcodeName": "shortcodeName",
+            "title": "title.innerContent.*",
+            "zoom_level": "pin.innerContent.*.zoom"
+        },
+        "conditionalAttributeConversionFunctionMap": [],
+        "nonResponsiveAttributes": [],
+        "optionEnableMap": [],
+        "valueExpansionFunctionMap": {
+            "inline_fonts": "convertInlineFont"
+        }
+    },
+    "conversionOutline": {
+        "advanced": [],
+        "css": [],
+        "module": {
+            "content": "content.innerContent.*",
+            "inline_fonts": "content.decoration.inlineFont.*.families",
+            "pin_address": "pin.innerContent.*.address",
+            "pin_address_lat": "pin.innerContent.*.lat",
+            "pin_address_lng": "pin.innerContent.*.lng",
+            "title": "title.innerContent.*",
+            "zoom_level": "pin.innerContent.*.zoom"
+        },
+        "valueExpansionFunctionMap": {
+            "inline_fonts": "convertInlineFont"
+        }
+    },
+    "defaults": {
+        "printedStyle": [],
+        "render": {
+            "pin": {
+                "innerContent": {
+                    "desktop": {
+                        "value": {
+                            "address": "",
+                            "lat": 0,
+                            "lng": 0,
+                            "zoom": 18
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "leaves": {
+        "content.innerContent": {
+            "attrName": "content.innerContent",
+            "inPresetMap": true,
+            "preset": "content"
+        },
+        "css__after": {
+            "attrName": "css",
+            "inPresetMap": false,
+            "preset": [
+                "style"
+            ],
+            "subName": "after"
+        },
+        "css__before": {
+            "attrName": "css",
+            "inPresetMap": false,
+            "preset": [
+                "style"
+            ],
+            "subName": "before"
+        },
+        "css__freeForm": {
+            "attrName": "css",
+            "inPresetMap": false,
+            "preset": [
+                "style"
+            ],
+            "subName": "freeForm"
+        },
+        "css__mainElement": {
+            "attrName": "css",
+            "inPresetMap": false,
+            "preset": [
+                "style"
+            ],
+            "subName": "mainElement"
+        },
+        "pin.advanced.html__elementType": {
+            "attrName": "pin.advanced.html",
+            "inPresetMap": false,
+            "preset": [
+                "html"
+            ],
+            "subName": "elementType"
+        },
+        "pin.advanced.html__htmlAfter": {
+            "attrName": "pin.advanced.html",
+            "inPresetMap": false,
+            "preset": [
+                "html"
+            ],
+            "subName": "htmlAfter"
+        },
+        "pin.advanced.html__htmlBefore": {
+            "attrName": "pin.advanced.html",
+            "inPresetMap": false,
+            "preset": [
+                "html"
+            ],
+            "subName": "htmlBefore"
+        },
+        "pin.advanced.loop__enable": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "enable"
+        },
+        "pin.advanced.loop__excludeCurrentPost": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "excludeCurrentPost"
+        },
+        "pin.advanced.loop__excludePostWithSpecificTerms": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "excludePostWithSpecificTerms"
+        },
+        "pin.advanced.loop__excludeSpecificPosts": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "excludeSpecificPosts"
+        },
+        "pin.advanced.loop__ignoreStickysPost": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "ignoreStickysPost"
+        },
+        "pin.advanced.loop__includePostWithSpecificTerms": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "includePostWithSpecificTerms"
+        },
+        "pin.advanced.loop__includeSpecificPosts": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "includeSpecificPosts"
+        },
+        "pin.advanced.loop__metaQuery": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "metaQuery"
+        },
+        "pin.advanced.loop__order": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "order"
+        },
+        "pin.advanced.loop__orderBy": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "orderBy"
+        },
+        "pin.advanced.loop__postOffset": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "postOffset"
+        },
+        "pin.advanced.loop__postPerPage": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "postPerPage"
+        },
+        "pin.advanced.loop__queryType": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "queryType"
+        },
+        "pin.advanced.loop__subTypes": {
+            "attrName": "pin.advanced.loop",
+            "inPresetMap": true,
+            "preset": [
+                "html"
+            ],
+            "subName": "subTypes"
+        },
+        "pin.innerContent": {
+            "attrName": "pin.innerContent",
+            "inPresetMap": true,
+            "preset": "content"
+        },
+        "pin.meta.adminLabel": {
+            "attrName": "pin.meta.adminLabel",
+            "inPresetMap": true,
+            "preset": "meta"
+        },
+        "pin.meta.meta.forceVisible": {
+            "attrName": "pin.meta.meta.forceVisible",
+            "inPresetMap": true,
+            "preset": "meta"
+        },
+        "pin.meta.meta.tocListHeading": {
+            "attrName": "pin.meta.meta.tocListHeading",
+            "inPresetMap": true,
+            "preset": "meta"
+        },
+        "title.innerContent": {
+            "attrName": "title.innerContent",
+            "inPresetMap": true,
+            "preset": "content"
+        }
+    },
+    "module": {
+        "category": "child-module",
+        "d4Shortcode": "et_pb_map_pin",
+        "description": "A single map marker inside a Map or Fullwidth Map module with coordinates and tooltip content.",
+        "folder": "map-pin",
+        "name": "divi/map-pin",
+        "registered": true,
+        "title": "Map Pin",
+        "titles": "Map Pins"
+    },
+    "settings": {
+        "content": "auto",
+        "groups": {
+            "contentMap": {
+                "component": {
+                    "name": "divi/composite",
+                    "props": {
+                        "groupLabel": "Map",
+                        "preset": "content"
+                    }
+                },
+                "groupName": "contentMap",
+                "panel": "content",
+                "priority": 10
+            },
+            "contentText": {
+                "component": {
+                    "name": "divi/composite",
+                    "props": {
+                        "groupLabel": "Text",
+                        "preset": "content"
+                    }
+                },
+                "groupName": "contentText",
+                "panel": "content",
+                "priority": 10
+            }
+        }
+    }
+}
