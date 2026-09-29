@@ -83,6 +83,8 @@ def _padding(block, path, paddings, value, report) -> None:
     top, bottom = pad.get("top"), pad.get("bottom")
     if not (isinstance(top, str) and isinstance(bottom, str) and top and bottom):
         return
+    if "$variable(" in top or "$variable(" in bottom:
+        return  # a variable reference is never off-token
     if (top, bottom) not in paddings:
         report("warning", "W_OFF_SCALE_SPACING", f"Section padding {top} / {bottom} is not one the site uses",
                node=block, path=path, attr=f"{SPACING_ATTR}.padding:desktop:value", value=f"{top}|{bottom}",

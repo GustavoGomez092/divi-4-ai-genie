@@ -52,6 +52,13 @@ class TokenChecksTest(unittest.TestCase):
         self.assertIn("W_OFF_SCALE_SPACING", codes(section("10px", "10px")))
         self.assertNotIn("W_OFF_SCALE_SPACING", codes(section("96px", "96px")))
 
+    def test_variable_section_padding_is_fine(self):
+        ref = var("gvid-spacing", "content")
+        wrap = {"builderVersion": V, "module": {"decoration": {"spacing": {"desktop": {"value": {
+            "padding": {"top": ref, "bottom": ref}}}}}}}
+        src = f"<!-- wp:divi/section {json.dumps(wrap)} --><!-- /wp:divi/section -->"
+        self.assertNotIn("W_OFF_SCALE_SPACING", codes(src))
+
     def test_no_tokens_no_findings(self):
         self.assertNotIn("W_OFF_PALETTE_COLOR",
                          [f.code for f in validate_source(page(block("text", bg("#123456"))))])
